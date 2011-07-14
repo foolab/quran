@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Quran
+Icon=quran-logo
+Exec=/usr/bin/invoker --single-instance --type=d /usr/bin/quran
+OnlyShowIn=X-MeeGo;
+X-MeeGo-Translation-Catalog=quran
