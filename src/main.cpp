@@ -1,0 +1,66 @@
+/*
+ * Copyright (c) 2011 Mohammed Sameer <msameer@foolab.org>. All rights reserved.
+ *
+ * This package is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <QApplication>
+#include <QDeclarativeView>
+#include <QDeclarativeContext>
+#include <QDeclarativeEngine>
+#include "settings.h"
+#include "dataprovider.h"
+#include "quranview.h"
+#include "bookmarks.h"
+#include "numberformatter.h"
+#include "pagepositioncontroller.h"
+#include "imageprovider.h"
+
+int main(int argc, char *argv[]) {
+  QApplication app(argc, argv);
+  app.setProperty("NoMStyle", true);
+
+  Settings settings;
+
+  DataProvider data(DATA_DIR "/text/");
+
+  Bookmarks bookmarks(&settings);
+
+  NumberFormatter formatter(&settings);
+
+  PagePositionController position;
+
+  qmlRegisterType<DataProvider>();
+  qmlRegisterType<Settings>();
+  qmlRegisterType<Bookmarks>();
+  qmlRegisterType<NumberFormatter>();
+  qmlRegisterType<PagePositionController>();
+  qmlRegisterType<QuranView>("Quran", 1, 0, "QuranView");
+
+  QDeclarativeView view;
+
+  view.engine()->addImageProvider("quran", new ImageProvider);
+  view.engine()->addImportPath(DATA_DIR "/qml");
+
+  view.rootContext()->setContextProperty("_settings", &settings);
+  view.rootContext()->setContextProperty("_data", &data);
+  view.rootContext()->setContextProperty("_bookmarks", &bookmarks);
+  view.rootContext()->setContextProperty("_formatter", &formatter);
+  view.rootContext()->setContextProperty("_position", &position);
+  view.setSource(QUrl::fromLocalFile(DATA_DIR "/qml/" "main.qml"));
+
+  view.showFullScreen();
+
+  return app.exec();
+}

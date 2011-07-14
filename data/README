@@ -1,0 +1,20 @@
+Obtaining the data files:
+
+1) Main data:
+   - Go to http://tanzil.net/download/
+   - Select Uthmani, check everything and XML as the format. Save as quran-uthmani.xml
+   - Select Simple Enhanced, check everything and XML as the format. Save as quran-simple-enhanced.xml
+
+2) Metadata:
+   - Get quran-data.xml from http://tanzil.net/wiki/Quran_Metadata and save it here
+
+3) Font:
+   - Get me_quran_volt_newmet.zip from http://arabicfonts.wikispaces.com/ and unzip it.
+
+Building:
+  qmake && make
+  That should generate metadata.h
+
+Logo:
+  Original logo from http://en.wikipedia.org/wiki/File:Bismillah_gold.svg
+  Modified by me to get a greenish background ;-)

@@ -1,0 +1,33 @@
+/*
+ * Copyright (c) 2011 Mohammed Sameer <msameer@foolab.org>. All rights reserved.
+ *
+ * This package is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+AboutPage 1.0 AboutPage.qml
+AddToFavoritesMenu 1.0 AddToFavoritesMenu.qml
+BookmarksModel 1.0 BookmarksModel.qml
+BookmarksPage 1.0 BookmarksPage.qml
+IndexPage 1.0 IndexPage.qml
+IndexPageRowCell 1.0 IndexPageRowCell.qml
+IndexPageRow 1.0 IndexPageRow.qml
+main 1.0 main.qml
+NumberLabel 1.0 NumberLabel.qml
+QuranPageContextMenu 1.0 QuranPageContextMenu.qml
+QuranPage 1.0 QuranPage.qml
+QuranPageScrollButton 1.0 QuranPageScrollButton.qml
+QuranPageSuraList 1.0 QuranPageSuraList.qml
+RemoveFromFavoritesMenu 1.0 RemoveFromFavoritesMenu.qml
+SettingsPage 1.0 SettingsPage.qml
+ErrorPage 1.0 ErrorPage.qml
