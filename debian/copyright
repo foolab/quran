@@ -1,0 +1,57 @@
+Application code:
+=================
+Copyright (c) 2011 Mohammed Sameer <msameer@foolab.org>. All rights reserved.
+
+This package is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+Data files:
+===========
+Tanzil Quran Text
+Copyright &copy; 2008-2011 Tanzil Project
+License: Creative Commons Attribution 3.0
+
+This copy of the Quran text is carefully produced, highly
+verified and continuously monitored by a group of specialists
+in Tanzil Project.
+
+TERMS OF USE:
+
+- Permission is granted to copy and distribute verbatim copies
+  of this text, but CHANGING IT IS NOT ALLOWED.
+
+- This Quran text can be used in any website or application,
+  provided that its source (Tanzil Project) is clearly indicated,
+  and a link is made to http://tanzil.net to enable users to keep
+  track of changes.
+
+- This copyright notice shall be included in all verbatim copies
+  of the text, and shall be reproduced appropriately in all files
+  derived from or containing substantial portion of this text.
+
+Please check updates at: http://tanzil.net/updates/
+
+
+Font:
+====
+Font used is me_quran. Copyright &copy; Meor Ridzuan Meor Yahaya. All rights reserved.
+This is an arabic font, specifically design for rendering the Quran like the Madinah
+Mushaf. The font contains arabic glyph only.
+
+The font comes with the following restriction:
+- It is for private and non-commercial use only.
+- The Opentype and VOLT table can be use as a learning material.
+- Redistribution is not permitted without the consent from the author.
+
+Permission from the author has been granted for this application.
