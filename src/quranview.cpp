@@ -195,8 +195,9 @@ void QuranView::addFragment(QTextCursor& cursor, const Fragment& frag) {
 
   // Ayat:
   QStringList text = m_data->text(frag);
-  for (int x = 0; x < frag.size(); x++) {
-    int sura = frag.sura();
+  int sura = frag.sura();
+
+  for (int x = 0; x < text.size(); x++) {
     int ayaNumber = x + frag.start();
 
     QString aya = QString("%1 (%2)").arg(text.at(x)).arg(m_formatter->number(ayaNumber + 1));
