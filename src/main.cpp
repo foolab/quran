@@ -27,9 +27,11 @@
 #include "pagepositioncontroller.h"
 #include "imageprovider.h"
 
-int main(int argc, char *argv[]) {
-  QApplication app(argc, argv);
-  app.setProperty("NoMStyle", true);
+#include <MDeclarativeCache>
+
+Q_DECL_EXPORT int main(int argc, char *argv[]) {
+  QApplication *app = MDeclarativeCache::qApplication(argc, argv);
+  app->setProperty("NoMStyle", true);
 
   Settings settings;
 
@@ -48,19 +50,19 @@ int main(int argc, char *argv[]) {
   qmlRegisterType<PagePositionController>();
   qmlRegisterType<QuranView>("Quran", 1, 0, "QuranView");
 
-  QDeclarativeView view;
+  QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
 
-  view.engine()->addImageProvider("quran", new ImageProvider);
-  view.engine()->addImportPath(DATA_DIR "/qml");
+  view->engine()->addImageProvider("quran", new ImageProvider);
+  view->engine()->addImportPath(DATA_DIR "/qml");
 
-  view.rootContext()->setContextProperty("_settings", &settings);
-  view.rootContext()->setContextProperty("_data", &data);
-  view.rootContext()->setContextProperty("_bookmarks", &bookmarks);
-  view.rootContext()->setContextProperty("_formatter", &formatter);
-  view.rootContext()->setContextProperty("_position", &position);
-  view.setSource(QUrl::fromLocalFile(DATA_DIR "/qml/" "main.qml"));
+  view->rootContext()->setContextProperty("_settings", &settings);
+  view->rootContext()->setContextProperty("_data", &data);
+  view->rootContext()->setContextProperty("_bookmarks", &bookmarks);
+  view->rootContext()->setContextProperty("_formatter", &formatter);
+  view->rootContext()->setContextProperty("_position", &position);
+  view->setSource(QUrl::fromLocalFile(DATA_DIR "/qml/" "main.qml"));
 
-  view.showFullScreen();
+  view->showFullScreen();
 
-  return app.exec();
+  return app->exec();
 }
