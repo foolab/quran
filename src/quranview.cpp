@@ -35,6 +35,8 @@ QuranView::QuranView(QDeclarativeItem *parent) :
   m_doc(new QTextDocument(this)) {
 
   m_doc->setDocumentMargin(0);
+  m_doc->setUndoRedoEnabled(false);
+
   setFlag(ItemHasNoContents, false);
   setFlag(QGraphicsItem::ItemUsesExtendedStyleOption, true);
   //  setCacheMode(QGraphicsItem::DeviceCoordinateCache);
