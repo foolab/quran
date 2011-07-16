@@ -184,7 +184,7 @@ void QuranView::addFragment(QTextCursor& cursor, const Fragment& frag) {
     cursor.insertText(m_data->fullSuraName(frag.sura()), QTextCharFormat());
 
     if (s.hasBasmala()) {
-      cursor.insertText("\n"); // TODO: QChar::LineSeparator
+      cursor.insertBlock(centerFormat);
       cursor.insertText(m_data->basmala(), QTextCharFormat());
     }
 
