@@ -122,7 +122,7 @@ NumberFormatter *QuranView::formatter() {
 }
 
 void QuranView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) {
-  if (isComponentComplete() && newGeometry != oldGeometry) {
+  if (isComponentComplete() && newGeometry.width() != oldGeometry.width()) {
     updateLayout();
   }
 
