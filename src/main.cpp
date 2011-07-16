@@ -26,12 +26,20 @@
 #include "numberformatter.h"
 #include "pagepositioncontroller.h"
 #include "imageprovider.h"
-
+#include <QDir>
 #include <MDeclarativeCache>
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
   QApplication *app = MDeclarativeCache::qApplication(argc, argv);
   app->setProperty("NoMStyle", true);
+
+  bool dev = false;
+  for (int x = 0; x < argc; x++) {
+    if (QLatin1String("-dev") == QLatin1String(argv[x])) {
+      dev = true;
+      break;
+    }
+  }
 
   Settings settings;
 
@@ -53,14 +61,20 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
 
   view->engine()->addImageProvider("quran", new ImageProvider);
-  view->engine()->addImportPath(DATA_DIR "/qml");
 
   view->rootContext()->setContextProperty("_settings", &settings);
   view->rootContext()->setContextProperty("_data", &data);
   view->rootContext()->setContextProperty("_bookmarks", &bookmarks);
   view->rootContext()->setContextProperty("_formatter", &formatter);
   view->rootContext()->setContextProperty("_position", &position);
-  view->setSource(QUrl::fromLocalFile(DATA_DIR "/qml/" "main.qml"));
+
+  if (dev) {
+    view->setSource(QUrl::fromLocalFile(QDir::currentPath() + "/main.qml"));
+  }
+  else {
+    view->engine()->addImportPath(DATA_DIR "/qml");
+    view->setSource(QUrl::fromLocalFile(DATA_DIR "/qml/" "main.qml"));
+  }
 
   view->showFullScreen();
 
