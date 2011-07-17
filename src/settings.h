@@ -35,6 +35,7 @@ class Settings : public QObject {
   Q_PROPERTY(int maxFontSize READ maxFontSize CONSTANT);
   Q_PROPERTY(QColor highlightColor READ highlightColor CONSTANT);
   Q_PROPERTY(QString version READ version CONSTANT);
+  Q_PROPERTY(bool fontLoaded READ isFontLoaded CONSTANT);
 
 public:
   Settings(QObject *parent = 0);
@@ -64,7 +65,9 @@ public:
 
   QString version() const;
 
-  Q_INVOKABLE bool loadFont();
+  void loadFont();
+
+  bool isFontLoaded() const;
 
 signals:
   void fontSizeChanged();

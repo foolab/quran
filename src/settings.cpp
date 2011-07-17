@@ -123,12 +123,14 @@ QString Settings::version() const {
   return VERSION;
 }
 
-bool Settings::loadFont() {
+void Settings::loadFont() {
   if (m_font != -1) {
-    return true;
+    return;
   }
 
   m_font = QFontDatabase::addApplicationFont(DATA_DIR FONT_FILE);
+}
 
+bool Settings::isFontLoaded() const {
   return m_font != -1;
 }

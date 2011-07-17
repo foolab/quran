@@ -21,7 +21,6 @@ import com.nokia.extras 1.0
 
 PageStackWindow {
   id: window
-  property bool fontLoaded: _settings.loadFont();
   property int textType: _settings.textType;
 
   InfoBanner {
@@ -102,7 +101,7 @@ PageStackWindow {
   }
 
   Component.onCompleted: {
-    if (!fontLoaded) {
+    if (!_settings.fontLoaded) {
       fontError.show();
     }
 

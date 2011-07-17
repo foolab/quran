@@ -42,6 +42,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   }
 
   Settings settings;
+  settings.loadFont();
 
   DataProvider data(DATA_DIR "/text/");
 
