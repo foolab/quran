@@ -132,10 +132,10 @@ Page {
           onPinchUpdated: {
 	    var f = pinch.scale - pinch.previousScale;
 
-            if (_settings.fontSize == _settings.maxFontSize) {
+            if (f > 0 && _settings.fontSize == _settings.maxFontSize) {
               maxFontSize.show();
             }
-            else if (_settings.fontSize == _settings.minFontSize) {
+            else if (f < 0 && _settings.fontSize == _settings.minFontSize) {
               minFontSize.show();
             }
             else if (f > 0) {
