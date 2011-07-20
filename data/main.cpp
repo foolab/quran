@@ -212,7 +212,7 @@ void calcFragments(Page& c, Page& n) {
     Fragment f;
     f.sura = n.sura;
     f.index = frags.size();
-    f.page = n.index;
+    f.page = c.index;
     f.start = 0;
     f.size = n.aya;
 
