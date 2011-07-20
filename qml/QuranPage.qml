@@ -125,7 +125,6 @@ Page {
           easing.type: Easing.InOutQuad
           property: "contentY"
           onToChanged: {
-            console.log(from + " " + to);
             restart();
           }
         }
