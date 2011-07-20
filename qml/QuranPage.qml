@@ -118,6 +118,18 @@ Page {
         contentHeight: content.height
 	clip: true
 
+        NumberAnimation {
+          id: animation
+          target: flick
+          from: flick.contentY
+          easing.type: Easing.InOutQuad
+          property: "contentY"
+          onToChanged: {
+            console.log(from + " " + to);
+            restart();
+          }
+        }
+
         QuranView {
           id: content
 
@@ -169,24 +181,24 @@ Page {
             else if (lower <= flick.contentY + flick.height) {
               // Topmost part is not visible.
               // We will scroll anyway and make it visible.
-              // TODO: animate
-              flick.contentY = upper;
+
+              animation.to = upper;
               return;
             }
 
             if (lower - upper > flick.height) {
               // The line will not fit no matter what we do.
               // Just show the upper part.
-              // TODO: animate
-              flick.contentY = upper;
+
+              animation.to = upper;
               return;
             }
 
             // Our line will fit the view. We need to scroll until the bottommost part
             // is just visible.
+
             var part = upper + (lower - (upper + flick.height));
-            // TODO: animate
-            flick.contentY = part;
+            animation.to = part;
           }
 
           PinchArea {
