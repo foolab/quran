@@ -118,35 +118,6 @@ Page {
         contentHeight: content.height
 	clip: true
 
-        PinchArea {
-          id: pinch
-          anchors.fill: parent
-          anchors.right: parent.right
-          anchors.left: parent.left
-          anchors.top: parent.top
-          anchors.bottom: parent.bottom
-          width: parent.width
-          height: parent.height
-
-          // TODO: ignore small finger moves ? make it less sensitive ?
-          onPinchUpdated: {
-	    var f = pinch.scale - pinch.previousScale;
-
-            if (f > 0 && _settings.fontSize == _settings.maxFontSize) {
-              maxFontSize.show();
-            }
-            else if (f < 0 && _settings.fontSize == _settings.minFontSize) {
-              minFontSize.show();
-            }
-            else if (f > 0) {
-              _settings.fontSize = _settings.fontSize + 1;
-            }
-            else if (f < 0) {
-              _settings.fontSize = _settings.fontSize - 1;
-            }
-          }
-        }
-
         QuranView {
           id: content
 
@@ -218,8 +189,42 @@ Page {
             flick.contentY = part;
           }
 
+          PinchArea {
+            id: pinch
+            anchors.fill: parent
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: parent.width
+            height: parent.height
+
+            // TODO: ignore small finger moves ? make it less sensitive ?
+            onPinchUpdated: {
+              if (pinch.scale > 1.0) {
+                var newSize = Math.round(pinch.scale) + _settings.fontSize;
+                var finalSize = Math.min(newSize, _settings.maxFontSize);
+                if (finalSize == _settings.maxFontSize) {
+                  maxFontSize.show();
+                }
+
+                _settings.fontSize = finalSize;
+              }
+              else {
+                var newSize = _settings.fontSize - Math.round(pinch.scale * 2);
+                var finalSize = Math.max(newSize, _settings.minFontSize);
+                if (finalSize == _settings.minFontSize) {
+                  minFontSize.show();
+                }
+
+                _settings.fontSize = finalSize;
+              }
+            }
+          }
+
           MouseArea {
             anchors.fill: parent
+            enabled: !pinch.pinch.active
             onClicked: content.mouseClicked(mouse.x, mouse.y);
             onPressAndHold: {
               var b = content.bookmarkId(mouse.x, mouse.y);
