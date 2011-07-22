@@ -24,12 +24,18 @@ Page {
   anchors.fill: parent
   tools: toolBar
 
+  Connections {
+    target: _bookmarks
+    onCleared: pageStack.pop();
+  }
+
+
   QueryDialog {
     id: clearDialog
     titleText: qsTr("Clear all favorites?")
     acceptButtonText: qsTr("Yes")
     rejectButtonText: qsTr("No")
-    onAccepted: _bookmarks.clear()
+    onAccepted: _bookmarks.clear();
   }
 
   QueryDialog {
