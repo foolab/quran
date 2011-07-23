@@ -84,6 +84,7 @@ QVariantList Bookmarks::bookmarks() const {
 
 void Bookmarks::clear() {
   m_settings->setBookmarks(QList<uint>());
+  m_bookmarks.clear();
   emit cleared();
 }
 
