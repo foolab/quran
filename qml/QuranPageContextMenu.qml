@@ -18,7 +18,6 @@
 import QtQuick 1.1
 import com.nokia.meego 1.0
 
-// TODO: show the banner
 ContextMenu {
   property variant bookmark: 0
   property alias title: menuItem.text
