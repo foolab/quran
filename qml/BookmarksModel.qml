@@ -20,10 +20,6 @@ import com.nokia.meego 1.0
 
 ListModel {
   Component.onCompleted: {
-    // HACK: Seems the only way to catch the signal from a global object is this way
-    _bookmarks.cleared.connect(clear);
-    _bookmarks.bookmarkRemoved.connect(bookmarkRemoved);
-
     var bs = _bookmarks.bookmarks();
 
     for (var x = 0; x < bs.length; x++) {

@@ -26,9 +26,16 @@ Page {
 
   Connections {
     target: _bookmarks
-    onCleared: pageStack.pop();
+    onCleared: {
+      view.model.clear();
+      pageStack.pop();
+    }
   }
 
+  Connections {
+    target: _bookmarks
+    onBookmarkRemoved: view.model.bookmarkRemoved();
+  }
 
   QueryDialog {
     id: clearDialog
