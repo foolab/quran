@@ -29,6 +29,10 @@ Bookmarks::~Bookmarks() {
   m_settings = 0;
 }
 
+bool Bookmarks::isEmpty() {
+  return m_bookmarks.isEmpty();
+}
+
 uint Bookmarks::serialize(int sura, int aya) {
   uint bookmark = sura;
 
@@ -50,6 +54,10 @@ void Bookmarks::add(uint bookmark) {
 
     int index = m_bookmarks.indexOf(bookmark);
     emit bookmarkAdded(bookmark, index);
+
+    if (m_bookmarks.size() == 1) {
+      emit emptyChanged();
+    }
   }
 }
 
@@ -59,6 +67,10 @@ void Bookmarks::removeByIndex(int index) {
     m_bookmarks.removeAt(index);
     m_settings->setBookmarks(m_bookmarks);
     emit bookmarkRemoved(bookmark, index);
+
+    if (m_bookmarks.size() == 0) {
+      emit emptyChanged();
+    }
   }
 }
 
@@ -69,6 +81,10 @@ void Bookmarks::remove(uint bookmark) {
     m_bookmarks.removeAt(index);
     m_settings->setBookmarks(m_bookmarks);
     emit bookmarkRemoved(bookmark, index);
+
+    if (m_bookmarks.size() == 0) {
+      emit emptyChanged();
+    }
   }
 }
 

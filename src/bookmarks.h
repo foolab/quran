@@ -26,6 +26,8 @@ class Settings;
 class Bookmarks : public QObject {
   Q_OBJECT
 
+  Q_PROPERTY(bool empty READ isEmpty NOTIFY emptyChanged);
+
 public:
   Bookmarks(Settings *settings, QObject *parent = 0);
   ~Bookmarks();
@@ -39,6 +41,8 @@ public:
   Q_INVOKABLE int sura(uint bookmark);
   Q_INVOKABLE int aya(uint bookmark);
 
+  bool isEmpty();
+
 public slots:
   void add(uint bookmark);
   void remove(uint bookmark);
@@ -49,6 +53,7 @@ signals:
   void bookmarkAdded(uint bookmark, int index);
   void bookmarkRemoved(uint bookmark, int index);
   void cleared();
+  void emptyChanged();
 
 private:
   void deserialize(uint bookmark, int& sura, int& aya);
