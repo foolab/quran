@@ -86,13 +86,30 @@ Page {
       anchors.fill: parent
       anchors.left: parent.left
       anchors.right: parent.right
-      anchors.topMargin: 20
+      anchors.topMargin: 16
+      anchors.leftMargin: 16
+      anchors.rightMargin: 16
       id: view
       model: BookmarksModel {}
       section.property: "sura"
       section.criteria: ViewSection.FullString
       section.delegate: section
       delegate: cell
+      header: header
+    }
+
+    Component {
+      id: header
+      Rectangle {
+        height: title.height + 26
+        Label {
+          id: title
+          text: qsTr("Favorites")
+          font.pixelSize: 32
+          anchors.bottom: parent.bottom
+          anchors.bottomMargin: 26
+        }
+      }
     }
 
     Component {
@@ -103,11 +120,8 @@ Page {
         height: title.height
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: 20
-        anchors.rightMargin: 20
         Label {
           anchors.right: parent.right
-          anchors.rightMargin: 20
           id: title
           font.family: _settings.fontFamily
           font.pixelSize: 32
@@ -124,8 +138,6 @@ Page {
         width: parent.width
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: 20
-        anchors.rightMargin: 20
         anchors.top: cell.top
         height: n.height + rm.height
         color: index % 2 ? Qt.lighter(_settings.highlightColor, 1.2) : Qt.lighter(_settings.highlightColor, 1.3)
