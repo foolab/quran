@@ -112,8 +112,4 @@ PageStackWindow {
       pageStack.push(Qt.createComponent("QuranPage.qml"), {}, true);
     }
   }
-
-  // TODO: we don't want a transition here.
-//    initialPage: Page {}
-//  initialPage: QuranPage {}
 }
