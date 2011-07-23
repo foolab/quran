@@ -107,7 +107,6 @@ PageStackWindow {
 
     if (!_data.setText(textType)) {
       pageStack.push(Qt.createComponent("ErrorPage.qml"));
-      console.log(textType);
     }
     else {
       pageStack.push(Qt.createComponent("QuranPage.qml"), {}, true);
