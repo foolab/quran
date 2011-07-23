@@ -31,3 +31,4 @@ QuranPageSuraList 1.0 QuranPageSuraList.qml
 RemoveFromFavoritesMenu 1.0 RemoveFromFavoritesMenu.qml
 SettingsPage 1.0 SettingsPage.qml
 ErrorPage 1.0 ErrorPage.qml
+BookmarksPageEmpty 1.0 BookmarksPageEmpty.qml

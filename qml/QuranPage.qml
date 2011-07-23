@@ -69,7 +69,7 @@ Page {
     ToolIcon {
       id: favoritesIcon
       iconId: "toolbar-favorite-mark"
-      onClicked: createPage("BookmarksPage");
+      onClicked: createPage(_bookmarks.empty ? "BookmarksPageEmpty" : "BookmarksPage");
     }
 
     ToolIcon {
