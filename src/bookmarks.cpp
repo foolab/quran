@@ -99,9 +99,12 @@ QVariantList Bookmarks::bookmarks() const {
 }
 
 void Bookmarks::clear() {
-  m_settings->setBookmarks(QList<uint>());
-  m_bookmarks.clear();
-  emit cleared();
+  if (!m_bookmarks.isEmpty()) {
+    m_settings->setBookmarks(QList<uint>());
+    m_bookmarks.clear();
+    emit cleared();
+    emit emptyChanged();
+  }
 }
 
 int Bookmarks::sura(uint bookmark) {
