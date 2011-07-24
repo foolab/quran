@@ -2,6 +2,6 @@
 Type=Application
 Name=Quran
 Icon=/usr/share/themes/base/meegotouch/icons/quran-logo.png
-Exec=/usr/bin/invoker --single-instance --type=d /usr/bin/quran
+Exec=/usr/bin/single-instance /usr/bin/quran
 OnlyShowIn=X-MeeGo;
 X-MeeGo-Translation-Catalog=quran
