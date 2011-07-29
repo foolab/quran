@@ -77,6 +77,8 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.topMargin: 16
+        anchors.leftMargin: 16
+        anchors.rightMargin: 16
         horizontalAlignment: Text.AlignHCenter
         font.family: _settings.fontFamily
         font.pointSize: _settings.fontSize
