@@ -72,6 +72,7 @@ Page {
         property int textType: _settings.textType
 
         id: preview
+        height: _settings.maxFontSize * 5.5
         anchors.top: previewLabel.bottom
         anchors.left: parent.left
         anchors.right: parent.right
