@@ -120,6 +120,12 @@ Page {
           minimumValue: _settings.minFontSize
           maximumValue: _settings.maxFontSize
 
+          onPressedChanged: {
+            if (!pressed) {
+              _settings.fontSize = value;
+            }
+          }
+
           // HACK: valueChanged will be emitted upon the component creation with value
           // being the minimum (16) and we end up resetting the settings.
           // We will only set it now if the component has been created.
@@ -127,8 +133,14 @@ Page {
           // both are returning "undefined"
           property bool done: false
           onValueChanged: {
-            if (done) {
+            // We also don't update _settings.fontSize while we are
+            // pressed because we don't want all the components to react
+            // as changing font size is very slow and affects the performance of sliding
+            if (done && !pressed) {
               _settings.fontSize = value
+            }
+            else if (pressed) {
+              preview.font.pointSize = value
             }
           }
 
