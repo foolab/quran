@@ -117,6 +117,7 @@ Page {
         height: parent.height - part.height - number.height
         contentHeight: content.height
 	clip: true
+        interactive: !pinch.pinch.active
 
         NumberAnimation {
           id: animation
@@ -154,7 +155,6 @@ Page {
             onAyaChanged: content.scrollIfNeeded();
           }
 
-          // TODO: stop listening to this when we are not active.
           font.pointSize: _settings.fontSize
           font.family: _settings.fontFamily
           anchors.right: parent.right
@@ -202,6 +202,7 @@ Page {
 
           PinchArea {
             id: pinch
+
             anchors.fill: parent
             anchors.right: parent.right
             anchors.left: parent.left
@@ -209,27 +210,26 @@ Page {
             anchors.bottom: parent.bottom
             width: parent.width
             height: parent.height
+            pinch.target: parent
+            pinch.minimumScale: _settings.minFontSize / _settings.fontSize
+            pinch.maximumScale: _settings.maxFontSize / _settings.fontSize
 
-            // TODO: ignore small finger moves ? make it less sensitive ?
             onPinchUpdated: {
-              if (pinch.scale > 1.0) {
-                var newSize = Math.round(pinch.scale) + _settings.fontSize;
-                var finalSize = Math.min(newSize, _settings.maxFontSize);
-                if (finalSize == _settings.maxFontSize) {
-                  maxFontSize.show();
-                }
+              var size = content.scale * _settings.fontSize;
 
-                _settings.fontSize = finalSize;
+              if (pinch.scale < 1.0 && size <= _settings.minFontSize) {
+                minFontSize.show();
               }
-              else {
-                var newSize = _settings.fontSize - Math.round(pinch.scale * 2);
-                var finalSize = Math.max(newSize, _settings.minFontSize);
-                if (finalSize == _settings.minFontSize) {
-                  minFontSize.show();
-                }
+              else if (pinch.scale > 1.0 && size >= _settings.maxFontSize) {
+                maxFontSize.show();
+              }
+            }
 
-                _settings.fontSize = finalSize;
-              }
+            onPinchFinished: {
+              var len = pinch.startCenter.y - flick.contentY;
+              _settings.fontSize = content.scale * _settings.fontSize;
+              content.scale = 1;
+              animation.to = Math.min(Math.max(len), content.height - flick.height)
             }
           }
 
