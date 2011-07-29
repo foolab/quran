@@ -223,8 +223,6 @@ void QuranView::end(QTextCursor& cursor, const QList<Fragment>& frags) {
   }
 
   // TODO: account for margin ?
-  // TODO: fix this ?
-  //  setBaselineOffset(m_doc->size().height());
 
   m_doc->setTextWidth(width());
   setImplicitHeight(m_doc->size().height());
