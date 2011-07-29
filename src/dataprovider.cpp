@@ -45,15 +45,19 @@ int DataProvider::pageCount() {
 QStringList DataProvider::surasForPage(int page) {
   QList<Fragment> frags = pageFromIndex(page).fragments();
 
+  QList<int> suras;
+
   QStringList ret;
-  if (frags.size() == 1 && frags.at(0).start() != 0) {
-    ret << sura(frags.at(0).sura()).name();
-  }
 
   for (int x = 0; x < frags.size(); x++) {
-    if (frags.at(x).start() == 0) {
-      ret << sura(frags.at(x).sura()).name();
+    int sura = frags.at(x).sura();
+    if (suras.indexOf(sura) == -1) {
+      suras.append(sura);
     }
+  }
+
+  for (int x = 0; x < suras.size(); x++) {
+    ret.append(sura(suras.at(x)).name());
   }
 
   return ret;
