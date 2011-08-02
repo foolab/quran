@@ -20,6 +20,7 @@
 
 #include <QObject>
 #include <QColor>
+#include <QPoint>
 
 class QSettings;
 
@@ -36,6 +37,7 @@ class Settings : public QObject {
   Q_PROPERTY(QColor highlightColor READ highlightColor CONSTANT);
   Q_PROPERTY(QString version READ version CONSTANT);
   Q_PROPERTY(bool fontLoaded READ isFontLoaded CONSTANT);
+  Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged);
 
 public:
   Settings(QObject *parent = 0);
@@ -69,11 +71,15 @@ public:
 
   bool isFontLoaded() const;
 
+  void setPosition(const QPoint& pos);
+  QPoint position() const;
+
 signals:
   void fontSizeChanged();
   void textTypeChanged();
   void numberFormatChanged();
   void pageNumberChanged();
+  void positionChanged();
 
 private:
   QSettings *m_settings;
