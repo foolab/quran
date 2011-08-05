@@ -26,25 +26,62 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QMaemo5InformationBox>
+#include <QLabel>
 
 // TODO: get rid of the serailze/deserialize we are doing.
 FavoritesDialog::FavoritesDialog(Settings *settings, Bookmarks *bookmarks, DataProvider *data,
 				 QWidget *parent) :
-  QDialog(parent), m_bookmarks(bookmarks), m_sura(-1), m_aya(-1) {
+  QDialog(parent), m_settings(settings), m_data(data),
+  m_bookmarks(bookmarks), m_widget(0), m_sura(-1), m_aya(-1) {
 
   setAttribute(Qt::WA_Maemo5PortraitOrientation);
   setWindowTitle(tr("Favorites"));
 
   setMinimumHeight(1000); // Something big
 
+  QVariantList bs = m_bookmarks->bookmarks();
+  if (bs.isEmpty()) {
+    showEmpty();
+  }
+  else {
+    showFavorites(bs);
+  }
+}
+
+FavoritesDialog::~FavoritesDialog() {
+
+}
+
+void FavoritesDialog::showEmpty() {
+  QLabel *label = new QLabel(tr("No favorites. Long tap on a verse to add or remove favorites"),
+			     this);
+  label->setWordWrap(true);
+  label->setAlignment(Qt::AlignCenter);
+
+  QVBoxLayout *layout = new QVBoxLayout(this);
+  layout->addWidget(label, Qt::AlignCenter);
+
+  QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+  layout->addWidget(buttonBox);
+
+  QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+  QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+}
+
+void FavoritesDialog::showFavorites(const QVariantList& bs) {
   m_widget = new QTreeWidget(this);
+
   m_widget->setColumnCount(1);
+  m_widget->setHeaderHidden(true);
+  m_widget->setLayoutDirection(Qt::RightToLeft);
+  m_widget->setRootIsDecorated(false);
+  m_widget->setExpandsOnDoubleClick(false);
+  m_widget->setTextElideMode(Qt::ElideRight); // TODO:
 
   QList<QTreeWidgetItem *> items;
 
   QMap<int, QList<int> > map;
 
-  QVariantList bs = m_bookmarks->bookmarks();
   foreach(const QVariant& var, bs) {
     uint b = var.value<uint>();
     map[m_bookmarks->sura(b)].append(m_bookmarks->aya(b));
@@ -62,15 +99,15 @@ FavoritesDialog::FavoritesDialog(Settings *settings, Bookmarks *bookmarks, DataP
 
     QTreeWidgetItem *item = new QTreeWidgetItem;
     QFont f = item->font(0);
-    f.setFamily(settings->fontFamily());
+    f.setFamily(m_settings->fontFamily());
     item->setFont(0, f);
 
-    item->setText(0, data->fullSuraName(sura));
+    item->setText(0, m_data->fullSuraName(sura));
     items << item;
 
     foreach(int aya, ayat) {
       QTreeWidgetItem *item2 = new QTreeWidgetItem(item);
-      item2->setText(0, data->text(sura, aya));
+      item2->setText(0, m_data->text(sura, aya));
       item2->setFont(0, f);
       item2->setData(0, Qt::UserRole, m_bookmarks->serialize(sura, aya));
     }
@@ -82,18 +119,10 @@ FavoritesDialog::FavoritesDialog(Settings *settings, Bookmarks *bookmarks, DataP
     m_widget->expandItem(item);
   }
 
-  m_widget->setHeaderHidden(true);
-  m_widget->setLayoutDirection(Qt::RightToLeft);
-  m_widget->setRootIsDecorated(false);
-  m_widget->setExpandsOnDoubleClick(false);
-  m_widget->setTextElideMode(Qt::ElideRight); // TODO:
-
   QVBoxLayout *layout = new QVBoxLayout(this);
   layout->addWidget(m_widget);
 
   QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
-  QObject::connect(buttonBox->addButton(tr("Go"), QDialogButtonBox::ActionRole),
-		   SIGNAL(clicked()), this, SLOT(go()));
 
   QObject::connect(buttonBox->addButton(tr("Clear"), QDialogButtonBox::ActionRole),
 		   SIGNAL(clicked()), this, SLOT(clear()));
@@ -101,14 +130,13 @@ FavoritesDialog::FavoritesDialog(Settings *settings, Bookmarks *bookmarks, DataP
   QObject::connect(buttonBox->addButton(tr("Remove"), QDialogButtonBox::ActionRole),
 		   SIGNAL(clicked()), this, SLOT(remove()));
 
+  QObject::connect(buttonBox->addButton(tr("Go"), QDialogButtonBox::ActionRole),
+		   SIGNAL(clicked()), this, SLOT(go()));
+
   layout->addWidget(buttonBox);
 
   QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
   QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-}
-
-FavoritesDialog::~FavoritesDialog() {
-
 }
 
 void FavoritesDialog::go() {

@@ -19,6 +19,7 @@
 #define FAVORITES_DIALOG_H
 
 #include <QDialog>
+#include <QVariant>
 
 class Bookmarks;
 class DataProvider;
@@ -42,7 +43,13 @@ private slots:
   void remove();
 
 private:
+  void showEmpty();
+  void showFavorites(const QVariantList& bs);
+
+  Settings *m_settings;
+  DataProvider *m_data;
   Bookmarks *m_bookmarks;
+
   QTreeWidget *m_widget;
   int m_sura;
   int m_aya;
