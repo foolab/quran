@@ -23,10 +23,19 @@ Page {
   id: quranpage
   orientationLock: PageOrientation.LockPortrait
 
-  function createPage(name) {
+  function doScrollTo(sura, aya) {
+    if (view.currentItem) {
+      view.currentItem.scrollTo(sura, aya);
+    }
+  }
+
+  function createPage(name, useSignal) {
     var component = Qt.createComponent(name + ".qml");
     if (component.status == Component.Ready) {
-      pageStack.push(component);
+      var p = pageStack.push(component);
+      if (useSignal) {
+        p.scrollTo.connect(doScrollTo);
+      }
     }
   }
 
@@ -45,12 +54,12 @@ Page {
     MenuLayout {
       MenuItem {
         text: qsTr("Settings")
-        onClicked: createPage("SettingsPage");
+        onClicked: createPage("SettingsPage", false);
       }
 
       MenuItem {
         text: qsTr("About")
-        onClicked: createPage("AboutPage");
+        onClicked: createPage("AboutPage", false);
       }
     }
   }
@@ -69,13 +78,20 @@ Page {
     ToolIcon {
       id: favoritesIcon
       iconId: "toolbar-favorite-mark"
-      onClicked: createPage(_bookmarks.empty ? "BookmarksPageEmpty" : "BookmarksPage");
+      onClicked: {
+        if (_bookmarks.empty) {
+          createPage("BookmarksPageEmpty", false);
+        }
+        else {
+          createPage("BookmarksPage", true);
+        }
+      }
     }
 
     ToolIcon {
       id: listIcon
       iconId: "toolbar-list"
-      onClicked: createPage("IndexPage");
+      onClicked: createPage("IndexPage", true);
     }
 
     ToolIcon {
@@ -91,6 +107,13 @@ Page {
     Rectangle {
       width: view.width
       height: view.height
+      function scrollTo(sura, aya) {
+        content.scrollTo(sura, aya);
+      }
+
+      function setY(yp) {
+        animation.run(yp);
+      }
 
       QuranPageSuraList {
         id: name
@@ -119,14 +142,22 @@ Page {
 	clip: true
         interactive: !pinch.pinch.active
 
+        onContentYChanged: {
+          _settings.y = contentY > 0 ? contentY : 0;
+        }
+
         NumberAnimation {
           id: animation
           target: flick
           from: flick.contentY
           easing.type: Easing.InOutQuad
           property: "contentY"
-          onToChanged: {
-            restart();
+
+          function run(t) {
+            complete();
+            from = flick.contentY;
+            to = t;
+            start();
           }
         }
 
@@ -137,23 +168,6 @@ Page {
           // and _settings.textType is to alias them to properties!
           property int format: _settings.numberFormat
           property int textType: _settings.textType
-
-          function scrollIfNeeded() {
-            if (_position.isValid()) {
-              selectRequested(_position.sura, _position.aya);
-            }
-          }
-
-          Component.onCompleted: scrollIfNeeded();
-          Connections {
-            target: _position
-            onSuraChanged: content.scrollIfNeeded();
-          }
-
-          Connections {
-            target: _position
-            onAyaChanged: content.scrollIfNeeded();
-          }
 
           font.pointSize: _settings.fontSize
           font.family: _settings.fontFamily
@@ -171,8 +185,6 @@ Page {
           onTextTypeChanged: populate();
 
           onLineVisibilityRequested: {
-            _position.reset();
-
             if (upper >= flick.contentY && lower <= flick.contentY + flick.height) {
               // Nothing.
               return;
@@ -180,24 +192,21 @@ Page {
             else if (lower <= flick.contentY + flick.height) {
               // Topmost part is not visible.
               // We will scroll anyway and make it visible.
-
-              animation.to = upper;
+              animation.run(upper);
               return;
             }
 
             if (lower - upper > flick.height) {
               // The line will not fit no matter what we do.
               // Just show the upper part.
-
-              animation.to = upper;
+              animation.run(upper);
               return;
             }
 
             // Our line will fit the view. We need to scroll until the bottommost part
             // is just visible.
-
             var part = upper + (lower - (upper + flick.height));
-            animation.to = part;
+            animation.run(part);
           }
 
           PinchArea {
@@ -280,5 +289,17 @@ Page {
     delegate: viewView
     cacheBuffer: 0
     onFlickEnded: _settings.pageNumber = currentIndex
+
+    // TODO: couldn't find a better way :|
+    property bool __set: false;
+    onCurrentItemChanged: {
+      if (currentItem && !__set) {
+        currentItem.setY(_settings.y);
+        __set = true;
+      }
+      else if (currentItem && __set) {
+        _settings.y = 0;
+      }
+    }
   }
 }

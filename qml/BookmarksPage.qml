@@ -24,6 +24,8 @@ Page {
   anchors.fill: parent
   tools: toolBar
 
+  signal scrollTo(int sura, int aya);
+
   Connections {
     target: _bookmarks
     onCleared: {

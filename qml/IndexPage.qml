@@ -24,6 +24,8 @@ Page {
   anchors.fill: parent
   tools: toolBar
 
+  signal scrollTo(int sura, int aya);
+
   Rectangle {
     color: "white"
     width: parent.width
@@ -45,7 +47,10 @@ Page {
 
       Component {
         id: row
-        IndexPageRow { width: view.width; rowIndex: index }
+        IndexPageRow {
+          width: view.width;
+          rowIndex: index
+        }
       }
     }
   }

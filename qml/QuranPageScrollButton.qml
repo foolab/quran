@@ -31,7 +31,7 @@ Button {
     }
 
     if (_sura != -1 && _aya != -1) {
-      _position.set(_sura, _aya);
+      pageStack.currentPage.scrollTo(_sura, _aya);
 
       _sura = -1;
       _aya = -1;
@@ -44,11 +44,11 @@ Button {
     __clicked = true;
     var p = _data.pageNumberForSuraAndAya(_sura, _aya);
     if (p == page) {
-
-      _position.set(_sura, _aya);
+      pageStack.currentPage.scrollTo(_sura, _aya);
 
       _sura = -1;
       _aya = -1;
+
       pageStack.pop();
     }
     else {
