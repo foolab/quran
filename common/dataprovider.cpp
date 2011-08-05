@@ -63,15 +63,9 @@ QStringList DataProvider::surasForPage(int page) {
   return ret;
 }
 
-// TODO:
-/*
-QString DataProvider::firstSuraForPage(int page) {
-  _Page *p = &Pages[page];
-  int frag = p->firstFragment;
-  int sura = Fragments[frag].sura;
-  return QString::fromUtf8(Suras[sura].name);
+int DataProvider::firstSuraForPage(int page) {
+  return (&Pages[page])->sura;
 }
-*/
 
 int DataProvider::suraCount() {
   return MAX_SURA + 1;
