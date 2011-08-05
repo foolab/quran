@@ -25,6 +25,7 @@
 #define DEFAULT_FONT_SIZE      36
 #define DEFAULT_NUMBER_FORMAT  0
 #define DEFAULT_PAGE_NUMBER    0
+#define DEFAULT_Y              0
 
 #define FONT_FAMILY            "me_quran"
 #define FONT_MIN_SIZE          16
@@ -144,4 +145,15 @@ void Settings::setPosition(const QPoint& pos) {
 
 QPoint Settings::position() const {
   return m_settings->value("General/position", QPoint(0, 0)).toPoint();
+}
+
+int Settings::y() const {
+  return m_settings->value("General/y", DEFAULT_Y).toInt();
+}
+
+void Settings::setY(int y) {
+  if (y != Settings::y()) {
+    m_settings->setValue("General/y", y);
+    emit yChanged();
+  }
 }

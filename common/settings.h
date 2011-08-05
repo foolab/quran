@@ -38,6 +38,7 @@ class Settings : public QObject {
   Q_PROPERTY(QString version READ version CONSTANT);
   Q_PROPERTY(bool fontLoaded READ isFontLoaded CONSTANT);
   Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged);
+  Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged);
 
 public:
   Settings(QObject *parent = 0);
@@ -45,16 +46,13 @@ public:
 
   QString fontFamily() const;
 
-  void setFontSize(int size);
   int fontSize() const;
 
   void setPageNumber(int page);
   int pageNumber() const;
 
-  void setNumberFormat(int format);
   int numberFormat() const;
 
-  void setTextType(int type);
   int textType() const;
 
   int minFontSize() const;
@@ -74,12 +72,21 @@ public:
   void setPosition(const QPoint& pos);
   QPoint position() const;
 
+  int y() const;
+
+public slots:
+  void setFontSize(int size);
+  void setNumberFormat(int format);
+  void setTextType(int type);
+  void setY(int y);
+
 signals:
   void fontSizeChanged();
   void textTypeChanged();
   void numberFormatChanged();
   void pageNumberChanged();
   void positionChanged();
+  void yChanged();
 
 private:
   QSettings *m_settings;
