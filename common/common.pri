@@ -5,8 +5,11 @@ INCLUDEPATH += . ../data/ ../common/
 
 DEFINES += VERSION=\\\"0.1\\\" DATA_DIR=\\\"/usr/share/quran/\\\"
 
-SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp
-HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h
+SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp abstractquranview.cpp \
+           position.cpp legal.cpp
+
+HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h abstractquranview.h \
+           position.h legal.h
 
 target.path = /usr/bin/
 
