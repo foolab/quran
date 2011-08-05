@@ -24,6 +24,7 @@ class Settings;
 class DataProvider;
 class NumberFormatter;
 class QLabel;
+class QSlider;
 
 class SettingsDialog : public QDialog {
   Q_OBJECT
@@ -36,12 +37,15 @@ public:
 private slots:
   void populatePreview();
   void changeTextType(int text);
+  void sliderValueChanged(int value);
+  void sliderReleased();
 
 private:
   Settings *m_settings;
   DataProvider *m_data;
   NumberFormatter *m_formatter;
 
+  QSlider *m_slider;
   QLabel *m_preview;
 };
 

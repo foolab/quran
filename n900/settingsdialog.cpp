@@ -28,6 +28,7 @@
 #include <QPushButton>
 #include <QButtonGroup>
 #include <QMaemo5InformationBox>
+#include <QDebug>
 
 SettingsDialog::SettingsDialog(Settings *settings, DataProvider *data, NumberFormatter *formatter,
 			       QWidget *parent) : QDialog(parent), m_settings(settings),
@@ -49,15 +50,16 @@ SettingsDialog::SettingsDialog(Settings *settings, DataProvider *data, NumberFor
 
   // Text Size...
   {
-    QSlider *slider = new QSlider(this);
-    slider->setRange(m_settings->minFontSize(), m_settings->maxFontSize());
-    slider->setValue(m_settings->fontSize());
+    m_slider = new QSlider(this);
+    m_slider->setRange(m_settings->minFontSize(), m_settings->maxFontSize());
+    m_slider->setValue(m_settings->fontSize());
     QGroupBox *box = new QGroupBox(tr("Font size:"), this);
     QVBoxLayout *layout = new QVBoxLayout(box);
-    layout->addWidget(slider);
-    slider->setOrientation(Qt::Horizontal);
+    layout->addWidget(m_slider);
+    m_slider->setOrientation(Qt::Horizontal);
     l->addWidget(box);
-    QObject::connect(slider, SIGNAL(valueChanged(int)), m_settings, SLOT(setFontSize(int)));
+    QObject::connect(m_slider, SIGNAL(sliderReleased()), this, SLOT(sliderReleased()));
+    QObject::connect(m_slider, SIGNAL(valueChanged(int)), this, SLOT(sliderValueChanged(int)));
   }
 
   // Text type:
@@ -121,7 +123,6 @@ SettingsDialog::SettingsDialog(Settings *settings, DataProvider *data, NumberFor
   QVBoxLayout *layout = new QVBoxLayout(this);
   layout->addWidget(area);
 
-  QObject::connect(m_settings, SIGNAL(fontSizeChanged()), this, SLOT(populatePreview()));
   QObject::connect(m_settings, SIGNAL(textTypeChanged()), this, SLOT(populatePreview()));
   QObject::connect(m_settings, SIGNAL(numberFormatChanged()), this, SLOT(populatePreview()));
 }
@@ -145,3 +146,14 @@ void SettingsDialog::changeTextType(int text) {
     m_settings->setTextType(text);
   }
 }
+
+void SettingsDialog::sliderValueChanged(int value) {
+  QFont f = m_preview->font();
+  f.setPointSize(value);
+  m_preview->setFont(f);
+}
+
+void SettingsDialog::sliderReleased() {
+  m_settings->setFontSize(m_slider->value());
+}
+
