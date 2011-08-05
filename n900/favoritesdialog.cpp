@@ -27,8 +27,8 @@
 #include <QMessageBox>
 #include <QMaemo5InformationBox>
 #include <QLabel>
+#include <QDebug>
 
-// TODO: get rid of the serailze/deserialize we are doing.
 FavoritesDialog::FavoritesDialog(Settings *settings, Bookmarks *bookmarks, DataProvider *data,
 				 QWidget *parent) :
   QDialog(parent), m_settings(settings), m_data(data),
@@ -80,18 +80,15 @@ void FavoritesDialog::showFavorites(const QVariantList& bs) {
 
   QList<QTreeWidgetItem *> items;
 
-  QMap<int, QList<int> > map;
+  QMap<int, QMap<int, uint> > map;
 
   foreach(const QVariant& var, bs) {
     uint b = var.value<uint>();
-    map[m_bookmarks->sura(b)].append(m_bookmarks->aya(b));
+    map[m_bookmarks->sura(b)][m_bookmarks->aya(b)] = b;
   }
 
-  for (QMap<int, QList<int> >::const_iterator iter = map.constBegin();
-       iter != map.constEnd(); iter++) {
-    int sura = iter.key();
-    QList<int> ayat = iter.value();
-    qSort(ayat);
+  foreach (int sura, map.keys()) {
+    QMap<int, uint> ayat = map[sura];
 
     if (ayat.isEmpty()) {
       continue;
@@ -105,11 +102,11 @@ void FavoritesDialog::showFavorites(const QVariantList& bs) {
     item->setText(0, m_data->fullSuraName(sura));
     items << item;
 
-    foreach(int aya, ayat) {
+    foreach(int aya, ayat.keys()) {
       QTreeWidgetItem *item2 = new QTreeWidgetItem(item);
       item2->setText(0, m_data->text(sura, aya));
       item2->setFont(0, f);
-      item2->setData(0, Qt::UserRole, m_bookmarks->serialize(sura, aya));
+      item2->setData(0, Qt::UserRole, ayat[aya]);
     }
   }
 
