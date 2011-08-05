@@ -33,7 +33,7 @@ bool Bookmarks::isEmpty() {
   return m_bookmarks.isEmpty();
 }
 
-uint Bookmarks::serialize(int sura, int aya) {
+uint Bookmarks::serialize(int sura, int aya) const {
   uint bookmark = sura;
 
   bookmark <<= 16;
@@ -44,6 +44,10 @@ uint Bookmarks::serialize(int sura, int aya) {
 
 bool Bookmarks::isBookmarked(uint bookmark) const {
   return m_bookmarks.indexOf(bookmark) != -1;
+}
+
+bool Bookmarks::isBookmarked(int sura, int aya) const {
+  return isBookmarked(serialize(sura, aya));
 }
 
 void Bookmarks::add(uint bookmark) {
