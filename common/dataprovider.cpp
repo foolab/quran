@@ -91,23 +91,17 @@ int DataProvider::pageNumberForSura(int sura) {
 
 int DataProvider::pageNumberForSuraAndAya(int sura, int aya) {
   int page = Suras[sura].page;
-
   _Page *p = &Pages[page];
 
-  while (p->sura == sura) {
-    if (p->aya == aya) {
-      return p->index;
+  for (int x = p->firstFragment; x <= MAX_FRAG; x++) {
+    _Fragment *f = &Fragments[x];
+    if (f->sura == sura && f->start <= aya && f->start + f->size >= aya) {
+      return f->page;
     }
-    else if (p->aya > aya) {
-      --p;
-      return p->index;
-    }
-
-    ++p;
   }
 
-  // We should never reach this but whatever.
-  return page;
+  // We shouldn't reach this but you never know!
+  return p->index;
 }
 
 QString DataProvider::partName(int page) {
