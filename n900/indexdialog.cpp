@@ -22,8 +22,9 @@
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include "settings.h"
+#include <QApplication>
+#include <QDesktopWidget>
 
-// TODO: select the current sura.
 IndexDialog::IndexDialog(Settings *settings, DataProvider *data, NumberFormatter *formatter,
 			 QWidget *parent) : QDialog(parent), m_settings(settings),
 					    m_data(data), m_formatter(formatter), m_sura(-1) {
@@ -31,13 +32,15 @@ IndexDialog::IndexDialog(Settings *settings, DataProvider *data, NumberFormatter
   setWindowTitle(tr("Index"));
   setAttribute(Qt::WA_Maemo5PortraitOrientation);
 
-  setMinimumHeight(1000); // Something big
+  // We have to set the size like that in order for the initial selection to work!
+  setMinimumHeight(QApplication::desktop()->availableGeometry().height());
 
   m_widget = new QTreeWidget(this);
   m_widget->setLayoutDirection(Qt::RightToLeft);
   m_widget->setColumnCount(2);
   m_widget->setHeaderHidden(true);
   m_widget->setColumnWidth(0, 200);
+  m_widget->setUniformRowHeights(true);
 
   for (int x = 0; x < m_data->suraCount(); x++) {
     QTreeWidgetItem *item = new QTreeWidgetItem(m_widget);
@@ -56,10 +59,21 @@ IndexDialog::IndexDialog(Settings *settings, DataProvider *data, NumberFormatter
 
   QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(doAccept()));
   QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+  layout->activate();
+
+  showCurrentPage();
 }
 
 IndexDialog::~IndexDialog() {
 
+}
+
+void IndexDialog::showCurrentPage() {
+  int sura = m_data->firstSuraForPage(m_settings->pageNumber());
+  QTreeWidgetItem *item = m_widget->topLevelItem(sura);
+  m_widget->setCurrentItem(item);
+  m_widget->scrollToItem(item, QTreeWidget::PositionAtCenter);
 }
 
 void IndexDialog::doAccept() {

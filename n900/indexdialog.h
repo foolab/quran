@@ -37,6 +37,7 @@ public:
 
 private slots:
   void doAccept();
+  void showCurrentPage();
 
 private:
   Settings *m_settings;
