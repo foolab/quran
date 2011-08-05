@@ -120,6 +120,9 @@ void MainWindow::createContent() {
 void MainWindow::setPage(int page) {
   m_view->populate(page);
   m_settings->setY(0);
+
+  m_forward->setEnabled(m_data->hasPage(page + 1));
+  m_back->setEnabled(m_data->hasPage(page - 1));
 }
 
 void MainWindow::load() {
