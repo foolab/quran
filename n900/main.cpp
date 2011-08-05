@@ -57,39 +57,4 @@ int main(int argc, char *argv[]) {
   win.show();
 
   return app.exec();
-
-#if 0
-
-
-  PagePositionController position;
-
-  qmlRegisterType<DataProvider>();
-  qmlRegisterType<Settings>();
-  qmlRegisterType<Bookmarks>();
-  qmlRegisterType<NumberFormatter>();
-  qmlRegisterType<PagePositionController>();
-  qmlRegisterType<QuranView>("Quran", 1, 0, "QuranView");
-
-  QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
-
-  view->engine()->addImageProvider("quran", new ImageProvider);
-
-  view->rootContext()->setContextProperty("_settings", &settings);
-  view->rootContext()->setContextProperty("_data", &data);
-  view->rootContext()->setContextProperty("_bookmarks", &bookmarks);
-  view->rootContext()->setContextProperty("_formatter", &formatter);
-  view->rootContext()->setContextProperty("_position", &position);
-
-  if (dev) {
-    view->setSource(QUrl::fromLocalFile(QDir::currentPath() + "/main.qml"));
-  }
-  else {
-    view->engine()->addImportPath(DATA_DIR "/qml");
-    view->setSource(QUrl::fromLocalFile(DATA_DIR "/qml/" "main.qml"));
-  }
-
-  view->showFullScreen();
-
-  return app->exec();
-#endif
 }
