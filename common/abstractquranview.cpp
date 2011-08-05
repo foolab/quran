@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "quranview.h"
+#include "abstractquranview.h"
 #include <QDebug>
 #include <QTextDocument>
 #include "dataprovider.h"
@@ -29,99 +29,76 @@
 
 #define BOOKMARKS_PROPERTY QTextFormat::UserProperty
 
-QuranView::QuranView(QDeclarativeItem *parent) :
-  QDeclarativeItem(parent), m_page(0),
+AbstractQuranView::AbstractQuranView(QTextDocument *doc) :
   m_data(0), m_bookmarks(0), m_formatter(0),
-  m_doc(new QTextDocument(this)) {
+  m_doc(doc) {
 
   m_doc->setDocumentMargin(0);
   m_doc->setUndoRedoEnabled(false);
-
-  setFlag(ItemHasNoContents, false);
-  setFlag(QGraphicsItem::ItemUsesExtendedStyleOption, true);
-  //  setCacheMode(QGraphicsItem::DeviceCoordinateCache);
 }
 
-QuranView::~QuranView() {
+AbstractQuranView::~AbstractQuranView() {
   m_data = 0;
 }
 
-void QuranView::componentComplete() {
-  QDeclarativeItem::componentComplete();
-
-  // Do our job
-
-  Q_ASSERT(m_data != 0);
-
-  if (!m_data) {
-    return;
-  }
-
-  populate();
-}
-
-void QuranView::setFont(const QFont& font) {
+void AbstractQuranView::setFont(const QFont& font) {
   m_doc->setDefaultFont(font);
-
-  if (isComponentComplete()) {
-    updateLayout();
-    update();
-  }
 }
 
-QFont QuranView::font() {
+QFont AbstractQuranView::font() {
   return m_doc->defaultFont();
 }
 
-void QuranView::setPage(int page) {
-  m_page = page;
-}
-
-int QuranView::page() {
-  return m_page;
-}
-
-qreal QuranView::margin() {
-  return m_doc->documentMargin();
-}
-
-void QuranView::setMargin(qreal margin) {
-  m_doc->setDocumentMargin(margin);
-}
-
-void QuranView::setDataProvider(DataProvider *data) {
+void AbstractQuranView::setDataProvider(DataProvider *data) {
   m_data = data;
 }
 
-DataProvider *QuranView::dataProvider() {
+DataProvider *AbstractQuranView::dataProvider() {
   return m_data;
 }
 
-void QuranView::setBookmarks(Bookmarks *bookmarks) {
+void AbstractQuranView::setBookmarks(Bookmarks *bookmarks) {
   m_bookmarks = bookmarks;
 }
 
-Bookmarks *QuranView::bookmarks() {
+Bookmarks *AbstractQuranView::bookmarks() {
   return m_bookmarks;
 }
 
-void QuranView::setFormatter(NumberFormatter *formatter) {
+void AbstractQuranView::setFormatter(NumberFormatter *formatter) {
   m_formatter = formatter;
 }
 
-void QuranView::setHighlightColor(const QColor& color) {
-  m_color = color;
-}
-
-QColor QuranView::highlightColor() const {
-  return m_color;
-}
-
-NumberFormatter *QuranView::formatter() {
+NumberFormatter *AbstractQuranView::formatter() {
   return m_formatter;
 }
 
-void QuranView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) {
+void AbstractQuranView::setHighlightColor(const QColor& color) {
+  m_color = color;
+}
+
+QColor AbstractQuranView::highlightColor() const {
+  return m_color;
+}
+
+void AbstractQuranView::populate(int page) {
+  Page p = m_data->pageFromIndex(page);
+
+  QList<Fragment> frags = p.fragments();
+
+  begin(frags);
+
+  QTextCursor c(m_doc);
+
+  foreach (const Fragment& frag, frags) {
+    addFragment(c, frag);
+  }
+
+  end(c, frags);
+}
+
+#if 0
+void AbstractQuranView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) {
   if (isComponentComplete() && newGeometry.width() != oldGeometry.width()) {
     updateLayout();
   }
@@ -129,12 +106,11 @@ void QuranView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeom
   QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
-void QuranView::updateLayout() {
+void AbstractQuranView::updateLayout() {
   m_doc->setTextWidth(width());
-  setImplicitHeight(m_doc->size().height());
 }
 
-void QuranView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+void AbstractQuranView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 		      QWidget *widget) {
 
   Q_UNUSED(widget);
@@ -153,29 +129,18 @@ void QuranView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
   painter->restore();
 }
 
-void QuranView::populate() {
-  Page p = m_data->pageFromIndex(m_page);
+void AbstractQuranView::populate() {
 
-  QList<Fragment> frags = p.fragments();
-
-  begin(frags);
-
-  QTextCursor c(m_doc);
-
-  foreach (const Fragment& frag, frags) {
-    addFragment(c, frag);
-  }
-
-  end(c, frags);
 }
+#endif
 
-void QuranView::begin(const QList<Fragment>& frags) {
+void AbstractQuranView::begin(const QList<Fragment>& frags) {
   Q_UNUSED(frags);
 
   m_doc->clear();
 }
 
-void QuranView::addFragment(QTextCursor& cursor, const Fragment& frag) {
+void AbstractQuranView::addFragment(QTextCursor& cursor, const Fragment& frag) {
   Sura s = m_data->sura(frag.sura());
 
   QTextBlockFormat centerFormat;
@@ -212,7 +177,7 @@ void QuranView::addFragment(QTextCursor& cursor, const Fragment& frag) {
   }
 }
 
-void QuranView::end(QTextCursor& cursor, const QList<Fragment>& frags) {
+void AbstractQuranView::end(QTextCursor& cursor, const QList<Fragment>& frags) {
   if (!frags.isEmpty() && frags.at(0).start() == 0) {
     // Seems we will get an empty line at the beginning
     // of the document if we start it with a block.
@@ -223,12 +188,10 @@ void QuranView::end(QTextCursor& cursor, const QList<Fragment>& frags) {
   }
 
   // TODO: account for margin ?
-
-  m_doc->setTextWidth(width());
-  setImplicitHeight(m_doc->size().height());
 }
 
-QString QuranView::textForPosition(int x, int y) {
+#if 0
+QString AbstractQuranView::textForPosition(int x, int y) {
   int pos = m_doc->documentLayout()->hitTest(QPointF(x, y), Qt::FuzzyHit);
   if (pos == -1) {
     return QString();
@@ -251,7 +214,7 @@ QString QuranView::textForPosition(int x, int y) {
   return QString();
 }
 
-QVariant QuranView::bookmarkId(int x, int y) {
+QVariant AbstractQuranView::bookmarkId(int x, int y) {
   int pos = m_doc->documentLayout()->hitTest(QPointF(x, y), Qt::FuzzyHit);
   if (pos == -1) {
     return QVariant();
@@ -278,13 +241,24 @@ QVariant QuranView::bookmarkId(int x, int y) {
 
   return QVariant();
 }
+#endif
 
-void QuranView::selectRequested(int sura, int aya) {
-  uint bookmark = m_bookmarks->serialize(sura, aya);
+QLineF AbstractQuranView::position(const Position& position) {
+  return AbstractQuranView::position(position, false);
+}
+
+QLineF AbstractQuranView::select(const Position& position) {
+  return AbstractQuranView::position(position, true);
+}
+
+QLineF AbstractQuranView::position(const Position& position, bool highlight) {
+  uint bookmark = m_bookmarks->serialize(position.sura(), position.aya());
 
   qreal height = 0;
 
-  clearSelection();
+  if (highlight) {
+    clearSelection();
+  }
 
   QTextCursor c(m_doc);
 
@@ -299,20 +273,22 @@ void QuranView::selectRequested(int sura, int aya) {
 	int start = frag.position();
 	int end = start + frag.length();
 
-	// Select
-        c.setPosition(start, QTextCursor::MoveAnchor);
-        c.setPosition(end, QTextCursor::KeepAnchor);
+	if (highlight) {
+	  // Select
+	  c.setPosition(start, QTextCursor::MoveAnchor);
+	  c.setPosition(end, QTextCursor::KeepAnchor);
 
-	// Apply background color
-        QTextCharFormat fmt;
-        fmt.setBackground(m_color);
-        c.mergeCharFormat(fmt);
+	  // Apply background color
+	  QTextCharFormat fmt;
+	  fmt.setBackground(m_color);
+	  c.mergeCharFormat(fmt);
 
-	// Update selection:
-	m_highlighted = frag;
+	  // Update selection:
+	  m_highlighted = frag;
 
-	// deselect
-        c.clearSelection();
+	  // deselect
+	  c.clearSelection();
+	}
 
 	// calculate line position
         QRectF startRect = block.layout()->lineForTextPosition(start - block.position()).naturalTextRect();
@@ -322,21 +298,18 @@ void QuranView::selectRequested(int sura, int aya) {
         QRectF endRect = block.layout()->lineForTextPosition(end - block.position()).naturalTextRect();
         qreal lower = height + endRect.y() + endRect.height();
 	lower += m_doc->documentMargin();
-	// done!
-	update();
 
-	QMetaObject::invokeMethod(this, "lineVisibilityRequested", Qt::QueuedConnection,
-				  Q_ARG(qreal, upper), Q_ARG(qreal, lower));
-
-	return;
+	return QLineF(0, upper, 0, lower);;
       }
     }
 
     height += m_doc->documentLayout()->blockBoundingRect(block).height();
   }
+
+  return QLineF();
 }
 
-void QuranView::clearSelection() {
+void AbstractQuranView::clearSelection() {
   QTextCursor c(m_doc);
 
   if (m_highlighted.isValid()) {
@@ -347,22 +320,15 @@ void QuranView::clearSelection() {
     fmt.clearBackground();
     c.setCharFormat(fmt);
     c.clearSelection();
-
-    update();
   }
 }
 
-void QuranView::mouseClicked(int x, int y) {
+Position AbstractQuranView::position(int x, int y) {
   int pos = m_doc->documentLayout()->hitTest(QPointF(x, y), Qt::FuzzyHit);
   if (pos == -1) {
-    return;
+    return Position();
   }
 
-  clearSelection();
-
-  QTextCursor c(m_doc);
-
-  qreal height = 0;
   for (QTextBlock block = m_doc->begin(); block != m_doc->end(); block = block.next()) {
     for (QTextBlock::Iterator it = block.begin(); !(it.atEnd()); ++it) {
 
@@ -373,43 +339,19 @@ void QuranView::mouseClicked(int x, int y) {
 
       if (pos >= start && pos <= end && frag.length() != 1) {
 	if (!frag.charFormat().hasProperty(BOOKMARKS_PROPERTY)) {
-	  // Only select ayat
-	  return;
+	  // Only ayat
+	  return Position();
 	}
 
-	// Select
-        c.setPosition(start, QTextCursor::MoveAnchor);
-        c.setPosition(end, QTextCursor::KeepAnchor);
+	unsigned b = frag.charFormat().property(BOOKMARKS_PROPERTY).value<unsigned>();
 
-	// Apply background color
-        QTextCharFormat fmt;
-        fmt.setBackground(m_color);
-        c.mergeCharFormat(fmt);
+	int sura = m_bookmarks->sura(b);
+	int aya = m_bookmarks->aya(b);
 
-	// Update selection:
-	m_highlighted = frag;
-
-	// deselect
-        c.clearSelection();
-
-	// calculate line position
-        QRectF startRect = block.layout()->lineForTextPosition(start - block.position()).naturalTextRect();
-        qreal upper = height + startRect.y();
-	upper += m_doc->documentMargin();
-
-        QRectF endRect = block.layout()->lineForTextPosition(end - block.position()).naturalTextRect();
-        qreal lower = height + endRect.y() + endRect.height();
-	lower += m_doc->documentMargin();
-	// done!
-	update();
-
-	QMetaObject::invokeMethod(this, "lineVisibilityRequested", Qt::QueuedConnection,
-				  Q_ARG(qreal, upper), Q_ARG(qreal, lower));
-
-	return;
+	return Position(sura, aya);
       }
     }
-
-    height += m_doc->documentLayout()->blockBoundingRect(block).height();
   }
+
+  return Position();
 }

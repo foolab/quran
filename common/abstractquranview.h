@@ -15,12 +15,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QURAN_VIEW_H
-#define QURAN_VIEW_H
+#ifndef ABSTRACT_QURAN_VIEW_H
+#define ABSTRACT_QURAN_VIEW_H
 
-#include <QDeclarativeItem>
+#include <QObject>
 #include <QTextFragment>
 #include <QColor>
+#include "position.h"
 
 class DataProvider;
 class QTextDocument;
@@ -29,31 +30,16 @@ class Fragment;
 class Bookmarks;
 class NumberFormatter;
 
-class QuranView : public QDeclarativeItem {
-  Q_OBJECT
-  Q_PROPERTY(int page READ page WRITE setPage);
-  Q_PROPERTY(DataProvider * dataProvider READ dataProvider WRITE setDataProvider);
-  Q_PROPERTY(Bookmarks * bookmarks READ bookmarks WRITE setBookmarks);
-  Q_PROPERTY(NumberFormatter * formatter READ formatter WRITE setFormatter);
-  Q_PROPERTY(QFont font READ font WRITE setFont);
-  Q_PROPERTY(qreal margin READ margin WRITE setMargin);
-  Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setHighlightColor);
-
+class AbstractQuranView {
 public:
-  QuranView(QDeclarativeItem *parent = 0);
-  ~QuranView();
-
-  void setPage(int page);
-  int page();
+  AbstractQuranView(QTextDocument *doc);
+  ~AbstractQuranView();
 
   void setFont(const QFont& font);
   QFont font();
 
   void setDataProvider(DataProvider *data);
   DataProvider *dataProvider();
-
-  void setMargin(qreal margin);
-  qreal margin();
 
   void setBookmarks(Bookmarks *bookmarks);
   Bookmarks *bookmarks();
@@ -64,17 +50,24 @@ public:
   void setHighlightColor(const QColor& color);
   QColor highlightColor() const;
 
-  virtual void componentComplete();
-  virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-		     QWidget *widget = 0);
+  void populate(int page);
 
-  Q_INVOKABLE QVariant bookmarkId(int x, int y);
-  Q_INVOKABLE QString textForPosition(int x, int y);
+  Position position(int x, int y);
+
+  QLineF select(const Position& position);
+  QLineF position(const Position& position);
+
+  void clearSelection();
+
+#if 0
+  QVariant bookmarkId(int x, int y);
+  QString textForPosition(int x, int y);
+
+  void updateLayout();
 
 public slots:
-  void mouseClicked(int x, int y);
-  void populate();
-  void selectRequested(int sura, int aya);
+
+
 
 protected:
   virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
@@ -83,15 +76,23 @@ signals:
   void lineVisibilityRequested(qreal upper, qreal lower);
 
 private:
-  void updateLayout();
 
-  void clearSelection();
+
+
+
+
+
+
+
+
+#endif
+private:
+  QLineF position(const Position& position, bool highlight);
 
   void begin(const QList<Fragment>& frags);
   void addFragment(QTextCursor& cursor, const Fragment& frag);
   void end(QTextCursor& cursor, const QList<Fragment>& frags);
 
-  int m_page;
   DataProvider *m_data;
   Bookmarks *m_bookmarks;
   NumberFormatter *m_formatter;
@@ -102,4 +103,4 @@ private:
   QTextFragment m_highlighted;
 };
 
-#endif /* QURAN_VIEW_H */
+#endif /* ABSTRACT_QURAN_VIEW_H */
