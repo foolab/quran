@@ -15,66 +15,37 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAIN_WINDOW_H
-#define MAIN_WINDOW_H
+#ifndef INDEX_DIALOG_H
+#define INDEX_DIALOG_H
 
-#include <QMainWindow>
+#include <QDialog>
 
-class QLabel;
 class Settings;
-class Bookmarks;
 class DataProvider;
 class NumberFormatter;
-class QuranView;
-class QPushButton;
+class QTreeWidget;
 
-class MainWindow : public QMainWindow {
+class IndexDialog : public QDialog {
   Q_OBJECT
 
 public:
-  MainWindow(Settings *settings, Bookmarks *bookmarks,
-	     DataProvider *data, NumberFormatter *formatter,
-	     QWidget *parent = 0);
-  ~MainWindow();
+  IndexDialog(Settings *settings, DataProvider *data, NumberFormatter *formatter,
+	      QWidget *parent = 0);
+  ~IndexDialog();
 
-  void createContent();
-
-public slots:
-  void load();
+  int sura() const;
 
 private slots:
-  void fontSizeChanged();
-  void textTypeChanged();
-  void numberFormatChanged();
-  void pageNumberChanged();
-  void yChanged();
-  void nextPage();
-  void previousPage();
-
-  void showSettings();
-  void showIndex();
-  void showFavorites();
-  void showAbout();
-
-  void bookmarkAdded();
-  void bookmarkRemoved();
-  void bookmarksCleared();
+  void doAccept();
 
 private:
-  void setPage(int page);
-
   Settings *m_settings;
-  Bookmarks *m_bookmarks;
   DataProvider *m_data;
   NumberFormatter *m_formatter;
 
-  QLabel *m_part;
-  QLabel *m_sura;
-  QLabel *m_page;
+  QTreeWidget *m_widget;
 
-  QuranView *m_view;
-  QPushButton *m_forward;
-  QPushButton *m_back;
+  int m_sura;
 };
 
-#endif /* MAIN_WINDOW_H */
+#endif /* INDEX_DIALOG_H */

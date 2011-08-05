@@ -22,6 +22,7 @@
 #include "bookmarks.h"
 #include "numberformatter.h"
 #include <QMaemo5InformationBox>
+#include <QTimer>
 
 int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
@@ -50,7 +51,7 @@ int main(int argc, char *argv[]) {
   }
   else {
     win.createContent();
-    win.load();
+    QTimer::singleShot(0, &win, SLOT(load()));
   }
 
   win.show();

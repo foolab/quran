@@ -1,22 +1,10 @@
-TEMPLATE = app
-TARGET = quran
-DEPENDPATH += . ../src/ ../data/
-INCLUDEPATH += . ../src/ ../data/
-DEFINES += VERSION=\\\"0.1\\\" DATA_DIR=\\\"/usr/share/quran/\\\"
+include(../common/common.pri)
 
 QT += maemo5
 
-CONFIG += qdeclarative-boostable
+CONFIG += debug
 
-SOURCES += main.cpp mainwindow.cpp settings.cpp dataprovider.cpp bookmarks.cpp numberformatter.cpp
+SOURCES += main.cpp mainwindow.cpp quranview.cpp settingsdialog.cpp indexdialog.cpp \
+           aboutdialog.cpp favoritesdialog.cpp
 
-#settings.cpp dataprovider.cpp quranview.cpp bookmarks.cpp numberformatter.cpp \
-#           pagepositioncontroller.cpp imageprovider.cpp
-
-HEADERS += mainwindow.h settings.h dataprovider.h bookmarks.h numberformatter.h metadata.h
-#settings.h dataprovider.h metadata.h quranview.h bookmarks.h numberformatter.h \
-           #pagepositioncontroller.h imageprovider.h
-
-target.path = /usr/bin/
-
-INSTALLS += target
+HEADERS += mainwindow.h quranview.h settingsdialog.h indexdialog.h aboutdialog.h favoritesdialog.h
