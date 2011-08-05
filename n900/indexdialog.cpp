@@ -49,8 +49,8 @@ IndexDialog::IndexDialog(Settings *settings, DataProvider *data, NumberFormatter
   QVBoxLayout *layout = new QVBoxLayout(this);
   layout->addWidget(m_widget);
 
-  QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
-						     | QDialogButtonBox::Cancel);
+  QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
+  buttonBox->addButton(tr("Go"), QDialogButtonBox::AcceptRole);
 
   layout->addWidget(buttonBox);
 
