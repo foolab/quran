@@ -24,8 +24,8 @@
 #include "quranview.h"
 #include "bookmarks.h"
 #include "numberformatter.h"
-#include "pagepositioncontroller.h"
 #include "imageprovider.h"
+#include "legal.h"
 #include <QDir>
 #include <MDeclarativeCache>
 
@@ -50,13 +50,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   NumberFormatter formatter(&settings);
 
-  PagePositionController position;
+  Legal legal;
 
   qmlRegisterType<DataProvider>();
   qmlRegisterType<Settings>();
   qmlRegisterType<Bookmarks>();
   qmlRegisterType<NumberFormatter>();
-  qmlRegisterType<PagePositionController>();
+  qmlRegisterType<Legal>();
   qmlRegisterType<QuranView>("Quran", 1, 0, "QuranView");
 
   QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
@@ -67,7 +67,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   view->rootContext()->setContextProperty("_data", &data);
   view->rootContext()->setContextProperty("_bookmarks", &bookmarks);
   view->rootContext()->setContextProperty("_formatter", &formatter);
-  view->rootContext()->setContextProperty("_position", &position);
+  view->rootContext()->setContextProperty("_legal", &legal);
 
   if (dev) {
     view->setSource(QUrl::fromLocalFile(QDir::currentPath() + "/main.qml"));
