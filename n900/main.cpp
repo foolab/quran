@@ -38,18 +38,14 @@ int main(int argc, char *argv[]) {
 
   MainWindow win(&settings, &bookmarks, &data, &formatter);
 
-  // TODO: fix this mess!
-  if (!settings.isFontLoaded()) {
-    QMaemo5InformationBox::information(&win, QObject::tr("Failed to load application font"));
-    win.createContent();
-  }
-  else if (!data.setText(settings.textType())) {
-    win.show();
-    QMaemo5InformationBox::information(&win,
-    QObject::tr("Failed to load the Quran text. Please reinstall"),
-				       QMaemo5InformationBox::NoTimeout);
+  if (!data.setText(settings.textType())) {
+    win.createErrorContent();
   }
   else {
+    if (!settings.isFontLoaded()) {
+      QMaemo5InformationBox::information(&win, QObject::tr("Failed to load application font"));
+    }
+
     win.createContent();
     QTimer::singleShot(0, &win, SLOT(load()));
   }

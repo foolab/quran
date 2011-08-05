@@ -39,6 +39,8 @@ public:
 
   void createContent();
 
+  void createErrorContent();
+
 public slots:
   void load();
 

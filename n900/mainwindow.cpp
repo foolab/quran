@@ -57,6 +57,13 @@ MainWindow::~MainWindow() {
 
 }
 
+void MainWindow::createErrorContent() {
+  QLabel *label = new QLabel(tr("Failed to load the Quran text. Please reinstall."), this);
+  label->setWordWrap(true);
+  label->setAlignment(Qt::AlignCenter);
+  setCentralWidget(label);
+}
+
 void MainWindow::createContent() {
   QWidget *widget = new QWidget(this);
   setCentralWidget(widget);
