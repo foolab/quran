@@ -59,33 +59,12 @@ public:
 
   void clearSelection();
 
-#if 0
-  QVariant bookmarkId(int x, int y);
-  QString textForPosition(int x, int y);
-
-  void updateLayout();
-
-public slots:
-
-
-
 protected:
-  virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
+  QTextDocument *m_doc;
+  DataProvider *m_data;
+  Bookmarks *m_bookmarks;
+  NumberFormatter *m_formatter;
 
-signals:
-  void lineVisibilityRequested(qreal upper, qreal lower);
-
-private:
-
-
-
-
-
-
-
-
-
-#endif
 private:
   QLineF position(const Position& position, bool highlight);
 
@@ -93,12 +72,7 @@ private:
   void addFragment(QTextCursor& cursor, const Fragment& frag);
   void end(QTextCursor& cursor, const QList<Fragment>& frags);
 
-  DataProvider *m_data;
-  Bookmarks *m_bookmarks;
-  NumberFormatter *m_formatter;
   QColor m_color;
-
-  QTextDocument *m_doc;
 
   QTextFragment m_highlighted;
 };

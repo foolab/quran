@@ -30,8 +30,7 @@
 #define BOOKMARKS_PROPERTY QTextFormat::UserProperty
 
 AbstractQuranView::AbstractQuranView(QTextDocument *doc) :
-  m_data(0), m_bookmarks(0), m_formatter(0),
-  m_doc(doc) {
+  m_doc(doc), m_data(0), m_bookmarks(0), m_formatter(0) {
 
   m_doc->setDocumentMargin(0);
   m_doc->setUndoRedoEnabled(false);
@@ -97,43 +96,6 @@ void AbstractQuranView::populate(int page) {
   end(c, frags);
 }
 
-#if 0
-void AbstractQuranView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) {
-  if (isComponentComplete() && newGeometry.width() != oldGeometry.width()) {
-    updateLayout();
-  }
-
-  QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
-}
-
-void AbstractQuranView::updateLayout() {
-  m_doc->setTextWidth(width());
-}
-
-void AbstractQuranView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-		      QWidget *widget) {
-
-  Q_UNUSED(widget);
-
-  // TODO: is this needed ?
-  painter->save();
-
-  QAbstractTextDocumentLayout::PaintContext ctx;
-  if (option->exposedRect.isValid()) {
-    qreal margin = m_doc->documentMargin();
-    ctx.clip = option->exposedRect.adjusted(margin, margin, -margin, -margin);
-  }
-
-  m_doc->documentLayout()->draw(painter, ctx);
-
-  painter->restore();
-}
-
-void AbstractQuranView::populate() {
-
-}
-#endif
-
 void AbstractQuranView::begin(const QList<Fragment>& frags) {
   Q_UNUSED(frags);
 
@@ -189,59 +151,6 @@ void AbstractQuranView::end(QTextCursor& cursor, const QList<Fragment>& frags) {
 
   // TODO: account for margin ?
 }
-
-#if 0
-QString AbstractQuranView::textForPosition(int x, int y) {
-  int pos = m_doc->documentLayout()->hitTest(QPointF(x, y), Qt::FuzzyHit);
-  if (pos == -1) {
-    return QString();
-  }
-
-  for (QTextBlock block = m_doc->begin(); block != m_doc->end(); block = block.next()) {
-    for (QTextBlock::Iterator it = block.begin(); !(it.atEnd()); ++it) {
-
-      QTextFragment frag(it.fragment());
-
-      int start = frag.position();
-      int end = start + frag.length();
-
-      if (pos >= start && pos <= end && frag.length() != 1) {
-	return frag.text();
-      }
-    }
-  }
-
-  return QString();
-}
-
-QVariant AbstractQuranView::bookmarkId(int x, int y) {
-  int pos = m_doc->documentLayout()->hitTest(QPointF(x, y), Qt::FuzzyHit);
-  if (pos == -1) {
-    return QVariant();
-  }
-
-  for (QTextBlock block = m_doc->begin(); block != m_doc->end(); block = block.next()) {
-    for (QTextBlock::Iterator it = block.begin(); !(it.atEnd()); ++it) {
-
-      QTextFragment frag(it.fragment());
-
-      int start = frag.position();
-      int end = start + frag.length();
-
-      if (pos >= start && pos <= end && frag.length() != 1) {
-	if (!frag.charFormat().hasProperty(BOOKMARKS_PROPERTY)) {
-	  // Only select ayat
-	  return QVariant();
-	}
-
-	return frag.charFormat().property(BOOKMARKS_PROPERTY);
-      }
-    }
-  }
-
-  return QVariant();
-}
-#endif
 
 QLineF AbstractQuranView::position(const Position& position) {
   return AbstractQuranView::position(position, false);
