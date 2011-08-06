@@ -43,6 +43,7 @@ public:
 
 public slots:
   void load();
+  void showBanner(const QString& message);
 
 private slots:
   void fontSizeChanged();
@@ -64,7 +65,6 @@ private slots:
 
 private:
   void setPage(int page);
-  void showBanner(const QString& message);
 
   Settings *m_settings;
   Bookmarks *m_bookmarks;

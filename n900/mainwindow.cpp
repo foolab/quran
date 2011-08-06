@@ -187,6 +187,10 @@ void MainWindow::previousPage() {
 
 void MainWindow::showSettings() {
   SettingsDialog dlg(m_settings, m_data, m_formatter);
+
+  QObject::connect(&dlg, SIGNAL(showBanner(const QString&)),
+		   this, SLOT(showBanner(const QString&)));
+
   dlg.exec();
 }
 
@@ -201,6 +205,9 @@ void MainWindow::showIndex() {
 
 void MainWindow::showFavorites() {
   FavoritesDialog dlg(m_settings, m_bookmarks, m_data);
+  QObject::connect(&dlg, SIGNAL(showBanner(const QString&)),
+		   this, SLOT(showBanner(const QString&)));
+
   if (dlg.exec() != QDialog::Accepted) {
     return;
   }

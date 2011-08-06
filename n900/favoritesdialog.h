@@ -37,6 +37,9 @@ public:
   int sura() const;
   int aya() const;
 
+signals:
+  void showBanner(const QString& message);
+
 private slots:
   void go();
   void clear();

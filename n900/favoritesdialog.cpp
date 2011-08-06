@@ -25,7 +25,6 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QMessageBox>
-#include <QMaemo5InformationBox>
 #include <QLabel>
 #include <QDebug>
 
@@ -140,7 +139,7 @@ void FavoritesDialog::go() {
   QList<QTreeWidgetItem *> items = m_widget->selectedItems();
 
   if (items.isEmpty() || items.at(0)->childCount() != 0) {
-    QMaemo5InformationBox::information(this, tr("Please select a verse"));
+    emit showBanner(tr("Please select a verse"));
     return;
   }
 
@@ -166,7 +165,7 @@ void FavoritesDialog::remove() {
   QList<QTreeWidgetItem *> items = m_widget->selectedItems();
 
   if (items.isEmpty() || items.at(0)->childCount() != 0) {
-    QMaemo5InformationBox::information(this, tr("Please select a verse"));
+    emit showBanner(tr("Please select a verse"));
     return;
   }
 

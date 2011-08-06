@@ -27,7 +27,6 @@
 #include <QSlider>
 #include <QPushButton>
 #include <QButtonGroup>
-#include <QMaemo5InformationBox>
 #include <QDebug>
 
 SettingsDialog::SettingsDialog(Settings *settings, DataProvider *data, NumberFormatter *formatter,
@@ -140,7 +139,8 @@ void SettingsDialog::populatePreview() {
 
 void SettingsDialog::changeTextType(int text) {
   if (!m_data->setText(text)) {
-    QMaemo5InformationBox::information(this, tr("Failed to load the text"));
+    // TODO: reset the button too.
+    emit showBanner(tr("Failed to load the text"));
   }
   else {
     m_settings->setTextType(text);

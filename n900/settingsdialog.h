@@ -34,6 +34,9 @@ public:
 		 QWidget *parent = 0);
   ~SettingsDialog();
 
+signals:
+  void showBanner(const QString& message);
+
 private slots:
   void populatePreview();
   void changeTextType(int text);
