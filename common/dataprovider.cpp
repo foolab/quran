@@ -90,7 +90,6 @@ int DataProvider::pageNumberForSuraAndAya(int sura, int aya) {
   for (int x = p->firstFragment; x <= MAX_FRAG; x++) {
     _Fragment *f = &Fragments[x];
     if (f->sura == sura && f->start <= aya && f->start + f->size > aya) {
-      qCritical() << "Found page" << f->page << f->start << f->size;
       return f->page;
     }
   }
