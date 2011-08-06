@@ -1,13 +1,13 @@
 Source: quran
-Section: misc
+Section: user/education
 Priority: optional
 Maintainer: Mohammed Sameer <msameer@foolab.org>
-Build-Depends: debhelper (>= 7.1), libqt4-dev, applauncherd-dev
+Build-Depends: debhelper (>= 5), libqt4-dev
 Standards-Version: 3.9.1
 
 Package: quran
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}, qt-components
+Depends: ${misc:Depends}, ${shlibs:Depends}
 XB-Maemo-Display-Name: Holy Quran
 XB-Maemo-Flags: visible
 XB-Maemo-Icon-26:
@@ -206,8 +206,7 @@ XB-Maemo-Icon-26:
  achyCdtROFkH5SiElEhTm1J5/X89MjPZ/qeHppSrYLI2pxRqQs+LFIiJjmCi
  bs0pccD/ukNT09tf7bG5U77gr/ng5PT2V3t09o3aX+Xh6d/W/rcfn/+/bhnj
  7RzIhi8AAAAASUVORK5CYII=
-XB-MeeGo-Desktop-Entry-Filename: quran
-Description: Holy Quran for MeeGo Harmattan
- A holy Quran reader for MeeGo Harmattan. Allows reading the holy book
- and allows adding certain verses to a list of favorites to easily
+Description: Holy Quran for N900 Harmattan
+ A holy Quran reader for N900. Allows reading the holy book
+ and adding certain verses to a list of favorites to easily
  navigate to them later.
