@@ -21,7 +21,6 @@
 #include "dataprovider.h"
 #include "bookmarks.h"
 #include "numberformatter.h"
-#include <QMaemo5InformationBox>
 #include <QTimer>
 
 int main(int argc, char *argv[]) {
@@ -43,7 +42,8 @@ int main(int argc, char *argv[]) {
   }
   else {
     if (!settings.isFontLoaded()) {
-      QMaemo5InformationBox::information(&win, QObject::tr("Failed to load application font"));
+      QMetaObject::invokeMethod(&win, "showBanner", Qt::QueuedConnection,
+				Q_ARG(QString, QObject::tr("Failed to load application font")));
     }
 
     win.createContent();
