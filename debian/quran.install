@@ -1,8 +1,7 @@
-qml/*.qml usr/share/quran/qml/
-qml/qmldir usr/share/quran/qml/
+n900/quran usr/bin/
 data/quran-uthmani.xml usr/share/quran/text/
 data/quran-simple-enhanced.xml usr/share/quran/text/
 data/logo_160.png usr/share/quran/
-data/quran-logo.png usr/share/themes/base/meegotouch/icons/
+data/quran-logo.png usr/share/icons/
 data/me_quran_volt_newmet.ttf usr/share/quran/
-quran.desktop usr/share/applications/
+debian/quran.desktop usr/share/applications/hildon/
