@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
 Name=Quran
-Icon=quran-logo
-Exec=/usr/bin/quran
+Icon=n900-quran-logo
+Exec=/usr/bin/n900-quran
 Categories=Education;
