@@ -8,6 +8,7 @@ Standards-Version: 3.9.1
 Package: n900-quran
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
+XSBC-Bugtracker: mailto:msameer@foolab.org
 XB-Maemo-Display-Name: Holy Quran
 XB-Maemo-Flags: visible
 XB-Maemo-Icon-26:
