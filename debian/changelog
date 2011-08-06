@@ -1,3 +1,15 @@
+n900-quran (0.1-3) unstable; urgency=low
+
+  * Added XSBC-Bugtracker
+
+ -- Mohammed Sameer <msameer@debian.org>  Sat, 06 Aug 2011 19:44:03 +0300
+
+n900-quran (0.1-2) unstable; urgency=low
+
+  * Renamed to n900-quran
+
+ -- Mohammed Sameer <msameer@foolab.org>  Sat, 06 Aug 2011 19:18:55 +0300
+
 n900-quran (0.1) unstable; urgency=low
 
   * Initial release.
