@@ -1,11 +1,11 @@
-Source: quran
+Source: n900-quran
 Section: user/education
 Priority: optional
 Maintainer: Mohammed Sameer <msameer@foolab.org>
 Build-Depends: debhelper (>= 5), libqt4-dev
 Standards-Version: 3.9.1
 
-Package: quran
+Package: n900-quran
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 XB-Maemo-Display-Name: Holy Quran
