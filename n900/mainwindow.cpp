@@ -169,7 +169,7 @@ void MainWindow::yChanged() {
 
 void MainWindow::nextPage() {
   if (m_settings->pageNumber() == m_data->pageCount() - 1) {
-    QMaemo5InformationBox::information(this, tr("You are at the last page"));
+    showBanner(tr("You are at the last page"));
   }
   else {
     m_settings->setPageNumber(m_settings->pageNumber() + 1);
@@ -178,7 +178,7 @@ void MainWindow::nextPage() {
 
 void MainWindow::previousPage() {
   if (m_settings->pageNumber() == 0) {
-    QMaemo5InformationBox::information(this, tr("You are at the first page"));
+    showBanner(tr("You are at the first page"));
   }
   else {
     m_settings->setPageNumber(m_settings->pageNumber() - 1);
@@ -220,13 +220,18 @@ void MainWindow::showAbout() {
 }
 
 void MainWindow::bookmarkAdded() {
-  QMaemo5InformationBox::information(this, tr("Favorite added"));
+  showBanner(tr("Favorite added"));
 }
 
 void MainWindow::bookmarkRemoved() {
-  QMaemo5InformationBox::information(this, tr("Favorite removed"));
+  showBanner(tr("Favorite removed"));
 }
 
 void MainWindow::bookmarksCleared() {
-  QMaemo5InformationBox::information(this, tr("Favorites cleared"));
+  showBanner(tr("Favorites cleared"));
+}
+
+void MainWindow::showBanner(const QString& message) {
+  // TODO: sometimes the banner gets squeezed a bit!
+  QMaemo5InformationBox::information(this, message);
 }
