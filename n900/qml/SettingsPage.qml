@@ -36,31 +36,32 @@ Page {
                       text: qsTr("Preview")
                 }
 
-              Label {
-                      // HACK: Seems the only way to listen to _settings.numberFormat
-                      // and _settings.textType is to alias them to properties!
-                      property int format: _settings.numberFormat
-                      property int textType: _settings.textType
+                Label {
+                        id: preview
 
-                      id: preview
-                      height: _settings.maxFontSize * 5.5
-                      anchors.top: previewLabel.bottom
-                      anchors.left: parent.left
-                      anchors.right: parent.right
-                      anchors.topMargin: 16
-                      anchors.leftMargin: 16
-                      anchors.rightMargin: 16
-                      horizontalAlignment: Text.AlignHCenter
-                      font.family: _settings.fontFamily
-                      font.pointSize: _settings.fontSize
+                        Connections {
+                                target: _settings
+                                onNumberFormatChanged: preview.populate();
+                                onTextTypeChanged: preview.populate();
+                        }
 
-                      onFormatChanged: populate();
-                      onTextTypeChanged: populate();
-                      Component.onCompleted: populate();
+                        // TODO: the rightmost part of the text gets clipped
+                        height: isPortrait() ? 200 : 100
+                        anchors.top: previewLabel.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.topMargin: 16
+                        anchors.leftMargin: 16
+                        anchors.rightMargin: 16
+                        horizontalAlignment: Text.AlignHCenter
+                        font.family: _settings.fontFamily
+                        font.pointSize: _settings.fontSize
 
-                      function populate() {
-                              text = _data.text(0, 0) + " (" + _formatter.number(1) + ")"
-                      }
+                        Component.onCompleted: populate();
+
+                        function populate() {
+                                text = _data.text(0, 0) + " (" + _formatter.number(1) + ")"
+                        }
                 }
 
                 Label {

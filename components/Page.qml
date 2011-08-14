@@ -7,6 +7,10 @@ Rectangle {
 
         anchors.fill: parent
 
+        function isPortrait() {
+                return height > width;
+        }
+
         MouseArea {
                 anchors.fill: parent
                 z: 3000

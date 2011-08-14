@@ -8,9 +8,6 @@ Obtaining the data files:
 2) Metadata:
    - Get quran-data.xml from http://tanzil.net/wiki/Quran_Metadata and save it here
 
-3) Font:
-   - Get me_quran_volt_newmet.zip from http://arabicfonts.wikispaces.com/ and unzip it.
-
 Building:
   qmake && make
   That should generate metadata.h
@@ -18,3 +15,8 @@ Building:
 Logo:
   Original logo from http://en.wikipedia.org/wiki/File:Bismillah_gold.svg
   Modified by me to get a greenish background ;-)
+
+Font:
+=====
+Font info: FONTLOG.txt
+Font license: OFL.txt
