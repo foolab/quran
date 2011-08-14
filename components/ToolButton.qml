@@ -7,8 +7,8 @@ Rectangle {
         property string icon: ""
         signal clicked
 
-        width: 60
-        height: 60
+        width: button.enabled ? 60 : 0
+        height: button.enabled ? 60 : 0
 
         onIconChanged: img.source = "image://theme/" + icon
 
@@ -18,8 +18,8 @@ Rectangle {
         }
 
         Image {
-                width: 50
-                height: 50
+                width: button.enabled ? 50 : 0
+                height: button.enabled ? 50 : 0
                 x: 5
                 y: 5
 
