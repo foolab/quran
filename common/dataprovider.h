@@ -42,12 +42,12 @@ public:
   Q_INVOKABLE int pageNumberForSuraAndAya(int sura, int aya);
   Q_INVOKABLE QString partName(int page);
 
-  int firstSuraForPage(int page);
+  Q_INVOKABLE int firstSuraForPage(int page);
 
   // TODO:
   //  Q_INVOKABLE int numberOfSuraPages(int sura);
 
-  bool hasPage(int page) const;
+  Q_INVOKABLE bool hasPage(int page) const;
 
   QStringList availableTexts() const;
   Q_INVOKABLE bool setText(int index);
