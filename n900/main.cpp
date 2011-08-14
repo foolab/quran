@@ -82,6 +82,8 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 #endif
 
+  view->setWindowTitle(QObject::tr("Holy Quran"));
+
   QObject::connect(view->engine(), SIGNAL(quit()), app, SLOT(quit()));
 
   qCritical() << app->desktop()->availableGeometry();
