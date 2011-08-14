@@ -1,8 +1,7 @@
 include(../common/common.pri)
 
-QT += maemo5
+QT += maemo5 declarative
+# CONFIG += debug
+SOURCES += main.cpp themeimageprovider.cpp
 
-SOURCES += main.cpp mainwindow.cpp quranview.cpp settingsdialog.cpp indexdialog.cpp \
-           aboutdialog.cpp favoritesdialog.cpp
-
-HEADERS += mainwindow.h quranview.h settingsdialog.h indexdialog.h aboutdialog.h favoritesdialog.h
+HEADERS += themeimageprovider.h
