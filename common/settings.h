@@ -40,7 +40,6 @@ class Settings : public QObject {
   Q_PROPERTY(QColor subtitleColor READ subtitleColor CONSTANT);
   Q_PROPERTY(QString version READ version CONSTANT);
   Q_PROPERTY(bool fontLoaded READ isFontLoaded CONSTANT);
-  Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged);
   Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged);
   Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged);
   Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY orientationChanged);
@@ -83,9 +82,7 @@ public:
   void setOrientation(int orientation);
   int orientation() const;
 
-  void setPosition(const QPoint& pos);
-  QPoint position() const;
-
+  // TODO: use or kill
   int y() const;
 
 public slots:
@@ -101,7 +98,6 @@ signals:
   void textTypeChanged();
   void numberFormatChanged();
   void pageNumberChanged();
-  void positionChanged();
   void yChanged();
   void fullScreenChanged();
   void orientationChanged();

@@ -158,17 +158,6 @@ bool Settings::isFontLoaded() const {
   return m_font != -1;
 }
 
-void Settings::setPosition(const QPoint& pos) {
-  if (pos != position()) {
-    m_settings->setValue("General/position", pos);
-    emit positionChanged();
-  }
-}
-
-QPoint Settings::position() const {
-  return m_settings->value("General/position", QPoint(0, 0)).toPoint();
-}
-
 int Settings::y() const {
   return m_settings->value("General/y", DEFAULT_Y).toInt();
 }
