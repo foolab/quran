@@ -73,11 +73,35 @@ NumberFormatter *AbstractQuranView::formatter() {
 }
 
 void AbstractQuranView::setHighlightColor(const QColor& color) {
-  m_color = color;
+  m_highlightColor = color;
 }
 
 QColor AbstractQuranView::highlightColor() const {
-  return m_color;
+  return m_highlightColor;
+}
+
+void AbstractQuranView::setTitleColor(const QColor& color) {
+  m_titleColor = color;
+}
+
+QColor AbstractQuranView::titleColor() const {
+  return m_titleColor;
+}
+
+void AbstractQuranView::setSubtitleColor(const QColor& color) {
+  m_subtitleColor = color;
+}
+
+QColor AbstractQuranView::subtitleColor() const {
+  return m_subtitleColor;
+}
+
+void AbstractQuranView::setVerseColor(const QColor& color) {
+  m_verseColor = color;
+}
+
+QColor AbstractQuranView::verseColor() const {
+  return m_verseColor;
 }
 
 void AbstractQuranView::populate(int page) {
@@ -110,11 +134,14 @@ void AbstractQuranView::addFragment(QTextCursor& cursor, const Fragment& frag) {
 
   if (frag.start() == 0) {
     cursor.insertBlock(centerFormat);
-    cursor.insertText(m_data->fullSuraName(frag.sura()), QTextCharFormat());
+    QTextCharFormat fmt;
+    fmt.setForeground(QBrush(m_titleColor));
+    cursor.insertText(m_data->fullSuraName(frag.sura()), fmt);
 
     if (s.hasBasmala()) {
       cursor.insertBlock(centerFormat);
-      cursor.insertText(m_data->basmala(), QTextCharFormat());
+      fmt.setForeground(QBrush(m_subtitleColor));
+      cursor.insertText(m_data->basmala(), fmt);
     }
 
     cursor.insertBlock(QTextBlockFormat());
@@ -131,6 +158,7 @@ void AbstractQuranView::addFragment(QTextCursor& cursor, const Fragment& frag) {
 
     QString aya = QString("%1 (%2)").arg(text.at(x)).arg(m_formatter->number(ayaNumber + 1));
     fmt.setProperty(BOOKMARKS_PROPERTY, m_bookmarks->serialize(sura, ayaNumber));
+    fmt.setForeground(QBrush(m_verseColor));
     cursor.insertText(aya, fmt);
 
     if (x + 1 != frag.size()) {
@@ -189,7 +217,7 @@ QLineF AbstractQuranView::position(const Position& position, bool highlight) {
 
 	  // Apply background color
 	  QTextCharFormat fmt;
-	  fmt.setBackground(m_color);
+	  fmt.setBackground(m_highlightColor);
 	  c.mergeCharFormat(fmt);
 
 	  // Update selection:

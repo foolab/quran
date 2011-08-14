@@ -26,7 +26,8 @@
 #include "numberformatter.h"
 
 QuranView::QuranView(QDeclarativeItem *parent)
-  : QDeclarativeItem(parent), AbstractQuranView(new QTextDocument(this)), m_page(0) {
+  : QDeclarativeItem(parent), AbstractQuranView(new QTextDocument(this)),
+    m_page(-1) {
 
   m_doc->setDocumentMargin(0);
   m_doc->setUndoRedoEnabled(false);
@@ -41,7 +42,10 @@ QuranView::~QuranView() {
 }
 
 void QuranView::updateLayout() {
+  prepareGeometryChange();
+
   m_doc->setTextWidth(width());
+
   setImplicitHeight(m_doc->size().height());
 }
 
@@ -55,6 +59,10 @@ void QuranView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeom
 
 void QuranView::setPage(int page) {
   m_page = page;
+
+  if (m_page != -1 && isComponentComplete()) {
+    populate();
+  }
 }
 
 int QuranView::page() {
@@ -96,7 +104,9 @@ void QuranView::populate() {
 void QuranView::componentComplete() {
   QDeclarativeItem::componentComplete();
 
-  populate();
+  if (m_page != -1) {
+    populate();
+  }
 }
 
 void QuranView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,

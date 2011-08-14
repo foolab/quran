@@ -32,6 +32,9 @@ class QuranView : public QDeclarativeItem, public AbstractQuranView {
   Q_PROPERTY(NumberFormatter * formatter READ formatter WRITE setFormatter);
   Q_PROPERTY(QFont font READ font WRITE setFont);
   Q_PROPERTY(QColor highlightColor READ highlightColor WRITE setHighlightColor);
+  Q_PROPERTY(QColor verseColor READ verseColor WRITE setVerseColor);
+  Q_PROPERTY(QColor titleColor READ titleColor WRITE setTitleColor);
+  Q_PROPERTY(QColor subtitleColor READ subtitleColor WRITE setSubtitleColor);
 
 public:
   QuranView(QDeclarativeItem *parent = 0);

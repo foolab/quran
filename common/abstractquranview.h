@@ -50,6 +50,15 @@ public:
   void setHighlightColor(const QColor& color);
   QColor highlightColor() const;
 
+  void setTitleColor(const QColor& color);
+  QColor titleColor() const;
+
+  void setSubtitleColor(const QColor& color);
+  QColor subtitleColor() const;
+
+  void setVerseColor(const QColor& color);
+  QColor verseColor() const;
+
   void populate(int page);
 
   Position position(int x, int y);
@@ -72,7 +81,10 @@ private:
   void addFragment(QTextCursor& cursor, const Fragment& frag);
   void end(QTextCursor& cursor, const QList<Fragment>& frags);
 
-  QColor m_color;
+  QColor m_highlightColor;
+  QColor m_titleColor;
+  QColor m_subtitleColor;
+  QColor m_verseColor;
 
   QTextFragment m_highlighted;
 };
