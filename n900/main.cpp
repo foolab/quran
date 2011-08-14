@@ -80,7 +80,6 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
 #else
   QDeclarativeView *view = new QDeclarativeView;
   view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
-  view->setAttribute(Qt::WA_NoSystemBackground);
 #endif
 
   QObject::connect(view->engine(), SIGNAL(quit()), app, SLOT(quit()));
