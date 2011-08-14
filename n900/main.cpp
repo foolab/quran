@@ -44,7 +44,8 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
 #else
   // PR 1.3 Qt hildon style will crash when we are launched in portrait mode.
   // We don't use Qt so we choose an arbitrary style.
-  QApplication::setStyle("clearlook");
+  // TODO: seems the only way is to pass -style
+  QApplication::setStyle("clearlooks");
   QApplication *app = new QApplication(argc, argv);
 #endif
 
