@@ -16,15 +16,45 @@
  */
 
 #include <QApplication>
-#include "mainwindow.h"
+#include <QDeclarativeView>
+#include <QDeclarativeContext>
+#include <QDeclarativeEngine>
+#include <QtDeclarative>
 #include "settings.h"
 #include "dataprovider.h"
+#include "quranview.h"
 #include "bookmarks.h"
 #include "numberformatter.h"
-#include <QTimer>
+#include "logoprovider.h"
+#include "themeimageprovider.h"
+#include "legal.h"
+#include <QDir>
+#include "windowcontroller.h"
 
-int main(int argc, char *argv[]) {
-  QApplication app(argc, argv);
+#ifndef Q_WS_MAEMO_5
+#include <MDeclarativeCache>
+#else
+#define M_DECL_EXPORT
+#endif
+
+M_DECL_EXPORT int main(int argc, char *argv[]) {
+#ifndef Q_WS_MAEMO_5
+  QApplication *app = MDeclarativeCache::qApplication(argc, argv);
+  app->setProperty("NoMStyle", true);
+#else
+  // PR 1.3 Qt hildon style will crash when we are launched in portrait mode.
+  // We don't use Qt so we choose an arbitrary style.
+  QApplication::setStyle("clearlook");
+  QApplication *app = new QApplication(argc, argv);
+#endif
+
+  bool dev = false;
+  for (int x = 0; x < argc; x++) {
+    if (QLatin1String("-dev") == QLatin1String(argv[x])) {
+      dev = true;
+      break;
+    }
+  }
 
   Settings settings;
   settings.loadFont();
@@ -35,22 +65,63 @@ int main(int argc, char *argv[]) {
 
   NumberFormatter formatter(&settings);
 
-  MainWindow win(&settings, &bookmarks, &data, &formatter);
+  Legal legal;
 
-  if (!data.setText(settings.textType())) {
-    win.createErrorContent();
+  qmlRegisterType<DataProvider>();
+  qmlRegisterType<Settings>();
+  qmlRegisterType<Bookmarks>();
+  qmlRegisterType<NumberFormatter>();
+  qmlRegisterType<Legal>();
+  qmlRegisterType<QuranView>("Quran", 1, 0, "QuranView");
+
+#ifndef Q_WS_MAEMO_5
+  QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
+#else
+  QDeclarativeView *view = new QDeclarativeView;
+  view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+  view->setAttribute(Qt::WA_NoSystemBackground);
+#endif
+
+  QObject::connect(view->engine(), SIGNAL(quit()), app, SLOT(quit()));
+
+  qCritical() << app->desktop()->availableGeometry();
+  view->engine()->addImageProvider("quran", new LogoProvider);
+  view->engine()->addImageProvider("theme", new ThemeImageProvider);
+
+  view->rootContext()->setContextProperty("_settings", &settings);
+  view->rootContext()->setContextProperty("_data", &data);
+  view->rootContext()->setContextProperty("_bookmarks", &bookmarks);
+  view->rootContext()->setContextProperty("_formatter", &formatter);
+  view->rootContext()->setContextProperty("_legal", &legal);
+
+  if (dev) {
+    view->setSource(QUrl::fromLocalFile(QDir::currentPath() + "/main.qml"));
   }
   else {
-    if (!settings.isFontLoaded()) {
-      QMetaObject::invokeMethod(&win, "showBanner", Qt::QueuedConnection,
-				Q_ARG(QString, QObject::tr("Failed to load application font")));
-    }
-
-    win.createContent();
-    QTimer::singleShot(0, &win, SLOT(load()));
+    view->engine()->addImportPath(DATA_DIR "/qml");
+    view->setSource(QUrl::fromLocalFile(DATA_DIR "/qml/" "main.qml"));
   }
 
-  win.show();
+  WindowController controller(view, &settings);
 
-  return app.exec();
+#ifdef Q_WS_MAEMO_5
+  controller.setOrientation();
+#endif
+
+  controller.show();
+
+  /*
+#ifndef Q_WS_MAEMO_5
+  view->showFullScreen();
+#else
+  view->showMaximized();
+#endif
+  */
+
+  int ret = app->exec();
+
+  delete view;
+  delete app;
+
+  return ret;
 }
