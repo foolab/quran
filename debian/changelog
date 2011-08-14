@@ -1,3 +1,9 @@
+n900-quran (0.2-1) unstable; urgency=low
+
+  * Reworked using QML.
+
+ -- Mohammed Sameer <msameer@foolab.org>  Sun, 14 Aug 2011 19:54:21 +0300
+
 n900-quran (0.1-4) unstable; urgency=low
 
   * Rebuilt to get rid of the mess in the source tarball data directory
