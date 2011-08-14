@@ -204,5 +204,10 @@ int Settings::orientation() const {
 }
 
 void Settings::reset() {
-  // TODO:
+  setFullScreen(DEFAULT_FULL_SCREEN);
+  setOrientation(DEFAULT_ORIENTATION);
+  setFontSize(DEFAULT_FONT_SIZE);
+  setNumberFormat(DEFAULT_NUMBER_FORMAT);
+  setTextType(DEFAULT_TEXT_TYPE);
+  setY(DEFAULT_Y);
 }
