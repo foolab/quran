@@ -54,20 +54,21 @@ Page {
 
                 function pageNumberChanged() {
                         if (!current) {
-                        return;
+                                return;
                         }
+
                         if (!_data.hasPage(_settings.pageNumber)) {
-                        return;
+                                return;
                         }
 
                         if (current.page == _settings.pageNumber) {
-                        flick.contentY = 0;
-                        return;
+                                flick.contentY = 0;
+                                return;
                         }
 
                         if (_settings.pageNumber > index) {
                                 index = _settings.pageNumber;
-                        showNextItem();
+                                showNextItem();
                         }
                         else {
                                 index = _settings.pageNumber;
@@ -76,8 +77,8 @@ Page {
                 }
 
                 Component.onCompleted: {
-                  addItem();
-                _settings.pageNumberChanged.connect(pageNumberChanged);
+                        addItem();
+                        _settings.pageNumberChanged.connect(pageNumberChanged);
                 }
 
                 property int index: _settings.pageNumber
@@ -173,9 +174,9 @@ Page {
                         onSwipedRight: {
                                 var newIndex = view.index + 1;
                                 if (_data.hasPage(newIndex)) {
-                                  view.index = newIndex;
-                                  view.showNextItem();
-                                  _settings.pageNumber = view.index;
+                                        view.index = newIndex;
+                                        view.showNextItem();
+                                        _settings.pageNumber = view.index;
                                 }
                                 else {
                                         lastPageReached.show();
@@ -188,9 +189,9 @@ Page {
                         onSwipedLeft: {
                                 var newIndex = view.index - 1;
                                 if (_data.hasPage(newIndex)) {
-                                  view.index = newIndex;
-                                  view.showPreviousItem();
-                                  _settings.pageNumber = view.index;
+                                        view.index = newIndex;
+                                        view.showPreviousItem();
+                                        _settings.pageNumber = view.index;
                                 }
                                 else {
                                         firstPageReached.show();
@@ -286,12 +287,12 @@ Page {
                                         var y = Math.abs(y1 - y2);
                                         var x = Math.abs(x1 - x2);
                                         if (y <= mouse.yThreshold && x >= mouse.xThreshold) {
-                                            if (x1 > x2) {
-                                                swipedLeft();
-                                            }
-                                            else {
-                                                swipedRight();
-                                            }
+                                                if (x1 > x2) {
+                                                        swipedLeft();
+                                                }
+                                                else {
+                                                        swipedRight();
+                                                }
                                         }
                                 }
                         }
