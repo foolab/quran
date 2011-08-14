@@ -35,10 +35,15 @@ class Settings : public QObject {
   Q_PROPERTY(int minFontSize READ minFontSize CONSTANT);
   Q_PROPERTY(int maxFontSize READ maxFontSize CONSTANT);
   Q_PROPERTY(QColor highlightColor READ highlightColor CONSTANT);
+  Q_PROPERTY(QColor verseColor READ verseColor CONSTANT);
+  Q_PROPERTY(QColor titleColor READ titleColor CONSTANT);
+  Q_PROPERTY(QColor subtitleColor READ subtitleColor CONSTANT);
   Q_PROPERTY(QString version READ version CONSTANT);
   Q_PROPERTY(bool fontLoaded READ isFontLoaded CONSTANT);
   Q_PROPERTY(QPoint position READ position WRITE setPosition NOTIFY positionChanged);
   Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged);
+  Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged);
+  Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY orientationChanged);
 
 public:
   Settings(QObject *parent = 0);
@@ -62,6 +67,9 @@ public:
   QList<uint> bookmarks() const;
 
   QColor highlightColor() const;
+  QColor verseColor() const;
+  QColor titleColor() const;
+  QColor subtitleColor() const;
 
   QString version() const;
 
@@ -69,12 +77,20 @@ public:
 
   bool isFontLoaded() const;
 
+  void setFullScreen(bool fs);
+  bool fullScreen() const;
+
+  void setOrientation(int orientation);
+  int orientation() const;
+
   void setPosition(const QPoint& pos);
   QPoint position() const;
 
   int y() const;
 
 public slots:
+  void reset();
+
   void setFontSize(int size);
   void setNumberFormat(int format);
   void setTextType(int type);
@@ -87,6 +103,8 @@ signals:
   void pageNumberChanged();
   void positionChanged();
   void yChanged();
+  void fullScreenChanged();
+  void orientationChanged();
 
 private:
   QSettings *m_settings;

@@ -26,16 +26,28 @@
 #define DEFAULT_NUMBER_FORMAT  0
 #define DEFAULT_PAGE_NUMBER    0
 #define DEFAULT_Y              0
+#define DEFAULT_FULL_SCREEN    false
+#define DEFAULT_ORIENTATION    1
 
 #define FONT_FAMILY            "me_quran"
+//#define FONT_FAMILY            "Scheherazade"
 #define FONT_MIN_SIZE          16
 #define FONT_MAX_SIZE          48
 #define HIGHLIGHT_COLOR        QColor(163, 218, 244)
-
+#define TITLE_COLOR            Qt::black
+#define SUBTITLE_COLOR         Qt::black
+#define VERSE_COLOR            Qt::black
+//#define FONT_FILE              "ScheherazadeRegOT.ttf"
 #define FONT_FILE              "me_quran_volt_newmet.ttf"
 
 Q_DECLARE_METATYPE(QList<uint>);
 
+/*!
+ * Orientations:
+ * 0 = Automatic
+ * 1 = Portrait
+ * 2 = Landscape
+ */
 Settings::Settings(QObject *parent) : QObject(parent), m_font(-1) {
   qRegisterMetaType<QList<uint> >("QList<uint>");
   qRegisterMetaTypeStreamOperators<QList<uint> >("QList<uint>");
@@ -120,6 +132,18 @@ QColor Settings::highlightColor() const {
   return HIGHLIGHT_COLOR;
 }
 
+QColor Settings::verseColor() const {
+  return VERSE_COLOR;
+}
+
+QColor Settings::titleColor() const {
+  return TITLE_COLOR;
+}
+
+QColor Settings::subtitleColor() const {
+  return SUBTITLE_COLOR;
+}
+
 QString Settings::version() const {
   return VERSION;
 }
@@ -156,4 +180,31 @@ void Settings::setY(int y) {
     m_settings->setValue("General/y", y);
     emit yChanged();
   }
+}
+
+void Settings::setFullScreen(bool fs) {
+  if (fullScreen() != fs) {
+    m_settings->setValue("General/fullScreen", fs);
+    emit fullScreenChanged();
+  }
+}
+
+bool Settings::fullScreen() const {
+  return m_settings->value("General/fullScreen", DEFAULT_FULL_SCREEN).toBool();
+}
+
+void Settings::setOrientation(int orientation) {
+  int o = qBound(0, orientation, 2);
+  if (Settings::orientation() != o) {
+    m_settings->setValue("General/orientation", o);
+    emit orientationChanged();
+  }
+}
+
+int Settings::orientation() const {
+  return qBound(0, m_settings->value("General/orientation", DEFAULT_ORIENTATION).toInt(), 2);
+}
+
+void Settings::reset() {
+  // TODO:
 }
