@@ -15,17 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IMAGE_PROVIDER_H
-#define IMAGE_PROVIDER_H
+#include "logoprovider.h"
+#include <QImageReader>
 
-#include <QDeclarativeImageProvider>
+LogoProvider::LogoProvider() : QDeclarativeImageProvider(QDeclarativeImageProvider::Image) {
 
-class ImageProvider : public QDeclarativeImageProvider {
-public:
-  ImageProvider();
-  ~ImageProvider();
+}
 
-  virtual QImage requestImage(const QString& id, QSize *size, const QSize& requestedSize);
-};
+LogoProvider::~LogoProvider() {
 
-#endif /* IMAGE_PROVIDER_H */
+}
+
+QImage LogoProvider::requestImage(const QString& id, QSize *size, const QSize& requestedSize) {
+  Q_UNUSED(id);
+
+  QImageReader reader(DATA_DIR "/logo_160.png");
+  reader.setScaledSize(requestedSize);
+
+  *size = requestedSize;
+
+  return reader.read();
+}

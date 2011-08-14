@@ -15,37 +15,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QURAN_VIEW_H
-#define QURAN_VIEW_H
+#ifndef LOGO_PROVIDER_H
+#define LOGO_PROVIDER_H
 
-#include <QTextEdit>
-#include "abstractquranview.h"
+#include <QDeclarativeImageProvider>
 
-class QAbstractKineticScroller;
-class Settings;
-
-class QuranView : public QTextEdit, public AbstractQuranView {
-  Q_OBJECT
-
+class LogoProvider : public QDeclarativeImageProvider {
 public:
-  QuranView(Settings *settings, QWidget *parent = 0);
-  ~QuranView();
+  LogoProvider();
+  ~LogoProvider();
 
-  void setY(int y);
-
-  void scrollToPosition(const Position& pos);
-
-protected:
-  virtual void mousePressEvent(QMouseEvent *e);
-  virtual void mouseReleaseEvent(QMouseEvent *e);
-  virtual void contextMenuEvent(QContextMenuEvent *event);
-
-private:
-  void showLine(const QLineF& line, const QMatrix& m);
-  QMatrix matrix();
-
-  Settings *m_settings;
-  QAbstractKineticScroller *m_scroll;
+  virtual QImage requestImage(const QString& id, QSize *size, const QSize& requestedSize);
 };
 
-#endif /* QURAN_VIEW_H */
+#endif /* LOGO_PROVIDER_H */
