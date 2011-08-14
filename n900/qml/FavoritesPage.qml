@@ -89,7 +89,10 @@ Page {
                                 text: _data.text(sura, aya);
                                 elide: Text.ElideRight
                                 textAlignment: Text.AlignRight
-                                onClicked: { _settings.pageNumber = _data.pageNumberForSuraAndAya(sura, aya); pageStack.pop(); }
+                                onClicked: {
+                                        pagePosition.setPosition(sura, aya);
+                                        pageStack.pop();
+                                }
                         }
                 }
         }

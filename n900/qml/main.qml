@@ -6,11 +6,21 @@ import QtQuick 1.0
 PageStackWindow {
         id: root
 
-        Item {
+        QtObject {
                 id: pagePosition
-                property int sura
-                property int aya
-//                property int y
+                property int sura: 0
+                property int aya: 0
+                property int y: 0
+
+                function setPosition(sura, aya) {
+                        pagePosition.sura = sura;
+                        pagePosition.aya = aya;
+                        _settings.pageNumber = _data.pageNumberForSuraAndAya(sura, aya);
+                }
+
+                onSuraChanged: console.log("Sura " + sura);
+                onAyaChanged: console.log("Aya " + aya);
+                onYChanged: console.log("Y " + y);
         }
 
         Connections {

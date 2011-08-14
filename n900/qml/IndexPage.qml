@@ -15,7 +15,7 @@ Page {
                                 id: mouse
                                 anchors.fill: parent
                                 onClicked: {
-                                        _settings.pageNumber = _data.pageNumberForSura(number.number);
+                                        pagePosition.setPosition(number.number, 0);
                                         pageStack.pop();
                                 }
                         }
