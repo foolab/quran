@@ -223,6 +223,11 @@ Page {
                 }
         }
 
+        InfoBanner {
+                id: settingsReset
+                text: qsTr("Settings reset");
+        }
+
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
@@ -243,6 +248,6 @@ Page {
                 titleText: qsTr("Reset settings?")
                 acceptButtonText: qsTr("Yes")
                 rejectButtonText: qsTr("No")
-                onAccepted: _settings.reset();
+                onAccepted: { _settings.reset(); settingsReset.show(); }
         }
 }
