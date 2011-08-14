@@ -16,24 +16,24 @@ Page {
                 height: parent.height
                 width: parent.width
 
-              Label {
-                      id: settings
-                      anchors.top: parent.top
-                      anchors.topMargin: 16
-                      anchors.left: parent.left
-                      anchors.leftMargin: 16
-                      text: qsTr("Settings")
-                      font.pixelSize: 32
+                Label {
+                        id: settings
+                        anchors.top: parent.top
+                        anchors.topMargin: 16
+                        anchors.left: parent.left
+                        anchors.leftMargin: 16
+                        text: qsTr("Settings")
+                        font.pixelSize: 32
                 }
 
-              Label {
-                      id: previewLabel
-                      anchors.top: settings.bottom
-                      anchors.topMargin: 26
-                      anchors.left: parent.left
-                      anchors.leftMargin: 26
-                      font.pixelSize: 26
-                      text: qsTr("Preview")
+                Label {
+                        id: previewLabel
+                        anchors.top: settings.bottom
+                        anchors.topMargin: 26
+                        anchors.left: parent.left
+                        anchors.leftMargin: 26
+                        font.pixelSize: 26
+                        text: qsTr("Preview")
                 }
 
                 Label {
