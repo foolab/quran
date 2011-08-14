@@ -8,8 +8,21 @@ Row {
         onChildrenChanged: layout();
         onWidthChanged: layout();
 
+        function __enabledChildren() {
+                var x = 0;
+                var len = 0;
+
+                for (x = 0; x < children.length; x++) {
+                        if (children[x].enabled) {
+                                ++len;
+                        }
+                }
+
+                return len;
+        }
+
         function layout() {
-                var len = children.length
+                var len = __enabledChildren();
                 if (len == 0) {
                         spacing = 0;
                 }
@@ -20,7 +33,9 @@ Row {
                         var totalWidth = 0;
                         var x = 0;
                         for (x = 0; x < children.length; x++) {
-                                totalWidth += children[x].width;
+                                if (children[x].enabled) {
+                                        totalWidth += children[x].width;
+                                }
                         }
 
                         spacing = (width - (totalWidth))/(len - 1);
