@@ -17,8 +17,6 @@ Label {
 
         font.bold: true
 
-        anchors.verticalCenter: parent.verticalCenter
-
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
 
