@@ -10,7 +10,7 @@ PageStackWindow {
                 id: pagePosition
                 property int sura: -1
                 property int aya: -1
-                property int y: 0
+//                property int y: 0
 
                 signal changed
 
@@ -30,9 +30,9 @@ PageStackWindow {
                         changed();
                 }
 
-                onSuraChanged: console.log("Sura " + sura);
-                onAyaChanged: console.log("Aya " + aya);
-                onYChanged: console.log("Y " + y);
+//                onSuraChanged: console.log("Sura " + sura);
+//                onAyaChanged: console.log("Aya " + aya);
+//                onYChanged: console.log("Y " + y);
         }
 
         Connections {
