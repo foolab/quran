@@ -69,15 +69,3 @@ QString Legal::textLicense() {
 	    "<br />"
 	    "Please check updates at: <a href=\"http://tanzil.net/updates/\">http://tanzil.net/updates</a>");
 }
-
-QString Legal::fontLicense() {
-  return tr("Font used is me_quran. Copyright &copy; Meor Ridzuan Meor Yahaya. All rights reserved.<br />"
-	    "This is an arabic font, specifically design for rendering the Quran like the Madinah Mushaf.<br />The font contains arabic glyph only.<br />"
-	    "<br />"
-	    "The font comes with the following restriction:<br />"
-	    "- It is for private and non-commercial use only.<br />"
-	    "- The Opentype and VOLT table can be use as a learning material.<br />"
-	    "- Redistribution is not permitted without the consent from the author.<br />"
-	    "<br />"
-	    "Permission from the author has been granted for this application.");
-}

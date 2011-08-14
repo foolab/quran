@@ -94,26 +94,6 @@ Page {
                                         textFormat: Text.RichText
                                 }
                         }
-
-                        Rectangle {
-                                width: parent.width
-                                height: fnt.height + fntLabel.height
-
-                                Label {
-                                        id: fntLabel
-                                        font.bold: true
-                                        text: qsTr("Font license:");
-                                }
-
-                                Label {
-                                        id: fnt
-                                        text: _legal.fontLicense
-                                        wrapMode: Text.WordWrap
-                                        anchors.top: fntLabel.bottom
-                                        width: parent.width
-                                        textFormat: Text.RichText
-                                }
-                       }
                }
        }
 
