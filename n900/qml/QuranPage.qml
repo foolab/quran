@@ -37,13 +37,26 @@ Page {
 	                    verseColor: _settings.verseColor
 	                    titleColor: _settings.titleColor
 	                    subtitleColor: _settings.subtitleColor
+
                         Connections {
                                 target: _settings
                                 onNumberFormatChanged: populate();
                         }
+
                         Connections {
                                 target: _settings
                                 onTextTypeChanged: populate();
+                        }
+
+                        Connections {
+                                target: pagePosition
+                                onChanged: scrollTo(pagePosition.sura, pagePosition.aya);
+                        }
+
+                        Component.onCompleted: {
+                                if (pagePosition.isValid()) {
+                                        scrollTo(pagePosition.sura, pagePosition.aya);
+                                }
                         }
                 }
         }
@@ -51,6 +64,37 @@ Page {
         Item {
                 id: view
                 property Item current: null
+
+                Connections {
+                        target: view.current
+                        onLineVisibilityRequested: {
+                                // Let's reset here. We have multiple exit points.
+                                pagePosition.reset();
+
+                                if (upper >= flick.contentY && lower <= flick.contentY + flick.height) {
+                                        // Nothing.
+                                        return;
+                                }
+                                else if (lower <= flick.contentY + flick.height) {
+                                        // Topmost part is not visible.
+                                        // We will scroll anyway and make it visible.
+                                        animation.run(upper);
+                                        return;
+                                }
+
+                                if (lower - upper > flick.height) {
+                                        // The line will not fit no matter what we do.
+                                        // Just show the upper part.
+                                        animation.run(upper);
+                                        return;
+                                }
+
+                                // Our line will fit the view. We need to scroll until the bottommost part
+                                // is just visible.
+                                var part = upper + (lower - (upper + flick.height));
+                                animation.run(part);
+                        }
+                }
 
                 function pageNumberChanged() {
                         if (!current) {
@@ -230,6 +274,21 @@ Page {
                         flickableDirection: Flickable.VerticalFlick
 
                         interactive: !previousAnimation.running && !nextAnimation.running
+
+                        NumberAnimation {
+                                id: animation
+                                target: flick
+                                from: flick.contentY
+                                easing.type: Easing.InOutQuad
+                                property: "contentY"
+
+                                function run(t) {
+                                        complete();
+                                        from = flick.contentY;
+                                        to = t;
+                                        start();
+                                }
+                        }
 
                         MouseArea {
                                 id: mouse

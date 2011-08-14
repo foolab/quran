@@ -8,14 +8,26 @@ PageStackWindow {
 
         QtObject {
                 id: pagePosition
-                property int sura: 0
-                property int aya: 0
+                property int sura: -1
+                property int aya: -1
                 property int y: 0
+
+                signal changed
+
+                function isValid() {
+                        return sura != -1 && aya != -1;
+                }
+
+                function reset() {
+                        sura = -1;
+                        aya = -1;
+                }
 
                 function setPosition(sura, aya) {
                         pagePosition.sura = sura;
                         pagePosition.aya = aya;
                         _settings.pageNumber = _data.pageNumberForSuraAndAya(sura, aya);
+                        changed();
                 }
 
                 onSuraChanged: console.log("Sura " + sura);
