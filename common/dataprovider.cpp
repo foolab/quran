@@ -165,7 +165,11 @@ QStringList DataProvider::availableTexts() const {
   return texts;
 }
 
-bool DataProvider::setText(int index) {
+int DataProvider::textType() const {
+  return m_index;
+}
+
+bool DataProvider::setTextType(int index) {
   int idx = CLAMP(MIN_TEXT, index, MAX_TEXT);
   if (idx != index) {
     return false;

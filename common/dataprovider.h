@@ -50,7 +50,8 @@ public:
   Q_INVOKABLE bool hasPage(int page) const;
 
   QStringList availableTexts() const;
-  Q_INVOKABLE bool setText(int index);
+  Q_INVOKABLE bool setTextType(int index);
+  Q_INVOKABLE int textType() const;
 
   Page pageFromIndex(int index) const;
 
