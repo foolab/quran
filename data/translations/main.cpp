@@ -45,8 +45,8 @@ int main(int argc, char *argv[]) {
   puts("struct _Translation {");
   puts("  const char *id;");
   puts("  const char *name;");
-  puts("  const char *language;");
   puts("  const char *file;");
+  puts("  int language;");
   puts("  int rtl;");
   puts("} Ts[] = {");
 
@@ -56,16 +56,19 @@ int main(int argc, char *argv[]) {
 
     QString id = s.value("id").toString();
     QString name = s.value("localizedName").toString();
-    QString language = QLocale::languageToString(QLocale(s.value("language").toString()).language());
+    QString language = s.value("language").toString();
     QString file = s.value("file").toString();
     int rtl = s.value("rtl").toString() == "rtl" ? 1 : 0;
+    QLocale locale(s.value("language").toString());
+
     if (id.isEmpty() || name.isEmpty() || language.isEmpty() || file.isEmpty()) {
       qFatal("Missing meta data");
+      return 1;
     }
 
-    printf("{\"%s\", \"%s\", \"%s\", \"%s\", %i},\n", encode(id).toLatin1().data(),
-	   encode(name).toLatin1().data(), encode(language).toLatin1().data(),
-	   encode(file).toLatin1().data(), rtl);
+    printf("{\"%s\", \"%s\", \"%s\", %i, %i},\n", encode(id).toLatin1().data(),
+	   encode(name).toLatin1().data(), encode(file).toLatin1().data(),
+	   locale.language(), rtl);
 
     s.endGroup();
   }
