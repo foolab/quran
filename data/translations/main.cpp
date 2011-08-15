@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
   puts("  const char *language;");
   puts("  const char *file;");
   puts("  int rtl;");
-  puts("} Translations[] = {");
+  puts("} Ts[] = {");
 
 
   foreach (const QString& group, groups) {
