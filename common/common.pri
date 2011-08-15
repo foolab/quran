@@ -9,7 +9,7 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp abstr
            position.cpp legal.cpp quranview.cpp logoprovider.cpp windowcontroller.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h abstractquranview.h \
-           position.h legal.h quranview.h logoprovider.h windowcontroller.h
+           position.h legal.h quranview.h logoprovider.h windowcontroller.h trans-meta.h
 
 target.path = /usr/bin/
 

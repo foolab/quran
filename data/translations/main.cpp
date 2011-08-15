@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     s.beginGroup(group);
 
     QString id = s.value("id").toString();
-    QString name = s.value("localizedName").toString();
+    QString name = QString::fromUtf8(s.value("localizedName").toByteArray());
     QString language = s.value("language").toString();
     QString file = s.value("file").toString();
     int rtl = s.value("rtl").toString() == "rtl" ? 1 : 0;
