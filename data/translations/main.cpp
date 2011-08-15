@@ -39,6 +39,9 @@ int main(int argc, char *argv[]) {
   printf("// %s\n", app.arguments().join(" ").toLatin1().data());
   puts("");
 
+  printf("#define TRANSLATIONS_LEN %d\n", groups.size());
+  puts("");
+
   puts("struct _Translation {");
   puts("  const char *id;");
   puts("  const char *name;");
