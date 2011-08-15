@@ -66,9 +66,14 @@ int main(int argc, char *argv[]) {
       return 1;
     }
 
+    int lang = locale.language();
+    if (lang == QLocale::C) {
+      lang = QLocale::English;
+    }
+
     printf("{\"%s\", \"%s\", \"%s\", %i, %i},\n", encode(id).toLatin1().data(),
 	   encode(name).toLatin1().data(), encode(file).toLatin1().data(),
-	   locale.language(), rtl);
+	   lang, rtl);
 
     s.endGroup();
   }
