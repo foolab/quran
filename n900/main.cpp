@@ -30,12 +30,17 @@
 #include "legal.h"
 #include <QDir>
 #include "windowcontroller.h"
+#include "translations.h"
+#include "translation.h"
+#include "downloader.h"
 
 #ifndef Q_WS_MAEMO_5
 #include <MDeclarativeCache>
 #else
 #define M_DECL_EXPORT
 #endif
+
+#define USER_DIR "/home/user/MyDocs/.n900-quran/"
 
 M_DECL_EXPORT int main(int argc, char *argv[]) {
 #ifndef Q_WS_MAEMO_5
@@ -68,12 +73,19 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
 
   Legal legal;
 
+  Downloader downloader;
+
+  Translations translations(USER_DIR "translations/", &downloader);
+
   qmlRegisterType<DataProvider>();
   qmlRegisterType<Settings>();
   qmlRegisterType<Bookmarks>();
   qmlRegisterType<NumberFormatter>();
   qmlRegisterType<Legal>();
+  qmlRegisterType<Translations>();
+  qmlRegisterType<Translation>("Translations", 1, 0, "Translation");
   qmlRegisterType<QuranView>("Quran", 1, 0, "QuranView");
+  //  qmlRegisterType<Downloader>();
 
 #ifndef Q_WS_MAEMO_5
   QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
@@ -95,6 +107,8 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   view->rootContext()->setContextProperty("_bookmarks", &bookmarks);
   view->rootContext()->setContextProperty("_formatter", &formatter);
   view->rootContext()->setContextProperty("_legal", &legal);
+  view->rootContext()->setContextProperty("_translations", &translations);
+  view->rootContext()->setContextProperty("_downloader", &downloader);
 
   if (dev) {
     view->setSource(QUrl::fromLocalFile(QDir::currentPath() + "/main.qml"));
