@@ -68,7 +68,7 @@ Item {
 
                 Label {
                         id: titleLabel
-                        font.pointSize: 36
+                        font.pointSize: 32
                         font.bold: true
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.top: parent.top
@@ -83,9 +83,13 @@ Item {
                         id: messageLabel
                         font.pointSize: 26
                         font.bold: true
+		        anchors.left: parent.left
+		        anchors.right: parent.right
+	                anchors.leftMargin: 20
+	                anchors.rightMargin: 20
                         anchors.top: titleLabel.bottom
                         anchors.topMargin: 10
-                        anchors.horizontalCenter: parent.horizontalCenter
+//                        anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
 //                        style: Text.Outline
