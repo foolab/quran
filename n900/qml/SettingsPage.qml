@@ -12,7 +12,7 @@ Page {
                 anchors.bottom: toolBar.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                contentHeight: orientation.y + orientation.height + orientation.anchors.topMargin + orientation.anchors.bottomMargin
+                contentHeight: reset.y + reset.height + reset.anchors.topMargin + reset.anchors.bottomMargin
                 height: parent.height
                 width: parent.width
 
@@ -221,6 +221,15 @@ Page {
                                 checked: (_settings.orientation == 2);
                         }
                 }
+
+                DialogButton {
+                        id: reset;
+                        text: qsTr("Reset settings");
+                        onClicked: resetDialog.open();
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: orientation.bottom
+                        anchors.topMargin: 32
+                }
         }
 
         InfoBanner {
@@ -232,14 +241,7 @@ Page {
                 id: toolBar
                 ToolBarLayout {
                         ToolButton { icon: "general_backspace"; onClicked: pageStack.pop(); }
-
-                        DialogButton {
-                                id: reset;
-                                text: qsTr("Reset");
-                                onClicked: resetDialog.open();
-                                anchors.verticalCenter: parent.verticalCenter
-                                // TODO: border or padding
-                        }
+                        ToolButton { icon: "clock_starter_worldclock"; onClicked: showPage("TranslationSettingsPage"); }
                 }
         }
 
