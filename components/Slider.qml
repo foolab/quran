@@ -3,8 +3,9 @@ import QtQuick 1.0
 
 Rectangle {
 //        color: "black" // For debugging
+        property bool interactive: true
         width: 350
-        height: knob.height
+        height: interactive ? knob.height : 50
 
         id: slider
 
@@ -34,6 +35,8 @@ Rectangle {
 
         MouseArea {
                 anchors.fill: parent
+                enabled: slider.interactive
+
                 id: mouse
                 acceptedButtons: Qt.LeftButton
                 drag.target: knob
@@ -50,7 +53,7 @@ Rectangle {
 
         Rectangle {
                 id: groove
-                width: parent.width - knob.width
+                width: interactive ? parent.width - knob.width : parent.width * value/maximumValue
                 x: knob.width/2
                 anchors.verticalCenter: parent.verticalCenter
                 height: 25
@@ -65,8 +68,8 @@ Rectangle {
 
         Rectangle {
                 id: knob
-                width: 50
-                height: 50
+                width: slider.interactive ? 50 : 0
+                height: slider.interactive ? 50 : 0
                 x: positionForValue(slider.value) - width/2
 
 
