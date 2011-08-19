@@ -63,21 +63,12 @@ signals:
   void installedChanged();
   void downloadsChanged();
   void categoriesChanged();
-
-#if 0
-private slots:
-  void replyDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-  void replyError();
-  void replyFinished();
-
-#endif
+  void activeChanged();
 
 private:
   TranslationPrivate *info(int tid);
   QString id(int tid) const;
   int tid(const QString& id);
-
-  //  bool readData(TranslationInfo *info);
 
   Downloader *m_downloader;
 
