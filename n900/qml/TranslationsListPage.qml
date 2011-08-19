@@ -46,7 +46,7 @@ Page {
                 anchors.bottom: toolBar.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                model: _translations.installed// + _translations.downloads
+                model: _translations.active
                 delegate: translationsDelegate
                 footer: DialogButton {
                         text: qsTr("Add translation");
