@@ -6,8 +6,11 @@ Rectangle {
         property bool showProgress: true
         property alias text: label.text
         property alias progress: slider.value
+        property alias errorText: error.text
 
         property bool showRm: true
+
+        property bool showError: false
 
         signal clicked
         signal removeClicked
@@ -42,6 +45,13 @@ Rectangle {
                 maximumValue: 100
                 anchors.top: label.bottom
                 color: parent.color
+        }
+
+        Label {
+                id: error
+                color: "red"
+                anchors.fill: slider
+                opacity: showError ? 1.0 : 0.0
         }
 
         ToolButton {
