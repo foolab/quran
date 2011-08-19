@@ -17,6 +17,7 @@ class Translations : public QObject {
   Q_PROPERTY(QList<int> installed READ installed NOTIFY installedChanged);
   Q_PROPERTY(QList<int> downloads READ downloads NOTIFY downloadsChanged);
   Q_PROPERTY(QList<int> categories READ categories NOTIFY categoriesChanged);
+  Q_PROPERTY(QList<int> active READ active NOTIFY activeChanged);
 
 public:
   Translations(const QString& dir, Downloader *downloader, QObject *parent = 0);
@@ -25,6 +26,7 @@ public:
   QList<int> installed() const;
   QList<int> downloads() const;
   QList<int> categories() const;
+  QList<int> active() const;
 
   Q_INVOKABLE QString categoryName(int category);
   Q_INVOKABLE QList<int> translations(int category);

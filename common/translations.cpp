@@ -48,6 +48,7 @@ void Translations::refresh() {
   }
 
   emit installedChanged();
+  emit activeChanged();
 }
 
 TranslationPrivate *Translations::registerTranslation(Translation *t) {
@@ -115,6 +116,14 @@ QString Translations::translationName(int translation) {
 
 QList<int> Translations::installed() const {
   return m_installed;
+}
+
+QList<int> Translations::active() const {
+  QList<int> res = m_installed;
+
+  res += downloads();
+
+  return res;
 }
 
 void Translations::startDownload(int tid) {
