@@ -46,15 +46,19 @@ Page {
                 anchors.bottom: toolBar.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                model: _translations.installedTranslations
+                model: _translations.installed// + _translations.downloads
                 delegate: translationsDelegate
+                footer: DialogButton {
+                        text: qsTr("Add translation");
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        onClicked: pageStack.push("TranslationsAddPage");
+                }
         }
 
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
                         ToolButton { icon: "general_backspace"; onClicked: pageStack.pop(); }
-                        ToolButton { icon: "general_add"; onClicked: pageStack.push("TranslationsAddPage"); }
 		        }
 		}
 }
