@@ -38,6 +38,8 @@ void Translations::refresh() {
   QStringList list = m_dir.entryList(QStringList() << INDEX_FILTER,
 				     QDir::Files | QDir::NoDotAndDotDot, QDir::Name);
 
+  m_installed.clear();
+
   foreach (const QString& file, list) {
     int tid = Translations::tid(QFileInfo(file).completeBaseName());
     if (m_installed.indexOf(tid) == -1) {
