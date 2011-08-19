@@ -76,6 +76,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   Downloader downloader;
 
   Translations translations(USER_DIR "translations/", &downloader);
+  translations.refresh();
 
   qmlRegisterType<DataProvider>();
   qmlRegisterType<Settings>();
