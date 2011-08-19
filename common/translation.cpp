@@ -1,10 +1,11 @@
 #include "translation.h"
 #include "translations.h"
+#include "translation_p.h"
 #include <QDebug>
 
 Translation::Translation(QObject *parent)
   : QObject(parent), m_tid(-1),
-    m_translations(0) {
+    d_ptr(0), m_translations(0) {
 
 }
 
@@ -12,6 +13,8 @@ Translation::~Translation() {
   if (m_translations) {
     m_translations->unregisterTranslation(this);
   }
+
+  d_ptr = 0;
 }
 
 void Translation::setTid(int tid) {
@@ -29,50 +32,38 @@ int Translation::tid() const {
 }
 
 int Translation::downloadProgress() const {
-  if (m_translations) {
-    return m_translations->downloadProgress(tid());
-  }
-
-  return 0;
+  return d_ptr ? d_ptr->downloadProgress() : 0;
 }
 
 Translation::Status Translation::status() const {
-  if (m_translations) {
-    return m_translations->status(tid());
-  }
-
-  return Translation::None;
+  return d_ptr ? d_ptr->status() : Translation::None;
 }
 
 QString Translation::error() const {
-  if (m_translations) {
-    return m_translations->error(tid());
-  }
-
-  return QString();
+  return d_ptr ? d_ptr->error() : QString();
 }
 
 void Translation::startDownload() {
-  if (m_translations && tid() >= 0) {
+  if (m_translations) {
     m_translations->startDownload(tid());
   }
 }
 
 void Translation::stopDownload() {
-  if (m_translations && tid() >= 0) {
+  if (m_translations) {
     m_translations->stopDownload(tid());
   }
 }
 
 void Translation::setTranslations(Translations *translations) {
-  if (m_translations) {
+  if (m_translations && d_ptr) {
     m_translations->unregisterTranslation(this);
   }
 
   m_translations = translations;
 
   if (tid() >= 0 && m_translations) {
-    m_translations->registerTranslation(this);
+    d_ptr = m_translations->registerTranslation(this);
   }
 }
 

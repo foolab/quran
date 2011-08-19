@@ -4,6 +4,7 @@
 #include <QObject>
 
 class Translations;
+class TranslationPrivate;
 
 class Translation : public QObject {
   Q_OBJECT
@@ -16,7 +17,7 @@ class Translation : public QObject {
   Q_PROPERTY(Status status READ status NOTIFY statusChanged);
   Q_PROPERTY(Translations * translations READ translations WRITE setTranslations);
 
-  friend class TranslationInfo;
+  friend class TranslationPrivate;
   friend class Translations;
 
 public:
@@ -53,6 +54,7 @@ signals:
 private:
   int m_tid;
 
+  TranslationPrivate *d_ptr;
   Translations *m_translations;
 };
 
