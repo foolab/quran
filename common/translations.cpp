@@ -139,7 +139,9 @@ QList<int> Translations::downloads() const {
   QList<int> res;
 
   foreach (const TranslationPrivate *p, m_info) {
-    res << p->tid();
+    if (p->status() == Translation::Downloading) {
+      res << p->tid();
+    }
   }
 
   qSort(res);
