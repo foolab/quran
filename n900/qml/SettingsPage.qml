@@ -222,12 +222,49 @@ Page {
                         }
                 }
 
+                Label {
+                        id: translationsLabel
+                        anchors.top: orientation.bottom
+                        anchors.left: parent.left
+                        anchors.leftMargin: 26
+                        anchors.topMargin: 26
+                        font.pixelSize: 26
+                        text: qsTr("Translations")
+                }
+
+                ButtonRow {
+                        id: translations
+                        anchors.top: translationsLabel.bottom
+                        anchors.topMargin: 6
+
+                        Button {
+                                id: enabled
+                                text: qsTr("Enabled");
+                                onClicked: _settings.translationMode = 1;
+                                checked: (_settings.translationMode == 1);
+                        }
+
+                        Button {
+                                id: disabled
+                                text: qsTr("Disabled");
+                                onClicked: _settings.translationMode = 0;
+                                checked: (_settings.translationMode == 0);
+                        }
+
+                        Button {
+                                id: hidden
+                                text: qsTr("Hidden");
+                                onClicked: _settings.translationMode = 2;
+                                checked: (_settings.translationMode == 2);
+                        }
+                }
+
                 DialogButton {
                         id: reset;
                         text: qsTr("Reset settings");
                         onClicked: resetDialog.open();
                         anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.top: orientation.bottom
+                        anchors.top: translations.bottom
                         anchors.topMargin: 32
                 }
         }
@@ -241,7 +278,7 @@ Page {
                 id: toolBar
                 ToolBarLayout {
                         ToolButton { icon: "general_backspace"; onClicked: pageStack.pop(); }
-                        ToolButton { icon: "clock_starter_worldclock"; onClicked: showPage("TranslationSettingsPage"); }
+                        ToolButton { icon: "clock_starter_worldclock"; onClicked: showPage("TranslationsListPage"); }
                 }
         }
 
