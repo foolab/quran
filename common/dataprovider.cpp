@@ -23,6 +23,7 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <QDebug>
+#include "textprovider.h"
 
 #define CLAMP(min, x, max) qMax(qMin(x, max), min)
 
@@ -32,7 +33,7 @@ DataProvider::DataProvider(const QString& dir, QObject *parent) :
 
 DataProvider::~DataProvider() {
   if (m_data) {
-    munmap(m_data, Texts[m_index].len);
+    delete m_data;
     m_data = 0;
     m_index = -1;
   }
@@ -104,13 +105,6 @@ QString DataProvider::partName(int page) {
   return QString::fromUtf8(Parts[p->part].name);
 }
 
-// TODO:
-//int DataProvider::numberOfSuraPages(int sura) {
-//  return Suras[sura].length;
-//}
-
-
-
 bool DataProvider::hasPage(int page) const {
   return page >= MIN_PAGE && page <= MAX_PAGE;
 }
@@ -134,11 +128,7 @@ QString DataProvider::text(int sura, int aya) const {
 
   off_t index = Offsets[sura];
 
-  Aya *a = Texts[m_index].table + index + aya;
-
-  char *data = m_data + a->pos;
-
-  return QString::fromUtf8(data, a->len);
+  return m_data->text(aya, index);
 }
 
 QStringList DataProvider::text(const Fragment& frag) const {
@@ -170,51 +160,28 @@ int DataProvider::textType() const {
 }
 
 bool DataProvider::setTextType(int index) {
-  int idx = CLAMP(MIN_TEXT, index, MAX_TEXT);
-  if (idx != index) {
+  if (index != CLAMP(MIN_TEXT, index, MAX_TEXT)) {
     return false;
   }
 
-  if (idx == m_index) {
+  if (index == m_index) {
     return true;
   }
 
-  QString file = QString("%1%2%3").arg(m_dir).arg(QDir::separator()).arg(Texts[idx].name);
+  QString data = QString("%1%2%3").arg(m_dir).arg(QDir::separator()).arg(Texts[index].name);
+  QString idx = Texts[index].idx;
 
-  int fd = open(file.toLocal8Bit().data(), O_RDONLY);
-  if (fd == -1) {
-    return false;
-  }
-
-  struct stat buf;
-  if (fstat(fd, &buf) != 0) {
-    close(fd);
-    return false;
-  }
-
-  if (buf.st_size != Texts[idx].len) {
-    close(fd);
-    return false;
-  }
-
-  char *data = (char *)mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
-  if (data == MAP_FAILED) {
-    close(fd);
+  TextProvider *p = new TextProvider(data, idx);
+  if (!p->load()) {
+    delete p;
     return false;
   }
 
   if (m_data) {
-    if (munmap(m_data, Texts[m_index].len) != 0) {
-      close(fd);
-      munmap(data, buf.st_size);
-      return false;
-    }
+    delete m_data;
   }
 
-  m_data = data;
-  m_index = idx;
-
-  close(fd);
+  m_data = p;
 
   return true;
 }

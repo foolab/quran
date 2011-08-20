@@ -25,6 +25,7 @@
 class Page;
 class Fragment;
 class Sura;
+class TextProvider;
 
 class DataProvider : public QObject {
   Q_OBJECT
@@ -43,9 +44,6 @@ public:
   Q_INVOKABLE QString partName(int page);
 
   Q_INVOKABLE int firstSuraForPage(int page);
-
-  // TODO:
-  //  Q_INVOKABLE int numberOfSuraPages(int sura);
 
   Q_INVOKABLE bool hasPage(int page) const;
 
@@ -73,7 +71,7 @@ private:
   const QString m_dir;
 
   int m_index;
-  char *m_data;
+  TextProvider *m_data;
 };
 
 class Page {

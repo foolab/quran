@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/mman.h>
+#include "index.h"
 
 struct Sura {
   QString name;
@@ -61,7 +62,8 @@ QList<Fragment> frags;
 struct Offset {
   QString name;
   QString id;
-  QList<QList<QPair<off_t, off_t> > > index;
+  QString idx;
+  QList<QPair<off_t, size_t> > index;
   size_t len;
 };
 QList<Offset> offsets;
@@ -76,7 +78,7 @@ QList<Part> parts;
 
 QString basmala;
 
-bool calcOffsets(const QString& id, const QString& fileName) {
+bool calcOffsets(const QString& id, const QString& fileName, const QString& idx) {
   int fd = open(fileName.toLocal8Bit(), O_RDONLY);
   if (fd == -1) {
     perror("open");
@@ -98,6 +100,7 @@ bool calcOffsets(const QString& id, const QString& fileName) {
   }
 
   Offset o;
+  o.idx = QFileInfo(idx).fileName();
   o.id = id;
   o.name = QFileInfo(fileName).fileName();
   o.len = buf.st_size;
@@ -122,8 +125,7 @@ bool calcOffsets(const QString& id, const QString& fileName) {
   }
 
   for (int x = 0; x < suras.size(); x++) {
-
-    QList<QPair<off_t, off_t> > lst;
+    QList<QPair<off_t, size_t> > lst;
 
     for (int i = 0; i < suras.at(x).ayas; i++) {
       char *f = strstr(start, "text=\"");
@@ -144,11 +146,12 @@ bool calcOffsets(const QString& id, const QString& fileName) {
 
       start = ff;
       off_t off = f - data;
-      off_t len = ff - f;
+      size_t len = ff - f;
       std::string str(&data[off], len);
 
-      lst.append(qMakePair<off_t, off_t>(off, len));
+      lst.append(qMakePair<off_t, size_t>(off, len));
     }
+
     o.index.append(lst);
   }
 
@@ -427,7 +430,7 @@ QString encode(const QString& in) {
   return out;
 }
 
-void output() {
+bool output() {
   QString prefix;
 
   prefix.append(QChar(0x633)).append(QChar(0x648)).append(QChar(0x631)).append(QChar(0x629));
@@ -517,11 +520,18 @@ void output() {
 
   for (int x = 0; x < offsets.size(); x++) {
     const Offset& o = offsets.at(x);
+
+    QMap<QString, QVariant> meta;
+    meta.insert("size", o.len);
+
+    if (!Index::write(o.idx, o.index, meta)) {
+      qCritical() << "Failed to write index";
+      return false;
+    }
+
     printf("struct Aya %s[] = {\n", o.id.toLatin1().data());
     for (int i = 0; i < o.index.size(); i++) {
-      for (int j = 0; j < o.index.at(i).size(); j++) {
-	printf("  {%li, %li},\n", o.index.at(i).at(j).first, o.index.at(i).at(j).second);
-      }
+      printf("  {%li, %i},\n", o.index.at(i).first, o.index.at(i).second);
     }
     printf("};\n\n");
   }
@@ -530,13 +540,14 @@ void output() {
   puts("  const char *name;");
   puts("  const char *id;");
   puts("  off_t len;");
+  puts("  const char *idx;");
   puts("  struct Aya *table;");
   puts("} Texts[] = {");
   for (int x = 0; x < offsets.size(); x++) {
     const Offset& o = offsets.at(x);
-    printf("{\"%s\", \"%s\", %i, %s},\n",
+    printf("{\"%s\", \"%s\", %i, \"%s\", %s},\n",
 	   encode(o.name).toLatin1().data(), encode(o.id).toLatin1().data(),
-	   o.len, o.id.toLatin1().data());
+	   o.len, encode(":/" + o.idx).toLatin1().data(), o.id.toLatin1().data());
   }
   puts("};");
 
@@ -553,6 +564,8 @@ void output() {
   puts("");
 
   puts("#endif /* META_DATA_H */");
+
+  return true;
 }
 
 int main(int argc, char *argv[]) {
@@ -580,17 +593,19 @@ int main(int argc, char *argv[]) {
 
   for (int x = 2; x < argc; x++) {
     QStringList parts = QString(argv[x]).split(":");
-    if (parts.size() != 2) {
+    if (parts.size() != 3) {
       qWarning() << "invalid file";
       return 1;
     }
 
-    if (!calcOffsets(parts[0], parts[1])) {
+    if (!calcOffsets(parts[0], parts[1], parts[2])) {
       return 1;
     }
   }
 
-  output();
+  if (!output()) {
+    return 1;
+  }
 
   return 0;
 }
