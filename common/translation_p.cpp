@@ -42,6 +42,10 @@ bool TranslationPrivate::canDownload() const {
 }
 
 bool TranslationPrivate::canDestroy() const {
+  if (!isEmpty()) {
+    return false;
+  }
+
   return m_status == Translation::None || m_status == Translation::Installed;
 }
 
