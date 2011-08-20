@@ -1,17 +1,11 @@
 // -*- qml-mode -*-
 import QtQuick 1.0
+import Translations 1.0
 
-Page {
+TranslationsPage {
         id: translationListPage
 
         tools: toolBar
-
-        QueryDialog {
-                id: rmDialog
-                titleText: qsTr("Remove translation?");
-                acceptButtonText: qsTr("Yes")
-                rejectButtonText: qsTr("No")
-        }
 
         Component {
                 id: translationsDelegate
@@ -22,20 +16,17 @@ Page {
                         tid: modelData
                         width: view.width
 
-                        function dialogRejected() {
-                                rmDialog.accepted.disconnect(dialogAccepted);
-                                rmDialog.rejected.disconnect(dialogRejected);
-                        }
-
-                        function dialogAccepted() {
-                                _translations.removeTranslation(tid);
+                        onClicked: {
+                                if (status == Translation.Downloading) {
+                                        askForStop(tid);
+                                }
+                                else if (status == Translation.Error) {
+                                        askForDownload(tid);
+                                }
                         }
 
                         onRemoveClicked: {
-                                rmDialog.message = text;
-                                rmDialog.accepted.connect(dialogAccepted);
-                                rmDialog.rejected.connect(dialogRejected);
-                                rmDialog.open();
+                                askForRemoval(tid);
                         }
                 }
         }

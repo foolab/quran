@@ -1,24 +1,11 @@
 // -*- qml-mode -*-
 import QtQuick 1.0
+import Translations 1.0
 
-Page {
+TranslationsPage {
         id: translationsAddPage
 
         tools: toolBar
-
-        QueryDialog {
-                id: dlDialog
-                titleText: qsTr("Download translation?");
-                acceptButtonText: qsTr("Yes")
-                rejectButtonText: qsTr("No")
-        }
-
-        QueryDialog {
-                id: rmDialog
-                titleText: qsTr("Remove translation?");
-                acceptButtonText: qsTr("Yes")
-                rejectButtonText: qsTr("No")
-        }
 
         Component {
                 id: translationsDelegate
@@ -56,40 +43,18 @@ Page {
                                         tid: modelData
                                         width: view.width
 
-                                        function dlDialogRejected() {
-                                                dlDialog.accepted.disconnect(dlDialogAccepted);
-                                                dlDialog.rejected.disconnect(dlDialogRejected);
-                                        }
-
-                                        function dlDialogAccepted() {
-                                                dlDialog.accepted.disconnect(dlDialogAccepted);
-                                                dlDialog.rejected.disconnect(dlDialogRejected);
-                                                startDownload();
-                                        }
-
-                                        function rmDialogRejected() {
-                                                rmDialog.accepted.disconnect(rmDialogAccepted);
-                                                rmDialog.rejected.disconnect(rmDialogRejected);
-                                        }
-
-                                        function rmDialogAccepted() {
-                                                rmDialog.accepted.disconnect(rmDialogAccepted);
-                                                rmDialog.rejected.disconnect(rmDialogRejected);
-                                                _translations.removeTranslation(tid);
-                                        }
-
                                         onClicked: {
-                                                dlDialog.message = text;
-                                                dlDialog.accepted.connect(dlDialogAccepted);
-                                                dlDialog.rejected.connect(dlDialogRejected);
-                                                dlDialog.open();
+                                                if (status == Translation.Downloading) {
+                                                        askForStop(tid);
+                                                }
+                                                else if (status == Translation.None ||
+                                                         status == Translation.Error) {
+                                                        askForDownload(tid);
+                                                }
                                         }
 
                                         onRemoveClicked: {
-                                                rmDialog.message = text;
-                                                rmDialog.accepted.connect(rmDialogAccepted);
-                                                rmDialog.rejected.connect(rmDialogRejected);
-                                                rmDialog.open();
+                                                askForRemoval(tid);
                                         }
                                 }
                         }
