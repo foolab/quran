@@ -272,3 +272,18 @@ void TranslationPrivate::replyReadyRead() {
     m_file = 0;
   }
 }
+
+void TranslationPrivate::remove() {
+  if (m_status == Translation::None) {
+    return;
+  }
+
+  stopDownload();
+
+  QString index = m_translations->index(tid());
+  QString data = m_translations->data(tid());
+
+  if (QFile(index).remove() && QFile(data).remove()) {
+    setStatus(Translation::None);
+  }
+}

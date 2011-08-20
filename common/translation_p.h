@@ -29,6 +29,8 @@ public:
   bool startDownload(QNetworkReply *reply);
   void stopDownload();
 
+  void remove();
+
   int tid() const;
 
   bool isEmpty() const;
