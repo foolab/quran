@@ -267,12 +267,7 @@ void TranslationPrivate::replyReadyRead() {
   }
 
   if (!readData()) {
-    setStatus(Translation::Error);
-
-    m_reply->deleteLater();
-    m_reply = 0;
-    delete m_file;
-    m_file = 0;
+    replyError();
   }
 }
 
