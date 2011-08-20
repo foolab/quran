@@ -118,17 +118,17 @@ void TranslationPrivate::stopDownload() {
 }
 
 void TranslationPrivate::setStatus(Translation::Status status) {
-  qCritical() << Q_FUNC_INFO << m_status << status;
-
   if (m_status != status) {
+    Translation::Status oldStatus = m_status;
+
     m_status = status;
 
     foreach (Translation *translation, m_items) {
       translation->statusChanged();
     }
-  }
 
-  // TODO: inform translations
+    m_translations->statusChanged(tid(), oldStatus, m_status);
+  }
 }
 
 void TranslationPrivate::setDownloadProgress(int downloadProgress) {
@@ -219,8 +219,6 @@ void TranslationPrivate::replyDownloadProgress(qint64 bytesReceived, qint64 byte
 }
 
 void TranslationPrivate::replyError() {
-  qCritical() << Q_FUNC_INFO;
-
   if (!m_reply || !m_file) {
     return;
   }
