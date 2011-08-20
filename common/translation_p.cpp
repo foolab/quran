@@ -53,8 +53,6 @@ void TranslationPrivate::add(Translation *translation) {
   if (m_items.indexOf(translation) == -1) {
     m_items << translation;
 
-    translation->statusChanged();
-
     // TODO: bad
     QMetaObject::invokeMethod(translation, "errorChanged", Qt::QueuedConnection);
     QMetaObject::invokeMethod(translation, "downloadProgressChanged", Qt::QueuedConnection);
