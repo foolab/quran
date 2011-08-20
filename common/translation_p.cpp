@@ -156,9 +156,14 @@ bool TranslationPrivate::readData() {
       return false;
     }
 
-    // TODO: detect proper \n || \r\n
-    m_offsets << qMakePair<quint64, quint64>(m_offset, data.size() - 1);
-    m_offset += data.size();
+    if (data.startsWith('\n') || data.startsWith('#')) {
+      // Empty lines or comments.
+      m_offset += data.size();
+    }
+    else {
+      m_offsets << qMakePair<quint64, quint64>(m_offset, data.size() - 1);
+      m_offset += data.size();
+    }
   }
 
   return true;
