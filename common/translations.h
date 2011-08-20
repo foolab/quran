@@ -14,7 +14,6 @@ class TranslationPrivate;
 class Translations : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(QList<int> installed READ installed NOTIFY installedChanged);
   Q_PROPERTY(QList<int> downloads READ downloads NOTIFY downloadsChanged);
   Q_PROPERTY(QList<int> categories READ categories NOTIFY categoriesChanged);
   Q_PROPERTY(QList<int> active READ active NOTIFY activeChanged);
@@ -27,11 +26,13 @@ public:
   QList<int> downloads() const;
   QList<int> categories() const;
   QList<int> active() const;
+  QList<int> error() const;
 
   Q_INVOKABLE QString categoryName(int category);
   Q_INVOKABLE QList<int> translations(int category);
   Q_INVOKABLE QString translationName(int translation);
 
+  void statusChanged(int tid, Translation::Status oldStatus, Translation::Status newStatus);
   //  void setEnabled(bool enabled);
 
   //  void refresh();
@@ -44,23 +45,17 @@ public:
   TranslationPrivate *registerTranslation(Translation *t);
   void unregisterTranslation(Translation *t);
 
-  int downloadProgress(int tid);
-  Translation::Status status(int tid);
-  QString error(int tid);
-
-  void startDownload(int tid);
-  void stopDownload(int tid);
-
   void refresh();
 
   QString index(int tid) const;
   QString data(int tid) const;
 
 public slots:
-  void removeTranslation(int translation);
+  void startDownload(int tid);
+  void stopDownload(int tid);
+  void removeTranslation(int tid);
 
 signals:
-  void installedChanged();
   void downloadsChanged();
   void categoriesChanged();
   void activeChanged();

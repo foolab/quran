@@ -13,6 +13,8 @@
 #define DATA_SUFFIX ".txt"
 #define INDEX_FILTER "*" INDEX_SUFFIX
 
+// TODO: limit the number of simultaneously downloaded translations.
+
 Translations::Translations(const QString& dir, Downloader *downloader, QObject *parent)
   : QObject(parent), m_downloader(downloader), m_dir(dir) {
 
@@ -47,7 +49,6 @@ void Translations::refresh() {
     }
   }
 
-  emit installedChanged();
   emit activeChanged();
 }
 
@@ -67,6 +68,7 @@ TranslationPrivate *Translations::registerTranslation(Translation *t) {
 
 void Translations::unregisterTranslation(Translation *t) {
   TranslationPrivate *p = t->d_ptr;
+
   if (!p) {
     return;
   }
@@ -123,6 +125,8 @@ QList<int> Translations::active() const {
 
   res += downloads();
 
+  res += error();
+
   return res;
 }
 
@@ -141,7 +145,12 @@ void Translations::startDownload(int tid) {
 }
 
 void Translations::stopDownload(int tid) {
-  // TODO:
+  TranslationPrivate *p = info(tid);
+  if (!p) {
+    return;
+  }
+
+  p->stopDownload();
 }
 
 QList<int> Translations::downloads() const {
@@ -158,10 +167,29 @@ QList<int> Translations::downloads() const {
   return res;
 }
 
-void Translations::removeTranslation(int translation) {
-  stopDownload(translation);
+QList<int> Translations::error() const {
+  QList<int> res;
 
-  // TODO:
+  foreach (const TranslationPrivate *p, m_info) {
+    if (p->status() == Translation::Error) {
+      res << p->tid();
+    }
+  }
+
+  qSort(res);
+
+  return res;
+}
+
+void Translations::removeTranslation(int tid) {
+  TranslationPrivate *p = info(tid);
+  if (!p) {
+    return;
+  }
+
+  p->stopDownload();
+
+  p->remove();
 }
 
 QString Translations::id(int tid) const {
@@ -186,4 +214,38 @@ QString Translations::index(int tid) const {
 QString Translations::data(int tid) const {
   return QString("%1%2%3%4").arg(m_dir.absolutePath()).arg(QDir::separator())
     .arg(id(tid)).arg(DATA_SUFFIX);
+}
+
+void Translations::statusChanged(int tid, Translation::Status oldStatus,
+				 Translation::Status newStatus) {
+
+  TranslationPrivate *p = info(tid);
+  if (!p) {
+    return;
+  }
+
+  if (oldStatus == Translation::None && newStatus == Translation::Downloading) {
+    // User initiated a download
+    emit downloadsChanged();
+    emit activeChanged();
+  }
+  else if (oldStatus == Translation::Installed && newStatus == Translation::None) {
+    // User removed a translation
+    m_installed.takeAt(m_installed.indexOf(p->tid()));
+    emit activeChanged();
+  }
+  else if (oldStatus == Translation::Error && newStatus == Translation::Downloading) {
+    // User restarted a failed download.
+    emit activeChanged();
+  }
+  else if (oldStatus == Translation::Downloading && newStatus == Translation::None) {
+    // User stopped a download
+    emit downloadsChanged();
+    emit activeChanged();
+  }
+  else if (oldStatus == Translation::Downloading && newStatus == Translation::Installed) {
+    // Translation installed.
+    m_installed.append(p->tid());
+    emit activeChanged();
+  }
 }
