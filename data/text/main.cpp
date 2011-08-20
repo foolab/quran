@@ -513,11 +513,6 @@ bool output() {
 
   puts("");
 
-  puts("struct Aya {");
-  puts("  off_t pos;");
-  puts("  size_t len;");
-  puts("};");
-
   for (int x = 0; x < offsets.size(); x++) {
     const Offset& o = offsets.at(x);
 
@@ -528,12 +523,6 @@ bool output() {
       qCritical() << "Failed to write index";
       return false;
     }
-
-    printf("struct Aya %s[] = {\n", o.id.toLatin1().data());
-    for (int i = 0; i < o.index.size(); i++) {
-      printf("  {%li, %i},\n", o.index.at(i).first, o.index.at(i).second);
-    }
-    printf("};\n\n");
   }
 
   puts("struct _Text {");
@@ -541,13 +530,12 @@ bool output() {
   puts("  const char *id;");
   puts("  off_t len;");
   puts("  const char *idx;");
-  puts("  struct Aya *table;");
   puts("} Texts[] = {");
   for (int x = 0; x < offsets.size(); x++) {
     const Offset& o = offsets.at(x);
-    printf("{\"%s\", \"%s\", %i, \"%s\", %s},\n",
+    printf("{\"%s\", \"%s\", %i, \"%s\"},\n",
 	   encode(o.name).toLatin1().data(), encode(o.id).toLatin1().data(),
-	   o.len, encode(":/" + o.idx).toLatin1().data(), o.id.toLatin1().data());
+	   o.len, encode(":/" + o.idx).toLatin1().data());
   }
   puts("};");
 
