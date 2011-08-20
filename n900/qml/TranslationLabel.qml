@@ -7,6 +7,8 @@ DownloadLabel {
 
         property int tid: -1
 
+        property alias status: translation.status
+
         showProgress: translation.status == Translation.Downloading
         showError: translation.status == Translation.Error
 
