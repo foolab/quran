@@ -136,8 +136,8 @@ void Translations::startDownload(int tid) {
     return;
   }
 
-  // TODO:
-  QNetworkReply *reply = m_downloader->get(QString("http://home.foolab.org/files/%1.txt").arg(id(tid)));
+  QString url = QString("http://tanzil.net/trans/?transID=%1&type=txt").arg(id(tid));
+  QNetworkReply *reply = m_downloader->get(url);
 
   if (!p->startDownload(reply)) {
     delete reply;
