@@ -60,7 +60,6 @@ Page {
                 dlDialog.rejected.disconnect(__dlDialogRejected);
         }
 
-
         function askForStop(tid) {
                 __tid = tid;
                 stopDialog.message = _translations.translationName(__tid);
