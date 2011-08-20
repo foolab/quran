@@ -15,14 +15,6 @@ DownloadLabel {
         text: tid >= 0 ? _translations.translationName(tid) : "";
         errorText: translation.error
 
-	    function startDownload() {
-                translation.startDownload();
-        }
-
-	    function stopDownload() {
-                translation.stopDownload();
-        }
-
         Translation {
                 id: translation
                 tid: label.tid
