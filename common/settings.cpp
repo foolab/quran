@@ -21,22 +21,23 @@
 #include <QDebug>
 #include <QFontDatabase>
 
-#define DEFAULT_TEXT_TYPE      0
-#define DEFAULT_FONT_SIZE      36
-#define DEFAULT_NUMBER_FORMAT  0
-#define DEFAULT_PAGE_NUMBER    0
-#define DEFAULT_Y              0
-#define DEFAULT_FULL_SCREEN    false
-#define DEFAULT_ORIENTATION    1
+#define DEFAULT_TEXT_TYPE          0
+#define DEFAULT_FONT_SIZE          36
+#define DEFAULT_NUMBER_FORMAT      0
+#define DEFAULT_PAGE_NUMBER        0
+#define DEFAULT_Y                  0
+#define DEFAULT_FULL_SCREEN        false
+#define DEFAULT_ORIENTATION        1
+#define DEFAULT_TRANSLATION_MODE   0
 
-#define FONT_FAMILY            "Scheherazade"
-#define FONT_MIN_SIZE          16
-#define FONT_MAX_SIZE          48
-#define HIGHLIGHT_COLOR        QColor(163, 218, 244)
-#define TITLE_COLOR            Qt::black
-#define SUBTITLE_COLOR         Qt::black
-#define VERSE_COLOR            Qt::black
-#define FONT_FILE              "ScheherazadeRegOT.ttf"
+#define FONT_FAMILY                "Scheherazade"
+#define FONT_MIN_SIZE              16
+#define FONT_MAX_SIZE              48
+#define HIGHLIGHT_COLOR            QColor(163, 218, 244)
+#define TITLE_COLOR                Qt::black
+#define SUBTITLE_COLOR             Qt::black
+#define VERSE_COLOR                Qt::black
+#define FONT_FILE                  "ScheherazadeRegOT.ttf"
 
 Q_DECLARE_METATYPE(QList<uint>);
 
@@ -45,6 +46,12 @@ Q_DECLARE_METATYPE(QList<uint>);
  * 0 = Automatic
  * 1 = Portrait
  * 2 = Landscape
+ */
+/*!
+ * Translation mode:
+ * 0 = Off
+ * 1 = On
+ * 2 = Hidden
  */
 Settings::Settings(QObject *parent) : QObject(parent), m_font(-1) {
   qRegisterMetaType<QList<uint> >("QList<uint>");
@@ -190,6 +197,20 @@ void Settings::setOrientation(int orientation) {
 
 int Settings::orientation() const {
   return qBound(0, m_settings->value("General/orientation", DEFAULT_ORIENTATION).toInt(), 2);
+}
+
+void Settings::setTranslationMode(int mode) {
+  int m = qBound(0, mode, 2);
+
+  if (translationMode() != m) {
+    m_settings->setValue("General/translationMode", m);
+    emit translationModeChanged();
+  }
+}
+
+int Settings::translationMode() const {
+  return qBound(0, m_settings->value("General/translationMode",
+				     DEFAULT_TRANSLATION_MODE).toInt(), 2);
 }
 
 void Settings::reset() {
