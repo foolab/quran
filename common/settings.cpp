@@ -213,6 +213,17 @@ int Settings::translationMode() const {
 				     DEFAULT_TRANSLATION_MODE).toInt(), 2);
 }
 
+void Settings::setDefaultTranslation(const QString& id) {
+  if (defaultTranslation() != id) {
+    m_settings->setValue("General/defaultTranslation", id);
+    emit defaultTranslationChanged();
+  }
+}
+
+QString Settings::defaultTranslation() const {
+  return m_settings->value("General/defaultTranslation").toString();
+}
+
 void Settings::reset() {
   setFullScreen(DEFAULT_FULL_SCREEN);
   setOrientation(DEFAULT_ORIENTATION);

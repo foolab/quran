@@ -44,6 +44,7 @@ class Settings : public QObject {
   Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged);
   Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY orientationChanged);
   Q_PROPERTY(int translationMode READ translationMode WRITE setTranslationMode NOTIFY translationModeChanged);
+  Q_PROPERTY(QString defaultTranslation READ defaultTranslation WRITE setDefaultTranslation NOTIFY defaultTranslationChanged);
 
 public:
   Settings(QObject *parent = 0);
@@ -86,6 +87,9 @@ public:
   void setTranslationMode(int mode);
   int translationMode() const;
 
+  void setDefaultTranslation(const QString& id);
+  QString defaultTranslation() const;
+
   // TODO: use or kill
   int y() const;
 
@@ -106,6 +110,7 @@ signals:
   void fullScreenChanged();
   void orientationChanged();
   void translationModeChanged();
+  void defaultTranslationChanged();
 
 private:
   QSettings *m_settings;
