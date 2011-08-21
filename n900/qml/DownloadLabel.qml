@@ -8,17 +8,16 @@ Rectangle {
         property alias progress: slider.value
         property alias errorText: error.text
 
-        property bool showRm: true
+        property bool showInstalled: true
 
         property bool showError: false
 
         signal clicked
-        signal removeClicked
 
         color: mouse.pressed ? "steelblue" : "white"
 
-        width: slider.width + 20 + rm.width + 10
-        height: slider.y + slider.height
+        width: slider.width + 20 + installed.width + 10
+        height: 100
 
         MouseArea {
                 id: mouse
@@ -36,15 +35,13 @@ Rectangle {
                 color: mouse.pressed ? "white" : "black"
         }
 
-        Slider {
+        ProgressBar {
                 id: slider
                 x: label.x
                 opacity: showProgress ? 1.0 : 0.0
-                interactive: false
                 minimumValue: 0
                 maximumValue: 100
                 anchors.top: label.bottom
-                color: parent.color
         }
 
         Label {
@@ -55,12 +52,11 @@ Rectangle {
         }
 
         ToolButton {
-                id: rm
-                icon: "general_delete"
-                opacity: showRm ? 1.0 : 0.0
+                id: installed
+                icon: "general_received"
+                opacity: showInstalled ? 1.0 : 0.0
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 color: parent.color
-                onClicked: parent.removeClicked()
         }
 }
