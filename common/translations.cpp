@@ -14,6 +14,7 @@
 #define INDEX_FILTER "*" INDEX_SUFFIX
 
 // TODO: limit the number of simultaneously downloaded translations.
+// TODO: We don't notify the user when we finish or fail or ...
 
 Translations::Translations(const QString& dir, Downloader *downloader, QObject *parent)
   : QObject(parent), m_downloader(downloader), m_dir(dir) {
@@ -48,6 +49,8 @@ void Translations::refresh() {
       m_installed << tid;
     }
   }
+
+  emit installedChanged();
 
   emit activeChanged();
 }
@@ -232,6 +235,7 @@ void Translations::statusChanged(int tid, Translation::Status oldStatus,
   else if (oldStatus == Translation::Installed && newStatus == Translation::None) {
     // User removed a translation
     m_installed.takeAt(m_installed.indexOf(p->tid()));
+    emit installedChanged();
     emit activeChanged();
   }
   else if (oldStatus == Translation::Error && newStatus == Translation::Downloading) {
@@ -246,6 +250,7 @@ void Translations::statusChanged(int tid, Translation::Status oldStatus,
   else if (oldStatus == Translation::Downloading && newStatus == Translation::Installed) {
     // Translation installed.
     m_installed.append(p->tid());
+    emit installedChanged();
     emit activeChanged();
   }
 }

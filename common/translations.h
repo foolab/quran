@@ -59,6 +59,7 @@ signals:
   void downloadsChanged();
   void categoriesChanged();
   void activeChanged();
+  void installedChanged();
 
 private:
   TranslationPrivate *info(int tid);
