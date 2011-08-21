@@ -366,7 +366,6 @@ Page {
 //                        MenuItem { text: qsTr("Help") }
                         MenuItem { text: qsTr("About"); onClicked: { menu.close(); showPage("AboutPage"); } }
                         MenuItem { text: qsTr("Quit"); onClicked: Qt.quit(); }
-                        //                MenuItem { text: "Translations" }
                 }
         }
 
