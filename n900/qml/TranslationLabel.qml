@@ -13,7 +13,7 @@ DownloadLabel {
         showError: translation.status == Translation.Error
 
         progress: translation.downloadProgress
-        showRm: translation.status == Translation.Installed
+        showInstalled: translation.status == Translation.Installed
         text: tid >= 0 ? _translations.translationName(tid) : "";
         errorText: translation.error
 
