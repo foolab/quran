@@ -14,28 +14,10 @@ Page {
         }
 
         QueryDialog {
-                id: rmDialog
-                titleText: qsTr("Remove translation?");
-                acceptButtonText: qsTr("Yes")
-                rejectButtonText: qsTr("No")
-        }
-
-        QueryDialog {
                 id: stopDialog
                 titleText: qsTr("Stop download?");
                 acceptButtonText: qsTr("Yes")
                 rejectButtonText: qsTr("No")
-        }
-
-        function __rmDialogAccepted() {
-                rmDialog.accepted.disconnect(__rmDialogAccepted);
-                rmDialog.rejected.disconnect(__rmDialogRejected);
-                _translations.removeTranslation(__tid);
-        }
-
-        function __rmDialogRejected() {
-                rmDialog.accepted.disconnect(__rmDialogAccepted);
-                rmDialog.rejected.disconnect(__rmDialogRejected);
         }
 
         function __stopDialogAccepted() {
@@ -74,14 +56,6 @@ Page {
                 dlDialog.accepted.connect(__dlDialogAccepted);
                 dlDialog.rejected.connect(__dlDialogRejected);
                 dlDialog.open();
-        }
-
-        function askForRemoval(tid) {
-                __tid = tid;
-                rmDialog.message = _translations.translationName(__tid);
-                rmDialog.accepted.connect(__rmDialogAccepted);
-                rmDialog.rejected.connect(__rmDialogRejected);
-                rmDialog.open();
         }
 }
 

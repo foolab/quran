@@ -51,10 +51,10 @@ TranslationsPage {
                                                          status == Translation.Error) {
                                                         askForDownload(tid);
                                                 }
-                                        }
-
-                                        onRemoveClicked: {
-                                                askForRemoval(tid);
+                                                else if (status == Translation.Installed) {
+                                                        pageStack.push("TranslationEditPage");
+                                                        pageStack.currentPage.tid = tid;
+                                                }
                                         }
                                 }
                         }
