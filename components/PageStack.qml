@@ -6,6 +6,8 @@ import "PageStack.js" as Stack
 Item {
         id: pageStack
 
+	    property Item currentPage: null
+
         function pop() {
                 Stack.pop();
         }

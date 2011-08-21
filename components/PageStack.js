@@ -49,6 +49,8 @@ function push(page, ignored, immediate) {
   else {
     obj.state = "shown";
   }
+
+  pageStack.currentPage = obj;
 }
 
 function pop() {
@@ -64,4 +66,6 @@ function pop() {
   obj.destroy(1000);
 
   __stack[__stack.length - 1].state = "shown";
+
+  pageStack.currentPage = __stack[__stack.length - 1];
 }
