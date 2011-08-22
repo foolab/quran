@@ -8,10 +8,12 @@ class TextProviderPrivate;
 
 class TextProvider {
 public:
-  TextProvider(const QString& dataFile, const QString& indexFile);
+  TextProvider(int id, const QString& dataFile, const QString& indexFile);
   ~TextProvider();
 
   bool load();
+
+  int id() const;
 
   QString text(int aya, off_t start) const;
 

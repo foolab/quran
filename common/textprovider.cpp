@@ -13,20 +13,26 @@ public:
   QString data;
   char *ptr;
   off_t size;
+  int id;
 };
 
-TextProvider::TextProvider(const QString& dataFile, const QString& indexFile)
+TextProvider::TextProvider(int id, const QString& dataFile, const QString& indexFile)
   : d_ptr(new TextProviderPrivate) {
   d_ptr->size = 0;
   d_ptr->ptr = 0;
   d_ptr->index = indexFile;
   d_ptr->data = dataFile;
+  d_ptr->id = id;
 }
 
 TextProvider::~TextProvider() {
   unload();
 
   delete d_ptr;
+}
+
+int TextProvider::id() const {
+  return d_ptr->id;
 }
 
 bool TextProvider::load() {
