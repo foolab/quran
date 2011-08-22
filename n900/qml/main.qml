@@ -103,14 +103,37 @@ PageStackWindow {
                 text: qsTr("This is the last page");
         }
 
+        InfoBanner {
+                id: translationError
+                text: qsTr("Failed to load the translation");
+        }
+
         function showPage(name, point, now) {
                 pageStack.push(name, point, now);
+        }
+
+        function loadTranslationsIfNeeded() {
+                var t = _settings.translationMode;
+
+                if (t != 0) {
+                        if (!_translations.load()) {
+                                translationError.show();
+                        }
+                }
+                else {
+                        _translations.unload();
+                }
         }
 
         Component.onCompleted: {
                 if (!_settings.fontLoaded) {
                         fontError.show();
                 }
+
+                _settings.translationModeChanged.connect(loadTranslationsIfNeeded);
+                _settings.defaultTranslationChanged.connect(loadTranslationsIfNeeded);
+
+                loadTranslationsIfNeeded();
 
                 if (_data.setTextType(_settings.textType)) {
                         pageStack.push("QuranPage", Qt.point(0, 0), true);
