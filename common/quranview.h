@@ -35,6 +35,7 @@ class QuranView : public QDeclarativeItem, public AbstractQuranView {
   Q_PROPERTY(QColor verseColor READ verseColor WRITE setVerseColor);
   Q_PROPERTY(QColor titleColor READ titleColor WRITE setTitleColor);
   Q_PROPERTY(QColor subtitleColor READ subtitleColor WRITE setSubtitleColor);
+  Q_PROPERTY(bool showTranslation READ showTranslation WRITE setShowTranslation);
 
 public:
   QuranView(QDeclarativeItem *parent = 0);

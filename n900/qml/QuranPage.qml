@@ -29,7 +29,7 @@ Page {
                         font.family: _settings.fontFamily
 
                         width: view.width
-
+                        showTranslation: _settings.translationMode == 1
                         margin: 20
                         dataProvider: _data
                         bookmarks: _bookmarks

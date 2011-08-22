@@ -59,6 +59,9 @@ public:
   void setVerseColor(const QColor& color);
   QColor verseColor() const;
 
+  void setShowTranslation(bool show);
+  bool showTranslation() const;
+
   void populate(int page);
 
   Position position(int x, int y);
@@ -87,6 +90,8 @@ private:
   QColor m_verseColor;
 
   QTextFragment m_highlighted;
+
+  bool m_showTranslation;
 };
 
 #endif /* ABSTRACT_QURAN_VIEW_H */

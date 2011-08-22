@@ -66,6 +66,7 @@ public:
   Q_INVOKABLE QString text(int sura, int aya) const;
 
   QStringList text(const Fragment& frag) const;
+  QStringList secondaryText(const Fragment& frag) const;
 
   void setSecondaryText(TextProvider *text);
 

@@ -30,7 +30,7 @@
 #define BOOKMARKS_PROPERTY QTextFormat::UserProperty
 
 AbstractQuranView::AbstractQuranView(QTextDocument *doc) :
-  m_doc(doc), m_data(0), m_bookmarks(0), m_formatter(0) {
+  m_doc(doc), m_data(0), m_bookmarks(0), m_formatter(0), m_showTranslation(false) {
 
   m_doc->setDocumentMargin(0);
   m_doc->setUndoRedoEnabled(false);
@@ -104,6 +104,14 @@ QColor AbstractQuranView::verseColor() const {
   return m_verseColor;
 }
 
+void AbstractQuranView::setShowTranslation(bool show) {
+  m_showTranslation = show;
+}
+
+bool AbstractQuranView::showTranslation() const {
+  return m_showTranslation;
+}
+
 void AbstractQuranView::populate(int page) {
   Page p = m_data->pageFromIndex(page);
 
@@ -151,6 +159,7 @@ void AbstractQuranView::addFragment(QTextCursor& cursor, const Fragment& frag) {
 
   // Ayat:
   QStringList text = m_data->text(frag);
+  QStringList sec = m_data->secondaryText(frag);
   int sura = frag.sura();
 
   for (int x = 0; x < text.size(); x++) {
@@ -161,8 +170,13 @@ void AbstractQuranView::addFragment(QTextCursor& cursor, const Fragment& frag) {
     fmt.setForeground(QBrush(m_verseColor));
     cursor.insertText(aya, fmt);
 
+    if (m_showTranslation) {
+      fmt.setProperty(QTextFormat::FontFamily, "Nokia Sans");
+      cursor.insertText(QString("\n%1").arg(sec.at(x)), fmt);
+    }
+
     if (x + 1 != frag.size()) {
-      cursor.insertText(" ", QTextCharFormat());
+      cursor.insertText(m_data->secondaryTextProvider() ? "\n" : " ", QTextCharFormat());
     }
   }
 }
