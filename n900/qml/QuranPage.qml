@@ -372,6 +372,8 @@ Page {
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
+                        id: layout
+
                         NumberLabel {
                                 width: 60
                                 height: 60
@@ -385,7 +387,18 @@ Page {
                                         showPage(_bookmarks.empty ? "FavoritesPageEmpty" : "FavoritesPage");
                                 }
                         }
-//                        ToolButton { icon: "clock_starter_worldclock" }
+
+                        ToolButton {
+                                icon: "clock_starter_worldclock"
+                                enabled: _settings.translationMode != 0
+                                Connections {
+                                        target: _settings
+                                        onTranslationModeChanged: layout.layout();
+                                }
+
+                                onClicked: console.log("tt");
+                        }
+
                         ToolButton {
                                 icon: "general_fullsize"
                                 onClicked: _settings.fullScreen = !_settings.fullScreen;
