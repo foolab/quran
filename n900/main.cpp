@@ -65,18 +65,17 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   Settings settings;
   settings.loadFont();
 
+  Downloader downloader;
+
   DataProvider data(DATA_DIR "/text/");
+
+  Translations translations(USER_DIR "translations/", &downloader, &settings, &data);
 
   Bookmarks bookmarks(&settings);
 
   NumberFormatter formatter(&settings);
 
   Legal legal;
-
-  Downloader downloader;
-
-  Translations translations(USER_DIR "translations/", &downloader);
-  translations.refresh();
 
   qmlRegisterType<DataProvider>();
   qmlRegisterType<Settings>();
