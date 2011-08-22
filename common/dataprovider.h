@@ -67,11 +67,19 @@ public:
 
   QStringList text(const Fragment& frag) const;
 
+  void setSecondaryText(TextProvider *text);
+
+  TextProvider *secondaryTextProvider() const;
+
+signals:
+  void secondaryTextChanged();
+
 private:
   const QString m_dir;
 
   int m_index;
   TextProvider *m_data;
+  TextProvider *m_secondary;
 };
 
 class Page {

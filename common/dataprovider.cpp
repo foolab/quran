@@ -28,7 +28,8 @@
 #define CLAMP(min, x, max) qMax(qMin(x, max), min)
 
 DataProvider::DataProvider(const QString& dir, QObject *parent) :
-  QObject(parent), m_dir(dir), m_index(-1), m_data(0) {
+  QObject(parent), m_dir(dir), m_index(-1), m_data(0), m_secondary(0) {
+
 }
 
 DataProvider::~DataProvider() {
@@ -36,6 +37,11 @@ DataProvider::~DataProvider() {
     delete m_data;
     m_data = 0;
     m_index = -1;
+  }
+
+  if (m_secondary) {
+    delete m_secondary;
+    m_secondary = 0;
   }
 }
 
@@ -171,7 +177,7 @@ bool DataProvider::setTextType(int index) {
   QString data = QString("%1%2%3").arg(m_dir).arg(QDir::separator()).arg(Texts[index].name);
   QString idx = Texts[index].idx;
 
-  TextProvider *p = new TextProvider(data, idx);
+  TextProvider *p = new TextProvider(index, data, idx);
   if (!p->load()) {
     delete p;
     return false;
@@ -238,6 +244,18 @@ QList<Fragment> Page::fragments() {
   }
 
   return frags;
+}
+
+TextProvider *DataProvider::secondaryTextProvider() const {
+  return m_secondary;
+}
+
+void DataProvider::setSecondaryText(TextProvider *text) {
+  if (m_secondary != text) {
+    delete m_secondary;
+    m_secondary = text;
+    emit secondaryTextChanged();
+  }
 }
 
 int Fragment::sura() const {
