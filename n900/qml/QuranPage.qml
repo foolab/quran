@@ -22,6 +22,7 @@ Page {
 
         Component {
                 id: quranPageDelegate
+
                 QuranView {
                         id: content
                         font.pointSize: _settings.fontSize
@@ -41,16 +42,18 @@ Page {
                         Connections {
                                 target: _settings
                                 onNumberFormatChanged: populate();
-                        }
-
-                        Connections {
-                                target: _settings
                                 onTextTypeChanged: populate();
                         }
+
 
                         Connections {
                                 target: pagePosition
                                 onChanged: scrollTo(pagePosition.sura, pagePosition.aya);
+                        }
+
+                        Connections {
+                                target: _data
+                                onSecondaryTextChanged: populate();
                         }
 
                         Component.onCompleted: {
