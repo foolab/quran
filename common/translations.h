@@ -10,6 +10,8 @@
 
 class Downloader;
 class TranslationPrivate;
+class Settings;
+class DataProvider;
 
 class Translations : public QObject {
   Q_OBJECT
@@ -19,7 +21,9 @@ class Translations : public QObject {
   Q_PROPERTY(QList<int> active READ active NOTIFY activeChanged);
 
 public:
-  Translations(const QString& dir, Downloader *downloader, QObject *parent = 0);
+  Translations(const QString& dir, Downloader *downloader, Settings *settings,
+	       DataProvider *data, QObject *parent = 0);
+
   ~Translations();
 
   QList<int> installed() const;
@@ -33,6 +37,9 @@ public:
   Q_INVOKABLE QString translationName(int translation);
 
   void statusChanged(int tid, Translation::Status oldStatus, Translation::Status newStatus);
+
+  Q_INVOKABLE bool load();
+
   //  void setEnabled(bool enabled);
 
   //  void refresh();
@@ -54,6 +61,7 @@ public slots:
   void startDownload(int tid);
   void stopDownload(int tid);
   void removeTranslation(int tid);
+  void unload();
 
 signals:
   void downloadsChanged();
@@ -69,6 +77,9 @@ private:
   Downloader *m_downloader;
 
   const QDir m_dir;
+
+  Settings *m_settings;
+  DataProvider *m_data;
 
   QList<TranslationPrivate *> m_info;
 

@@ -7,6 +7,9 @@
 #include <QNetworkReply>
 #include <QTemporaryFile>
 #include "translation_p.h"
+#include "settings.h"
+#include "dataprovider.h"
+#include "textprovider.h"
 #include <QDebug>
 
 #define INDEX_SUFFIX ".idx"
@@ -16,8 +19,10 @@
 // TODO: limit the number of simultaneously downloaded translations.
 // TODO: We don't notify the user when we finish or fail or ...
 
-Translations::Translations(const QString& dir, Downloader *downloader, QObject *parent)
-  : QObject(parent), m_downloader(downloader), m_dir(dir) {
+Translations::Translations(const QString& dir, Downloader *downloader, Settings *settings,
+			   DataProvider *data, QObject *parent)
+  : QObject(parent), m_downloader(downloader), m_dir(dir), m_settings(settings),
+    m_data(data) {
 
 }
 
@@ -33,6 +38,41 @@ TranslationPrivate *Translations::info(int tid) {
   }
 
   return 0;
+}
+
+void Translations::unload() {
+  m_data->setSecondaryText(0);
+}
+
+bool Translations::load() {
+  refresh();
+
+  if (m_installed.isEmpty()) {
+    return false;
+  }
+
+  QString id = m_settings->defaultTranslation();
+
+  int t = id.isEmpty() ? m_installed.at(0) : tid(id);
+
+  if (m_installed.indexOf(t) == -1) {
+    return false;
+  }
+
+  TextProvider *s = m_data->secondaryTextProvider();
+  if (s && s->id() == t) {
+    return true;
+  }
+
+  TextProvider *p = new TextProvider(t, data(t), index(t));
+  if (!p->load()) {
+    delete p;
+    return false;
+  }
+
+  m_data->setSecondaryText(p);
+
+  return true;
 }
 
 void Translations::refresh() {
