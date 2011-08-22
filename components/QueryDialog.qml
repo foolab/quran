@@ -129,6 +129,4 @@ Item {
                 anchors.fill: parent
                 color: "steelblue"
         }
-
-
 }
