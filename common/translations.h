@@ -16,6 +16,7 @@ class DataProvider;
 class Translations : public QObject {
   Q_OBJECT
 
+  Q_PROPERTY(QList<int> installed READ installed NOTIFY installedChanged);
   Q_PROPERTY(QList<int> downloads READ downloads NOTIFY downloadsChanged);
   Q_PROPERTY(QList<int> categories READ categories NOTIFY categoriesChanged);
   Q_PROPERTY(QList<int> active READ active NOTIFY activeChanged);
@@ -57,6 +58,8 @@ public:
   QString index(int tid) const;
   QString data(int tid) const;
 
+  Q_INVOKABLE QString id(int tid) const;
+
 public slots:
   void startDownload(int tid);
   void stopDownload(int tid);
@@ -71,7 +74,6 @@ signals:
 
 private:
   TranslationPrivate *info(int tid);
-  QString id(int tid) const;
   int tid(const QString& id);
 
   Downloader *m_downloader;

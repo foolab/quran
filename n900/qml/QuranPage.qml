@@ -8,6 +8,10 @@ Page {
         id: quranPage
         tools: toolBar
 
+        TranslationSelector {
+                id: translationSelector
+        }
+
         QuranPageContextMenu {
                 id: addFavorite
                 label: qsTr("Add to favorites");
@@ -394,12 +398,12 @@ Page {
                         ToolButton {
                                 icon: "clock_starter_worldclock"
                                 enabled: _settings.translationMode != 0
-                                Connections {
-                                        target: _settings
-                                        onTranslationModeChanged: layout.layout();
-                                }
 
-                                onClicked: console.log("tt");
+                                // TODO: Not working. Layout gets broken
+                                onEnabledChanged: layout.layout();
+
+                                // TODO:
+                                onClicked: translationSelector.open();
                         }
 
                         ToolButton {
