@@ -435,10 +435,8 @@ Page {
                                 icon: "clock_starter_worldclock"
                                 enabled: _settings.translationMode != 0
 
-                                // TODO: Not working. Layout gets broken
                                 onEnabledChanged: layout.layout();
 
-                                // TODO:
                                 onClicked: translationSelector.open();
                         }
 
