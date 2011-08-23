@@ -65,6 +65,18 @@ Item {
 
                 model: _translations.installed
                 delegate: contentDelegate
+                header: Rectangle {
+                        width: label.width
+                        height: label.height
+                        color: "steelblue"
+                        Label {
+                                id: label
+                                text: qsTr("Choose translation");
+                                width: content.width
+                                color: "white"
+                                x: 10
+                        }
+                }
         }
 
 
