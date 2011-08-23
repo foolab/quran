@@ -22,7 +22,7 @@
 Translations::Translations(const QString& dir, Downloader *downloader, Settings *settings,
 			   DataProvider *data, QObject *parent)
   : QObject(parent), m_downloader(downloader), m_dir(dir), m_settings(settings),
-    m_data(data) {
+    m_data(data), m_current(0) {
 
 }
 
@@ -40,6 +40,18 @@ TranslationPrivate *Translations::info(int tid) {
   return 0;
 }
 
+int Translations::current() const {
+  return m_current;
+}
+
+void Translations::setCurrent(int tid) {
+  if (m_current != tid) {
+    m_current = tid;
+
+    emit currentChanged();
+  }
+}
+
 void Translations::unload() {
   m_data->setSecondaryText(0);
 }
@@ -55,6 +67,9 @@ bool Translations::load(int tid) {
 
   TextProvider *s = m_data->secondaryTextProvider();
   if (s && s->id() == tid) {
+
+    setCurrent(tid);
+
     return true;
   }
 
@@ -65,6 +80,8 @@ bool Translations::load(int tid) {
   }
 
   m_data->setSecondaryText(p);
+
+  setCurrent(tid);
 
   m_settings->setDefaultTranslation(id(tid));
 

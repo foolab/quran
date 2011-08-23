@@ -21,6 +21,8 @@ class Translations : public QObject {
   Q_PROPERTY(QList<int> categories READ categories NOTIFY categoriesChanged);
   Q_PROPERTY(QList<int> active READ active NOTIFY activeChanged);
 
+  Q_PROPERTY(int current READ current NOTIFY currentChanged);
+
 public:
   Translations(const QString& dir, Downloader *downloader, Settings *settings,
 	       DataProvider *data, QObject *parent = 0);
@@ -32,6 +34,8 @@ public:
   QList<int> categories() const;
   QList<int> active() const;
   QList<int> error() const;
+
+  int current() const;
 
   Q_INVOKABLE QString categoryName(int category);
   Q_INVOKABLE QList<int> translations(int category);
@@ -72,10 +76,13 @@ signals:
   void categoriesChanged();
   void activeChanged();
   void installedChanged();
+  void currentChanged();
 
 private:
   TranslationPrivate *info(int tid);
   int tid(const QString& id);
+
+  void setCurrent(int tid);
 
   Downloader *m_downloader;
 
@@ -87,6 +94,8 @@ private:
   QList<TranslationPrivate *> m_info;
 
   QList<int> m_installed;
+
+  int m_current;
 };
 
 #endif /* TRANSLATIONS_H */

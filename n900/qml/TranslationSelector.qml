@@ -106,6 +106,7 @@ Item {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignHCenter
+                                font.bold: _translations.current == modelData
                         }
                 }
         }
