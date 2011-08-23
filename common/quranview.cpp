@@ -103,10 +103,6 @@ void QuranView::populate() {
 
 void QuranView::componentComplete() {
   QDeclarativeItem::componentComplete();
-
-  if (m_page != -1) {
-    populate();
-  }
 }
 
 void QuranView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -126,6 +122,13 @@ void QuranView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
   m_doc->documentLayout()->draw(painter, ctx);
 
   painter->restore();
+}
+
+void QuranView::toggleSecondaryText(int x, int y) {
+  if (AbstractQuranView::toggleSecondaryText(x, y)) {
+    updateLayout();
+    update();
+  }
 }
 
 void QuranView::mouseClicked(int x, int y) {

@@ -112,28 +112,16 @@ PageStackWindow {
                 pageStack.push(name, point, now);
         }
 
-        function loadTranslationsIfNeeded() {
-                var t = _settings.translationMode;
-
-                if (t != 0) {
-                        if (!_translations.load()) {
-                                translationError.show();
-                        }
-                }
-                else {
-                        _translations.unload();
-                }
-        }
-
         Component.onCompleted: {
                 if (!_settings.fontLoaded) {
                         fontError.show();
                 }
 
-                _settings.translationModeChanged.connect(loadTranslationsIfNeeded);
-                _settings.defaultTranslationChanged.connect(loadTranslationsIfNeeded);
-
-                loadTranslationsIfNeeded();
+                if (_settings.translationMode != 0) {
+                        if (!_translations.loadDefault()) {
+                                translationError.show();
+                        }
+                }
 
                 if (_data.setTextType(_settings.textType)) {
                         pageStack.push("QuranPage", Qt.point(0, 0), true);

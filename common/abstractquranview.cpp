@@ -26,14 +26,17 @@
 #include "bookmarks.h"
 #include <QTextBlock>
 #include "numberformatter.h"
+#include <QTextList>
 
 #define BOOKMARKS_PROPERTY QTextFormat::UserProperty
 
 AbstractQuranView::AbstractQuranView(QTextDocument *doc) :
-  m_doc(doc), m_data(0), m_bookmarks(0), m_formatter(0), m_showTranslation(false) {
+  m_doc(doc), m_data(0), m_bookmarks(0), m_formatter(0),
+  m_addSecondaryText(false) {
 
   m_doc->setDocumentMargin(0);
   m_doc->setUndoRedoEnabled(false);
+  m_doc->setIndentWidth(0);
 }
 
 AbstractQuranView::~AbstractQuranView() {
@@ -104,12 +107,50 @@ QColor AbstractQuranView::verseColor() const {
   return m_verseColor;
 }
 
-void AbstractQuranView::setShowTranslation(bool show) {
-  m_showTranslation = show;
+void AbstractQuranView::setAddSecondaryText(bool add) {
+  m_addSecondaryText = add;
 }
 
-bool AbstractQuranView::showTranslation() const {
-  return m_showTranslation;
+bool AbstractQuranView::isSecondaryTextAdded() const {
+  return m_addSecondaryText;
+}
+
+QTextCharFormat AbstractQuranView::titleCharFormat() {
+  QTextCharFormat f;
+
+  f.setForeground(QBrush(m_titleColor));
+
+  return f;
+}
+
+QTextCharFormat AbstractQuranView::subtitleCharFormat() {
+  QTextCharFormat f;
+
+  f.setForeground(QBrush(m_subtitleColor));
+
+  return f;
+}
+
+QTextCharFormat AbstractQuranView::verseCharFormat(int sura, int aya) {
+  QTextCharFormat f;
+
+  f.setProperty(BOOKMARKS_PROPERTY, m_bookmarks->serialize(sura, aya));
+
+  f.setForeground(QBrush(m_verseColor));
+
+  return f;
+}
+
+QTextCharFormat AbstractQuranView::verseCharFormat(const Position& pos) {
+  return verseCharFormat(pos.sura(), pos.aya());
+}
+
+QTextCharFormat AbstractQuranView::secondaryCharFormat(int sura, int aya) {
+  QTextCharFormat f(verseCharFormat(sura, aya));
+
+  f.setProperty(QTextFormat::FontFamily, "Nokia Sana"); // TODO:
+
+  return f;
 }
 
 void AbstractQuranView::populate(int page) {
@@ -135,49 +176,62 @@ void AbstractQuranView::begin(const QList<Fragment>& frags) {
 }
 
 void AbstractQuranView::addFragment(QTextCursor& cursor, const Fragment& frag) {
+  bool addTranslation = m_addSecondaryText && m_data->secondaryTextProvider() != 0;
+  bool splitIntoLines = m_data->secondaryTextProvider() != 0;
+
   Sura s = m_data->sura(frag.sura());
 
-  QTextBlockFormat centerFormat;
-  centerFormat.setAlignment(Qt::AlignHCenter);
-
-  if (frag.start() == 0) {
-    cursor.insertBlock(centerFormat);
-    QTextCharFormat fmt;
-    fmt.setForeground(QBrush(m_titleColor));
-    cursor.insertText(m_data->fullSuraName(frag.sura()), fmt);
-
-    if (s.hasBasmala()) {
-      cursor.insertBlock(centerFormat);
-      fmt.setForeground(QBrush(m_subtitleColor));
-      cursor.insertText(m_data->basmala(), fmt);
-    }
-
-    cursor.insertBlock(QTextBlockFormat());
-  }
-
-  QTextCharFormat fmt;
-
-  // Ayat:
-  QStringList text = m_data->text(frag);
-  QStringList sec = m_data->secondaryText(frag);
   int sura = frag.sura();
 
-  for (int x = 0; x < text.size(); x++) {
-    int ayaNumber = x + frag.start();
+  const QStringList text = m_data->text(frag);
+  const QStringList secondary = m_data->secondaryText(frag);
 
-    QString aya = QString("%1 (%2)").arg(text.at(x)).arg(m_formatter->number(ayaNumber + 1));
-    fmt.setProperty(BOOKMARKS_PROPERTY, m_bookmarks->serialize(sura, ayaNumber));
-    fmt.setForeground(QBrush(m_verseColor));
-    cursor.insertText(aya, fmt);
+  if (frag.start() == 0) {
+    insertBlock(QStringList() << m_data->fullSuraName(frag.sura()), cursor,
+		QList<QTextCharFormat>() << titleCharFormat(), true);
 
-    if (m_showTranslation) {
-      fmt.setProperty(QTextFormat::FontFamily, "Nokia Sans");
-      cursor.insertText(QString("\n%1").arg(sec.at(x)), fmt);
+    if (s.hasBasmala()) {
+      insertBlock(QStringList() << m_data->basmala(), cursor,
+		  QList<QTextCharFormat>() << subtitleCharFormat(), true);
+    }
+  }
+
+  if (splitIntoLines || (addTranslation && secondary.size() == text.size())) {
+    for (int x = 0; x < text.size(); x++) {
+      int ayaNumber = x + frag.start();
+
+      QString verse = QString("%1 (%2)").arg(text.at(x)).arg(m_formatter->number(ayaNumber + 1));
+
+      QTextList *list = cursor.insertList(QTextListFormat());
+      QTextBlockFormat bf = cursor.blockFormat();
+      bf.clearProperty(QTextFormat::BlockAlignment);
+
+      cursor.setBlockFormat(bf);
+      cursor.insertText(verse, verseCharFormat(sura, ayaNumber));
+
+      if (addTranslation) {
+	cursor.insertBlock(QTextBlockFormat());
+	cursor.insertText(secondary.at(x), secondaryCharFormat(sura, ayaNumber));
+	list->add(cursor.block());
+      }
+    }
+  }
+  else {
+    QTextCharFormat f;
+    f.setForeground(QBrush(m_verseColor));
+
+    QStringList verses;
+    QList<QTextCharFormat> fmt;
+
+    for (int x = 0; x < text.size(); x++) {
+      int ayaNumber = x + frag.start();
+
+      verses << QString("%1 (%2) ").arg(text.at(x)).arg(m_formatter->number(ayaNumber + 1));
+      f.setProperty(BOOKMARKS_PROPERTY, m_bookmarks->serialize(sura, ayaNumber));
+      fmt << f;
     }
 
-    if (x + 1 != frag.size()) {
-      cursor.insertText(m_data->secondaryTextProvider() ? "\n" : " ", QTextCharFormat());
-    }
+    insertBlock(verses, cursor, fmt, false);
   }
 }
 
@@ -192,6 +246,27 @@ void AbstractQuranView::end(QTextCursor& cursor, const QList<Fragment>& frags) {
   }
 
   // TODO: account for margin ?
+}
+
+void AbstractQuranView::insertBlock(const QStringList& text, QTextCursor& cursor,
+				    const QList<QTextCharFormat>& fmt, bool center) {
+  QTextBlockFormat bfmt;
+  if (center) {
+    bfmt.setAlignment(Qt::AlignHCenter);
+  }
+
+  cursor.insertBlock(bfmt);
+
+  for (int x = 0; x < text.size() - 1; x++) {
+    cursor.insertText(text.at(x), fmt.at(x));
+  }
+
+  QString last = text.last();
+  if (last.endsWith(" ")) {
+    last.chop(1);
+  }
+
+  cursor.insertText(last, fmt.last());
 }
 
 QLineF AbstractQuranView::position(const Position& position) {
@@ -274,6 +349,34 @@ void AbstractQuranView::clearSelection() {
   }
 }
 
+QTextBlock AbstractQuranView::blockAtPosition(int x, int y) {
+  int pos = m_doc->documentLayout()->hitTest(QPointF(x, y), Qt::FuzzyHit);
+  if (pos == -1) {
+    return QTextBlock();
+  }
+
+  for (QTextBlock block = m_doc->begin(); block != m_doc->end(); block = block.next()) {
+    for (QTextBlock::Iterator it = block.begin(); !(it.atEnd()); ++it) {
+
+      QTextFragment frag(it.fragment());
+
+      int start = frag.position();
+      int end = start + frag.length();
+
+      if (pos >= start && pos <= end && frag.length() != 1) {
+	if (!frag.charFormat().hasProperty(BOOKMARKS_PROPERTY)) {
+	  // Only ayat
+	  return QTextBlock();
+	}
+
+	return block;
+      }
+    }
+  }
+
+  return QTextBlock();
+}
+
 Position AbstractQuranView::position(int x, int y) {
   int pos = m_doc->documentLayout()->hitTest(QPointF(x, y), Qt::FuzzyHit);
   if (pos == -1) {
@@ -305,4 +408,39 @@ Position AbstractQuranView::position(int x, int y) {
   }
 
   return Position();
+}
+
+bool AbstractQuranView::toggleSecondaryText(int x, int y) {
+  QTextBlock b = blockAtPosition(x, y);
+  if (!b.isValid()) {
+    return false;
+  }
+
+  QTextList *list = b.textList();
+  if (!list) {
+    return false;
+  }
+
+  if (list->count() == 2) {
+    QTextCursor c(m_doc);
+    QTextBlock b = list->item(1);
+    list->remove(b);
+    c.setPosition(b.position());
+    c.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    c.deleteChar();
+    c.deleteChar();
+  }
+  else if (list->count() == 1) {
+    Position pos = position(x, y);
+    QTextCursor c(m_doc);
+
+    c.setPosition(b.position());
+    c.movePosition(QTextCursor::EndOfBlock);
+    c.insertBlock();
+    c.insertText(m_data->secondaryText(pos.sura(), pos.aya()),
+		 secondaryCharFormat(pos.sura(), pos.aya()));
+    list->add(c.block());
+  }
+
+  return true;
 }

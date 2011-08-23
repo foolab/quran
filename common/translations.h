@@ -39,7 +39,8 @@ public:
 
   void statusChanged(int tid, Translation::Status oldStatus, Translation::Status newStatus);
 
-  Q_INVOKABLE bool load();
+  Q_INVOKABLE bool load(int tid);
+  Q_INVOKABLE bool loadDefault();
 
   //  void setEnabled(bool enabled);
 

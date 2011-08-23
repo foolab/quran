@@ -3,11 +3,12 @@ import QtQuick 1.0
 
 // TODO: try to merge with menu and dialog
 Item {
+	    id: dialog
+
         signal accepted
         signal rejected
 
         z: 1000
-	    id: dialog
 
         state: "close"
 
@@ -86,8 +87,14 @@ Item {
                                 anchors.fill: parent
                                 id: mouse
                                 onClicked: {
-                                        var id = _translations.id(modelData);
-                                        _settings.defaultTranslation = id;
+                                        if (!_translations.load(modelData)) {
+                                                translationError.show();
+                                                dialog.rejected();
+                                        }
+                                        else {
+                                                dialog.accepted();
+                                        }
+
                                         dialog.close();
                                 }
                         }

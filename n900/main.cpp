@@ -70,6 +70,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   DataProvider data(DATA_DIR "/text/");
 
   Translations translations(USER_DIR "translations/", &downloader, &settings, &data);
+  translations.refresh();
 
   Bookmarks bookmarks(&settings);
 

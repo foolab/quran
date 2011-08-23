@@ -35,7 +35,7 @@ class QuranView : public QDeclarativeItem, public AbstractQuranView {
   Q_PROPERTY(QColor verseColor READ verseColor WRITE setVerseColor);
   Q_PROPERTY(QColor titleColor READ titleColor WRITE setTitleColor);
   Q_PROPERTY(QColor subtitleColor READ subtitleColor WRITE setSubtitleColor);
-  Q_PROPERTY(bool showTranslation READ showTranslation WRITE setShowTranslation);
+  Q_PROPERTY(bool addSecondaryText READ isSecondaryTextAdded WRITE setAddSecondaryText);
 
 public:
   QuranView(QDeclarativeItem *parent = 0);
@@ -64,6 +64,8 @@ public slots:
   void scrollTo(int sura, int aya);
 
   void populate();
+
+  void toggleSecondaryText(int x, int y);
 
 protected:
   virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);

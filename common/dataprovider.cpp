@@ -156,16 +156,23 @@ QStringList DataProvider::secondaryText(const Fragment& frag) const {
     return QStringList();
   }
 
-
   QStringList ret;
 
   for (int x = frag.start(); x < frag.size() + frag.start(); x++) {
-
     off_t index = Offsets[frag.sura()];
     ret << m_secondary->text(x, index);
   }
 
   return ret;
+}
+
+QString DataProvider::secondaryText(int sura, int aya) {
+  if (!m_secondary) {
+    return QString();
+  }
+
+  off_t index = Offsets[sura];
+  return m_secondary->text(aya, index);
 }
 
 QStringList DataProvider::availableTexts() const {
@@ -271,7 +278,6 @@ void DataProvider::setSecondaryText(TextProvider *text) {
   if (m_secondary != text) {
     delete m_secondary;
     m_secondary = text;
-    emit secondaryTextChanged();
   }
 }
 

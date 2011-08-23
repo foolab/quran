@@ -32,8 +32,12 @@ Page {
                         font.pointSize: _settings.fontSize
                         font.family: _settings.fontFamily
 
+                        function resetAddSecondaryText() {
+                                // Only if shown:
+                                content.addSecondaryText = _settings.translationMode == 1
+                        }
+
                         width: view.width
-                        showTranslation: _settings.translationMode == 1
                         margin: 20
                         dataProvider: _data
                         bookmarks: _bookmarks
@@ -49,18 +53,42 @@ Page {
                                 onTextTypeChanged: populate();
                         }
 
-
                         Connections {
                                 target: pagePosition
                                 onChanged: scrollTo(pagePosition.sura, pagePosition.aya);
                         }
 
                         Connections {
-                                target: _data
-                                onSecondaryTextChanged: populate();
+                                target: _settings
+
+                                onTranslationModeChanged: {
+                                        resetAddSecondaryText();
+
+                                        if (_settings.translationMode != 0) {
+                                                if (!_translations.loadDefault()) {
+                                                        translationError.show();
+                                                }
+                                                else {
+                                                        populate();
+                                                }
+                                        }
+                                        else {
+                                                _translations.unload();
+                                                populate();
+                                        }
+                                }
+                        }
+
+                        Connections {
+                                target: translationSelector
+                                onAccepted: populate();
                         }
 
                         Component.onCompleted: {
+                                resetAddSecondaryText();
+
+                                populate();
+
                                 if (pagePosition.isValid()) {
                                         scrollTo(pagePosition.sura, pagePosition.aya);
                                 }
@@ -336,6 +364,13 @@ Page {
                                         }
                                 }
 
+                                onClicked: {
+                                        if (_settings.translationMode == 2) {
+                                                // Hidden only:
+                                                view.current.toggleSecondaryText(mouse.x, mouse.y);
+                                        }
+                                }
+
                                 onPressed: {
                                         x1 = mouse.x; y1 = mouse.y;
                                 }
@@ -344,6 +379,7 @@ Page {
                                         x2 = mouseX; y2 = mouseY;
                                         detectSwipe();
                                 }
+
                                 onReleased: {
                                         x2 = mouse.x; y2 = mouse.y;
                                         detectSwipe();

@@ -67,13 +67,11 @@ public:
 
   QStringList text(const Fragment& frag) const;
   QStringList secondaryText(const Fragment& frag) const;
+  QString secondaryText(int sura, int aya);
 
   void setSecondaryText(TextProvider *text);
 
   TextProvider *secondaryTextProvider() const;
-
-signals:
-  void secondaryTextChanged();
 
 private:
   const QString m_dir;

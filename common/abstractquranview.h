@@ -22,6 +22,8 @@
 #include <QTextFragment>
 #include <QColor>
 #include "position.h"
+#include <QTextBlock>
+#include <QTextCharFormat>
 
 class DataProvider;
 class QTextDocument;
@@ -59,8 +61,8 @@ public:
   void setVerseColor(const QColor& color);
   QColor verseColor() const;
 
-  void setShowTranslation(bool show);
-  bool showTranslation() const;
+  void setAddSecondaryText(bool add);
+  bool isSecondaryTextAdded() const;
 
   void populate(int page);
 
@@ -72,6 +74,8 @@ public:
   void clearSelection();
 
 protected:
+  bool toggleSecondaryText(int x, int y);
+
   QTextDocument *m_doc;
   DataProvider *m_data;
   Bookmarks *m_bookmarks;
@@ -84,6 +88,17 @@ private:
   void addFragment(QTextCursor& cursor, const Fragment& frag);
   void end(QTextCursor& cursor, const QList<Fragment>& frags);
 
+  void insertBlock(const QStringList& text, QTextCursor& cursor,
+		   const QList<QTextCharFormat>& fmt, bool center);
+
+  QTextBlock blockAtPosition(int x, int y);
+
+  QTextCharFormat verseCharFormat(const Position& pos);
+  QTextCharFormat verseCharFormat(int sura, int aya);
+  QTextCharFormat secondaryCharFormat(int sura, int aya);
+  QTextCharFormat titleCharFormat();
+  QTextCharFormat subtitleCharFormat();
+
   QColor m_highlightColor;
   QColor m_titleColor;
   QColor m_subtitleColor;
@@ -91,7 +106,7 @@ private:
 
   QTextFragment m_highlighted;
 
-  bool m_showTranslation;
+  bool m_addSecondaryText;
 };
 
 #endif /* ABSTRACT_QURAN_VIEW_H */

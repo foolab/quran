@@ -44,9 +44,34 @@ void Translations::unload() {
   m_data->setSecondaryText(0);
 }
 
-bool Translations::load() {
-  refresh();
+bool Translations::load(int tid) {
+  if (m_installed.isEmpty()) {
+    return false;
+  }
 
+  if (m_installed.indexOf(tid) == -1) {
+    return false;
+  }
+
+  TextProvider *s = m_data->secondaryTextProvider();
+  if (s && s->id() == tid) {
+    return true;
+  }
+
+  TextProvider *p = new TextProvider(tid, data(tid), index(tid));
+  if (!p->load()) {
+    delete p;
+    return false;
+  }
+
+  m_data->setSecondaryText(p);
+
+  m_settings->setDefaultTranslation(id(tid));
+
+  return true;
+}
+
+bool Translations::loadDefault() {
   if (m_installed.isEmpty()) {
     return false;
   }
@@ -55,24 +80,7 @@ bool Translations::load() {
 
   int t = id.isEmpty() ? m_installed.at(0) : tid(id);
 
-  if (m_installed.indexOf(t) == -1) {
-    return false;
-  }
-
-  TextProvider *s = m_data->secondaryTextProvider();
-  if (s && s->id() == t) {
-    return true;
-  }
-
-  TextProvider *p = new TextProvider(t, data(t), index(t));
-  if (!p->load()) {
-    delete p;
-    return false;
-  }
-
-  m_data->setSecondaryText(p);
-
-  return true;
+  return load(t);
 }
 
 void Translations::refresh() {
