@@ -12,16 +12,16 @@ Menu {
         MenuLayout {
                 Rectangle {
                         width: item.width
-                        height: ayaText.height
+                        height: ayaText.height + 20
 
                         Label {
                                 id: ayaText
                                 width: parent.width - 40
-                                x: 20
                                 wrapMode: Text.WordWrap
                                 font.pointSize: 26
                                 font.family: _settings.fontFamily
                                 anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.verticalCenter: parent.verticalCenter
                                 horizontalAlignment: Text.AlignRight
                         }
                 }
