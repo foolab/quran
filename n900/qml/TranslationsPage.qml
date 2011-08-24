@@ -6,14 +6,14 @@ Page {
 
         property int __tid: -1
 
-        QueryDialog {
+        MassStorageQueryDialog {
                 id: dlDialog
                 titleText: qsTr("Download translation?");
                 acceptButtonText: qsTr("Yes")
                 rejectButtonText: qsTr("No")
         }
 
-        QueryDialog {
+        MassStorageQueryDialog {
                 id: stopDialog
                 titleText: qsTr("Stop download?");
                 acceptButtonText: qsTr("Yes")
