@@ -108,8 +108,37 @@ PageStackWindow {
                 text: qsTr("Failed to load the translation");
         }
 
+        InfoBanner {
+                id: massStorage
+                text: qsTr("Translations cannot be used in mass storage mode.");
+        }
+
         function showPage(name, point, now) {
                 pageStack.push(name, point, now);
+        }
+
+        function refreshTranslations(refresh) {
+                if (!_fsmon.available) {
+                        massStorage.show();
+                        return false;
+                }
+
+                if (_settings.translationMode != 0) {
+                        if (refresh) {
+                                _translations.refresh();
+                        }
+
+                        if (!_translations.loadDefault()) {
+                                translationError.show();
+                                return false;
+                        }
+
+                        return true;
+                }
+                else {
+                        _translations.unload();
+                        return true;
+                }
         }
 
         Component.onCompleted: {
@@ -117,11 +146,7 @@ PageStackWindow {
                         fontError.show();
                 }
 
-                if (_settings.translationMode != 0) {
-                        if (!_translations.loadDefault()) {
-                                translationError.show();
-                        }
-                }
+                refreshTranslations(true);
 
                 if (_data.setTextType(_settings.textType)) {
                         pageStack.push("QuranPage", Qt.point(0, 0), true);

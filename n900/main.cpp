@@ -33,6 +33,7 @@
 #include "translations.h"
 #include "translation.h"
 #include "downloader.h"
+#include "fsmonitor.h"
 
 #ifndef Q_WS_MAEMO_5
 #include <MDeclarativeCache>
@@ -62,6 +63,8 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
     }
   }
 
+  FSMonitor monitor;
+
   Settings settings;
   settings.loadFont();
 
@@ -70,7 +73,6 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   DataProvider data(DATA_DIR "/text/");
 
   Translations translations(USER_DIR "translations/", &downloader, &settings, &data);
-  translations.refresh();
 
   Bookmarks bookmarks(&settings);
 
@@ -84,9 +86,10 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<NumberFormatter>();
   qmlRegisterType<Legal>();
   qmlRegisterType<Translations>();
+  qmlRegisterType<FSMonitor>();
   qmlRegisterType<Translation>("Translations", 1, 0, "Translation");
   qmlRegisterType<QuranView>("Quran", 1, 0, "QuranView");
-  //  qmlRegisterType<Downloader>();
+
 
 #ifndef Q_WS_MAEMO_5
   QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
@@ -110,6 +113,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   view->rootContext()->setContextProperty("_legal", &legal);
   view->rootContext()->setContextProperty("_translations", &translations);
   view->rootContext()->setContextProperty("_downloader", &downloader);
+  view->rootContext()->setContextProperty("_fsmon", &monitor);
 
   if (dev) {
     view->setSource(QUrl::fromLocalFile(QDir::currentPath() + "/main.qml"));

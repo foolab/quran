@@ -58,14 +58,13 @@ public:
   TranslationPrivate *registerTranslation(Translation *t);
   void unregisterTranslation(Translation *t);
 
-  void refresh();
-
   QString index(int tid) const;
   QString data(int tid) const;
 
   Q_INVOKABLE QString id(int tid) const;
 
 public slots:
+  void refresh();
   void startDownload(int tid);
   void stopDownload(int tid);
   void removeTranslation(int tid);

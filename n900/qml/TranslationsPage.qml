@@ -20,6 +20,56 @@ Page {
                 rejectButtonText: qsTr("No")
         }
 
+        Rectangle {
+                id: massStorageGuard
+                anchors.top: parent.top
+                anchors.bottom: toolBar.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                z: 4000
+                state: _fsmon.available ? "fsAvailable" : "fsUnavailable"
+                color: "steelblue"
+
+                states: [
+                State {
+                        name: "fsUnavailable"
+                        PropertyChanges { target: massStorageGuard; opacity: 0.9 }
+                        PropertyChanges { target: massStorageLabel; opacity: 1.0 }
+                        },
+                State {
+                        name: "fsAvailable"
+                        PropertyChanges { target: massStorageGuard; opacity: 0.0 }
+                        PropertyChanges { target: massStorageLabel; opacity: 0.0 }
+                        }
+                ]
+
+                transitions: [
+                Transition {
+                        from: "fsAvailable"; to: "fsUnavailable"
+                        PropertyAnimation { properties: "opacity"; duration: 500 }
+                },
+                Transition {
+                        from: "fsUnavailable"; to: "fsAvailable"
+                        PropertyAnimation { properties: "opacity"; duration: 500 }
+                }
+                ]
+
+                MouseArea {
+                        id: massStorageGlass
+                        enabled: massStorageGuard.state == "fsUnavailable"
+                        anchors.fill: parent
+                }
+        }
+
+        Label {
+                id: massStorageLabel
+                anchors.centerIn: massStorageGuard
+                text: qsTr("Translations cannot be used in mass storage mode.");
+                width: massStorageGuard.width - 60
+                z: 4001
+                horizontalAlignment: Text.AlignHCenter
+        }
+
         function __stopDialogAccepted() {
                 stopDialog.accepted.disconnect(__stopDialogAccepted);
                 stopDialog.rejected.disconnect(__stopDialogRejected);

@@ -32,11 +32,6 @@ Page {
                         font.pointSize: _settings.fontSize
                         font.family: _settings.fontFamily
 
-                        function resetAddSecondaryText() {
-                                // Only if shown:
-                                content.addSecondaryText = _settings.translationMode == 1
-                        }
-
                         width: view.width
                         margin: 20
                         dataProvider: _data
@@ -59,21 +54,26 @@ Page {
                         }
 
                         Connections {
-                                target: _settings
-
-                                onTranslationModeChanged: {
-                                        resetAddSecondaryText();
-
-                                        if (_settings.translationMode != 0) {
-                                                if (!_translations.loadDefault()) {
-                                                        translationError.show();
-                                                }
-                                                else {
+                                target: _fsmon
+                                onAvailableChanged: {
+                                        if (_fsmon.available) {
+                                                content.addSecondaryText = _settings.translationMode == 1
+                                                if (refreshTranslations(true)) {
                                                         populate();
                                                 }
                                         }
                                         else {
                                                 _translations.unload();
+                                        }
+                                }
+                        }
+
+                        Connections {
+                                target: _settings
+
+                                onTranslationModeChanged: {
+                                        content.addSecondaryText = _settings.translationMode == 1
+                                        if (refreshTranslations(false)) {
                                                 populate();
                                         }
                                 }
@@ -85,7 +85,7 @@ Page {
                         }
 
                         Component.onCompleted: {
-                                resetAddSecondaryText();
+                                content.addSecondaryText = _settings.translationMode == 1
 
                                 populate();
 
@@ -437,7 +437,7 @@ Page {
 
                                 onEnabledChanged: layout.layout();
 
-                                onClicked: translationSelector.open();
+                                onClicked: _fsmon.available ? translationSelector.open() : massStorage.show();
                         }
 
                         ToolButton {

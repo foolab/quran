@@ -2,6 +2,9 @@ include(../common/common.pri)
 
 QT += maemo5 declarative
 # CONFIG += debug
-SOURCES += main.cpp themeimageprovider.cpp
+CONFIG += link_pkgconfig
+PKGCONFIG += gio-2.0
 
-HEADERS += themeimageprovider.h
+SOURCES += main.cpp themeimageprovider.cpp fsmonitor.cpp
+
+HEADERS += themeimageprovider.h fsmonitor.h
