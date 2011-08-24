@@ -1,6 +1,7 @@
 // -*- qml-mode -*-
 import QtQuick 1.0
 
+// TODO: use positionViewAtIndex ?
 Page {
         id: indexPage
 
