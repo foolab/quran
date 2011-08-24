@@ -1,6 +1,6 @@
 n900/n900-quran usr/bin/
-data/quran-uthmani.xml usr/share/n900-quran/text/
-data/quran-simple-enhanced.xml usr/share/n900-quran/text/
+data/text/quran-uthmani.xml usr/share/n900-quran/text/
+data/text/quran-simple-enhanced.xml usr/share/n900-quran/text/
 data/logo_160.png usr/share/n900-quran/
 data/n900-quran-logo.png usr/share/icons/
 data/ScheherazadeRegOT.ttf usr/share/n900-quran/
