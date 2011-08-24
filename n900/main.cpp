@@ -142,7 +142,12 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   int ret = app->exec();
 
   delete view;
+
+#ifndef Q_WS_MAEMO_5
+  // We get a crash deep in the stack from Qt
+  // We will not delete QApplication until I debug that properly
   delete app;
+#endif
 
   return ret;
 }
