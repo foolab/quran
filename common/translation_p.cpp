@@ -2,7 +2,7 @@
 #include <QNetworkReply>
 #include <QTemporaryFile>
 #include "translations.h"
-#include <QSettings>
+#include "index.h"
 #include <QDebug>
 
 TranslationPrivate::TranslationPrivate(Translation::Status status, int tid, Translations *parent)
@@ -161,7 +161,7 @@ bool TranslationPrivate::readData() {
       m_offset += data.size();
     }
     else {
-      m_offsets << qMakePair<quint64, quint64>(m_offset, data.size() - 1);
+      m_offsets << qMakePair<off_t, size_t>(m_offset, data.size() - 1);
       m_offset += data.size();
     }
   }
@@ -173,31 +173,15 @@ bool TranslationPrivate::install() {
   QString index = m_translations->index(tid());
   QString data = m_translations->data(tid());
 
-  if (m_offsets.size() != LINE_COUNT) {
-    return false;
-  }
-
   if (!m_file->rename(data)) {
     m_file->remove();
     return false;
   }
 
-  QSettings s(index, QSettings::IniFormat);
-  s.setValue("General/size", m_file->size());
+  QMap<QString, QVariant> meta;
+  meta["size"] = m_file->size();
 
-  s.beginWriteArray("offsets");
-
-  for (int x = 0; x < m_offsets.size(); x++) {
-    s.setArrayIndex(x);
-    s.setValue("offset", m_offsets.at(x).first);
-    s.setValue("len", m_offsets.at(x).second);
-  }
-
-  s.endArray();
-
-  s.sync();
-
-  if (s.status() != QSettings::NoError) {
+  if (!Index::write(index, m_offsets, meta)) {
     m_file->remove();
     return false;
   }

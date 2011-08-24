@@ -55,7 +55,7 @@ private:
   QTemporaryFile *m_file;
   QString m_error;
   quint64 m_offset;
-  QList<QPair<quint64, quint64> > m_offsets;
+  QList<QPair<off_t, size_t> > m_offsets;
   Translations *m_translations;
 };
 

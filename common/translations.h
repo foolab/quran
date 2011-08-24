@@ -6,8 +6,6 @@
 #include "translation.h"
 #include <QDir>
 
-#define LINE_COUNT 6236
-
 class Downloader;
 class TranslationPrivate;
 class Settings;
