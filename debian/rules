@@ -19,11 +19,11 @@ build: build-stamp
 
 build-stamp:
 	dh_testdir
-	qmake -o data/Makefile data/data.pro
+	qmake data/data.pro
 
 	$(MAKE) -C data/
 
-	qmake -o n900/Makefile n900/n900.pro
+	qmake n900/n900.pro
 
 	$(MAKE) -C n900/
 
