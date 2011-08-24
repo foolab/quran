@@ -10,7 +10,6 @@ TranslationsPage {
         Component {
                 id: translationsDelegate
 
-                // TODO: clicking it makes it the default translation ?
                 TranslationLabel {
                         id: label
                         tid: modelData

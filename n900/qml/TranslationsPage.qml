@@ -20,6 +20,13 @@ Page {
                 rejectButtonText: qsTr("No")
         }
 
+        MassStorageQueryDialog {
+                id: rmDialog
+                titleText: qsTr("Remove translation?");
+                acceptButtonText: qsTr("Yes")
+                rejectButtonText: qsTr("No")
+        }
+
         Rectangle {
                 id: massStorageGuard
                 anchors.top: parent.top
@@ -92,6 +99,18 @@ Page {
                 dlDialog.rejected.disconnect(__dlDialogRejected);
         }
 
+        function __rmDialogAccepted() {
+                rmDialog.accepted.disconnect(__rmDialogAccepted);
+                rmDialog.rejected.disconnect(__rmDialogRejected);
+                _translations.removeTranslation(__tid);
+                pageStack.pop();
+        }
+
+        function __rmDialogRejected() {
+                rmDialog.accepted.disconnect(__rmDialogAccepted);
+                rmDialog.rejected.disconnect(__rmDialogRejected);
+        }
+
         function askForStop(tid) {
                 __tid = tid;
                 stopDialog.message = _translations.translationName(__tid);
@@ -106,6 +125,14 @@ Page {
                 dlDialog.accepted.connect(__dlDialogAccepted);
                 dlDialog.rejected.connect(__dlDialogRejected);
                 dlDialog.open();
+        }
+
+        function askForRemoval(tid) {
+                __tid = tid;
+                rmDialog.message = _translations.translationName(__tid);
+                rmDialog.accepted.connect(__rmDialogAccepted);
+                rmDialog.rejected.connect(__rmDialogRejected);
+                rmDialog.open();
         }
 }
 

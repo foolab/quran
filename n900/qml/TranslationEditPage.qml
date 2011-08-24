@@ -2,38 +2,12 @@
 import QtQuick 1.0
 import Translations 1.0
 
-Page {
+TranslationsPage {
         id: translationEditPage
 
         property int tid: 0
 
         tools: toolBar
-
-        function __rmDialogAccepted() {
-                rmDialog.accepted.disconnect(__rmDialogAccepted);
-                rmDialog.rejected.disconnect(__rmDialogRejected);
-                _translations.removeTranslation(tid);
-                pageStack.pop();
-        }
-
-        function __rmDialogRejected() {
-                rmDialog.accepted.disconnect(__rmDialogAccepted);
-                rmDialog.rejected.disconnect(__rmDialogRejected);
-        }
-
-        function askForRemoval() {
-                rmDialog.message = _translations.translationName(tid);
-                rmDialog.accepted.connect(__rmDialogAccepted);
-                rmDialog.rejected.connect(__rmDialogRejected);
-                rmDialog.open();
-        }
-
-        QueryDialog {
-                id: rmDialog
-                titleText: qsTr("Remove translation?");
-                acceptButtonText: qsTr("Yes")
-                rejectButtonText: qsTr("No")
-        }
 
         Label {
                 id: name
@@ -51,7 +25,7 @@ Page {
                 anchors.top: name.bottom
                 anchors.topMargin: 30
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: askForRemoval();
+                onClicked: askForRemoval(tid);
         }
 
         ToolBar {
