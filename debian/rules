@@ -8,8 +8,7 @@ clean:
 	dh_testdir
 	dh_testroot
 
-	-$(MAKE) -C data/ distclean
-	-$(MAKE) -C n900/ distclean
+	-$(MAKE) distclean
 
 	dh_clean
 
@@ -19,13 +18,10 @@ build: build-stamp
 
 build-stamp:
 	dh_testdir
-	qmake -o data/Makefile data/data.pro
 
-	$(MAKE) -C data/
+	qmake
 
-	qmake -o n900/Makefile n900/n900.pro
-
-	$(MAKE) -C n900/
+	-$(MAKE)
 
 	touch build-stamp
 
