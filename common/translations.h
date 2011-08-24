@@ -69,6 +69,7 @@ public slots:
   void stopDownload(int tid);
   void removeTranslation(int tid);
   void unload();
+  void stopDownloads();
 
 signals:
   void downloadsChanged();

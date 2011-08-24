@@ -141,6 +141,15 @@ PageStackWindow {
                 }
         }
 
+        Connections {
+                target: _fsmon
+                onAvailableChanged: {
+                        if (!_fsmon.available) {
+                                _translations.stopDownloads();
+                        }
+                }
+        }
+
         Component.onCompleted: {
                 if (!_settings.fontLoaded) {
                         fontError.show();

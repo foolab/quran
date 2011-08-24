@@ -221,6 +221,14 @@ void Translations::stopDownload(int tid) {
   p->stopDownload();
 }
 
+void Translations::stopDownloads() {
+  QList<int> d = downloads();
+
+  foreach (int tid, d) {
+    stopDownload(tid);
+  }
+}
+
 QList<int> Translations::downloads() const {
   QList<int> res;
 
