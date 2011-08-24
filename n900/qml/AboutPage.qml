@@ -55,47 +55,25 @@ Page {
                                 textFormat: Text.RichText
                         }
 
-                        Rectangle {
-                                height: gpl.height + gplLabel.height
-                                width: parent.width
-
-                                Label {
-                                        id: gplLabel
-                                        font.bold: true
-                                        text: qsTr("Application license:");
-                                }
-
-                                Label {
-                                        id: gpl
-                                        text: _legal.appLicense
-                                        wrapMode: Text.WordWrap
-                                        anchors.top: gplLabel.bottom
-                                        width: parent.width
-                                        textFormat: Text.RichText
-                                }
+                        AboutPageBlock {
+                                id: appLicense
+                                title: qsTr("Application license:");
+                                text: _legal.appLicense
                         }
 
-                        Rectangle {
-                                width: parent.width
-                                height: data.height + dataLabel.height
-
-                                Label {
-                                        id: dataLabel
-                                        font.bold: true
-                                        text: qsTr("Text license:");
-                                }
-
-                                Label {
-                                        id: data
-                                        text: _legal.textLicense
-                                        wrapMode: Text.WordWrap
-                                        anchors.top: dataLabel.bottom
-                                        width: parent.width
-                                        textFormat: Text.RichText
-                                }
+                        AboutPageBlock {
+                                id: textLicense
+                                title: qsTr("Text license:");
+                                text: _legal.textLicense
                         }
-               }
-       }
+
+                        AboutPageBlock {
+                                id: translationsLicense
+                                title: qsTr("Translations license:");
+                                text: _legal.transLicense
+                        }
+                }
+        }
 
         ToolBar {
                 id: toolBar
