@@ -123,11 +123,11 @@ PageStackWindow {
                         return false;
                 }
 
-                if (_settings.translationMode != 0) {
-                        if (refresh) {
-                                _translations.refresh();
-                        }
+                if (refresh) {
+                        _translations.refresh();
+                }
 
+                if (_settings.translationMode != 0) {
                         if (!_translations.loadDefault()) {
                                 translationError.show();
                                 return false;
