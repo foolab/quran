@@ -100,7 +100,7 @@ bool calcOffsets(const QString& id, const QString& fileName, const QString& idx)
   }
 
   Offset o;
-  o.idx = QFileInfo(idx).fileName();
+  o.idx = idx;
   o.id = id;
   o.name = QFileInfo(fileName).fileName();
   o.len = buf.st_size;
@@ -535,7 +535,7 @@ bool output() {
     const Offset& o = offsets.at(x);
     printf("{\"%s\", \"%s\", %i, \"%s\"},\n",
 	   encode(o.name).toLatin1().data(), encode(o.id).toLatin1().data(),
-	   o.len, encode(":/" + o.idx).toLatin1().data());
+	   o.len, encode(":/" + QFileInfo(o.idx).fileName()).toLatin1().data());
   }
   puts("};");
 
