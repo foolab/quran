@@ -8,6 +8,13 @@ Page {
         id: quranPage
         tools: toolBar
 
+        NavigationBar {
+                id: navBar
+                // TODO: using z is bad :(
+                z: 1500
+                y: flick.y
+        }
+
         TranslationSelector {
                 id: translationSelector
         }
@@ -146,12 +153,10 @@ Page {
                         }
 
                         if (_settings.pageNumber > index) {
-                                index = _settings.pageNumber;
-                                showNextItem();
+                                showNextItem(_settings.pageNumber);
                         }
                         else {
-                                index = _settings.pageNumber;
-                                showPreviousItem();
+                                showPreviousItem(_settings.pageNumber);
                         }
                 }
 
@@ -176,7 +181,8 @@ Page {
                         current.page = view.index;
                 }
 
-                function showNextItem() {
+                function showNextItem(newIndex) {
+                        view.index = newIndex;
                         nextAnimation.prev = current;
                         addItem();
                         nextAnimation.next = current;
@@ -184,7 +190,8 @@ Page {
                         nextAnimation.running = true;
                 }
 
-                function showPreviousItem() {
+                function showPreviousItem(newIndex) {
+                        view.index = newIndex;
                         previousAnimation.prev = current;
                         addItem();
                         previousAnimation.next = current;
@@ -249,33 +256,39 @@ Page {
                 }
 
                 Connections {
-                        target: mouse
-                        onSwipedRight: {
+                        target: navBar
+                        onNextClicked: {
+                                navBar.show();
                                 var newIndex = view.index + 1;
                                 if (_data.hasPage(newIndex)) {
-                                        view.index = newIndex;
-                                        view.showNextItem();
+                                        view.showNextItem(newIndex);
                                         _settings.pageNumber = view.index;
                                 }
                                 else {
                                         lastPageReached.show();
                                 }
                         }
-                }
-
-                Connections {
-                        target: mouse
-                        onSwipedLeft: {
+                        onPreviousClicked: {
+                                navBar.show();
                                 var newIndex = view.index - 1;
                                 if (_data.hasPage(newIndex)) {
-                                        view.index = newIndex;
-                                        view.showPreviousItem();
+                                        view.showPreviousItem(newIndex);
                                         _settings.pageNumber = view.index;
                                 }
                                 else {
                                         firstPageReached.show();
                                 }
                         }
+                }
+
+                Connections {
+                        target: mouse
+                        onSwipedRight: navBar.show();
+                }
+
+                Connections {
+                        target: mouse
+                        onSwipedLeft: navBar.show();
                 }
 
                 Item {
@@ -305,7 +318,7 @@ Page {
                         anchors.bottom: parent.bottom
                         clip: true
                         contentHeight: view.current ? view.current.height : 0
-
+                        onMovementStarted: navBar.show();
                         flickableDirection: Flickable.VerticalFlick
 
                         interactive: !previousAnimation.running && !nextAnimation.running
