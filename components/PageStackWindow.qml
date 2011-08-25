@@ -6,9 +6,9 @@ Item {
 
         property alias pageStack: stack
 
-        // TODO: detect the orientation and set the initial value accordingle.
-        width: 424
-        height: 800
+        // This has to be set to something in order for SizeRootObjectToView to work
+        width: 1
+        height: 1
 
         PageStack {
                 id: stack
