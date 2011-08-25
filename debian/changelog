@@ -1,3 +1,9 @@
+n900-quran (0.3.1-1) unstable; urgency=low
+
+  * Added a navigation bar to navigate to previous and next pages.
+
+ -- Mohammed Sameer <msameer@foolab.org>  Fri, 26 Aug 2011 00:34:26 +0300
+
 n900-quran (0.3.0-1) unstable; urgency=low
 
   * Preliminary translations support.
