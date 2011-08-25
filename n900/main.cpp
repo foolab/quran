@@ -102,7 +102,6 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
 
   QObject::connect(view->engine(), SIGNAL(quit()), app, SLOT(quit()));
 
-  qCritical() << app->desktop()->availableGeometry();
   view->engine()->addImageProvider("quran", new LogoProvider);
   view->engine()->addImageProvider("theme", new ThemeImageProvider);
 

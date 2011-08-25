@@ -12,7 +12,5 @@ Item {
 
         PageStack {
                 id: stack
-//                anchors.fill: parent
-//                parent: window
         }
 }
