@@ -102,8 +102,10 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
 
   QObject::connect(view->engine(), SIGNAL(quit()), app, SLOT(quit()));
 
+  ThemeImageProvider *theme = new ThemeImageProvider(DATA_DIR "/themes/");
+
   view->engine()->addImageProvider("quran", new LogoProvider);
-  view->engine()->addImageProvider("theme", new ThemeImageProvider);
+  view->engine()->addImageProvider("theme", theme);
 
   view->rootContext()->setContextProperty("_settings", &settings);
   view->rootContext()->setContextProperty("_data", &data);
@@ -113,6 +115,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   view->rootContext()->setContextProperty("_translations", &translations);
   view->rootContext()->setContextProperty("_downloader", &downloader);
   view->rootContext()->setContextProperty("_fsmon", &monitor);
+  view->rootContext()->setContextProperty("_theme", theme);
 
   if (dev) {
     view->setSource(QUrl::fromLocalFile(QDir::currentPath() + "/main.qml"));
