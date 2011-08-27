@@ -56,6 +56,18 @@ Page {
                         }
 
                         Connections {
+                                target: themeManager
+                                onReloaded: {
+                                        content.secondaryTopBorder = _theme.path(theme.translationBorder);
+                                        content.secondaryBottomBorder = _theme.path(theme.translationBorder);
+                                        content.secondaryBackground = _theme.path(theme.translationBackground);
+                                        if (_settings.translationMode != 0) {
+                                                populate();
+                                        }
+                                }
+                        }
+
+                        Connections {
                                 target: pagePosition
                                 onChanged: scrollTo(pagePosition.sura, pagePosition.aya);
                         }
@@ -93,7 +105,12 @@ Page {
 
                         Component.onCompleted: {
                                 content.addSecondaryText = _settings.translationMode == 1
+                                if (theme) {
+                                        content.secondaryTopBorder = _theme.path(theme.translationBorder);
+                                        content.secondaryBottomBorder = _theme.path(theme.translationBorder);
+                                        content.secondaryBackground = _theme.path(theme.translationBackground);
 
+                                }
                                 populate();
 
                                 if (pagePosition.isValid()) {
@@ -438,14 +455,14 @@ Page {
                         }
 
                         ToolButton {
-                                icon: "imageviewer_favourite"
+                                icon: theme.favorites
                                 onClicked: {
                                         showPage(_bookmarks.empty ? "FavoritesPageEmpty" : "FavoritesPage");
                                 }
                         }
 
                         ToolButton {
-                                icon: "clock_starter_worldclock"
+                                icon: theme.translations
                                 enabled: _settings.translationMode != 0
 
                                 onEnabledChanged: layout.layout();
@@ -454,11 +471,11 @@ Page {
                         }
 
                         ToolButton {
-                                icon: "general_fullsize"
+                                icon: _settings.fullScreen ? theme.normalView : theme.fullScreenView
                                 onClicked: _settings.fullScreen = !_settings.fullScreen;
                         }
 
-                        ToolButton { icon: "keyboard_move_up"; onClicked: menu.open(); }
+                        ToolButton { icon: theme.menuIcon; onClicked: menu.open(); }
                 }
         }
 }
