@@ -18,10 +18,10 @@
 #include "themeimageprovider.h"
 #include <QImageReader>
 #include <QDebug>
-#include <QIcon>
+#include <QDir>
 
-ThemeImageProvider::ThemeImageProvider()
-  : QDeclarativeImageProvider(QDeclarativeImageProvider::Pixmap) {
+ThemeImageProvider::ThemeImageProvider(const QString& path, QObject *parent)
+  : QObject(parent), QDeclarativeImageProvider(QDeclarativeImageProvider::Pixmap), m_path(path) {
 
 }
 
@@ -29,8 +29,26 @@ ThemeImageProvider::~ThemeImageProvider() {
 
 }
 
+QString ThemeImageProvider::path(const QString& id) const {
+  return QString("%1%2%3%2%4.png").arg(m_path).arg(QDir::separator()).arg(m_id).arg(id);
+}
+
 QPixmap ThemeImageProvider::requestPixmap(const QString & id, QSize *size,
 					  const QSize& requestedSize) {
+
   *size = requestedSize;
-  return QIcon::fromTheme(id).pixmap(requestedSize);
+  QImageReader r(path(id));
+  r.setScaledSize(requestedSize);
+  return QPixmap::fromImage(r.read());
+}
+
+void ThemeImageProvider::setId(const QString& id) {
+  if (id != m_id) {
+    m_id = id;
+    emit idChanged();
+  }
+}
+
+QString ThemeImageProvider::id() const {
+  return m_id;
 }

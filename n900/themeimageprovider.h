@@ -19,13 +19,30 @@
 #define THEME_IMAGE_PROVIDER_H
 
 #include <QDeclarativeImageProvider>
+#include <QObject>
 
-class ThemeImageProvider : public QDeclarativeImageProvider {
+class ThemeImageProvider : public QObject, public QDeclarativeImageProvider {
+  Q_OBJECT
+
+  Q_PROPERTY(QString id READ id WRITE setId NOTIFY idChanged);
+
 public:
-  ThemeImageProvider();
+  ThemeImageProvider(const QString& path, QObject *parent = 0);
   ~ThemeImageProvider();
 
+  void setId(const QString& id);
+  QString id() const;
+
   virtual QPixmap requestPixmap(const QString & id, QSize *size, const QSize& requestedSize);
+
+  Q_INVOKABLE QString path(const QString& id) const;
+
+signals:
+  void idChanged();
+
+private:
+  const QString m_path;
+  QString m_id;
 };
 
 #endif /* THEME_IMAGE_PROVIDER_H */
