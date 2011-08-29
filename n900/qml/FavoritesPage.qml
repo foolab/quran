@@ -18,6 +18,10 @@ Page {
             _bookmarks.bookmarkRemoved.connect(view.model.bookmarkRemoved);
         }
 
+        Component.onDestruction: {
+            _bookmarks.bookmarkRemoved.disconnect(view.model.bookmarkRemoved);
+        }
+
         Component {
                 id: sectionDelegate
                 Rectangle {
