@@ -5,12 +5,27 @@ import QtQuick 1.0
 
 PageStackWindow {
         id: root
+        property alias theme: themeManager.theme
+
+        TranslationsManager {
+                id: translationsManager
+        }
+
+	    // TODO: duplicate of Page::isPortrait()
+        function isPortrait() {
+                return height > width;
+        }
+
+        ThemeManager {
+                id: themeManager
+                Component.onCompleted: loadTheme("blue"); // TODO: hardcode
+        }
 
         QtObject {
                 id: pagePosition
+
                 property int sura: -1
                 property int aya: -1
-//                property int y: 0
 
                 signal changed
 
@@ -117,30 +132,6 @@ PageStackWindow {
                 pageStack.push(name, point, now);
         }
 
-        function refreshTranslations(refresh) {
-                if (!_fsmon.available) {
-                        massStorage.show();
-                        return false;
-                }
-
-                if (refresh) {
-                        _translations.refresh();
-                }
-
-                if (_settings.translationMode != 0) {
-                        if (!_translations.loadDefault()) {
-                                translationError.show();
-                                return false;
-                        }
-
-                        return true;
-                }
-                else {
-                        _translations.unload();
-                        return true;
-                }
-        }
-
         Connections {
                 target: _fsmon
                 onAvailableChanged: {
@@ -154,8 +145,6 @@ PageStackWindow {
                 if (!_settings.fontLoaded) {
                         fontError.show();
                 }
-
-                refreshTranslations(true);
 
                 if (_data.setTextType(_settings.textType)) {
                         pageStack.push("QuranPage", Qt.point(0, 0), true);
