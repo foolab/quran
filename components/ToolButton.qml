@@ -2,7 +2,7 @@
 import QtQuick 1.0
 
 Rectangle {
-        color: "steelblue"
+        color: "transparent"
         id: button
         property string icon: ""
         signal clicked
