@@ -53,7 +53,7 @@ Rectangle {
 
         ToolButton {
                 id: installed
-                icon: "general_received"
+                icon: theme.downloaded
                 opacity: showInstalled ? 1.0 : 0.0
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right

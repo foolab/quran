@@ -52,7 +52,7 @@ Page {
                         ToolButton {
                                 id: rm
                                 color: parent.color
-                                icon: "general_delete"
+                                icon: theme.remove
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
                                 anchors.right: parent.right
@@ -119,7 +119,7 @@ Page {
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
-                        ToolButton { icon: "general_backspace"; onClicked: pageStack.pop(); }
+                        ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
 
                         DialogButton {
                                 id: clearButton

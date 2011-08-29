@@ -48,7 +48,7 @@ TranslationsPage {
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
-                        ToolButton { icon: "general_backspace"; onClicked: pageStack.pop(); }
+                        ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
 		        }
 		}
 }

@@ -277,8 +277,8 @@ Page {
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
-                        ToolButton { icon: "general_backspace"; onClicked: pageStack.pop(); }
-                        ToolButton { icon: "clock_starter_worldclock"; onClicked: showPage("TranslationsListPage"); }
+                        ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
+                        ToolButton { icon: theme.translations; onClicked: showPage("TranslationsListPage"); }
                 }
         }
 

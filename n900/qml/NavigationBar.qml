@@ -24,7 +24,7 @@ Item {
 
         ToolButton {
                 id: next
-                icon: "general_back"
+                icon: theme.next
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: navBar.nextClicked();
@@ -32,7 +32,7 @@ Item {
 
         ToolButton {
                 id: prev
-                icon: "general_forward"
+                icon: theme.previous
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: navBar.previousClicked();
