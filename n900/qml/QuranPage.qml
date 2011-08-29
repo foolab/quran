@@ -1,18 +1,16 @@
 // -*- qml-mode -*-
 import QtQuick 1.0
-import Quran 1.0
 
 Page {
 
-// TODO: reset flick when we enter full screen (when we are at the end of the page).
+        // TODO: reset flick when we enter full screen (when we are at the end of the page).
         id: quranPage
         tools: toolBar
 
         NavigationBar {
                 id: navBar
-                // TODO: using z is bad :(
                 z: 1500
-                y: flick.y
+                y: view.y
         }
 
         TranslationSelector {
@@ -31,402 +29,152 @@ Page {
                 onClicked: { _bookmarks.remove(bookmark); rmFavorite.close(); }
         }
 
+        function showAddToFavoritesMenu(text, chapter, verse) {
+                addFavorite.bookmark = _bookmarks.serialize(chapter, verse);
+                addFavorite.text = text;
+                addFavorite.open();
+        }
+
+        function showRemoveFromFavoritesMenu(text, chapter, verse) {
+                rmFavorite.bookmark = _bookmarks.serialize(chapter, verse);;
+                rmFavorite.text = text;
+                rmFavorite.open();
+        }
+
         Component {
                 id: quranPageDelegate
 
                 QuranView {
                         id: content
-                        font.pointSize: _settings.fontSize
-                        font.family: _settings.fontFamily
+                        onMovementStarted: navBar.show();
+                }
+        }
 
-                        width: view.width
-                        margin: 20
-                        dataProvider: _data
-                        bookmarks: _bookmarks
-                        formatter: _formatter
-                        highlightColor: _settings.highlightColor
-	                    verseColor: _settings.verseColor
-	                    titleColor: _settings.titleColor
-	                    subtitleColor: _settings.subtitleColor
+        Item {
+                id: upper
+                anchors.top: parent.top
+                width: parent.width
+                height: Math.max(verse.height, part.height)
 
-                        Connections {
-                                target: _settings
-                                onNumberFormatChanged: populate();
-                                onTextTypeChanged: populate();
-                        }
+                SuraList {
+                        id: verse
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
+                        suras: _data.surasForPage(_settings.pageNumber);
+                }
 
-                        Connections {
-                                target: themeManager
-                                onReloaded: {
-                                        content.secondaryTopBorder = _theme.path(theme.translationBorder);
-                                        content.secondaryBottomBorder = _theme.path(theme.translationBorder);
-                                        content.secondaryBackground = _theme.path(theme.translationBackground);
-                                        if (_settings.translationMode != 0) {
-                                                populate();
-                                        }
-                                }
-                        }
-
-                        Connections {
-                                target: pagePosition
-                                onChanged: scrollTo(pagePosition.sura, pagePosition.aya);
-                        }
-
-                        Connections {
-                                target: _fsmon
-                                onAvailableChanged: {
-                                        if (_fsmon.available) {
-                                                content.addSecondaryText = _settings.translationMode == 1
-                                                if (refreshTranslations(true)) {
-                                                        populate();
-                                                }
-                                        }
-                                        else {
-                                                _translations.unload();
-                                        }
-                                }
-                        }
-
-                        Connections {
-                                target: _settings
-
-                                onTranslationModeChanged: {
-                                        content.addSecondaryText = _settings.translationMode == 1
-                                        if (refreshTranslations(false)) {
-                                                populate();
-                                        }
-                                }
-                        }
-
-                        Connections {
-                                target: translationSelector
-                                onAccepted: populate();
-                        }
-
-                        Component.onCompleted: {
-                                content.addSecondaryText = _settings.translationMode == 1
-                                if (theme) {
-                                        content.secondaryTopBorder = _theme.path(theme.translationBorder);
-                                        content.secondaryBottomBorder = _theme.path(theme.translationBorder);
-                                        content.secondaryBackground = _theme.path(theme.translationBackground);
-
-                                }
-                                populate();
-
-                                if (pagePosition.isValid()) {
-                                        scrollTo(pagePosition.sura, pagePosition.aya);
-                                }
-                        }
+                Label {
+                        id: part
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        text: _data.partName(_settings.pageNumber);
                 }
         }
 
         Item {
                 id: view
-                property Item current: null
+                property Item page: null
 
-                Connections {
-                        target: view.current
-                        onLineVisibilityRequested: {
-                                // Let's reset here. We have multiple exit points.
-                                pagePosition.reset();
-
-                                if (upper >= flick.contentY && lower <= flick.contentY + flick.height) {
-                                        // Nothing.
-                                        return;
-                                }
-                                else if (lower <= flick.contentY + flick.height) {
-                                        // Topmost part is not visible.
-                                        // We will scroll anyway and make it visible.
-                                        animation.run(upper);
-                                        return;
-                                }
-
-                                if (lower - upper > flick.height) {
-                                        // The line will not fit no matter what we do.
-                                        // Just show the upper part.
-                                        animation.run(upper);
-                                        return;
-                                }
-
-                                // Our line will fit the view. We need to scroll until the bottommost part
-                                // is just visible.
-                                var part = upper + (lower - (upper + flick.height));
-                                animation.run(part);
-                        }
-                }
+                anchors.top: upper.bottom
+                anchors.bottom: toolBar.top
+                width: parent.width
 
                 function pageNumberChanged() {
-                        if (!current) {
+                        if (page && page.page == _settings.pageNumber) {
                                 return;
                         }
 
-                        if (!_data.hasPage(_settings.pageNumber)) {
-                                return;
+                        var newPage = quranPageDelegate.createObject(view);
+                        newPage.page = _settings.pageNumber;
+                        newPage.showAddToFavoritesMenu.connect(showAddToFavoritesMenu);
+                        newPage.showRemoveFromFavoritesMenu.connect(showRemoveFromFavoritesMenu);
+
+                        if (page) {
+                                page.hide();
                         }
 
-                        if (current.page == _settings.pageNumber) {
-                                flick.contentY = 0;
-                                return;
-                        }
-
-                        if (_settings.pageNumber > index) {
-                                showNextItem(_settings.pageNumber);
-                        }
-                        else {
-                                showPreviousItem(_settings.pageNumber);
-                        }
+                        page = newPage;
+                        page.show();
                 }
 
                 Component.onCompleted: {
-                        addItem();
                         _settings.pageNumberChanged.connect(pageNumberChanged);
-                }
-
-                property int index: _settings.pageNumber
-
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: toolBar.top
-
-                function addItem() {
-                        if (current) {
-                                current.destroy(500);
-                        }
-
-                        current = quranPageDelegate.createObject(flick.contentItem);
-                        current.page = view.index;
-                }
-
-                function showNextItem(newIndex) {
-                        view.index = newIndex;
-                        nextAnimation.prev = current;
-                        addItem();
-                        nextAnimation.next = current;
-                        current.x = -view.width;
-                        nextAnimation.running = true;
-                }
-
-                function showPreviousItem(newIndex) {
-                        view.index = newIndex;
-                        previousAnimation.prev = current;
-                        addItem();
-                        previousAnimation.next = current;
-                        current.x = view.width;
-                        previousAnimation.running = true;
-                }
-
-                ParallelAnimation {
-                        id: nextAnimation
-                        property alias prev: na.target
-                        property alias next: nb.target
-                        running: false
-                        NumberAnimation {
-                                id: na
-                                duration: 250
-                                property: "x"
-                                from: 0
-                                to: view.width
-                        }
-                        NumberAnimation {
-                                id: nb
-                                duration: 250
-                                property: "x"
-                                from: -view.width
-                                to: 0
-                        }
-
-                        NumberAnimation {
-                                duration: 250
-                                target: flick
-                                property: "contentY"
-                                to: 0
-                        }
-                }
-
-                ParallelAnimation {
-                        id: previousAnimation
-                        property alias prev: pa.target
-                        property alias next: pb.target
-                        running: false
-                        NumberAnimation {
-                                id: pa
-                                duration: 250
-                                property: "x"
-                                from: 0
-                                to: -view.width
-                        }
-                        NumberAnimation {
-                                id: pb
-                                duration: 250
-                                property: "x"
-                                from: view.width
-                                to: 0
-                        }
-
-                        NumberAnimation {
-                                duration: 250
-                                target: flick
-                                property: "contentY"
-                                to: 0
-                        }
-                }
-
-                Connections {
-                        target: navBar
-                        onNextClicked: {
-                                navBar.show();
-                                var newIndex = view.index + 1;
-                                if (_data.hasPage(newIndex)) {
-                                        view.showNextItem(newIndex);
-                                        _settings.pageNumber = view.index;
-                                }
-                                else {
-                                        lastPageReached.show();
-                                }
-                        }
-                        onPreviousClicked: {
-                                navBar.show();
-                                var newIndex = view.index - 1;
-                                if (_data.hasPage(newIndex)) {
-                                        view.showPreviousItem(newIndex);
-                                        _settings.pageNumber = view.index;
-                                }
-                                else {
-                                        firstPageReached.show();
-                                }
-                        }
+                        pageNumberChanged();
                 }
 
                 Connections {
                         target: mouse
                         onSwipedRight: navBar.show();
-                }
-
-                Connections {
-                        target: mouse
                         onSwipedLeft: navBar.show();
                 }
 
-                Item {
-                        id: upper
-                        anchors.top: parent.top
-                        width: parent.width
-                        height: Math.max(verse.height, part.height)
-                        SuraList {
-                                id: verse
-                                anchors.left: parent.left
-                                anchors.leftMargin: 10
-                                suras: _data.surasForPage(_settings.pageNumber);
+                MouseArea {
+                        id: mouse
+                        anchors.fill: parent
+
+                        signal swipedLeft
+                        signal swipedRight
+
+                        property int xThreshold: 20
+                        property int yThreshold: 60
+                        property int x1: 0
+                        property int x2: 0
+                        property int y1: 0
+                        property int y2: 0
+
+                        acceptedButtons: Qt.LeftButton
+                        enabled: view.page ? view.page.interactive: false
+
+                        function detectSwipe() {
+                                var y = Math.abs(y1 - y2);
+                                var x = Math.abs(x1 - x2);
+                                if (y <= mouse.yThreshold && x >= mouse.xThreshold) {
+                                        if (x1 > x2) {
+                                                swipedLeft();
+                                        }
+                                        else {
+                                                swipedRight();
+                                        }
+                                }
                         }
 
-                        Label {
-                                id: part
-                                anchors.right: parent.right
-                                text: _data.partName(_settings.pageNumber);
+                        onPressed: {
+                                x1 = mouse.x; y1 = mouse.y;
+                        }
+
+                        onCanceled: {
+                                x2 = mouseX; y2 = mouseY;
+                                detectSwipe();
+                        }
+
+                        onReleased: {
+                                x2 = mouse.x; y2 = mouse.y;
+                                detectSwipe();
+                        }
+                }
+        }
+
+        Connections {
+                target: navBar
+                onNextClicked: {
+                        navBar.show();
+                        var newIndex = _settings.pageNumber + 1;
+                        if (_data.hasPage(newIndex)) {
+                                _settings.pageNumber = newIndex;
+                        }
+                        else {
+                                lastPageReached.show();
                         }
                 }
 
-                Flickable {
-                        id: flick
-                        anchors.top: upper.bottom
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.bottom: parent.bottom
-                        clip: true
-                        contentHeight: view.current ? view.current.height : 0
-                        onMovementStarted: navBar.show();
-                        flickableDirection: Flickable.VerticalFlick
-
-                        interactive: !previousAnimation.running && !nextAnimation.running
-
-                        NumberAnimation {
-                                id: animation
-                                target: flick
-                                from: flick.contentY
-                                easing.type: Easing.InOutQuad
-                                property: "contentY"
-
-                                function run(t) {
-                                        complete();
-                                        from = flick.contentY;
-                                        to = t;
-                                        start();
-                                }
+                onPreviousClicked: {
+                        navBar.show();
+                        var newIndex = _settings.pageNumber - 1;
+                        if (_data.hasPage(newIndex)) {
+                                _settings.pageNumber = newIndex;
                         }
-
-                        MouseArea {
-                                id: mouse
-                                anchors.fill: parent
-
-                                signal swipedLeft
-                                signal swipedRight
-
-                                property int xThreshold: 20
-                                property int yThreshold: 60
-                                property int x1: 0
-                                property int x2: 0
-                                property int y1: 0
-                                property int y2: 0
-
-                                acceptedButtons: Qt.LeftButton
-                                enabled: flick.interactive
-
-                                onPressAndHold: {
-                                        if (!view.current) {
-                                                return;
-                                        }
-
-                                        var b = view.current.bookmarkId(mouse.x, mouse.y);
-                                        if (b == undefined) {
-                                                return;
-                                        }
-
-                                        if (_bookmarks.isBookmarked(b)) {
-                                                rmFavorite.bookmark = b;
-                                                rmFavorite.text = view.current.textForPosition(mouse.x, mouse.y);
-                                                rmFavorite.open();
-                                        }
-                                        else {
-                                                addFavorite.bookmark = b;
-                                                addFavorite.text = view.current.textForPosition(mouse.x, mouse.y);
-                                                addFavorite.open();
-                                        }
-                                }
-
-                                onClicked: {
-                                        if (_settings.translationMode == 2) {
-                                                // Hidden only:
-                                                view.current.toggleSecondaryText(mouse.x, mouse.y);
-                                        }
-                                }
-
-                                onPressed: {
-                                        x1 = mouse.x; y1 = mouse.y;
-                                }
-
-                                onCanceled: {
-                                        x2 = mouseX; y2 = mouseY;
-                                        detectSwipe();
-                                }
-
-                                onReleased: {
-                                        x2 = mouse.x; y2 = mouse.y;
-                                        detectSwipe();
-                                }
-
-                                function detectSwipe() {
-                                        var y = Math.abs(y1 - y2);
-                                        var x = Math.abs(x1 - x2);
-                                        if (y <= mouse.yThreshold && x >= mouse.xThreshold) {
-                                                if (x1 > x2) {
-                                                        swipedLeft();
-                                                }
-                                                else {
-                                                        swipedRight();
-                                                }
-                                        }
-                                }
+                        else {
+                                firstPageReached.show();
                         }
                 }
         }
