@@ -5,9 +5,6 @@ import QtQuick 1.0
 Item {
 	    id: dialog
 
-        signal accepted
-        signal rejected
-
         z: 1000
 
         state: "close"
@@ -51,7 +48,6 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                         dialog.close();
-                        dialog.rejected();
                 }
         }
 
@@ -99,14 +95,7 @@ Item {
                                 anchors.fill: parent
                                 id: mouse
                                 onClicked: {
-                                        if (!_translations.load(modelData)) {
-                                                translationError.show();
-                                                dialog.rejected();
-                                        }
-                                        else {
-                                                dialog.accepted();
-                                        }
-
+                                        translationsManager.changeTranslation(modelData);
                                         dialog.close();
                                 }
                         }
