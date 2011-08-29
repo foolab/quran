@@ -59,7 +59,7 @@ public:
 
   Sura sura(int index) const;
 
-  QString basmala() const;
+  Q_INVOKABLE QString basmala() const;
 
   QString prefix() const;
 
@@ -67,7 +67,7 @@ public:
 
   QStringList text(const Fragment& frag) const;
   QStringList secondaryText(const Fragment& frag) const;
-  QString secondaryText(int sura, int aya);
+  Q_INVOKABLE QString secondaryText(int sura, int aya);
 
   void setSecondaryText(TextProvider *text);
 
