@@ -281,6 +281,10 @@ void DataProvider::setSecondaryText(TextProvider *text) {
   }
 }
 
+bool DataProvider::hasBasmala(int sura) {
+  return !(sura == 0 || sura == 8);
+}
+
 int Fragment::sura() const {
   return Fragments[m_index].sura;
 }

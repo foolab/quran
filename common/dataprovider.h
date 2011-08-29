@@ -51,6 +51,8 @@ public:
   Q_INVOKABLE bool setTextType(int index);
   Q_INVOKABLE int textType() const;
 
+  Q_INVOKABLE bool hasBasmala(int sura);
+
   Page pageFromIndex(int index) const;
 
   Page pageForSura(int sura) const;
