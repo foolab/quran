@@ -22,7 +22,7 @@
 #include <QtDeclarative>
 #include "settings.h"
 #include "dataprovider.h"
-#include "quranview.h"
+#include "quranviewmodel.h"
 #include "bookmarks.h"
 #include "numberformatter.h"
 #include "logoprovider.h"
@@ -88,7 +88,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<Translations>();
   qmlRegisterType<FSMonitor>();
   qmlRegisterType<Translation>("Translations", 1, 0, "Translation");
-  qmlRegisterType<QuranView>("Quran", 1, 0, "QuranView");
+  qmlRegisterType<QuranViewModel>("QuranViewModel", 1, 0, "QuranViewModel");
 
 
 #ifndef Q_WS_MAEMO_5
