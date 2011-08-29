@@ -2,7 +2,6 @@
 import QtQuick 1.0
 
 Rectangle {
-        color: "steelblue"
         border.color: color
         border.width: 5
 	    width: parent.width
@@ -11,4 +10,10 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+
+        // TODO: this creates a dependency non-components stuff
+        Image {
+                anchors.fill: parent
+                source: "image://theme/" + theme.toolBarBackground
+        }
 }
