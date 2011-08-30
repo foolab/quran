@@ -1,5 +1,6 @@
 // -*- qml-mode -*-
 import QtQuick 1.0
+import Label2 1.0
 
 Menu {
         id: contextMenu
@@ -14,15 +15,13 @@ Menu {
                         width: item.width
                         height: ayaText.height + 20
 
-                        Label {
+                        Label2 {
                                 id: ayaText
                                 width: parent.width - 40
-                                wrapMode: Text.WordWrap
                                 font.pointSize: 26
                                 font.family: _settings.fontFamily
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 anchors.verticalCenter: parent.verticalCenter
-                                horizontalAlignment: Text.AlignRight
                         }
                 }
 

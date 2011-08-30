@@ -34,6 +34,7 @@
 #include "translation.h"
 #include "downloader.h"
 #include "fsmonitor.h"
+#include "label.h"
 
 #ifndef Q_WS_MAEMO_5
 #include <MDeclarativeCache>
@@ -89,7 +90,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<FSMonitor>();
   qmlRegisterType<Translation>("Translations", 1, 0, "Translation");
   qmlRegisterType<QuranViewModel>("QuranViewModel", 1, 0, "QuranViewModel");
-
+  qmlRegisterType<Label>("Label2", 1, 0, "Label2");
 
 #ifndef Q_WS_MAEMO_5
   QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();

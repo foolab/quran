@@ -1,6 +1,7 @@
 // -*- qml-mode -*-
 import QtQuick 1.0
 import QuranViewModel 1.0
+import Label2 1.0
 
 Flickable {
         id: flick
@@ -141,14 +142,13 @@ Flickable {
                         property int chapter: -1
                         width: parent ? parent.width : undefined
 
-                        Label {
+                        Label2 {
                                 id: title
                                 width: parent.width
                                 font.family: _settings.fontFamily
                                 font.pointSize: _settings.fontSize
 	                            color: _settings.titleColor
-                                horizontalAlignment: Text.AlignHCenter
-                                textFormat: Text.RichText
+                                center: true
 
                                 function populate() {
                                         if (parent.chapter == -1) {
@@ -166,14 +166,13 @@ Flickable {
                                 }
                         }
 
-                        Label {
+                        Label2 {
                                 id: subtitle
                                 font.family: _settings.fontFamily
                                 font.pointSize: _settings.fontSize
                                 width: parent.width
-                                horizontalAlignment: Text.AlignHCenter
+                                center: true
 	                            color: _settings.subtitleColor
-                                textFormat: Text.RichText
 
                                 function populate() {
                                         if (parent.chapter == -1) {
@@ -209,14 +208,12 @@ Flickable {
                         width: parent ? parent.width : undefined
                         property Item translation: null
 
-                        Label {
+                        Label2 {
                                 id: verse
                                 font.family: _settings.fontFamily
                                 font.pointSize: _settings.fontSize
                                 width: parent.width
-                                anchors.right: parent.right
 	                            color: _settings.verseColor
-                                textFormat: Text.RichText
 
                                 MouseArea {
                                         anchors.fill: parent
@@ -256,14 +253,11 @@ Flickable {
                                 }
                         }
 
-                        Label {
-                                // TODO: Text alignment
+                        Label2 {
                                 id: translation
                                 width: parent.width
                                 font.pointSize: _settings.fontSize
-//                                anchors.right: parent.right
 	                            color: _settings.verseColor
-//                                textFormat: Text.RichText
 
                                 function resetText() {
                                         if (parent.chapter == -1 || parent.verse == -1 ||

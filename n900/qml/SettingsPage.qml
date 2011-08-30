@@ -1,5 +1,6 @@
 // -*- qml-mode -*-
 import QtQuick 1.0
+import Label2 1.0
 
 Page {
         id: settingsPage
@@ -36,7 +37,7 @@ Page {
                         text: qsTr("Preview")
                 }
 
-                Label {
+                Label2 {
                         id: preview
 
                         Connections {
@@ -45,7 +46,6 @@ Page {
                                 onTextTypeChanged: preview.populate();
                         }
 
-                        // TODO: the rightmost part of the text gets clipped
                         height: isPortrait() ? 200 : 100
                         anchors.top: previewLabel.bottom
                         anchors.left: parent.left
@@ -53,7 +53,7 @@ Page {
                         anchors.topMargin: 16
                         anchors.leftMargin: 16
                         anchors.rightMargin: 16
-                        horizontalAlignment: Text.AlignHCenter
+                        center: true
                         font.family: _settings.fontFamily
                         font.pointSize: _settings.fontSize
 
