@@ -55,6 +55,13 @@ Page {
                                 textFormat: Text.RichText
                         }
 
+
+                        AboutPageBlock {
+                                id: contributors
+                                title: qsTr("Contributors:");
+                                text: _legal.contributors
+                        }
+
                         AboutPageBlock {
                                 id: appLicense
                                 title: qsTr("Application license:");

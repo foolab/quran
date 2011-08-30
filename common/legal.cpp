@@ -74,3 +74,7 @@ QString Legal::transLicense() const {
   return tr("The translations provided are for non-commercial purposes only. If used otherwise, you need to obtain necessary permission from the translator or the publisher.<br />"
 	    "Translations are being downloaded from <a href=\"http://tanzil.net/trans/\">http://tanzil.net/trans/</a>");
 }
+
+QString Legal::contributors() const {
+  return tr("<a href=\"mailto:ayman@aymansmail.co.cc\">Ayman Siddiqui</a>: The default theme.");
+}

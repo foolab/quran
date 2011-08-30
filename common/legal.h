@@ -27,6 +27,7 @@ class Legal : public QObject {
   Q_PROPERTY(QString appLicense READ appLicense CONSTANT);
   Q_PROPERTY(QString textLicense READ textLicense CONSTANT);
   Q_PROPERTY(QString transLicense READ transLicense CONSTANT);
+  Q_PROPERTY(QString contributors READ contributors CONSTANT);
 
 public:
   Legal(QObject *parent = 0);
@@ -36,6 +37,7 @@ public:
   QString appLicense() const;
   QString textLicense() const;
   QString transLicense() const;
+  QString contributors() const;
 };
 
 #endif /* LEGAL_H */
