@@ -39,6 +39,8 @@ public:
   Q_INVOKABLE QList<int> translations(int category);
   Q_INVOKABLE QString translationName(int translation);
 
+  Q_INVOKABLE QString categoryNameForTranslation(int translation);
+
   void statusChanged(int tid, Translation::Status oldStatus, Translation::Status newStatus);
 
   Q_INVOKABLE bool load(int tid);

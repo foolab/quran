@@ -184,6 +184,10 @@ QString Translations::translationName(int translation) {
   return QString::fromUtf8(Ts[translation].name);
 }
 
+QString Translations::categoryNameForTranslation(int translation) {
+  return categoryName(Ts[translation].language);
+}
+
 QList<int> Translations::installed() const {
   return m_installed;
 }

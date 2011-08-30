@@ -21,6 +21,7 @@ TranslationsPage {
                         id: label
                         tid: modelData
                         width: view.width
+                        showCategory: true
 
                         onClicked: {
                                 if (status == Translation.Downloading) {
