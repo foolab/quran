@@ -23,7 +23,7 @@ DownloadLabel {
                         return;
                 }
 
-                var t;
+                var t = "";
                 if (showCategory) {
                         t = _translations.categoryNameForTranslation(tid) + " - ";
                 }
