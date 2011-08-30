@@ -7,6 +7,13 @@ TranslationsPage {
 
         tools: toolBar
 
+        TitleLabel {
+                id: title
+                width: parent.width
+                anchors.top: parent.top
+                text: qsTr("Translations")
+        }
+
         Component {
                 id: translationsDelegate
 
@@ -32,16 +39,19 @@ TranslationsPage {
 
         ListView {
                 id: view
-                anchors.top: parent.top
+                clip: true
+                anchors.top: title.bottom
                 anchors.bottom: toolBar.top
                 anchors.left: parent.left
+                anchors.leftMargin: 16
                 anchors.right: parent.right
+                anchors.rightMargin: 16
                 model: _translations.active
                 delegate: translationsDelegate
                 footer: DialogButton {
                         text: qsTr("Add translation");
                         anchors.horizontalCenter: parent.horizontalCenter
-                        onClicked: pageStack.push("TranslationsAddPage");
+                        onClicked: pageStack.push("TranslationLanguageList");
                 }
         }
 

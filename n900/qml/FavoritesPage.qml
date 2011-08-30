@@ -6,6 +6,13 @@ Page {
 
         tools: toolBar
 
+        TitleLabel {
+                id: title
+                width: parent.width
+                anchors.top: parent.top
+                text: qsTr("Favorites")
+        }
+
         Connections {
                 target: _bookmarks
                 onCleared: {
@@ -105,14 +112,12 @@ Page {
                 id: view
                 clip: true
                 model: FavoritesModel {}
-                anchors.top: parent.top
-                anchors.topMargin: 16
+                anchors.top: title.bottom
                 anchors.left: parent.left
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
                 anchors.bottom: toolBar.top
-                anchors.bottomMargin: 16
 
                 section.property: "sura"
                 section.criteria: ViewSection.FullString

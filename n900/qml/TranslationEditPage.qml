@@ -9,20 +9,18 @@ TranslationsPage {
 
         tools: toolBar
 
-        Label {
-                id: name
-                text: _translations.translationName(tid);
-                font.pointSize: 22
-                width: parent.width - 20
-                x: 10
-                y: 10
-                horizontalAlignment: Text.AlignHCenter
+        TitleLabel {
+                id: title
+                width: parent.width
+                anchors.top: parent.top
+                text: _translations.translationName(parent.tid);
+                horizontalAlignment: Text.AlignHCenter // TODO: proper alignment
         }
 
         DialogButton {
                 text: qsTr("Delete translation");
                 width: 400
-                anchors.top: name.bottom
+                anchors.top: title.bottom
                 anchors.topMargin: 30
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: askForRemoval(tid);

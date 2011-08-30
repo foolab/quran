@@ -7,9 +7,17 @@ Page {
 
         tools: toolBar
 
+        TitleLabel {
+                id: title
+                width: parent.width
+                anchors.top: parent.top
+                text: qsTr("Settings")
+        }
+
         Flickable {
                 id: flick
-                anchors.top: parent.top
+                clip: true
+                anchors.top: title.bottom
                 anchors.bottom: toolBar.top
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -18,18 +26,8 @@ Page {
                 width: parent.width
 
                 Label {
-                        id: settings
-                        anchors.top: parent.top
-                        anchors.topMargin: 16
-                        anchors.left: parent.left
-                        anchors.leftMargin: 16
-                        text: qsTr("Settings")
-                        font.pixelSize: 32
-                }
-
-                Label {
                         id: previewLabel
-                        anchors.top: settings.bottom
+                        anchors.top: parent.top
                         anchors.topMargin: 26
                         anchors.left: parent.left
                         anchors.leftMargin: 26

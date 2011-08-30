@@ -6,14 +6,11 @@ Page {
 
         tools: toolBar
 
-        Label {
+        TitleLabel {
                 id: title
-                text: qsTr("Favorites")
-                font.pixelSize: 32
+                width: parent.width
                 anchors.top: parent.top
-                anchors.topMargin: 16
-                anchors.left: parent.left
-                anchors.leftMargin: 16
+                text: qsTr("Favorites")
         }
 
         Label {

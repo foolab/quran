@@ -5,57 +5,37 @@ import Translations 1.0
 TranslationsPage {
         id: translationsAddPage
 
+        property int cid: 0
+
         tools: toolBar
 
+        TitleLabel {
+                id: title
+                width: parent.width
+                anchors.top: parent.top
+                text: _translations.categoryName(parent.cid)
+                // TODO: proper alignment
+        }
+
         Component {
-                id: translationsDelegate
+                id: delegate
 
-                Column {
-                        property bool expanded: false
-                        id: col
-                        ListView.delayRemove: true
+                TranslationLabel {
+                        id: label
+                        tid: modelData
+                        width: view.width
 
-                        Rectangle {
-                                width: view.width
-                                height: label.height * 2
-                                color: mouse.pressed || col.expanded ? "steelblue" : "white"
-                                MouseArea {
-                                        id: mouse
-                                        anchors.fill: parent
-                                        onClicked: col.expanded = !col.expanded
+                        onClicked: {
+                                if (status == Translation.Downloading) {
+                                        askForStop(tid);
                                 }
-
-                                Label {
-                                        x: 20
-                                        id: label
-                                        font.pointSize: 22
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        text: _translations.categoryName(modelData)
-                                        color: mouse.pressed || col.expanded ? "white" : "black"
+                                else if (status == Translation.None ||
+                                         status == Translation.Error) {
+                                        askForDownload(tid);
                                 }
-                        }
-
-                        Repeater {
-                                model: col.expanded ? _translations.translations(modelData) : 0
-
-                                TranslationLabel {
-                                        id: label
-                                        tid: modelData
-                                        width: view.width
-
-                                        onClicked: {
-                                                if (status == Translation.Downloading) {
-                                                        askForStop(tid);
-                                                }
-                                                else if (status == Translation.None ||
-                                                         status == Translation.Error) {
-                                                        askForDownload(tid);
-                                                }
-                                                else if (status == Translation.Installed) {
-                                                        pageStack.push("TranslationEditPage");
-                                                        pageStack.currentPage.tid = tid;
-                                                }
-                                        }
+                                else if (status == Translation.Installed) {
+                                        pageStack.push("TranslationEditPage");
+                                        pageStack.currentPage.tid = tid;
                                 }
                         }
                 }
@@ -63,12 +43,15 @@ TranslationsPage {
 
         ListView {
                 id: view
-                anchors.top: parent.top
+                clip: true
+                anchors.top: title.bottom
                 anchors.bottom: toolBar.top
                 anchors.left: parent.left
+                anchors.leftMargin: 16
                 anchors.right: parent.right
-                model: _translations.categories
-                delegate: translationsDelegate
+                anchors.rightMargin: 16
+                model: _translations.translations(parent.cid)
+                delegate: delegate
         }
 
         ToolBar {

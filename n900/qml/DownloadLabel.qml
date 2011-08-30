@@ -28,7 +28,7 @@ Rectangle {
         Label {
                 id: label
                 x: 10
-                font.pointSize: 22
+                font.pointSize: 24
                 width: slider.width
                 anchors.top: parent.top
                 anchors.topMargin: 10
@@ -42,6 +42,7 @@ Rectangle {
                 minimumValue: 0
                 maximumValue: 100
                 anchors.top: label.bottom
+                anchors.topMargin: 10
         }
 
         Label {
