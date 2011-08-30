@@ -310,6 +310,7 @@ void Translations::statusChanged(int tid, Translation::Status oldStatus,
     m_installed.takeAt(m_installed.indexOf(p->tid()));
     emit installedChanged();
     emit activeChanged();
+    emit removed(tid);
   }
   else if (oldStatus == Translation::Error && newStatus == Translation::Downloading) {
     // User restarted a failed download.
@@ -319,11 +320,17 @@ void Translations::statusChanged(int tid, Translation::Status oldStatus,
     // User stopped a download
     emit downloadsChanged();
     emit activeChanged();
+    emit removed(tid);
   }
   else if (oldStatus == Translation::Downloading && newStatus == Translation::Installed) {
     // Translation installed.
     m_installed.append(p->tid());
     emit installedChanged();
     emit activeChanged();
+    emit installed(tid);
+  }
+  else if (oldStatus == Translation::Downloading && newStatus == Translation::Error) {
+    // Error!
+    emit failed(tid);
   }
 }

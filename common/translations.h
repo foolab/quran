@@ -44,15 +44,6 @@ public:
   Q_INVOKABLE bool load(int tid);
   Q_INVOKABLE bool loadDefault();
 
-  //  void setEnabled(bool enabled);
-
-  //  void refresh();
-
-  //  Q_INVOKABLE QStringList installedTranslations() const;
-  //  Q_INVOKABLE QStringList languages();
-
-  //  Q_INVOKABLE QStringList installableTranslations(const QString& language) const;
-
   TranslationPrivate *registerTranslation(Translation *t);
   void unregisterTranslation(Translation *t);
 
@@ -75,6 +66,10 @@ signals:
   void activeChanged();
   void installedChanged();
   void currentChanged();
+
+  void installed(int id);
+  void failed(int id);
+  void removed(int id);
 
 private:
   TranslationPrivate *info(int tid);
