@@ -8,7 +8,7 @@ QT += network
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/
 
-DEFINES += VERSION=\\\"0.3.1\\\" DATA_DIR=\\\"/usr/share/n900-quran/\\\"
+DEFINES += VERSION=\\\"0.3.2\\\" DATA_DIR=\\\"/usr/share/n900-quran/\\\"
 
 SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quranviewmodel.cpp \
            position.cpp aboutdata.cpp logoprovider.cpp windowcontroller.cpp \
