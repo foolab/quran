@@ -14,7 +14,6 @@ TranslationsPage {
                 width: parent.width
                 anchors.top: parent.top
                 text: _translations.translationName(parent.tid);
-                horizontalAlignment: Text.AlignHCenter // TODO: proper alignment
         }
 
         DialogButton {
