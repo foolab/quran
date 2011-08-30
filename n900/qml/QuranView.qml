@@ -322,6 +322,12 @@ Flickable {
                                                 onEnabledChanged: translation.resetText();
                                         }
 
+                                        Connections {
+                                                target: col
+                                                onVerseChanged: translation.resetText();
+                                                onChapterChanged: translation.resetText();
+                                        }
+
                                         Component.onCompleted: {
                                                 col.translation = translation;
                                                 _settings.defaultTranslationChanged.connect(resetText);
