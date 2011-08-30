@@ -15,12 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LEGAL_H
-#define LEGAL_H
+#ifndef ABOUT_DATA_H
+#define ABOUT_DATA_H
 
 #include <QObject>
 
-class Legal : public QObject {
+class AboutData : public QObject {
   Q_OBJECT
 
   Q_PROPERTY(QString copyright READ copyright CONSTANT);
@@ -30,8 +30,8 @@ class Legal : public QObject {
   Q_PROPERTY(QString contributors READ contributors CONSTANT);
 
 public:
-  Legal(QObject *parent = 0);
-  ~Legal();
+  AboutData(QObject *parent = 0);
+  ~AboutData();
 
   QString copyright() const;
   QString appLicense() const;
@@ -40,4 +40,4 @@ public:
   QString contributors() const;
 };
 
-#endif /* LEGAL_H */
+#endif /* ABOUT_DATA_H */

@@ -47,7 +47,7 @@ Page {
 
                         Label {
                                 id: copy
-                                text: _legal.copyright
+                                text: _about.copyright
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 horizontalAlignment: Text.AlignHCenter
                                 width: parent.width
@@ -59,25 +59,25 @@ Page {
                         AboutPageBlock {
                                 id: contributors
                                 title: qsTr("Contributors:");
-                                text: _legal.contributors
+                                text: _about.contributors
                         }
 
                         AboutPageBlock {
                                 id: appLicense
                                 title: qsTr("Application license:");
-                                text: _legal.appLicense
+                                text: _about.appLicense
                         }
 
                         AboutPageBlock {
                                 id: textLicense
                                 title: qsTr("Text license:");
-                                text: _legal.textLicense
+                                text: _about.textLicense
                         }
 
                         AboutPageBlock {
                                 id: translationsLicense
                                 title: qsTr("Translations license:");
-                                text: _legal.transLicense
+                                text: _about.transLicense
                         }
                 }
         }

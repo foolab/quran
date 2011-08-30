@@ -15,21 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "legal.h"
+#include "aboutdata.h"
 
-Legal::Legal(QObject *parent) : QObject(parent) {
-
-}
-
-Legal::~Legal() {
+AboutData::AboutData(QObject *parent) : QObject(parent) {
 
 }
 
-QString Legal::copyright() const {
+AboutData::~AboutData() {
+
+}
+
+QString AboutData::copyright() const {
   return tr("Copyright &copy; 2011 <a href=\"mailto:msameer@foolab.org\">Mohammed Sameer</a>. All rights reserved.");
 }
 
-QString Legal::appLicense() const {
+QString AboutData::appLicense() const {
   return tr("This program is free software; you can redistribute it and/or modify "
 	    "it under the terms of the GNU General Public License as published by "
 	    "the Free Software Foundation; either version 2 of the License, or "
@@ -44,7 +44,7 @@ QString Legal::appLicense() const {
 	    "along with this program. If not, see <a href=\"http://www.gnu.org/licenses/\">http://www.gnu.org/licenses</a>.");
 }
 
-QString Legal::textLicense() const {
+QString AboutData::textLicense() const {
   return tr("Tanzil Quran Text<br />"
 	    "Copyright &copy; 2008-2011 Tanzil Project<br />"
 	    "License: Creative Commons Attribution 3.0<br />"
@@ -70,11 +70,11 @@ QString Legal::textLicense() const {
 	    "Please check updates at: <a href=\"http://tanzil.net/updates/\">http://tanzil.net/updates</a>");
 }
 
-QString Legal::transLicense() const {
+QString AboutData::transLicense() const {
   return tr("The translations provided are for non-commercial purposes only. If used otherwise, you need to obtain necessary permission from the translator or the publisher.<br />"
 	    "Translations are being downloaded from <a href=\"http://tanzil.net/trans/\">http://tanzil.net/trans/</a>");
 }
 
-QString Legal::contributors() const {
+QString AboutData::contributors() const {
   return tr("<a href=\"mailto:ayman@aymansmail.co.cc\">Ayman Siddiqui</a>: The default theme.");
 }

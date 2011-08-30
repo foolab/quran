@@ -27,7 +27,7 @@
 #include "numberformatter.h"
 #include "logoprovider.h"
 #include "themeimageprovider.h"
-#include "legal.h"
+#include "aboutdata.h"
 #include <QDir>
 #include "windowcontroller.h"
 #include "translations.h"
@@ -79,13 +79,13 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
 
   NumberFormatter formatter(&settings);
 
-  Legal legal;
+  AboutData about;
 
   qmlRegisterType<DataProvider>();
   qmlRegisterType<Settings>();
   qmlRegisterType<Bookmarks>();
   qmlRegisterType<NumberFormatter>();
-  qmlRegisterType<Legal>();
+  qmlRegisterType<AboutData>();
   qmlRegisterType<Translations>();
   qmlRegisterType<FSMonitor>();
   qmlRegisterType<Translation>("Translations", 1, 0, "Translation");
@@ -112,7 +112,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   view->rootContext()->setContextProperty("_data", &data);
   view->rootContext()->setContextProperty("_bookmarks", &bookmarks);
   view->rootContext()->setContextProperty("_formatter", &formatter);
-  view->rootContext()->setContextProperty("_legal", &legal);
+  view->rootContext()->setContextProperty("_about", &about);
   view->rootContext()->setContextProperty("_translations", &translations);
   view->rootContext()->setContextProperty("_downloader", &downloader);
   view->rootContext()->setContextProperty("_fsmon", &monitor);
