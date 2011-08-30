@@ -1,3 +1,10 @@
+n900-quran (0.3.2-1) unstable; urgency=low
+
+  * Initial theme support.
+  * Each translation language has its own page.
+
+ -- Mohammed Sameer <msameer@foolab.org>  Tue, 30 Aug 2011 21:35:50 +0300
+
 n900-quran (0.3.1-1) unstable; urgency=low
 
   * Added a navigation bar to navigate to previous and next pages.
