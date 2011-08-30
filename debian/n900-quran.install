@@ -3,6 +3,7 @@ data/text/quran-uthmani.xml usr/share/n900-quran/text/
 data/text/quran-simple-enhanced.xml usr/share/n900-quran/text/
 data/logo_160.png usr/share/n900-quran/
 data/n900-quran-logo.png usr/share/icons/
+data/themes/blue/*.png usr/share/n900-quran/themes/blue/
 data/ScheherazadeRegOT.ttf usr/share/n900-quran/
 debian/n900-quran.desktop usr/share/applications/hildon/
 n900/qml/*.qml usr/share/n900-quran/qml/
