@@ -253,62 +253,87 @@ Flickable {
                                 }
                         }
 
-                        Label2 {
-                                id: translation
+                        Column {
+                                id: translationContainer
                                 width: parent.width
-                                font.pointSize: _settings.fontSize
-	                            color: _settings.verseColor
 
-                                function resetText() {
-                                        if (parent.chapter == -1 || parent.verse == -1 ||
-                                        !translationsManager.enabled ||
-                                        _settings.translationMode != 1) {
-                                                clearText();
-                                                return;
-                                        }
-
-                                        addText();
+                                Image {
+                                        id: borderTop
+                                        width: parent.width
+                                        height: translation.height > 0 ? 5 : 0
+                                        source: "image://theme/" + theme.translationBorder
                                 }
 
-                                function toggle() {
-                                        if (height == 0) {
+                                Label2 {
+                                        id: translation
+                                        Image {
+                                                anchors.fill: parent
+                                                source: "image://theme/" + theme.translationBackground
+                                                z: translation.z - 1
+                                        }
+
+                                        width: parent.width
+                                        font.pointSize: _settings.fontSize
+	                                    color: _settings.verseColor
+
+                                        function resetText() {
+                                                if (col.chapter == -1 || col.verse == -1 ||
+                                                    !translationsManager.enabled ||
+                                                    _settings.translationMode != 1) {
+                                                        clearText();
+                                                        return;
+                                                }
+
                                                 addText();
                                         }
-                                        else {
-                                                clearText();
-                                        }
-                                }
 
-                                function clearText() {
-                                        text = "";
-                                        height = 0;
-                                }
-
-                                function addText() {
-                                        height = undefined;
-                                        text = _data.secondaryText(parent.chapter, parent.verse);
-                                }
-
-                                MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: {
-                                                if (_settings.translationMode == 2) {
-                                                        translation.toggle();
+                                        function toggle() {
+                                                if (height == 0) {
+                                                        addText();
+                                                }
+                                                else {
+                                                        clearText();
                                                 }
                                         }
 
-                                        onPressAndHold: showMenu(verse, col.chapter, col.verse);
+                                        function clearText() {
+                                                text = "";
+                                                height = 0;
+                                        }
+
+                                        function addText() {
+                                                height = undefined;
+                                                text = _data.secondaryText(col.chapter, col.verse);
+                                        }
+
+                                        MouseArea {
+                                                anchors.fill: parent
+                                                onClicked: {
+                                                        if (_settings.translationMode == 2) {
+                                                                translation.toggle();
+                                                        }
+                                                }
+
+                                                onPressAndHold: showMenu(verse, col.chapter, col.verse);
+                                        }
+
+                                        Connections {
+                                                target: translationsManager
+                                                onEnabledChanged: translation.resetText();
+                                        }
+
+                                        Component.onCompleted: {
+                                                col.translation = translation;
+                                                _settings.defaultTranslationChanged.connect(resetText);
+                                                resetText();
+                                        }
                                 }
 
-                                Connections {
-                                        target: translationsManager
-                                        onEnabledChanged: translation.resetText();
-                                }
-
-                                Component.onCompleted: {
-                                        col.translation = translation;
-                                        _settings.defaultTranslationChanged.connect(resetText);
-                                        resetText();
+                                Image {
+                                        id: borderBottom
+                                        width: parent.width
+                                        height: translation.height > 0 ? 5 : 0
+                                        source: "image://theme/" + theme.translationBorder
                                 }
                         }
                 }
