@@ -128,6 +128,28 @@ PageStackWindow {
                 text: qsTr("Translations cannot be used in mass storage mode.");
         }
 
+        InfoBanner {
+                id: translations
+        }
+
+        Connections {
+                target: _translations
+                onInstalled: {
+                        translations.text = qsTr("Installed ") + _translations.translationName(id);
+                        translations.show();
+                }
+
+                onFailed: {
+                        translations.text = qsTr("Failed to download ") + _translations.translationName(id);
+                        translations.show();
+                }
+
+                onRemoved: {
+                        translations.text = qsTr("Removed ") + _translations.translationName(id);
+                        translations.show();
+                }
+        }
+
         function showPage(name, point, now) {
                 pageStack.push(name, point, now);
         }
