@@ -1,114 +1,50 @@
 // -*- qml-mode -*-
 import QtQuick 1.0
 
-// TODO: try to merge with menu and dialog
-Item {
-	    id: dialog
+SelectionDialog {
+        id: dialog
 
-        z: 1000
+        model: ListModel {
+                id: model
 
-        state: "close"
+                function currentChanged() {
+                        var len = _translations.installed.length;
 
-        states: [
-        State {
-                name: "open"
-                PropertyChanges { target: content; opacity: 1.0 }
-                PropertyChanges { target: fader; opacity: 0.3 }
-                },
-        State {
-                name: "close"
-                PropertyChanges { target: content; opacity: 0.0 }
-                PropertyChanges { target: fader; opacity: 0.0 }
-              }
-        ]
-
-        transitions: [
-        Transition {
-                from: "open"; to: "close"
-                PropertyAnimation { properties: "opacity"; duration: 200 }
-        },
-        Transition {
-                from: "close"; to: "open"
-                PropertyAnimation { properties: "opacity"; duration: 200 }
-        }
-        ]
-
-        anchors.fill: parent
-
-        function open() {
-                state = "open";
-        }
-
-        function close() {
-                state = "close";
-        }
-
-        MouseArea {
-                enabled: dialog.state == "open"
-                anchors.fill: parent
-                onClicked: {
-                        dialog.close();
-                }
-        }
-
-        ListView {
-                id: content
-                z: 1002
-                anchors.centerIn: parent
-
-                width: parent.width * 3/4
-                height: Math.min(_translations.installed.length * 80, parent.height * 3/4)
-
-                model: _translations.installed
-                delegate: contentDelegate
-                header: Rectangle {
-                        width: label.width
-                        height: label.height
-                        color: "steelblue"
-                        Label {
-                                id: label
-                                text: qsTr("Choose translation");
-                                width: content.width
-                                color: "white"
-                                x: 10
-                        }
-                }
-        }
-
-
-        Rectangle {
-                id: fader
-                z: 1001
-                anchors.fill: parent
-                color: "steelblue"
-        }
-
-        Component {
-                id: contentDelegate
-
-                Rectangle {
-                        color: mouse.pressed ? "steelblue" : "white"
-                        width: content.width;
-                        height: 80
-
-                        MouseArea {
-                                anchors.fill: parent
-                                id: mouse
-                                onClicked: {
-                                        translationsManager.changeTranslation(modelData);
-                                        dialog.close();
+                        for (var x = 0; x < len; x++) {
+                                if (_translations.current == get(x).tid) {
+                                        selectedIndex = x;
+                                        return;
                                 }
                         }
-
-                        Label {
-                                id: label
-                                width: parent.width;
-                                text: _translations.translationName(modelData);
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.verticalCenter: parent.verticalCenter
-                                horizontalAlignment: Text.AlignHCenter
-                                font.bold: _translations.current == modelData
-                        }
                 }
+
+                function populate() {
+                        clear();
+
+                        var len = _translations.installed.length;
+
+                        for (var x = 0; x < len; x++) {
+                                var tid = _translations.installed[x];
+                                var name = _translations.translationName(tid);
+                                append({"tid": tid, "name": name});
+                        }
+
+                        currentChanged();
+                }
+        }
+
+        titleText: qsTr("Choose translation");
+
+        Connections {
+                target: _translations
+                onInstalledChanged: model.populate();
+                onCurrentChanged: model.currentChanged();
+        }
+
+        Component.onCompleted: model.populate();
+
+        onAccepted: {
+                var tid = model.get(selectedIndex).tid;
+                translationsManager.changeTranslation(tid);
         }
 }
