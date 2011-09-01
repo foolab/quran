@@ -5,6 +5,8 @@ import QtQuick 1.0
 Item {
         id: dialog
 
+        property real faderOpacity: 0.9
+
         property alias title: titleBar.children
         property alias content: contentField.children
         property alias buttons: buttonRow.children
@@ -20,7 +22,7 @@ Item {
         State {
                 name: "open"
                 PropertyChanges { target: content; opacity: 1.0 }
-                PropertyChanges { target: fader; opacity: 0.9 }
+                PropertyChanges { target: fader; opacity: faderOpacity }
                 },
         State {
                 name: "close"
