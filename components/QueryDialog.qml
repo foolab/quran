@@ -1,132 +1,58 @@
 // -*- qml-mode -*-
 import QtQuick 1.0
 
-// TODO: try to merge with menu.
-Item {
+Dialog {
         property alias titleText: titleLabel.text
         property alias message: messageLabel.text
         property alias acceptButtonText: yes.text
         property alias rejectButtonText: no.text
 
-        signal accepted
-        signal rejected
-
-        z: 1000
 	    id: dialog
 
-        state: "close"
-
-        states: [
-        State {
-                name: "open"
-                PropertyChanges { target: content; opacity: 1.0 }
-                PropertyChanges { target: fader; opacity: 0.9 }
-                },
-        State {
-                name: "close"
-                PropertyChanges { target: content; opacity: 0.0 }
-                PropertyChanges { target: fader; opacity: 0.0 }
-              }
-        ]
-
-        transitions: [
-        Transition {
-                from: "open"; to: "close"
-                PropertyAnimation { properties: "opacity"; duration: 200 }
-        },
-        Transition {
-                from: "close"; to: "open"
-                PropertyAnimation { properties: "opacity"; duration: 200 }
-        }
-        ]
-
-        anchors.fill: parent
-
-        function open() {
-                state = "open";
+        title: Label {
+                id: titleLabel
+                font.pointSize: 32
+                font.bold: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                width: parent.width
+                //                        style: Text.Outline
+                //                        styleColor: "grey"
+                smooth: true
         }
 
-        function close() {
-                state = "close";
+// TODO: label2 ? font ?
+        content: Label {
+                id: messageLabel
+                font.pointSize: 26
+                font.bold: true
+                width: parent.width
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                smooth: true
         }
 
-        MouseArea {
-                enabled: dialog.state == "open"
-                anchors.fill: parent
-                onClicked: {
-                        dialog.close();
-                        dialog.rejected();
-                }
-        }
 
-        Item {
-                id: content
-                z: 1002
-                anchors.centerIn: parent
-                width: 400
-                height: (no.y + no.height) - titleLabel.y
+        buttons: Item {
+                width: parent.width
+                height: col.height
 
-                Label {
-                        id: titleLabel
-                        font.pointSize: 32
-                        font.bold: true
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.top: parent.top
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-//                        style: Text.Outline
-//                        styleColor: "grey"
-                        smooth: true
-                }
+                Column {
+                        id: col
+                        spacing: 20
+                        width: parent.width
 
-                Label {
-                        id: messageLabel
-                        font.pointSize: 26
-                        font.bold: true
-		        anchors.left: parent.left
-		        anchors.right: parent.right
-	                anchors.leftMargin: 20
-	                anchors.rightMargin: 20
-                        anchors.top: titleLabel.bottom
-                        anchors.topMargin: 10
-//                        anchors.horizontalCenter: parent.horizontalCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-//                        style: Text.Outline
-//                        styleColor: "grey"
-                        smooth: true
-                }
+                        DialogButton {
+                                id: yes
+                                onClicked: dialog.accept();
+                                anchors.horizontalCenter: parent.horizontalCenter
+                        }
 
-                DialogButton {
-                        id: yes
-//                        text: qsTr("Yes");
-                        anchors.top: messageLabel.bottom
-                        anchors.topMargin: 30
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        onClicked: {
-                                dialog.close();
-                                dialog.accepted();
+                        DialogButton {
+                                id: no
+                                onClicked: dialog.reject();
+                                anchors.horizontalCenter: parent.horizontalCenter
                         }
                 }
-
-                DialogButton {
-                        id: no
-//                        text: qsTr("No");
-                        anchors.top: yes.bottom
-                        anchors.topMargin: 20
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        onClicked: {
-                                dialog.close();
-                                dialog.rejected();
-                        }
-                }
-        }
-
-
-        Rectangle {
-                id: fader
-                z: 1001
-                anchors.fill: parent
-                color: "steelblue"
         }
 }
