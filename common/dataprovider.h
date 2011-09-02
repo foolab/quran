@@ -75,6 +75,11 @@ public:
 
   TextProvider *secondaryTextProvider() const;
 
+  Q_INVOKABLE int pageNumberForPart(int part);
+  Q_INVOKABLE int partNumberForPage(int page);
+
+  Q_INVOKABLE int suraSize(int sura);
+
 private:
   const QString m_dir;
 

@@ -285,6 +285,33 @@ bool DataProvider::hasBasmala(int sura) {
   return !(sura == 0 || sura == 8);
 }
 
+int DataProvider::pageNumberForPart(int part) {
+  part = qBound(MIN_PART, part, MAX_PART);
+
+  for (int x = 0; x <= MAX_PAGE; x++) {
+    if (Pages[x].part == part) {
+      return x;
+    }
+  }
+
+  // Heck!
+  return 0;
+}
+
+int DataProvider::partNumberForPage(int page) {
+  page = qBound(MIN_PAGE, page, MAX_PAGE);
+
+  return Pages[page].part;
+}
+
+int DataProvider::suraSize(int sura) {
+  if (sura < 0 || sura > 113) {
+    return 0;
+  }
+
+  return Suras[sura].length;
+}
+
 int Fragment::sura() const {
   return Fragments[m_index].sura;
 }
