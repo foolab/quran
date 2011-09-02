@@ -28,7 +28,7 @@ Dialog {
                         id: rect
                         width: label.width
                         height: label.height * 2
-                        color: index == dialog.selectedIndex ? "steelblue" : "white"
+                        color: mouse.pressed ? "lightsteelblue" : index == dialog.selectedIndex ? "steelblue" : "white"
 
                         Label {
                                 id: label
