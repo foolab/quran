@@ -2,7 +2,7 @@
 import QtQuick 1.0
 
 Dialog {
-		id: pageDialog
+        id: pageDialog
         faderOpacity: 0.3
 
         InfoBanner {
@@ -14,7 +14,6 @@ Dialog {
 
         title: Rectangle {
                 id: pageDialogTitle
-                property string text
 
                 width: 300
                 height: label.height
