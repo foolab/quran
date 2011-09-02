@@ -6,7 +6,7 @@ Dialog {
 
         faderOpacity: 0.3
 
-        property ListModel model: ListModel {}
+        property alias model: view.model
 
         property alias titleText: title.text
 
