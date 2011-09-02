@@ -7,6 +7,42 @@ Page {
 
         tools: toolBar
 
+        property Component partDialogComponent: null
+        property Item partDialog: null
+
+        property Component pageDialogComponent: null
+        property Item pageDialog: null
+
+        property Component verseDialogComponent: null
+        property Item verseDialog: null
+
+        function showPartDialog() {
+                if (!partDialogComponent) {
+                        partDialogComponent = Qt.createComponent("PartSelectionDialog.qml");
+                        partDialog = partDialogComponent.createObject(indexPage);
+                }
+
+                partDialog.open();
+        }
+
+        function showPageDialog() {
+                if (!pageDialogComponent) {
+                        pageDialogComponent = Qt.createComponent("PageSelectionDialog.qml");
+                        pageDialog = pageDialogComponent.createObject(indexPage);
+                }
+
+                pageDialog.open();
+        }
+
+        function showVerseDialog() {
+                if (!verseDialogComponent) {
+                        verseDialogComponent = Qt.createComponent("VerseSelectionDialog.qml");
+                        verseDialog = verseDialogComponent.createObject(indexPage);
+                }
+
+                verseDialog.open();
+        }
+
         TitleLabel {
                 id: title
                 width: parent.width
@@ -19,8 +55,24 @@ Page {
                 Item {
                         width: view.width
                         height: Math.max(left.height, right.height);
-                        IndexPageCell { id: left; sura: index + 57 }
-                        IndexPageCell { id: right; anchors.left: left.right; sura: index }
+                        IndexPageCell {
+                                id: left
+                                sura: index + 57
+                                onClicked: {
+                                        pagePosition.setPosition(sura, 0);
+                                        pageStack.pop();
+                                }
+                        }
+
+                        IndexPageCell {
+                                id: right
+                                anchors.left: left.right
+                                sura: index
+                                onClicked: {
+                                        pagePosition.setPosition(sura, 0);
+                                        pageStack.pop();
+                                }
+                        }
                 }
         }
 
@@ -37,10 +89,42 @@ Page {
                 delegate: indexPageDelegate
         }
 
+        Menu {
+                id: menu
+
+                MenuLayout {
+                        MenuItem {
+                                text: qsTr("Go to part")
+                                onClicked: {
+                                        menu.close();
+                                        showPartDialog();
+                                }
+                        }
+
+                        MenuItem {
+                                text: qsTr("Go to verse (Aya)")
+                                onClicked: {
+                                        menu.close();
+                                        showVerseDialog();
+                                }
+                        }
+
+                        MenuItem {
+                                text: qsTr("Go to page")
+                                onClicked: {
+                                        menu.close();
+                                        showPageDialog();
+                                }
+                        }
+                }
+        }
+
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
                         ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
+
+                        ToolButton { icon: theme.menuIcon; onClicked: menu.open(); }
                 }
         }
 }
