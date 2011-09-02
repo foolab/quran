@@ -12,6 +12,16 @@ Dialog {
 
         property int selectedIndex: -1
 
+        property bool __hack: false
+
+        onSelectedIndexChanged: {
+                if (__hack) {
+                        return;
+                }
+
+                view.positionViewAtIndex(selectedIndex, ListView.Center);
+        }
+
         property Component delegate: Component {
                 id: delegate
                 Rectangle {
@@ -30,9 +40,14 @@ Dialog {
                         }
 
                         MouseArea {
+                                id: mouse
                                 anchors.fill: parent
-                                onPressed: selectedIndex = index;
-                                onClicked: accept();
+                                onClicked: {
+                                        __hack = true;
+                                        selectedIndex = index;
+                                        __hack = false;
+                                        accept();
+                                }
                         }
                 }
         }
