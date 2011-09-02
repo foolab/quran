@@ -6,8 +6,9 @@ Rectangle {
         signal clicked
 
         property int sura: 0
+        property bool selected: false
 
-        color: mouse.pressed ? "steelblue" : "white"
+        color: selected || mouse.pressed ? "steelblue" : "white"
 
         width: parent.width / 2
         height: verse.height * 2
@@ -15,10 +16,7 @@ Rectangle {
         MouseArea {
                 id: mouse
                 anchors.fill: parent
-                onClicked: {
-                        pagePosition.setPosition(root.sura, 0);
-                        pageStack.pop();
-                }
+                onClicked: root.clicked();
         }
 
         NumberLabel {
