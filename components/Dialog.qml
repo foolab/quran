@@ -43,8 +43,8 @@ Item {
         ]
 
         anchors.centerIn: parent
-        width: parent.width
-        height: parent.height
+        width: parent ? parent.width : undefined
+        height: parent ? parent.height : undefined
 
         function accept() {
                 close();
@@ -62,6 +62,10 @@ Item {
 
         function close() {
                 state = "close";
+        }
+
+        function isOpen() {
+                return state == "open";
         }
 
         MouseArea {
