@@ -39,6 +39,11 @@
 #define VERSE_COLOR                Qt::black
 #define FONT_FILE                  "ScheherazadeRegOT.ttf"
 
+#define MIN_TRANSLATION_FONT_SIZE  FONT_MIN_SIZE
+#define MAX_TRANSLATION_FONT_SIZE  FONT_MAX_SIZE
+#define TRANSLATION_FONT_FAMILY    "Nokia Sans" // TODO: Harmattan
+#define DEFAULT_TRANSLATION_FONT_SIZE       DEFAULT_FONT_SIZE
+
 Q_DECLARE_METATYPE(QList<uint>);
 
 /*!
@@ -222,6 +227,29 @@ void Settings::setDefaultTranslation(const QString& id) {
 
 QString Settings::defaultTranslation() const {
   return m_settings->value("General/defaultTranslation").toString();
+}
+
+int Settings::minTranslationFontSize() const {
+  return MIN_TRANSLATION_FONT_SIZE;
+}
+
+int Settings::maxTranslationFontSize() const {
+  return MAX_TRANSLATION_FONT_SIZE;
+}
+
+QString Settings::translationFontFamily() const {
+  return TRANSLATION_FONT_FAMILY;
+}
+
+int Settings::translationFontSize() const {
+  return m_settings->value("General/translationFontSize", DEFAULT_TRANSLATION_FONT_SIZE).toInt();
+}
+
+void Settings::setTranslationFontSize(int size) {
+  if (size != translationFontSize()) {
+    m_settings->setValue("General/translationFontSize", size);
+    emit translationFontSizeChanged();
+  }
 }
 
 void Settings::reset() {

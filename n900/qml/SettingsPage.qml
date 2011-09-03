@@ -78,15 +78,17 @@ Page {
                                 onAccepted: _settings.fontSize = selectedIndex + _settings.minFontSize;
                         }
 
-                        /*
                         SettingsPageEntry {
-                                // TODO:
-                                id: translationFontSize
+                                id: translationFontSizeEntry
+
+                                entries: range(_settings.minTranslationFontSize, _settings.maxTranslationFontSize, translationFontSizeEntry);
+
                                 title: qsTr("Translation font size");
                                 subtitle: _settings.translationFontSize
-                                onClicked: translationFontSizeDialog.open();
+                                selectedIndex: _settings.translationFontSize - _settings.minTranslationFontSize;
+                                onAccepted: _settings.translationFontSize = selectedIndex + _settings.minTranslationFontSize;
                         }
-*/
+
                         SettingsPageEntry {
                                 id: textTypeEntry
                                 entries: [

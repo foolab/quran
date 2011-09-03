@@ -34,6 +34,10 @@ class Settings : public QObject {
   Q_PROPERTY(QString fontFamily READ fontFamily CONSTANT);
   Q_PROPERTY(int minFontSize READ minFontSize CONSTANT);
   Q_PROPERTY(int maxFontSize READ maxFontSize CONSTANT);
+  Q_PROPERTY(QString translationFontFamily READ translationFontFamily CONSTANT);
+  Q_PROPERTY(int minTranslationFontSize READ minTranslationFontSize CONSTANT);
+  Q_PROPERTY(int maxTranslationFontSize READ maxTranslationFontSize CONSTANT);
+  Q_PROPERTY(int translationFontSize READ translationFontSize WRITE setTranslationFontSize NOTIFY translationFontSizeChanged);
   Q_PROPERTY(QColor highlightColor READ highlightColor CONSTANT);
   Q_PROPERTY(QColor verseColor READ verseColor CONSTANT);
   Q_PROPERTY(QColor titleColor READ titleColor CONSTANT);
@@ -63,6 +67,11 @@ public:
 
   int minFontSize() const;
   int maxFontSize() const;
+
+  int minTranslationFontSize() const;
+  int maxTranslationFontSize() const;
+  int translationFontSize() const;
+  QString translationFontFamily() const;
 
   void setBookmarks(const QList<uint>& bookmarks);
   QList<uint> bookmarks() const;
@@ -100,6 +109,7 @@ public slots:
   void setNumberFormat(int format);
   void setTextType(int type);
   void setY(int y);
+  void setTranslationFontSize(int size);
 
 signals:
   void fontSizeChanged();
@@ -111,6 +121,7 @@ signals:
   void orientationChanged();
   void translationModeChanged();
   void defaultTranslationChanged();
+  void translationFontSizeChanged();
 
 private:
   QSettings *m_settings;

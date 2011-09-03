@@ -273,7 +273,8 @@ Flickable {
                                         }
 
                                         width: parent.width
-                                        font.pointSize: _settings.fontSize
+                                        font.family: _settings.translationFontFamily
+                                        font.pointSize: _settings.translationFontSize
 	                                    color: _settings.verseColor
 
                                         function resetText() {
