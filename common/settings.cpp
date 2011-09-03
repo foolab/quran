@@ -258,5 +258,6 @@ void Settings::reset() {
   setFontSize(DEFAULT_FONT_SIZE);
   setNumberFormat(DEFAULT_NUMBER_FORMAT);
   setTextType(DEFAULT_TEXT_TYPE);
+  setTranslationFontSize(DEFAULT_TRANSLATION_FONT_SIZE);
   setY(DEFAULT_Y);
 }
