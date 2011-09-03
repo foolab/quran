@@ -31,6 +31,8 @@ public:
 
   Q_INVOKABLE QString number(int number);
 
+  Q_INVOKABLE QString toHindi(int number);
+
 private slots:
   void numberFormatChanged();
 

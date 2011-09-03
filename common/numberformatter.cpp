@@ -37,11 +37,15 @@ void NumberFormatter::numberFormatChanged() {
 }
 
 QString NumberFormatter::number(int number) {
-  QString in = QString("%1").arg(number);
-
   if (m_format != 0) {
-    return in;
+    return QString("%1").arg(number);
   }
+
+  return toHindi(number);
+}
+
+QString NumberFormatter::toHindi(int number) {
+  QString in = QString("%1").arg(number);
 
   QString result;
   QChar c;
