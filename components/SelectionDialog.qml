@@ -22,6 +22,12 @@ Dialog {
                 view.positionViewAtIndex(selectedIndex, ListView.Center);
         }
 
+        Component.onCompleted: {
+                if (dialog.selectedIndex >= 0) {
+                        view.positionViewAtIndex(selectedIndex, ListView.Center);
+                }
+        }
+
         property Component delegate: Component {
                 id: delegate
                 Rectangle {
