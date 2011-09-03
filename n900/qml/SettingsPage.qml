@@ -47,6 +47,7 @@ Page {
                         width: parent.width
 
                         Label2 {
+                                // TODO: Why is the label cut especially with small sizes ? :(
                                 id: previewLabel
                                 width: parent.width
                                 anchors.horizontalCenter: parent.horizontalCenter
