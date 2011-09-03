@@ -1,12 +1,17 @@
+quran-data.xml originally from http://tanzil.net/wiki/Quran_Metadata but modified
+by me to fix the beginning of some parts.
+
+The original license allows doing whatever with that file.
+
 Obtaining the data files:
 
-1) Main data:
+- Main data:
    - Go to http://tanzil.net/download/
    - Select Uthmani, check everything and XML as the format. Save as quran-uthmani.xml
    - Select Simple Enhanced, check everything and XML as the format. Save as quran-simple-enhanced.xml
 
-2) Metadata:
-   - Get quran-data.xml from http://tanzil.net/wiki/Quran_Metadata and save it here
+- Metadata:
+   Already included now.
 
 Building:
   qmake && make
