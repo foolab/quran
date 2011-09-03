@@ -83,7 +83,6 @@ Dialog {
                 clip: true
                 width: title.width
                 anchors.horizontalCenter: parent.horizontalCenter
-                model: dialog.model
                 delegate: dialog.delegate
                 height: Math.min(contentItem.height, dialog.height * 0.75)
                 Component.onCompleted: parent.anchors.topMargin = 0; // HACK
