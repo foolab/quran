@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 QtObject {
@@ -28,4 +28,5 @@ QtObject {
 //        property string translationBorderTop: "translation-border-top"
         property string translationBorder: "translation-border"
         property string translationBackground: "translation-background"
+        property string navigationBarBackground: translationBackground
 }

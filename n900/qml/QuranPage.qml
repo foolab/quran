@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 Page {
@@ -10,7 +10,10 @@ Page {
         NavigationBar {
                 id: navBar
                 z: 1500
-                y: view.y
+                anchors.top: upper.bottom
+                anchors.bottom: toolBar.top
+                anchors.left: parent.left
+                anchors.right: parent.right
         }
 
         TranslationSelector {
