@@ -61,6 +61,7 @@ Page {
                                                 emptyText.show();
                                                 return;
                                         }
+
                                         var result = _search.search(text);
                                         if (result.length == 0) {
                                                 view.clearModel();
