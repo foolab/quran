@@ -1,3 +1,11 @@
+n900-quran (0.3.4-1) unstable; urgency=low
+
+  * Redesigned the settings page.
+  * Added the ability to jump to a page, verse or part from the index page.
+  * Added the ability to set the font size for translations.
+
+ -- Mohammed Sameer <msameer@debian.org>  Sat, 03 Sep 2011 23:31:50 +0300
+
 n900-quran (0.3.3-1) unstable; urgency=low
 
   * Fixed translation disappearing when er navigate to other pages.
