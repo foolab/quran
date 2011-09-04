@@ -32,7 +32,7 @@ public:
   Bookmarks(Settings *settings, QObject *parent = 0);
   ~Bookmarks();
 
-  Q_INVOKABLE uint serialize(int sura, int aya) const;
+  Q_INVOKABLE static uint serialize(int sura, int aya);
 
   Q_INVOKABLE bool isBookmarked(uint bookmark) const;
 
