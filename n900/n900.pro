@@ -8,3 +8,5 @@ PKGCONFIG += gio-2.0
 SOURCES += main.cpp themeimageprovider.cpp fsmonitor.cpp
 
 HEADERS += themeimageprovider.h fsmonitor.h
+
+LIBS += ../sqlite/.libs/libsqlite3.a
