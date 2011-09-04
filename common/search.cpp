@@ -17,35 +17,35 @@ Search::Search(const QString& path, QObject *parent) : QObject(parent), d_ptr(ne
 }
 
 Search::~Search() {
+  disable();
+
   delete d_ptr; d_ptr = 0;
 }
 
-bool Search::isEnabled() const {
-  return d_ptr->db != 0;
-}
-
-void Search::setEnabled(bool enabled) {
-  if (enabled && !d_ptr->db) {
-    if (sqlite3_open_v2(d_ptr->path.toLocal8Bit().data(),
-			&d_ptr->db, SQLITE_OPEN_READONLY, NULL) != SQLITE_OK) {
-      emit errorOpen();
-    }
-    else {
-      emit changed();
-    }
-  }
-  else if (!enabled && d_ptr->db) {
+void Search::disable() {
+  if (!d_ptr->db) {
     sqlite3_close(d_ptr->db);
     d_ptr->db = 0;
-
-    emit changed();
   }
+}
+
+bool Search::enable() {
+  if (d_ptr->db) {
+    return true;
+  }
+
+
+  if (sqlite3_open_v2(d_ptr->path.toLocal8Bit().data(),
+		      &d_ptr->db, SQLITE_OPEN_READONLY, NULL) != SQLITE_OK) {
+    emit errorOpen();
+    return false;
+  }
+
+  return true;
 }
 
 QVariantList Search::search(const QString& query) {
-  setEnabled(true);
-
-  if (!isEnabled()) {
+  if (!enable()) {
     return QVariantList();
   }
 
