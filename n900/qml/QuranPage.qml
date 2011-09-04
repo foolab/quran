@@ -9,7 +9,7 @@ Page {
 
         NavigationBar {
                 id: navBar
-                z: 1500
+                z: 1000
                 anchors.top: upper.bottom
                 anchors.bottom: toolBar.top
                 anchors.left: parent.left
