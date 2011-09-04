@@ -185,6 +185,7 @@ Page {
                 MenuLayout {
                         MenuItem { text: qsTr("Settings"); onClicked: { menu.close(); showPage("SettingsPage"); } }
 //                        MenuItem { text: qsTr("Help") }
+                        MenuItem { text: qsTr("Search"); onClicked: { menu.close(); showPage("SearchPage"); } }
                         MenuItem { text: qsTr("About"); onClicked: { menu.close(); showPage("AboutPage"); } }
                         MenuItem { text: qsTr("Quit"); onClicked: { menu.close(); Qt.quit(); } }
                 }
