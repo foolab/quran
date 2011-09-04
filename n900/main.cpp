@@ -35,6 +35,7 @@
 #include "downloader.h"
 #include "fsmonitor.h"
 #include "label.h"
+#include "search.h"
 
 #ifndef Q_WS_MAEMO_5
 #include <MDeclarativeCache>
@@ -81,6 +82,8 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
 
   AboutData about;
 
+  Search search(DATA_DIR "/search.db");
+
   qmlRegisterType<DataProvider>();
   qmlRegisterType<Settings>();
   qmlRegisterType<Bookmarks>();
@@ -88,6 +91,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<AboutData>();
   qmlRegisterType<Translations>();
   qmlRegisterType<FSMonitor>();
+  qmlRegisterType<Search>();
   qmlRegisterType<Translation>("Translations", 1, 0, "Translation");
   qmlRegisterType<QuranViewModel>("QuranViewModel", 1, 0, "QuranViewModel");
   qmlRegisterType<Label>("Label2", 1, 0, "Label2");
@@ -117,6 +121,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   view->rootContext()->setContextProperty("_downloader", &downloader);
   view->rootContext()->setContextProperty("_fsmon", &monitor);
   view->rootContext()->setContextProperty("_theme", theme);
+  view->rootContext()->setContextProperty("_search", &search);
 
   if (dev) {
     view->setSource(QUrl::fromLocalFile(QDir::currentPath() + "/main.qml"));
