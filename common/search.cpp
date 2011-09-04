@@ -80,8 +80,8 @@ QVariantList Search::search(const QString& query) {
   QVariantList res;
 
   while (ret == SQLITE_ROW) {
-    int chapter = sqlite3_column_int(stmt, 0) - 1;
-    int verse = sqlite3_column_int(stmt, 1) - 1;
+    int chapter = sqlite3_column_int(stmt, 0);
+    int verse = sqlite3_column_int(stmt, 1);
 
     res << Bookmarks::serialize(chapter, verse);
 
