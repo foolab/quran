@@ -9,6 +9,7 @@ clean:
 	dh_testroot
 
 	-$(MAKE) distclean
+	-$(MAKE) distclean -C sqlite/
 
 	dh_clean
 
@@ -20,6 +21,8 @@ build-stamp:
 	dh_testdir
 
 	qmake
+
+	./build_sqlite.sh
 
 	-$(MAKE)
 
