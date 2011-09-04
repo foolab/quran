@@ -16,6 +16,17 @@ Page {
                 text: qsTr("Failed to open search database.");
         }
 
+        InfoBanner {
+                id: emptyText
+                text: qsTr("Search text needed.");
+        }
+
+
+        InfoBanner {
+                id: noResults
+                text: qsTr("No results found.");
+        }
+
         TitleLabel {
                 id: title
                 width: parent.width
@@ -23,17 +34,15 @@ Page {
                 text: qsTr("Search")
         }
 
-        Connections {
-                target: _search
-                onError: error.show();
-                onErrorOpen: errorOpen.show();
-        }
+        Component.onCompleted: _search.enable();
+        Component.onDestruction: _search.disable();
 
         Component {
                 id: headerDelegate
 
                 Column {
                         spacing: 16
+
                         TextField {
                                 id: query
                                 width: view.width
@@ -48,8 +57,26 @@ Page {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 onClicked: {
                                         var text = query.text;
+                                        if (text.length == 0) {
+                                                emptyText.show();
+                                                return;
+                                        }
                                         var result = _search.search(text);
-                                        view.populate(result);
+                                        if (result.length == 0) {
+                                                view.clearModel();
+                                                noResults.show();
+                                        }
+                                        else if (result[0] == -1) {
+                                                view.clearModel();
+                                                errorOpen.show();
+                                        }
+                                        else if (result[0] == -2) {
+                                                view.clearModel();
+                                                error.show();
+                                        }
+                                        else {
+                                                view.populate(result);
+                                        }
                                 }
                         }
                 }
@@ -137,6 +164,9 @@ Page {
                 section.criteria: ViewSection.FullString
                 section.delegate: sectionDelegate
                 delegate: delegate
+                function clearModel() {
+                        model.clear();
+                }
 
                 function populate(result) {
                         model.populate(result);

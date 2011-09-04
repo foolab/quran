@@ -15,14 +15,12 @@ public:
 
   Q_INVOKABLE QVariantList search(const QString& query);
 
-signals:
-  void errorOpen();
-  void error();
+  Q_INVOKABLE bool enable();
 
-private:
-  bool enable();
+public slots:
   void disable();
 
+private:
   SearchPrivate *d_ptr;
 };
 

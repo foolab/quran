@@ -34,19 +34,22 @@ bool Search::enable() {
     return true;
   }
 
-
   if (sqlite3_open_v2(d_ptr->path.toLocal8Bit().data(),
 		      &d_ptr->db, SQLITE_OPEN_READONLY, NULL) != SQLITE_OK) {
-    emit errorOpen();
     return false;
   }
 
   return true;
 }
 
+/*
+ * First item -1 ? Failed to open
+ * First item -2 ? Failed to search
+ * Empty ? No results
+ */
 QVariantList Search::search(const QString& query) {
   if (!enable()) {
-    return QVariantList();
+    return QVariantList() << -1;
   }
 
   QByteArray s(QUERY);
@@ -61,8 +64,7 @@ QVariantList Search::search(const QString& query) {
 			       );
 
   if (ret != SQLITE_OK) {
-    emit error();
-    return QVariantList();
+    return QVariantList() << -2;
   }
 
   QByteArray q(query.toUtf8());
@@ -70,9 +72,8 @@ QVariantList Search::search(const QString& query) {
   ret = sqlite3_bind_text(stmt, 1, q.constData(), q.size(), SQLITE_STATIC);
 
   if (ret != SQLITE_OK) {
-    emit error();
     sqlite3_finalize(stmt);
-    return QVariantList();
+    return QVariantList() << -2;
   }
 
   ret = sqlite3_step(stmt);
@@ -94,7 +95,5 @@ QVariantList Search::search(const QString& query) {
     return res;
   }
 
-  emit error();
-
-  return QVariantList();
+  return QVariantList() << -2;
 }
