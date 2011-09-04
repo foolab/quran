@@ -154,8 +154,4 @@ Page {
                 rejectButtonText: qsTr("No")
                 onAccepted: _bookmarks.clear();
         }
-
-/*
-  signal scrollTo(int sura, int aya);
-*/
 }
