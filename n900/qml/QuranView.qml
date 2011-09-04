@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 import QuranViewModel 1.0
 import Label2 1.0
