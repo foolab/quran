@@ -6,11 +6,27 @@ Page {
 
         tools: toolBar
 
+        InfoBanner {
+                id: error
+                text: qsTr("Error while searching.");
+        }
+
+        InfoBanner {
+                id: errorOpen
+                text: qsTr("Failed to open search database.");
+        }
+
         TitleLabel {
                 id: title
                 width: parent.width
                 anchors.top: parent.top
                 text: qsTr("Search")
+        }
+
+        Connections {
+                target: _search
+                onError: error.show();
+                onErrorOpen: errorOpen.show();
         }
 
         Component {
