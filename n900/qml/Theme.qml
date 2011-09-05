@@ -24,6 +24,7 @@ QtObject {
         property string downloaded: "downloaded"
         property string add: "add"
         property string clear: "clear"
+        property string close: "close"
 
 //        property string translationBorderTop: "translation-border-top"
         property string translationBorder: "translation-border"
