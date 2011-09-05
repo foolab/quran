@@ -3,7 +3,9 @@
 #include "bookmarks.h"
 #include <QDebug>
 
-#define QUERY "SELECT chapter, verse FROM search WHERE text MATCH ?1 ORDER BY chapter, verse ASC;"
+#define MATCH_PART_QUERY "SELECT chapter, verse FROM search WHERE text LIKE ?1 ORDER BY chapter, verse ASC;"
+
+#define MATCH_ALL_QUERY "SELECT chapter, verse FROM search WHERE text MATCH ?1 ORDER BY chapter, verse ASC;"
 
 class SearchPrivate {
 public:
@@ -47,12 +49,12 @@ bool Search::enable() {
  * First item -2 ? Failed to search
  * Empty ? No results
  */
-QVariantList Search::search(const QString& query) {
+QVariantList Search::search(const QString& query, bool matchWholeWords) {
   if (!enable()) {
     return QVariantList() << -1;
   }
 
-  QByteArray s(QUERY);
+  QByteArray s(matchWholeWords ? MATCH_ALL_QUERY : MATCH_PART_QUERY);
 
   sqlite3_stmt *stmt = NULL;
 
@@ -67,7 +69,13 @@ QVariantList Search::search(const QString& query) {
     return QVariantList() << -2;
   }
 
-  QByteArray q(query.toUtf8());
+  QByteArray q;
+  if (matchWholeWords) {
+    q = query.toUtf8();
+  }
+  else {
+    q = "%" + query.toUtf8() + "%";
+  }
 
   ret = sqlite3_bind_text(stmt, 1, q.constData(), q.size(), SQLITE_STATIC);
 

@@ -13,7 +13,7 @@ public:
   Search(const QString& path, QObject *parent = 0);
   ~Search();
 
-  Q_INVOKABLE QVariantList search(const QString& query);
+  Q_INVOKABLE QVariantList search(const QString& query, bool matchWholeWords);
 
   Q_INVOKABLE bool enable();
 

@@ -51,6 +51,13 @@ Page {
                                 horizontalAlignment: TextInput.AlignRight
                         }
 
+                        CheckBox {
+                                id: matchWhole
+                                text: qsTr("Match whole words only");
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                checked: _settings.searchMatchWholeWords
+                        }
+
                         DialogButton {
                                 id: search
                                 text: qsTr("Search");
@@ -62,7 +69,9 @@ Page {
                                                 return;
                                         }
 
-                                        var result = _search.search(text);
+                                        _settings.searchMatchWholeWords = matchWhole.checked;
+
+                                        var result = _search.search(text, matchWhole.checked);
                                         if (result.length == 0) {
                                                 view.clearModel();
                                                 noResults.show();
