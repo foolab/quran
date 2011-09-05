@@ -50,6 +50,8 @@ class Settings : public QObject {
   Q_PROPERTY(int translationMode READ translationMode WRITE setTranslationMode NOTIFY translationModeChanged);
   Q_PROPERTY(QString defaultTranslation READ defaultTranslation WRITE setDefaultTranslation NOTIFY defaultTranslationChanged);
 
+  Q_PROPERTY(bool searchMatchWholeWords READ searchMatchWholeWords WRITE setSearchMatchWholeWords NOTIFY searchMatchWholeWordsChanged);
+
 public:
   Settings(QObject *parent = 0);
   ~Settings();
@@ -99,6 +101,9 @@ public:
   void setDefaultTranslation(const QString& id);
   QString defaultTranslation() const;
 
+  bool searchMatchWholeWords() const;
+  void setSearchMatchWholeWords(bool match);
+
   // TODO: use or kill
   int y() const;
 
@@ -122,6 +127,7 @@ signals:
   void translationModeChanged();
   void defaultTranslationChanged();
   void translationFontSizeChanged();
+  void searchMatchWholeWordsChanged();
 
 private:
   QSettings *m_settings;

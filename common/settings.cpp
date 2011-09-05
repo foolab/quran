@@ -44,6 +44,8 @@
 #define TRANSLATION_FONT_FAMILY    "Nokia Sans" // TODO: Harmattan
 #define DEFAULT_TRANSLATION_FONT_SIZE       DEFAULT_FONT_SIZE
 
+#define DEFAULT_SEARCH_MATCH_WHOLE_WORDS        true
+
 Q_DECLARE_METATYPE(QList<uint>);
 
 /*!
@@ -249,6 +251,18 @@ void Settings::setTranslationFontSize(int size) {
   if (size != translationFontSize()) {
     m_settings->setValue("General/translationFontSize", size);
     emit translationFontSizeChanged();
+  }
+}
+
+bool Settings::searchMatchWholeWords() const {
+  return m_settings->value("General/searchMatchWholeWords",
+			   DEFAULT_SEARCH_MATCH_WHOLE_WORDS).toBool();
+}
+
+void Settings::setSearchMatchWholeWords(bool match) {
+  if (match != searchMatchWholeWords()) {
+    m_settings->setValue("General/searchMatchWholeWords", match);
+    emit searchMatchWholeWordsChanged();
   }
 }
 
