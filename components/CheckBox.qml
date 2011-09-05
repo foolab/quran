@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 Rectangle {
@@ -23,13 +23,17 @@ Rectangle {
                 width: 60
                 height: 60
                 radius: 10
-                color: "steelblue"
+                color: "lightsteelblue"
+                border.width: 1
+                border.color: "white"
                 smooth: true
                 anchors.verticalCenter: parent.verticalCenter
 
                 Image {
                         anchors.fill: parent
-                        source: checkBox.checked ? "image://theme/widgets_tickmark_list" : ""
+                        // TODO: depends on external stuff
+                        source: checkBox.checked ? "image://theme/" + theme.close : ""
+
                 }
         }
 
