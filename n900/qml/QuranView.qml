@@ -142,6 +142,14 @@ Flickable {
                         property int chapter: -1
                         width: parent ? parent.width : undefined
 
+                        Image {
+                                id: chapterBorderTop
+                                width: parent.width
+                                height: 5
+//                                height: _settings.translationMode != 0 ? 5 : 0
+                                source: "image://theme/" + theme.chapterBorder
+                        }
+
                         Label2 {
                                 id: title
                                 width: parent.width
@@ -149,6 +157,12 @@ Flickable {
                                 font.pointSize: _settings.fontSize
 	                            color: _settings.titleColor
                                 center: true
+
+                                Image {
+                                        anchors.fill: parent
+                                        source: "image://theme/" + theme.chapterBackground
+                                        z: title.z - 1
+                                }
 
                                 function populate() {
                                         if (parent.chapter == -1) {
@@ -174,6 +188,12 @@ Flickable {
                                 center: true
 	                            color: _settings.subtitleColor
 
+                                Image {
+                                        anchors.fill: parent
+                                        source: "image://theme/" + theme.chapterBackground
+                                        z: subtitle.z - 1
+                                }
+
                                 function populate() {
                                         if (parent.chapter == -1) {
                                                 height = 0;
@@ -194,6 +214,14 @@ Flickable {
                                         _settings.textTypeChanged.connect(populate);
                                         populate();
                                 }
+                        }
+
+                        Image {
+                                id: chapterBorderBottom
+                                width: parent.width
+                                height: 5
+//                                height: _settings.translationMode != 0 ? 5 : 0
+                                source: "image://theme/" + theme.chapterBorder
                         }
                 }
         }

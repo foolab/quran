@@ -30,4 +30,7 @@ QtObject {
         property string translationBorder: "translation-border"
         property string translationBackground: "translation-background"
         property string navigationBarBackground: translationBackground
+
+        property string chapterBorder: "chapter-border"
+        property string chapterBackground: translationBackground
 }
