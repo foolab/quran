@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 import Label2 1.0
 
@@ -145,6 +145,14 @@ Page {
                                 selectedIndex: _settings.translationMode
                                 onAccepted: _settings.translationMode = selectedIndex;
                        }
+
+                        SettingsPageEntry {
+                                id: translations
+                                title: qsTr("Manage translations")
+                                onClicked: pageStack.push("TranslationsListPage");
+                                subtitle: _translations.installed.length + qsTr(" installed.");
+                       }
+
 /*
                         SettingsPageEntry {
                                 // TODO:
@@ -185,7 +193,6 @@ Page {
                 id: toolBar
                 ToolBarLayout {
                         ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
-                        ToolButton { icon: theme.translations; onClicked: showPage("TranslationsListPage"); }
                 }
         }
 
