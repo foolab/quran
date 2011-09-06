@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 Rectangle {
@@ -44,7 +44,7 @@ Rectangle {
         MouseArea {
                 id: mouse
                 anchors.fill: parent
-                onClicked: dialog.open();
+                onClicked: entries.length == 0 ? entry.clicked() : dialog.open();
         }
 
         SelectionDialog {
