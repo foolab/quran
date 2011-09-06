@@ -155,10 +155,6 @@ PageStackWindow {
                 }
         }
 
-        function showPage(name, point, now) {
-                pageStack.push(name, point, now);
-        }
-
         Connections {
                 target: _fsmon
                 onAvailableChanged: {

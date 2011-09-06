@@ -186,10 +186,10 @@ Page {
                 id: menu
 
                 MenuLayout {
-                        MenuItem { text: qsTr("Settings"); onClicked: { menu.close(); showPage("SettingsPage"); } }
+                        MenuItem { text: qsTr("Settings"); onClicked: { menu.close(); pageStack.push("SettingsPage"); } }
 //                        MenuItem { text: qsTr("Help") }
-                        MenuItem { text: qsTr("Search"); onClicked: { menu.close(); showPage("SearchPage"); } }
-                        MenuItem { text: qsTr("About"); onClicked: { menu.close(); showPage("AboutPage"); } }
+                        MenuItem { text: qsTr("Search"); onClicked: { menu.close(); pageStack.push("SearchPage"); } }
+                        MenuItem { text: qsTr("About"); onClicked: { menu.close(); pageStack.push("AboutPage"); } }
                         MenuItem { text: qsTr("Quit"); onClicked: { menu.close(); Qt.quit(); } }
                 }
         }
@@ -203,13 +203,13 @@ Page {
                                 width: 60
                                 height: 60
                                 number: _settings.pageNumber
-                                onClicked: showPage("IndexPage");
+                                onClicked: pageStack.push("IndexPage");
                         }
 
                         ToolButton {
                                 icon: theme.favorites
                                 onClicked: {
-                                        showPage(_bookmarks.empty ? "FavoritesPageEmpty" : "FavoritesPage");
+                                        pageStack.push(_bookmarks.empty ? "FavoritesPageEmpty" : "FavoritesPage");
                                 }
                         }
 
