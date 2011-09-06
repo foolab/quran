@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 QtObject {
@@ -19,7 +19,13 @@ QtObject {
         function translationModeChanged() {
                 if (_settings.translationMode != 0) {
                         if (!_translations.loadDefault()) {
-                                translationError.show();
+                                if (_translations.installed.length == 0) {
+                                        noTranslations.show();
+                                }
+                                else {
+                                        translationError.show();
+                                }
+
                                 enabled = false;
                                 return;
                         }

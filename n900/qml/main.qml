@@ -124,6 +124,11 @@ PageStackWindow {
         }
 
         InfoBanner {
+                id: noTranslations
+                text: qsTr("You need to download a translation first");
+        }
+
+        InfoBanner {
                 id: massStorage
                 text: qsTr("Translations cannot be used in mass storage mode.");
         }
