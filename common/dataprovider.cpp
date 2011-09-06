@@ -86,6 +86,14 @@ QString DataProvider::fullSuraName(int sura) {
   return QString("%1 %2").arg(prefix()).arg(suraName(sura));
 }
 
+QString DataProvider::translatedSuraName(int sura) {
+  return QString::fromUtf8(Suras[sura].translation);
+}
+
+QString DataProvider::transliteratedSuraName(int sura) {
+  return QString::fromUtf8(Suras[sura].transliteration);
+}
+
 int DataProvider::pageNumberForSura(int sura) {
   return Suras[sura].page;
 }

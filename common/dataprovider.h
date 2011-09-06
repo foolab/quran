@@ -39,6 +39,8 @@ public:
   Q_INVOKABLE int suraCount();
   Q_INVOKABLE QString suraName(int sura);
   Q_INVOKABLE QString fullSuraName(int sura);
+  Q_INVOKABLE QString translatedSuraName(int sura);
+  Q_INVOKABLE QString transliteratedSuraName(int sura);
   Q_INVOKABLE int pageNumberForSura(int sura);
   Q_INVOKABLE int pageNumberForSuraAndAya(int sura, int aya);
   Q_INVOKABLE QString partName(int page);
