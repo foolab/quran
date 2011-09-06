@@ -32,6 +32,8 @@
 
 struct Sura {
   QString name;
+  QString translation;
+  QString transliteration;
   int start;
   int end;
   int ayas;
@@ -260,13 +262,16 @@ bool readMetaData(char *f) {
     if (reader.isStartElement() && reader.name() == "sura") {
       QXmlStreamAttributes attrs(reader.attributes());
       if (!attrs.hasAttribute("ayas") || !attrs.hasAttribute("start")
-	  || !attrs.hasAttribute("index") || !attrs.hasAttribute("name")) {
+	  || !attrs.hasAttribute("index") || !attrs.hasAttribute("name")
+	  || !attrs.hasAttribute("ename") || !attrs.hasAttribute("tname")) {
 	qCritical() << "Missing attributes for sura";
 	return false;
       }
 
       Sura sura;
       sura.name = attrs.value("name").toString().trimmed();
+      sura.translation = attrs.value("ename").toString().trimmed();
+      sura.transliteration = attrs.value("tname").toString().trimmed();
       sura.index = attrs.value("index").toString().toInt() - 1;
       sura.ayas = attrs.value("ayas").toString().toInt();
       sura.start = attrs.value("start").toString().toInt();
@@ -461,10 +466,12 @@ bool output() {
   puts("  int length;");
   puts("  int page;");
   puts("  const char *name;");
+  puts("  const char *translation;");
+  puts("  const char *transliteration;");
   puts("} Suras[] = {");
   for (int x = 0; x < suras.size(); x++) {
     const Sura& s = suras.at(x);
-    printf("  {%i, %i, %i, \"%s\"},\n", s.index, s.ayas, s.page, encode(s.name).toLatin1().data());
+    printf("  {%i, %i, %i, \"%s\", \"%s\", \"%s\"},\n", s.index, s.ayas, s.page, encode(s.name).toLatin1().data(), encode(s.translation).toLatin1().data(), encode(s.transliteration).toLatin1().data());
   }
   puts("};");
 
