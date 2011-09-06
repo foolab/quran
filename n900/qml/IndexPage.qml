@@ -34,11 +34,13 @@ Page {
                 pageDialog.open();
         }
 
-        function showVerseDialog() {
+        function showVerseDialog(chapter) {
                 if (!verseDialogComponent) {
                         verseDialogComponent = Qt.createComponent("VerseSelectionDialog.qml");
                         verseDialog = verseDialogComponent.createObject(indexPage);
                 }
+
+                verseDialog.chapter = chapter;
 
                 verseDialog.open();
         }
@@ -52,26 +54,21 @@ Page {
 
         Component {
                 id: indexPageDelegate
-                Item {
+
+                IndexPageCell {
+                        id: cell
+                        sura: index
                         width: view.width
-                        height: Math.max(left.height, right.height);
-                        IndexPageCell {
-                                id: left
-                                sura: index + 57
-                                onClicked: {
-                                        pagePosition.setPosition(sura, 0);
-                                        pageStack.pop();
-                                }
+                        onClicked: {
+                                pagePosition.setPosition(sura, 0);
+                                pageStack.pop();
                         }
 
-                        IndexPageCell {
-                                id: right
-                                anchors.left: left.right
-                                sura: index
-                                onClicked: {
-                                        pagePosition.setPosition(sura, 0);
-                                        pageStack.pop();
-                                }
+                        ToolButton {
+                                icon: theme.verse
+                                anchors.left: parent.left
+                                anchors.verticalCenter: parent.verticalCenter
+                                onClicked: showVerseDialog(sura);
                         }
                 }
         }
@@ -79,7 +76,7 @@ Page {
         ListView {
                 id: view
                 clip: true
-                model: _data.suraCount()/2;
+                model: _data.suraCount();
                 anchors.top: title.bottom
                 anchors.left: parent.left
                 anchors.leftMargin: 16
@@ -93,7 +90,6 @@ Page {
                 id: toolBar
                 ToolBarLayout {
                         ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
-                        ToolButton { icon: theme.verse; onClicked: showVerseDialog(); }
                         ToolButton { icon: theme.page; onClicked: showPageDialog(); }
                         ToolButton { icon: theme.part; onClicked: showPartDialog(); }
                 }

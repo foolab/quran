@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 Rectangle {
@@ -36,7 +36,7 @@ Rectangle {
                 id: verse
                 font.pointSize: 24
                 width: parent.width - number.width
-                text: _data.suraName(root.sura);
+                text: _data.fullSuraName(root.sura);
                 font.bold: true
                 anchors.right: number.left
                 anchors.top: parent.top
