@@ -26,6 +26,11 @@ QtObject {
         property string clear: "clear"
         property string close: "close"
 
+        property string page: "page"
+        property string verse: "verse"
+        property string part: "part"
+        property string index: "index"
+
 //        property string translationBorderTop: "translation-border-top"
         property string translationBorder: "translation-border"
         property string translationBackground: "translation-background"

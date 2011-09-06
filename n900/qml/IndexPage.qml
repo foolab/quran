@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 // TODO: use positionViewAtIndex ?
@@ -89,42 +89,13 @@ Page {
                 delegate: indexPageDelegate
         }
 
-        Menu {
-                id: menu
-
-                MenuLayout {
-                        MenuItem {
-                                text: qsTr("Go to part")
-                                onClicked: {
-                                        menu.close();
-                                        showPartDialog();
-                                }
-                        }
-
-                        MenuItem {
-                                text: qsTr("Go to verse (Aya)")
-                                onClicked: {
-                                        menu.close();
-                                        showVerseDialog();
-                                }
-                        }
-
-                        MenuItem {
-                                text: qsTr("Go to page")
-                                onClicked: {
-                                        menu.close();
-                                        showPageDialog();
-                                }
-                        }
-                }
-        }
-
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
                         ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
-
-                        ToolButton { icon: theme.menuIcon; onClicked: menu.open(); }
+                        ToolButton { icon: theme.verse; onClicked: showVerseDialog(); }
+                        ToolButton { icon: theme.page; onClicked: showPageDialog(); }
+                        ToolButton { icon: theme.part; onClicked: showPartDialog(); }
                 }
         }
 }
