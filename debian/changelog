@@ -1,3 +1,12 @@
+n900-quran (0.3.8-1) unstable; urgency=low
+
+  * Really shipping the changes for 0.3.7-1
+  * Added the ability to access index page, goto page and goto part from the search page.
+  * Added the ability to access the search page from the index page.
+  * Added an option to centrally align text.
+
+ -- Mohammed Sameer <msameer@foolab.org>  Wed, 07 Sep 2011 22:36:38 +0300
+
 n900-quran (0.3.7-1) unstable; urgency=low
 
   * Fixes for CSSU 16/Qt 4.7.4
