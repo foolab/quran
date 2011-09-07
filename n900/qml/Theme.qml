@@ -30,6 +30,7 @@ QtObject {
         property string verse: "verse"
         property string part: "part"
         property string index: "index"
+        property string search: "search"
 
 //        property string translationBorderTop: "translation-border-top"
         property string translationBorder: "translation-border"

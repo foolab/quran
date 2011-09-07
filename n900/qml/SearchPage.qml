@@ -6,6 +6,33 @@ Page {
 
         tools: toolBar
 
+        property Component partDialogComponent: null
+        property Item partDialog: null
+
+        property Component pageDialogComponent: null
+        property Item pageDialog: null
+
+        property Component verseDialogComponent: null
+        property Item verseDialog: null
+
+        function showPartDialog() {
+                if (!partDialogComponent) {
+                        partDialogComponent = Qt.createComponent("PartSelectionDialog.qml");
+                        partDialog = partDialogComponent.createObject(searchPage);
+                }
+
+                partDialog.open();
+        }
+
+        function showPageDialog() {
+                if (!pageDialogComponent) {
+                        pageDialogComponent = Qt.createComponent("PageSelectionDialog.qml");
+                        pageDialog = pageDialogComponent.createObject(searchPage);
+                }
+
+                pageDialog.open();
+        }
+
         InfoBanner {
                 id: error
                 text: qsTr("Error while searching.");
@@ -92,6 +119,7 @@ Page {
                 }
         }
 
+        // TODO: merge all those delegates with the favorites page
         Component {
                 id: sectionDelegate
 
@@ -199,6 +227,9 @@ Page {
                 id: toolBar
                 ToolBarLayout {
                         ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
+                        ToolButton { icon: theme.page; onClicked: showPageDialog(); }
+                        ToolButton { icon: theme.part; onClicked: showPartDialog(); }
+                        ToolButton { icon: theme.index; onClicked: pageStack.replace("IndexPage"); }
                 }
         }
 }
