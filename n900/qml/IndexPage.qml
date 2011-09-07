@@ -92,6 +92,7 @@ Page {
                         ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
                         ToolButton { icon: theme.page; onClicked: showPageDialog(); }
                         ToolButton { icon: theme.part; onClicked: showPartDialog(); }
+                        ToolButton { icon: theme.search; onClicked: pageStack.replace("SearchPage"); }
                 }
         }
 }
