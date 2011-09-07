@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 Dialog {
@@ -7,6 +7,7 @@ Dialog {
 
         InfoBanner {
                 id: pageError
+                // TODO: use _formatter for those digits.
                 text: qsTr("Please choose a page between 1 and 604");
                 // TODO: something wrong with the animation
                 parent: parent ? parent : pageDialog

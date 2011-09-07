@@ -1,34 +1,52 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
-Grid {
-	    columns: 3
+Item {
+        id: numPad
+
         width: 180
+        height: 240
 
         signal insert(int val);
         signal backspace
 
-        Repeater {
-                model: 9
+        Row {
+                id: one
+                anchors.top: parent.top
+                width: parent.width
+                NumPadButton {index: 1}
+                NumPadButton {index: 2}
+                NumPadButton {index: 3}
+        }
+
+        Row {
+                id: two
+                anchors.top: one.bottom
+                width: parent.width
+                NumPadButton {index: 4}
+                NumPadButton {index: 5}
+                NumPadButton {index: 6}
+        }
+
+        Row {
+                id: three
+                anchors.top: two.bottom
+                width: parent.width
+                NumPadButton {index: 7}
+                NumPadButton {index: 8}
+                NumPadButton {index: 9}
+        }
+
+        Row {
+                id: four
+                anchors.top: three.bottom
+                width: parent.width
+                NumPadButton {index: 0}
                 Button {
-                        width: parent.width / 3
+                        width: parent.width * (2/3)
                         height: 60
-                        text: _formatter.number(index + 1);
-                        onClicked: insert(index + 1);
+                        text: "<<"
+                        onClicked: numPad.backspace();
                 }
-        }
-
-        Button {
-                width: parent.width / 3
-                height: 60
-                text: _formatter.number(0);
-                onClicked: insert(0);
-        }
-
-        Button {
-                width: (parent.width / 3) * 2
-                height: 60
-                text: "<<"
-                onClicked: backspace();
         }
 }
