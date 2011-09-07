@@ -1,3 +1,12 @@
+n900-quran (0.3.6-1) unstable; urgency=low
+
+  * Navigation bar now has a background that fills the page height to ease tapping.
+  * Added the ability to search partial words.
+  * Theme improvements for the chapter title.
+  * Moved the goto part/page/verse to the toolbar.
+
+ -- Mohammed Sameer <msameer@foolab.org>  Tue, 06 Sep 2011 19:18:46 +0300
+
 n900-quran (0.3.5-1) unstable; urgency=low
 
   * Added full text search support
