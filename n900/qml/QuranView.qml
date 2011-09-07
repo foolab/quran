@@ -242,6 +242,7 @@ Flickable {
                                 font.pointSize: _settings.fontSize
                                 width: parent.width
 	                            color: _settings.verseColor
+                                center: _settings.centerText
 
                                 MouseArea {
                                         anchors.fill: parent
@@ -304,6 +305,7 @@ Flickable {
                                         font.family: _settings.translationFontFamily
                                         font.pointSize: _settings.translationFontSize
 	                                    color: _settings.verseColor
+                                        center: _settings.centerText
 
                                         function resetText() {
                                                 if (col.chapter == -1 || col.verse == -1 ||

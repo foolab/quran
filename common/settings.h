@@ -52,6 +52,8 @@ class Settings : public QObject {
 
   Q_PROPERTY(bool searchMatchWholeWords READ searchMatchWholeWords WRITE setSearchMatchWholeWords NOTIFY searchMatchWholeWordsChanged);
 
+  Q_PROPERTY(bool centerText READ centerText WRITE setCenterText NOTIFY centerTextChanged);
+
 public:
   Settings(QObject *parent = 0);
   ~Settings();
@@ -104,6 +106,9 @@ public:
   bool searchMatchWholeWords() const;
   void setSearchMatchWholeWords(bool match);
 
+  bool centerText() const;
+  void setCenterText(bool center);
+
   // TODO: use or kill
   int y() const;
 
@@ -128,6 +133,7 @@ signals:
   void defaultTranslationChanged();
   void translationFontSizeChanged();
   void searchMatchWholeWordsChanged();
+  void centerTextChanged();
 
 private:
   QSettings *m_settings;

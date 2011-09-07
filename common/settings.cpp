@@ -45,6 +45,7 @@
 #define DEFAULT_TRANSLATION_FONT_SIZE       DEFAULT_FONT_SIZE
 
 #define DEFAULT_SEARCH_MATCH_WHOLE_WORDS        true
+#define DEFAULT_CENTER_TEXT                     false
 
 Q_DECLARE_METATYPE(QList<uint>);
 
@@ -266,6 +267,17 @@ void Settings::setSearchMatchWholeWords(bool match) {
   }
 }
 
+bool Settings::centerText() const {
+  return m_settings->value("General/centerText", DEFAULT_CENTER_TEXT).toBool();
+}
+
+void Settings::setCenterText(bool center) {
+  if (centerText() != center) {
+    m_settings->setValue("General/centerText", center);
+    emit centerTextChanged();
+  }
+}
+
 void Settings::reset() {
   setFullScreen(DEFAULT_FULL_SCREEN);
   setOrientation(DEFAULT_ORIENTATION);
@@ -273,5 +285,6 @@ void Settings::reset() {
   setNumberFormat(DEFAULT_NUMBER_FORMAT);
   setTextType(DEFAULT_TEXT_TYPE);
   setTranslationFontSize(DEFAULT_TRANSLATION_FONT_SIZE);
+  setCenterText(DEFAULT_CENTER_TEXT);
   setY(DEFAULT_Y);
 }

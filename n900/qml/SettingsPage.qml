@@ -4,6 +4,7 @@ import Label2 1.0
 
 // We can't use simple list models because of https://bugreports.qt.nokia.com//browse/QTBUG-16289
 
+        // TODO: Group similar items together ?
 Page {
         id: settingsPage
 
@@ -167,13 +168,18 @@ Page {
                                 subtitle: "TODO";
                         }
 */
-/*
+
                         SettingsPageEntry {
-                                // TODO:
+                                id: textAlignmentEntry
+                                entries: [
+                                QtObject {property string name: qsTr("Automatic") },
+                                QtObject {property string name: qsTr("Center") }
+                                ]
                                 title: qsTr("Text alignment");
-                                subtitle: "TODO";
+                                subtitle: entries[selectedIndex].name;
+                                selectedIndex: _settings.centerText ? 1 : 0;
+                                onAccepted: _settings.centerText = (selectedIndex == 1);
                         }
-*/
 
                         DialogButton {
                                 id: resetSettings;
