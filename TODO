@@ -2,10 +2,6 @@
 * Auto scroll mode.
 * Recitations
 * Translations
-* If you are on a page and select a sura that starts in the same page
-   from the index, we will not scroll to its beginning
-* Better icon and graphics.
-* Index page should have a title and redesigned.
 * Try to get webkit to work and switch to it.
 * Suggestions from http://forum.meego.com/showthread.php?p=26839
 * Save aya/sura/page as PDF/PNG/text
