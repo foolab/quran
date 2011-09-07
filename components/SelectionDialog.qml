@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 Dialog {
@@ -84,7 +84,10 @@ Dialog {
                 width: title.width
                 anchors.horizontalCenter: parent.horizontalCenter
                 delegate: dialog.delegate
-                height: Math.min(contentItem.height, dialog.height * 0.75)
+                // Seems Qt 4.7.4 shipped with CSSU 16 breaks somehow if we calculate the
+                // height in tems of contentItem.height.
+                // height: Math.min(contentItem.height, dialog.height * 0.75)
+                height: currentItem ? Math.min(currentItem.height * count, dialog.height * 0.75) : 0
                 Component.onCompleted: parent.anchors.topMargin = 0; // HACK
         }
 }
