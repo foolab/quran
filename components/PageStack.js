@@ -1,4 +1,4 @@
-// -*- c-mode -*-
+// -*- c -*-
 
 var __cache = {};
 
@@ -25,6 +25,12 @@ function __cacheGet(id) {
   }
 
   return comp;
+}
+
+function replace(page, ignored, immediate) {
+  // TODO: Better implementation
+  pop();
+  push(page, ignored, immediate);
 }
 
 function push(page, ignored, immediate) {
