@@ -30,14 +30,14 @@
 #define DEFAULT_ORIENTATION        1
 #define DEFAULT_TRANSLATION_MODE   0
 
-#define FONT_FAMILY                "Scheherazade"
+#define FONT_FAMILY                "Simplified Naskh"
 #define FONT_MIN_SIZE              16
 #define FONT_MAX_SIZE              48
 #define HIGHLIGHT_COLOR            QColor(163, 218, 244)
 #define TITLE_COLOR                Qt::black
 #define SUBTITLE_COLOR             Qt::black
 #define VERSE_COLOR                Qt::black
-#define FONT_FILE                  "ScheherazadeRegOT.ttf"
+#define FONT_FILE                  "SimplifiedNaskh.ttf"
 
 #define MIN_TRANSLATION_FONT_SIZE  FONT_MIN_SIZE
 #define MAX_TRANSLATION_FONT_SIZE  FONT_MAX_SIZE

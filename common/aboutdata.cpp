@@ -16,6 +16,7 @@
  */
 
 #include "aboutdata.h"
+#include <QStringList>
 
 AboutData::AboutData(QObject *parent) : QObject(parent) {
 
@@ -76,5 +77,10 @@ QString AboutData::transLicense() const {
 }
 
 QString AboutData::contributors() const {
-  return tr("<a href=\"mailto:ayman@aymansmail.co.cc\">Ayman Siddiqui</a>: The default theme.");
+  QStringList list;
+
+  list << tr("<a href=\"mailto:ayman@aymansmail.co.cc\">Ayman Siddiqui</a>: The default theme.");
+  list << tr("<a href=\"mailto:khaledhosny@eglug.org\">Khaled Hosny</a>: Great help with the font.");
+
+  return list.join("<br />");
 }
