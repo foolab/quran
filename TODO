@@ -16,3 +16,12 @@
 * http://talk.maemo.org/showpost.php?p=1079144&postcount=188
 * Use the new logo.
 * Prevent display dimming
+* Arabic vkb to the search page
+* Settings page takes a while to render because of the huge number of
+   dialogs.
+* Painting artifacts when you flick the quran view
+* Make the navbar more opaque ?
+* Theme the buttons
+* theme the sura header and add the translated sura names
+* search feature to search in translations
+* maybe add an option to read out loud the translation with espeak
