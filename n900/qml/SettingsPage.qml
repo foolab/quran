@@ -30,6 +30,14 @@ Page {
                 return arr;
         }
 
+        Menu {
+                id: menu
+
+                MenuLayout {
+                        MenuItem { text: qsTr("Reset settings"); onClicked: { menu.close(); resetDialog.open(); } }
+                }
+        }
+
         Flickable {
                 id: flick
                 clip: true
@@ -179,13 +187,6 @@ Page {
                                 selectedIndex: _settings.centerText ? 1 : 0;
                                 onAccepted: _settings.centerText = (selectedIndex == 1);
                         }
-
-                        DialogButton {
-                                id: resetSettings;
-                                text: qsTr("Reset settings");
-                                onClicked: resetDialog.open();
-                                anchors.horizontalCenter: parent.horizontalCenter
-                        }
                 }
         }
 
@@ -198,6 +199,7 @@ Page {
                 id: toolBar
                 ToolBarLayout {
                         ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
+                        ToolButton { icon: theme.menuIcon; onClicked: menu.open(); }
                 }
         }
 
