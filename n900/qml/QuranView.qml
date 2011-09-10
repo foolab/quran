@@ -372,6 +372,12 @@ Flickable {
                                         height: translation.height > 0 ? 5 : 0
                                         source: "image://theme/" + theme.translationBorder
                                 }
+
+                                Item {
+                                        id: separator
+                                        width: parent.width
+                                        height: translation.height > 0 ? 8 : 0
+                                }
                         }
                 }
         }
