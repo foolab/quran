@@ -119,7 +119,8 @@ Page {
                 }
         }
 
-        // TODO: merge all those delegates with the favorites page
+        // TODO: merge all those delegates with the favorites page and port them to the
+        // C++ Label instead of Button.
         Component {
                 id: sectionDelegate
 
