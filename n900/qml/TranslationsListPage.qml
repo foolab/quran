@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 import Translations 1.0
 
@@ -49,17 +49,13 @@ TranslationsPage {
                 anchors.rightMargin: 16
                 model: _translations.active
                 delegate: translationsDelegate
-                footer: DialogButton {
-                        text: qsTr("Add translation");
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        onClicked: pageStack.push("TranslationLanguageList");
-                }
         }
 
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
                         ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
+                        ToolButton { icon: theme.addTranslation; onClicked: pageStack.push("TranslationLanguageList"); }
 		        }
 		}
 }
