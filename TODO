@@ -1,28 +1,23 @@
-* Use the + and - keys for scrolling.
+* Use the +/- (volume-rocker/up-down-key) keys for scrolling ?
 * Auto scroll mode.
 * Recitations
-* Translations
-* Try to get webkit to work and switch to it.
-* Suggestions from http://forum.meego.com/showthread.php?p=26839
+* Suggestions from http://forum.meego.com/showthread.php?p=26839 Harmattan only).
 * Save aya/sura/page as PDF/PNG/text
 * Copy to the clipboard.
 * Tapping a link in the about page should launch browser/email client.
-* Color tajweed.
-* use volume-rocker/up-down-key for scroling.
+* Color tajweed ?
 * Night mode (White text on a black background).
-* Fix the end of aya mark with ScheherazadeRegOT
-* Multiple fonts
-* Color the QuranPage in light yellow ? http://talk.maemo.org/showpost.php?p=1072287&postcount=115
-* http://talk.maemo.org/showpost.php?p=1079144&postcount=188
+* Fix the end of aya mark with the font.
+* Multiple themes.
+* http://talk.maemo.org/showpost.php?p=1079144&postcount=188 (End of quran do'aa)
 * Use the new logo.
 * Prevent display dimming
-* Arabic vkb to the search page
-* Settings page takes a while to render because of the huge number of
-   dialogs.
+* Arabic vkb to the search page ?
+* Settings page takes a while to render because of the huge number of dialogs.
 * Painting artifacts when you flick the quran view
 * Make the navbar more opaque ?
 * Theme the buttons
 * theme the sura header and add the translated sura names
 * search feature to search in translations
 * maybe add an option to read out loud the translation with espeak
-* Custom colors and background colors.
+* Custom/multiple colors and background colors.
