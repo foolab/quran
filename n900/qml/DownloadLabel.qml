@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 Rectangle {
@@ -17,7 +17,7 @@ Rectangle {
         color: mouse.pressed ? "steelblue" : "white"
 
         width: slider.width + 20 + installed.width + 10
-        height: 100
+        height: Math.max(slider.y + slider.height + 10, 100)
 
         MouseArea {
                 id: mouse
