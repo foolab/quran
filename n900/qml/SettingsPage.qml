@@ -187,6 +187,27 @@ Page {
                                 selectedIndex: _settings.centerText ? 1 : 0;
                                 onAccepted: _settings.centerText = (selectedIndex == 1);
                         }
+
+                        SettingsPageEntry {
+                                id: recitationModeEntry
+                                entries: [
+                                QtObject {property string name: qsTr("Disabled") },
+                                QtObject {property string name: qsTr("Enabled") }
+                                ]
+
+                                title: qsTr("Recitation")
+                                subtitle: entries[_settings.recitationMode].name;
+                                selectedIndex: _settings.recitationMode
+                                onAccepted: _settings.recitationMode = selectedIndex;
+                       }
+
+                        SettingsPageEntry {
+                                id: recitationsEntry
+                                title: qsTr("Show recitations")
+                                onClicked: pageStack.push("RecitationsListPage");
+                                subtitle: _recitations.installed.length + qsTr(" installed.");
+                       }
+
                 }
         }
 
