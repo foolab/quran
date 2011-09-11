@@ -35,12 +35,16 @@ Page {
         function showAddToFavoritesMenu(text, chapter, verse) {
                 addFavorite.bookmark = _bookmarks.serialize(chapter, verse);
                 addFavorite.text = text;
+                addFavorite.chapter = chapter;
+                addFavorite.verse = verse;
                 addFavorite.open();
         }
 
         function showRemoveFromFavoritesMenu(text, chapter, verse) {
                 rmFavorite.bookmark = _bookmarks.serialize(chapter, verse);;
                 rmFavorite.text = text;
+                addFavorite.chapter = chapter;
+                addFavorite.verse = verse;
                 rmFavorite.open();
         }
 
