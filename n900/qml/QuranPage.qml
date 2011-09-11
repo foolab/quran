@@ -20,6 +20,10 @@ Page {
                 id: translationSelector
         }
 
+        RecitationSelector {
+                id: recitationSelector
+        }
+
         QuranPageContextMenu {
                 id: addFavorite
                 label: qsTr("Add to favorites");
@@ -224,6 +228,15 @@ Page {
                                 onEnabledChanged: layout.layout();
 
                                 onClicked: _fsmon.available ? translationSelector.open() : massStorage.show();
+                        }
+
+                        ToolButton {
+                                icon: theme.recitations
+                                enabled: _settings.recitationMode != 0
+
+                                onEnabledChanged: layout.layout();
+
+                                onClicked: _fsmon.available ? recitationSelector.open() : massStorage.show();
                         }
 
                         ToolButton {
