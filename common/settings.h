@@ -54,6 +54,9 @@ class Settings : public QObject {
 
   Q_PROPERTY(bool centerText READ centerText WRITE setCenterText NOTIFY centerTextChanged);
 
+  Q_PROPERTY(int recitationMode READ recitationMode WRITE setRecitationMode NOTIFY recitationModeChanged);
+  Q_PROPERTY(QString defaultRecitation READ defaultRecitation WRITE setDefaultRecitation NOTIFY defaultRecitationChanged);
+
 public:
   Settings(QObject *parent = 0);
   ~Settings();
@@ -109,6 +112,13 @@ public:
   bool centerText() const;
   void setCenterText(bool center);
 
+  int recitationMode() const;
+  void setRecitationMode(int mode);
+
+  void setDefaultRecitation(const QString& id);
+  QString defaultRecitation() const;
+
+
   // TODO: use or kill
   int y() const;
 
@@ -134,6 +144,8 @@ signals:
   void translationFontSizeChanged();
   void searchMatchWholeWordsChanged();
   void centerTextChanged();
+  void recitationModeChanged();
+  void defaultRecitationChanged();
 
 private:
   QSettings *m_settings;

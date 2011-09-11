@@ -47,6 +47,7 @@
 #define DEFAULT_SEARCH_MATCH_WHOLE_WORDS        true
 #define DEFAULT_CENTER_TEXT                     false
 
+#define DEFAULT_RECITATION_MODE             0
 Q_DECLARE_METATYPE(QList<uint>);
 
 /*!
@@ -278,6 +279,28 @@ void Settings::setCenterText(bool center) {
   }
 }
 
+int Settings::recitationMode() const {
+  return m_settings->value("General/recitationMode", DEFAULT_RECITATION_MODE).toInt();
+}
+
+void Settings::setRecitationMode(int mode) {
+  if (mode != recitationMode()) {
+    m_settings->setValue("General/recitationMode", mode);
+    emit recitationModeChanged();
+  }
+}
+
+void Settings::setDefaultRecitation(const QString& id) {
+  if (defaultRecitation() != id) {
+    m_settings->setValue("General/defaultRecitation", id);
+    emit defaultRecitationChanged();
+  }
+}
+
+QString Settings::defaultRecitation() const {
+  return m_settings->value("General/defaultRecitation").toString();
+}
+
 void Settings::reset() {
   setFullScreen(DEFAULT_FULL_SCREEN);
   setOrientation(DEFAULT_ORIENTATION);
@@ -286,5 +309,6 @@ void Settings::reset() {
   setTextType(DEFAULT_TEXT_TYPE);
   setTranslationFontSize(DEFAULT_TRANSLATION_FONT_SIZE);
   setCenterText(DEFAULT_CENTER_TEXT);
+  setRecitationMode(DEFAULT_RECITATION_MODE);
   setY(DEFAULT_Y);
 }
