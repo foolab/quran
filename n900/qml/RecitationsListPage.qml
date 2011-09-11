@@ -49,7 +49,7 @@ Page {
         }
 
         // TODO: Refresh button.
-
+        // TODO: hide list in mass storage mode ?
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
