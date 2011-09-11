@@ -36,6 +36,7 @@
 #include "fsmonitor.h"
 #include "label.h"
 #include "search.h"
+#include "recitations.h"
 
 #ifndef Q_WS_MAEMO_5
 #include <MDeclarativeCache>
@@ -75,6 +76,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   DataProvider data(DATA_DIR "/text/");
 
   Translations translations(USER_DIR "translations/", &downloader, &settings, &data);
+  Recitations recitations(USER_DIR "recitations/", &downloader, &settings, &data);
 
   Bookmarks bookmarks(&settings);
 
@@ -84,6 +86,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
 
   Search search(DATA_DIR "/search.db");
 
+  // TODO: Is this needed ?
   qmlRegisterType<DataProvider>();
   qmlRegisterType<Settings>();
   qmlRegisterType<Bookmarks>();
@@ -122,6 +125,7 @@ M_DECL_EXPORT int main(int argc, char *argv[]) {
   view->rootContext()->setContextProperty("_fsmon", &monitor);
   view->rootContext()->setContextProperty("_theme", theme);
   view->rootContext()->setContextProperty("_search", &search);
+  view->rootContext()->setContextProperty("_recitations", &recitations);
 
   if (dev) {
     view->setSource(QUrl::fromLocalFile(QDir::currentPath() + "/main.qml"));
