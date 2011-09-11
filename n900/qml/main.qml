@@ -144,7 +144,7 @@ PageStackWindow {
 
         InfoBanner {
                 id: massStorage
-                text: qsTr("Translations cannot be used in mass storage mode.");
+                text: qsTr("Cannot be used in mass storage mode.");
         }
 
         InfoBanner {
