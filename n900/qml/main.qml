@@ -128,8 +128,18 @@ PageStackWindow {
         }
 
         InfoBanner {
+                id: recitationError
+                text: qsTr("Failed to load the recitation");
+        }
+
+        InfoBanner {
                 id: noTranslations
                 text: qsTr("You need to download a translation first");
+        }
+
+        InfoBanner {
+                id: noRecitations
+                text: qsTr("You need to install a recitation first");
         }
 
         InfoBanner {
