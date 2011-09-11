@@ -11,6 +11,10 @@ PageStackWindow {
                 id: translationsManager
         }
 
+        RecitationsManager {
+                id: recitationsManager
+        }
+
 	    // TODO: duplicate of Page::isPortrait()
         function isPortrait() {
                 return height > width;
