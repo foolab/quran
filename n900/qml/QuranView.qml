@@ -13,9 +13,6 @@ Flickable {
 
         signal scrollRequest
 
-        signal showAddToFavoritesMenu(string text, int chapter, int verse);
-        signal showRemoveFromFavoritesMenu(string text, int chapter, int verse);
-
         function show() {
                 state = "shown"
         }
@@ -58,19 +55,6 @@ Flickable {
                 if (item) {
                         scrollToItem(item);
                         item = null;
-                }
-        }
-
-        function showMenu(item, chapter, verse) {
-                if (verse == -1 || chapter == -1) {
-                        return;
-                }
-
-                if (_bookmarks.isBookmarked(chapter, verse)) {
-                        showRemoveFromFavoritesMenu(item.text, chapter, verse);
-                }
-                else {
-                        showAddToFavoritesMenu(item.text, chapter, verse);
                 }
         }
 
@@ -235,6 +219,7 @@ Flickable {
                         property int chapter: -1
                         width: parent ? parent.width : undefined
                         property Item translation: null
+                        property Item menu: null
 
                         Label2 {
                                 id: verse
@@ -247,6 +232,8 @@ Flickable {
                                 MouseArea {
                                         anchors.fill: parent
                                         onClicked: {
+                                                col.menu.toggle();
+
                                                 if (_settings.translationMode == 2) {
                                                         col.translation.toggle();
                                                 }
@@ -279,6 +266,25 @@ Flickable {
                                         _settings.numberFormatChanged.connect(populate);
                                         populate();
                                         flick.scrollRequest.connect(scrollRequest);
+                                }
+                        }
+                        QuranPageContextMenu {
+                                id: menu
+                                width: parent.width
+                                verse: col.verse
+                                chapter: col.chapter
+
+                                Component.onCompleted: col.menu = menu;
+
+                                function toggle() {
+                                        if (menu.opacity == 1.0) {
+                                                menu.opacity = 0.0;
+                                                menu,height = 0;
+                                        }
+                                        else {
+                                                menu.opacity = 1.0;
+                                                menu,height = 60;
+                                        }
                                 }
                         }
 

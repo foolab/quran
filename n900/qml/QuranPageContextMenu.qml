@@ -1,34 +1,45 @@
 // -*- qml -*-
 import QtQuick 1.0
-import Label2 1.0
 
-Menu {
+Row {
         id: contextMenu
-        property variant bookmark: 0
+
+        height: 0
         property int chapter: -1
         property int verse: -1
-        property alias text: ayaText.text
-        property alias label: item.text
+        opacity: 0.0
 
-        signal clicked
+        anchors.horizontalCenter: parent.horizontalCenter
 
-        MenuLayout {
-                Rectangle {
-                        width: item.width
-                        height: ayaText.height + 20
+        ToolButton {
+                id: button
+                anchors.verticalCenter: parent.verticalCenter
 
-                        Label2 {
-                                id: ayaText
-                                width: parent.width - 40
-                                font.pointSize: 26
-                                font.family: _settings.fontFamily
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.verticalCenter: parent.verticalCenter
+                Connections {
+                        target: _bookmarks
+                        onBookmarkAdded: button.resetIcon();
+                        onBookmarkRemoved: button.resetIcon();
+                        onCleared: button.resetIcon();
+                }
+
+                icon: _bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? theme.favoritesRemove : theme.favoritesAdd
+
+                function resetIcon() {
+                        if (_bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse)) {
+                                icon = theme.favoritesRemove;
+                        }
+                        else {
+                                icon = theme.favoritesAdd;
                         }
                 }
 
-                MenuItem { id: item; onClicked: contextMenu.clicked(); }
-                // TODO: mass storage mode.
-                MenuItem { text: _recitations.installed.length == 0 ? "" : qsTr("Recite"); onClicked: { _recitations.play(contextMenu.chapter, contextMenu.verse); contextMenu.close(); } }
+                onClicked: { _bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? _bookmarks.remove(contextMenu.chapter, contextMenu.verse) : _bookmarks.add(contextMenu.chapter, contextMenu.verse); }
+        }
+
+        ToolButton {
+                anchors.verticalCenter: parent.verticalCenter
+                icon: theme.recitations
+                // TODO:
+                onClicked: _recitations.play(contextMenu.chapter, contextMenu.verse);
         }
 }
