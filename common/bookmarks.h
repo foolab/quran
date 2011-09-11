@@ -48,6 +48,8 @@ public:
 public slots:
   void add(uint bookmark);
   void remove(uint bookmark);
+  void add(int sura, int aya);
+  void remove(int sura, int aya);
   void removeByIndex(int index);
   void clear();
 

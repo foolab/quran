@@ -92,6 +92,14 @@ void Bookmarks::remove(uint bookmark) {
   }
 }
 
+void Bookmarks::add(int sura, int aya) {
+  add(serialize(sura, aya));
+}
+
+void Bookmarks::remove(int sura, int aya) {
+  remove(serialize(sura, aya));
+}
+
 QVariantList Bookmarks::bookmarks() const {
   QVariantList list;
 
