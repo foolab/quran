@@ -39,7 +39,7 @@ Row {
         ToolButton {
                 anchors.verticalCenter: parent.verticalCenter
                 icon: theme.recitations
-                // TODO:
+                enabled: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.play(contextMenu.chapter, contextMenu.verse);
         }
 }
