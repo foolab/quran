@@ -53,6 +53,7 @@ void Translations::setCurrent(int tid) {
 }
 
 void Translations::unload() {
+  // TODO: what to do with current ?
   m_data->setSecondaryText(0);
 }
 
