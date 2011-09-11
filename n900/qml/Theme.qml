@@ -33,6 +33,9 @@ QtObject {
         property string search: "search"
         property string addTranslation: "add-translation"
 
+        property string recitations: "recitations"
+        property string addRecitation: "add-recitation"
+
 //        property string translationBorderTop: "translation-border-top"
         property string translationBorder: "translation-border"
         property string translationBackground: "translation-background"
