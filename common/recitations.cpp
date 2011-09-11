@@ -76,6 +76,8 @@ bool Recitations::load(int id) {
 
   m_current = id;
 
+  m_settings->setDefaultRecitation(m_recitation->id());
+
   emit currentChanged();
 
   return true;
