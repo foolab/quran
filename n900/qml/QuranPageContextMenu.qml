@@ -4,10 +4,9 @@ import QtQuick 1.0
 Row {
         id: contextMenu
 
-        height: 0
         property int chapter: -1
         property int verse: -1
-        opacity: 0.0
+        visible: false
 
         anchors.horizontalCenter: parent.horizontalCenter
 
@@ -34,6 +33,12 @@ Row {
                 }
 
                 onClicked: { _bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? _bookmarks.remove(contextMenu.chapter, contextMenu.verse) : _bookmarks.add(contextMenu.chapter, contextMenu.verse); }
+        }
+
+        ToolButton {
+                icon: theme.translations
+                enabled: _settings.translationMode == 2 && _fsmon.available
+                onClicked: translation.shown = !translation.shown;
         }
 
         ToolButton {
