@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 Page {
@@ -15,7 +15,7 @@ Page {
 
         Label {
                 id: error
-                text: qsTr("No favorites. Long tap on a verse to add or remove favorites")
+                text: qsTr("No favorites added.\nTap on a verse then tap the star button to add or remove favorites")
                 anchors.left: parent.left
                 anchors.leftMargin: 16
                 anchors.right: parent.right
@@ -24,6 +24,7 @@ Page {
                 anchors.topMargin: 26
                 width: parent.width
                 font.pixelSize: 26
+                horizontalAlignment: Text.AlignHCenter
         }
 
         ToolBar {
