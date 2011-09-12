@@ -3,9 +3,13 @@ import QtQuick 1.0
 import QuranViewModel 1.0
 import Label2 1.0
 
+import "QuranView.js" as QV
+
+
 Flickable {
         id: flick
         clip: true
+        width: parent.width
 
         property int page: -1
 
@@ -74,41 +78,14 @@ Flickable {
         }
 
         function scrollToItem(iten) {
-                var upper = flick.mapFromItem(item, 0, item.y).y;
-                var lower = flick.mapFromItem(item, 0, item.y + item.height).y;
-
-                // Let's reset here. We have multiple exit points.
-                pagePosition.reset();
-
-                if (upper >= flick.contentY && lower <= flick.contentY + flick.height) {
-                        // Nothing.
-                        return;
-                }
-                else if (lower <= flick.contentY + flick.height) {
-                        // Topmost part is not visible.
-                        // We will scroll anyway and make it visible.
-                        animation.run(upper);
-                        return;
-                }
-
-                if (lower - upper > flick.height) {
-                        // The line will not fit no matter what we do.
-                        // Just show the upper part.
-                        animation.run(upper);
-                        return;
-                }
-
-                // Our line will fit the view. We need to scroll until the bottommost part
-                // is just visible.
-                var part = upper + (lower - (upper + flick.height));
-                animation.run(part);
+                QV.scrollToItem(item);
         }
 
         onPageChanged: {
                 if (page != -1) {
                         model.page = page;
                         model.populate();
-                        column.populate();
+                        QV.populate(column);
                         scrollRequest();
                 }
         }
@@ -122,15 +99,22 @@ Flickable {
 
         Component {
                 id: chapterDelegate
+
                 Column {
                         property int chapter: -1
+                        onChapterChanged: populate();
+
+                        function populate() {
+                                title.populate();
+                                subtitle.populate();
+                        }
+
                         width: parent ? parent.width : undefined
 
                         Image {
                                 id: chapterBorderTop
                                 width: parent.width
                                 height: 5
-//                                height: _settings.translationMode != 0 ? 5 : 0
                                 source: "image://theme/" + theme.chapterBorder
                         }
 
@@ -158,10 +142,7 @@ Flickable {
                                         text = _data.fullSuraName(parent.chapter);
                                 }
 
-                                Component.onCompleted: {
-                                        parent.chapterChanged.connect(populate);
-                                        populate();
-                                }
+                                Component.onCompleted: populate();
                         }
 
                         Label2 {
@@ -194,7 +175,6 @@ Flickable {
                                 }
 
                                 Component.onCompleted: {
-                                        parent.chapterChanged.connect(populate);
                                         _settings.textTypeChanged.connect(populate);
                                         populate();
                                 }
@@ -212,203 +192,54 @@ Flickable {
 
         Component {
                 id: verseDelegate
-
                 Column {
                         id: col
-                        property int verse: -1
                         property int chapter: -1
-                        width: parent ? parent.width : undefined
-                        property Item translation: null
-                        property Item menu: null
+                        property int verse: -1
+                        width: parent.width
 
-                        Label2 {
-                                id: verse
-                                font.family: _settings.fontFamily
-                                font.pointSize: _settings.fontSize
-                                width: parent.width
-	                            color: _settings.verseColor
-                                center: _settings.centerText
+                        QuranVerseLabel {
+                                id: label
+                                chapter: col.chapter
+                                verse: col.verse
 
-                                MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: {
-                                                col.menu.toggle();
-
-                                                if (_settings.translationMode == 2) {
-                                                        col.translation.toggle();
-                                                }
+                                onClicked: {
+                                        menu.visible = !menu.visible
+                                        if (!menu.visible && _settings.translationMode == 2) {
+                                                translation.shown = false;
                                         }
-
-                                        onPressAndHold: showMenu(verse, col.chapter, col.verse)
-                                }
-
-                                function populate() {
-                                        if (parent.chapter == -1 || parent.verse == -1) {
-                                                return;
-                                        }
-
-                                        text = _data.text(parent.chapter, parent.verse)
-                                        + " (" + _formatter.number(parent.verse + 1) + ")";
                                 }
 
                                 function scrollRequest() {
                                         if (pagePosition.isValid() &&
-                                        pagePosition.sura == parent.chapter &&
-                                        pagePosition.aya == parent.verse) {
-                                                flick.item = verse;
+                                            pagePosition.sura == chapter &&
+                                            pagePosition.aya == verse) {
+                                                flick.item = label;
                                         }
                                 }
 
                                 Component.onCompleted: {
-                                        parent.chapterChanged.connect(populate);
-                                        parent.verseChanged.connect(populate);
-                                        _settings.textTypeChanged.connect(populate);
-                                        _settings.numberFormatChanged.connect(populate);
-                                        populate();
                                         flick.scrollRequest.connect(scrollRequest);
                                 }
                         }
+
                         QuranPageContextMenu {
                                 id: menu
                                 width: parent.width
                                 verse: col.verse
                                 chapter: col.chapter
-
-                                Component.onCompleted: col.menu = menu;
-
-                                function toggle() {
-                                        if (menu.opacity == 1.0) {
-                                                menu.opacity = 0.0;
-                                                menu,height = 0;
-                                        }
-                                        else {
-                                                menu.opacity = 1.0;
-                                                menu,height = 60;
-                                        }
-                                }
                         }
 
-                        Column {
-                                id: translationContainer
-                                width: parent.width
-
-                                Image {
-                                        id: borderTop
-                                        width: parent.width
-                                        height: translation.height > 0 ? 5 : 0
-                                        source: "image://theme/" + theme.translationBorder
-                                }
-
-                                Label2 {
-                                        id: translation
-                                        Image {
-                                                anchors.fill: parent
-                                                source: "image://theme/" + theme.translationBackground
-                                                z: translation.z - 1
-                                        }
-
-                                        width: parent.width
-                                        font.family: _settings.translationFontFamily
-                                        font.pointSize: _settings.translationFontSize
-	                                    color: _settings.verseColor
-                                        center: _settings.centerText
-
-                                        function resetText() {
-                                                if (col.chapter == -1 || col.verse == -1 ||
-                                                    !translationsManager.enabled ||
-                                                    _settings.translationMode != 1) {
-                                                        clearText();
-                                                        return;
-                                                }
-
-                                                addText();
-                                        }
-
-                                        function toggle() {
-                                                if (height == 0) {
-                                                        addText();
-                                                }
-                                                else {
-                                                        clearText();
-                                                }
-                                        }
-
-                                        function clearText() {
-                                                text = "";
-                                                height = 0;
-                                        }
-
-                                        function addText() {
-                                                height = undefined;
-                                                text = _data.secondaryText(col.chapter, col.verse);
-                                        }
-
-                                        MouseArea {
-                                                anchors.fill: parent
-                                                onClicked: {
-                                                        if (_settings.translationMode == 2) {
-                                                                translation.toggle();
-                                                        }
-                                                }
-
-                                                onPressAndHold: showMenu(verse, col.chapter, col.verse);
-                                        }
-
-                                        Connections {
-                                                target: translationsManager
-                                                onEnabledChanged: translation.resetText();
-                                        }
-
-                                        Connections {
-                                                target: col
-                                                onVerseChanged: translation.resetText();
-                                                onChapterChanged: translation.resetText();
-                                        }
-
-                                        Component.onCompleted: {
-                                                col.translation = translation;
-                                                _settings.defaultTranslationChanged.connect(resetText);
-                                                resetText();
-                                        }
-                                }
-
-                                Image {
-                                        id: borderBottom
-                                        width: parent.width
-                                        height: translation.height > 0 ? 5 : 0
-                                        source: "image://theme/" + theme.translationBorder
-                                }
-
-                                Item {
-                                        id: separator
-                                        width: parent.width
-                                        height: translation.height > 0 ? 8 : 0
-                                }
+                        QuranTranslationLabel {
+                                id: translation
+                                chapter: col.chapter
+                                verse: col.verse
                         }
                 }
         }
 
         Column {
                 id: column
-                width: parent ? parent.width : undefined
-
-                function populate() {
-                        var chapters = model.chapters();
-                        for (var x = 0; x < chapters.length; x++) {
-                                var chapter = chapters[x];
-                                var verses = model.verses(chapters[x]);
-                                if (verses[0] == 0) {
-                                        var item = chapterDelegate.createObject(column);
-                                        item.chapter = chapter;
-                                }
-
-                                for (var i = 0; i < verses.length; i++) {
-                                        var verse = verses[i];
-                                        var item = verseDelegate.createObject(column);
-                                        item.chapter = chapter;
-                                        item.verse = verse;
-                                }
-                        }
-                }
+                width: parent.width
         }
 }
