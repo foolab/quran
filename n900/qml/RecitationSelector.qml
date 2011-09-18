@@ -1,7 +1,6 @@
 // -*- qml -*-
 import QtQuick 1.0
 
-// TODO:
 SelectionDialog {
         id: dialog
 
