@@ -1,8 +1,8 @@
 /* c-mode */
 
 function scrollToItem(iten) {
-  var upper = flick.mapFromItem(item, 0, item.y).y;
-  var lower = flick.mapFromItem(item, 0, item.y + item.height).y;
+  var upper = flick.mapFromItem(item, 0, item.y).y + flick.contentY;
+  var lower = flick.mapFromItem(item, 0, item.y + item.height).y + flick.contentY;
 
   // Let's reset here. We have multiple exit points.
   pagePosition.reset();
@@ -28,6 +28,7 @@ function scrollToItem(iten) {
   // Our line will fit the view. We need to scroll until the bottommost part
   // is just visible.
   var part = upper + (lower - (upper + flick.height));
+
   animation.run(part);
 }
 
