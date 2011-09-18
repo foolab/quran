@@ -28,9 +28,15 @@ function __cacheGet(id) {
 }
 
 function replace(page, ignored, immediate) {
-  // TODO: Better implementation
-  pop();
+  if (__stack.length == 0) {
+    console.log("Empty PageStack. Replace cannot be used..");
+    return;
+  }
+
+  var obj = __stack.pop();
+  obj.state = "disabled";
   push(page, ignored, immediate);
+  obj.destroy(150);
 }
 
 function push(page, ignored, immediate) {
