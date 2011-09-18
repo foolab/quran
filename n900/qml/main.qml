@@ -151,6 +151,15 @@ PageStackWindow {
                 id: translations
         }
 
+        InfoBanner {
+                id: playerError
+        }
+
+        Connections {
+                target: _recitations
+                onError: { playerError.text = msg; playerError.show(); }
+        }
+
         Connections {
                 target: _translations
                 onInstalled: {
