@@ -9,7 +9,9 @@ import "QuranView.js" as QV
 Flickable {
         id: flick
         clip: true
-        width: parent.width
+        width: parent ? parent.width : undefined
+
+//        interactive: !_recitations.isPlaying
 
         property int page: -1
 
@@ -196,7 +198,7 @@ Flickable {
                         id: col
                         property int chapter: -1
                         property int verse: -1
-                        width: parent.width
+                        width: parent ? parent.width : undefined
 
                         QuranVerseLabel {
                                 id: label
