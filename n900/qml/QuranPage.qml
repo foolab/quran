@@ -7,6 +7,14 @@ Page {
         id: quranPage
         tools: toolBar
 
+        Connections {
+                target: _recitations
+                onPositionChanged: {
+                        _settings.pageNumber = _data.pageNumberForSuraAndAya(chapter, verse);
+                        pagePosition.setPosition(chapter, verse);
+                }
+        }
+
         NavigationBar {
                 id: navBar
                 z: 1000
@@ -14,6 +22,7 @@ Page {
                 anchors.bottom: toolBar.top
                 anchors.left: parent.left
                 anchors.right: parent.right
+//                visible: !_recitations.isPlaying
         }
 
         TranslationSelector {
