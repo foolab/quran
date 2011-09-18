@@ -45,11 +45,11 @@ Rectangle {
         transitions: [
         Transition {
                 from: "shown"; to: "hidden"
-                PropertyAnimation { properties: "opacity"; duration: 500 }
+                PropertyAnimation { properties: "opacity"; duration: 100 }
         },
         Transition {
                 from: "hidden"; to: "shown"
-                PropertyAnimation { properties: "opacity"; duration: 500 }
+                PropertyAnimation { properties: "opacity"; duration: 100 }
         }
         ]
 }

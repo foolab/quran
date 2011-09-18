@@ -69,7 +69,7 @@ function pop() {
 
   obj.state = "hidden";
 
-  obj.destroy(1000);
+  obj.destroy(150);
 
   __stack[__stack.length - 1].state = "shown";
 
