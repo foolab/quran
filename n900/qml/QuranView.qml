@@ -204,6 +204,7 @@ Flickable {
                                 id: label
                                 chapter: col.chapter
                                 verse: col.verse
+                                color: _recitations.chapter == chapter && _recitations.verse == verse ? "red" : _settings.verseColor
 
                                 onClicked: {
                                         menu.visible = !menu.visible
