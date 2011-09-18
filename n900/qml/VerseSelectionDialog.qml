@@ -21,7 +21,7 @@ SelectionDialog {
                         var len = _data.suraSize(dialog.chapter);
 
                         for (var x = 0; x < len; x++) {
-                                append({"verse": x, "name": x + 1});
+                                append({"verse": x, "name": _formatter.number(x + 1)});
                         }
                 }
         }
