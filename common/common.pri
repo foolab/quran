@@ -12,7 +12,7 @@ MOBILITY = multimedia sensors
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/
 
-DEFINES += VERSION=\\\"0.3.10\\\" DATA_DIR=\\\"/usr/share/n900-quran/\\\"
+DEFINES += VERSION=\\\"0.4.0\\\" DATA_DIR=\\\"/usr/share/n900-quran/\\\"
 
 SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quranviewmodel.cpp \
            position.cpp aboutdata.cpp logoprovider.cpp windowcontroller.cpp \
