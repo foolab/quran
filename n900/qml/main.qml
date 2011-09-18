@@ -1,7 +1,5 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
-
-// TODO: Depends on qtquickcompat
 
 PageStackWindow {
         id: root

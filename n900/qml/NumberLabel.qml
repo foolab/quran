@@ -1,4 +1,4 @@
-// -*- qml-mode -*-
+// -*- qml -*-
 import QtQuick 1.0
 
 // HACK: Seems the only way to listen to _settings.numberFormat is to alias it to a property!
