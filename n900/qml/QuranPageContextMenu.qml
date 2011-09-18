@@ -47,4 +47,25 @@ Row {
                 enabled: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.play(contextMenu.chapter, contextMenu.verse);
         }
+
+        ToolButton {
+                id: playPage
+                icon: theme.playPage
+                enabled: _settings.recitationMode != 0 && _fsmon.available
+                onClicked: _recitations.playPage(_settings.pageNumber);
+        }
+
+        ToolButton {
+                id: playChapter
+                icon: theme.playChapter
+                enabled: _settings.recitationMode != 0 && _fsmon.available
+                onClicked: _recitations.playChapter(contextMenu.chapter);
+        }
+
+        ToolButton {
+                id: stop
+                icon: theme.stop
+                onClicked: _recitations.stop();
+                enabled: _recitations.isPlaying
+        }
 }
