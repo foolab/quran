@@ -1,3 +1,11 @@
+n900-quran (0.4.0-1) unstable; urgency=low
+
+  * Fixed clipping with long translation names.
+  * Support for recitations.
+  * Speed up the page transitions.
+
+ -- Mohammed Sameer <msameer@foolab.org>  Mon, 19 Sep 2011 00:18:18 +0300
+
 n900-quran (0.3.10-1) unstable; urgency=low
 
   * Moved the add translation button to the toolbar
