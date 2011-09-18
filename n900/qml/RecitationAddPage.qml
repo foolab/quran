@@ -13,7 +13,43 @@ Page {
                 text: qsTr("Howto install recitations")
         }
 
-        // TODO:
+        Flickable {
+                id: flick
+                width: parent.width
+
+                clip: true
+
+                anchors.top: title.bottom
+                anchors.topMargin: 16
+                anchors.bottom: toolBar.top
+                anchors.bottomMargin: 16
+                anchors.left: parent.left
+                anchors.leftMargin: 16
+                anchors.right: parent.right
+                anchors.rightMargin: 16
+
+                contentHeight: col.height
+
+                Column {
+                        id: col
+                        width: parent.width
+
+                        Label {
+                                id: help
+                                width: parent.width
+                                text: "<b>To install a recitation:</b><ul><li>Go to <a href='http://zekr.org/resources.html#recitation'>recitations download page</a> and download an offline recitation</li>                <li>Extract the downloaded zip file. It will create a <i>recitation.properties</i> file and a directory</li><li>Connect your N900 to your PC in <i>mass storage mode</i></li><li>Create a folder on the device underneath <i>.n900-quran/recitations/</i></li><li>Copy the result of the zip file extraction to the newly created directory</li><li>Restart this application.</li></ul><br />"
+
+                                onLinkActivated: Qt.openUrlExternally(link);
+                        }
+
+                        Label {
+                                id: helpAdvanced
+                                width: parent.width
+                                text: "<b>Create a recitation:</b><ul><li>Follow the zekr recitations naming convention and format</li><li>All mp3 files should be placed in a directpry underneath <i>.n900-quran/recitations/</i></li><li>Put a file called <i>info.ini</i> with the mp3 files and include the following content:<br />[recitation]<br />name=&lt;a unique name to identify the recitation&gt;</li><li>Restart the application</li></ul>"
+                        }
+                }
+        }
+
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
