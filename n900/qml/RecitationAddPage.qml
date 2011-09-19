@@ -45,7 +45,7 @@ Page {
                         Label {
                                 id: helpAdvanced
                                 width: parent.width
-                                text: "<b>Create a recitation:</b><ul><li>Follow the zekr recitations naming convention and format</li><li>All mp3 files should be placed in a directpry underneath <i>.n900-quran/recitations/</i></li><li>Put a file called <i>info.ini</i> with the mp3 files and include the following content:<br />[recitation]<br />name=&lt;a unique name to identify the recitation&gt;</li><li>Restart the application</li></ul>"
+                                text: "<b>Create a recitation:</b><ul><li>Follow the zekr recitations naming convention and format</li><li>All mp3 files should be placed in a directoryy underneath <i>.n900-quran/recitations/</i></li><li>Put a file called <i>info.ini</i> with the mp3 files and include the following content:<br />[recitation]<br />name=&lt;a unique name to identify the recitation&gt;</li><li>Restart the application</li></ul>"
                         }
                 }
         }
