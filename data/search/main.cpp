@@ -21,7 +21,11 @@
 #include <QDebug>
 #include <QFile>
 #include <QStringList>
-#include "../../sqlite/sqlite3.h"
+#ifndef Q_WS_MAEMO_5
+#include <sqlite3.h>
+#else
+#include "../sqlite/sqlite3.h"
+#endif
 
 #define QUERY "insert into search values(?1, ?2, ?3);"
 

@@ -44,9 +44,13 @@
 #define M_DECL_EXPORT
 #endif
 
+#ifndef Q_WS_MAEMO_5
+#define USER_DIR "/home/user/MyDocs/.n9-quran/"
+#else
 #define USER_DIR "/home/user/MyDocs/.n900-quran/"
+#endif
 
-M_DECL_EXPORT int main(int argc, char *argv[]) {
+Q_DECL_EXPORT int main(int argc, char *argv[]) {
 #ifndef Q_WS_MAEMO_5
   QApplication *app = MDeclarativeCache::qApplication(argc, argv);
   app->setProperty("NoMStyle", true);

@@ -1,8 +1,13 @@
 include(../common/common.pri)
 
+TARGET = n9-quran
+
 QT += declarative
 
-CONFIG += qdeclarative-boostable
+CONFIG += link_pkgconfig
 
-SOURCES += main.cpp quranview.cpp imageprovider.cpp
-HEADERS += quranview.h imageprovider.h
+PKGCONFIG += qmsystem2 qdeclarative-boostable libresourceqt1 sqlite3
+
+SOURCES += fsmonitor.cpp audiopolicy.cpp
+
+HEADERS += fsmonitor.h audiopolicy.h

@@ -1,5 +1,9 @@
 #include "search.h"
+#ifndef Q_WS_MAEMO_5
+#include <sqlite3.h>
+#else
 #include "../sqlite/sqlite3.h"
+#endif
 #include "bookmarks.h"
 #include <QDebug>
 
