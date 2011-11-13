@@ -19,11 +19,13 @@ Dialog {
                         return;
                 }
 
-                view.positionViewAtIndex(selectedIndex, ListView.Center);
+                if (selectedIndex != -1) {
+                        view.positionViewAtIndex(selectedIndex, ListView.Center);
+                }
         }
 
         Component.onCompleted: {
-                if (dialog.selectedIndex >= 0) {
+                if (dialog.selectedIndex != -1) {
                         view.positionViewAtIndex(selectedIndex, ListView.Center);
                 }
         }
