@@ -43,7 +43,7 @@ public:
       return 0;
     }
 
-    QString name = QSettings(path, QSettings::IniFormat).value("recitation/name").toString();
+    QString name = QString::fromUtf8(QSettings(path, QSettings::IniFormat).value("recitation/name").toByteArray());
     if (name.isEmpty()) {
       return 0;
     }
