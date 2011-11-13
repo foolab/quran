@@ -119,7 +119,6 @@ private:
 
   Fragment(int index) : m_index(index) {}
 
-  // TODO: cannot be const
   int m_index;
 };
 
