@@ -118,7 +118,7 @@ bool Recitations::load(int id) {
     m_player->setPlaylist(m_playlist);
   }
 
-  m_player->stop();
+  stop();
 
   QObject::connect(m_player, SIGNAL(error(QMediaPlayer::Error)),
 		   this, SLOT(playerError()));
