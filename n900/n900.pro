@@ -13,4 +13,6 @@ SOURCES += fsmonitor.cpp audiopolicy.cpp
 
 HEADERS += fsmonitor.h audiopolicy.h
 
+DEFINES += DATA_DIR=\\\"/usr/share/n900-quran/\\\"
+
 LIBS += ../sqlite/.libs/libsqlite3.a

@@ -40,6 +40,11 @@
 
 #ifndef Q_WS_MAEMO_5
 #include <MDeclarativeCache>
+#include <MApplication>
+#include <MApplicationWindow>
+#include <MApplicationPage>
+#include <MPannableViewport>
+#include <MPositionIndicator>
 #else
 #define M_DECL_EXPORT
 #endif
@@ -52,8 +57,7 @@
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
 #ifndef Q_WS_MAEMO_5
-  QApplication *app = MDeclarativeCache::qApplication(argc, argv);
-  app->setProperty("NoMStyle", true);
+  MApplication *app = new MApplication(argc, argv);
 #else
   // PR 1.3 Qt hildon style will crash when we are launched in portrait mode.
   // We don't use Qt so we choose an arbitrary style.
@@ -64,7 +68,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   bool dev = false;
   for (int x = 0; x < argc; x++) {
-    if (QLatin1String("-dev") == QLatin1String(argv[x])) {
+    if (QLatin1String("-quran-dev") == QLatin1String(argv[x])) {
       dev = true;
       break;
     }
@@ -90,7 +94,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   Search search(DATA_DIR "/search.db");
 
-  // TODO: Is this needed ?
+  // TODO: Is all this needed ?
   qmlRegisterType<DataProvider>();
   qmlRegisterType<Settings>();
   qmlRegisterType<Bookmarks>();
@@ -104,56 +108,72 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<Label>("Label2", 1, 0, "Label2");
 
 #ifndef Q_WS_MAEMO_5
-  QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
+  MApplicationWindow *view = new MApplicationWindow;
+  view->setRoundedCornersEnabled(false);
+  MApplicationPage *page = new MApplicationPage();
+  page->setPannable(false);
+  page->appear();
+  page->pannableViewport()->positionIndicator()->hide();
+  QDeclarativeEngine *engine = new QDeclarativeEngine;
 #else
   QDeclarativeView *view = new QDeclarativeView;
   view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+  QDeclarativeEngine *engine = view->engine();
 #endif
+
+  QDeclarativeContext *rootContext = engine->rootContext();
 
   view->setWindowTitle(QObject::tr("Holy Quran"));
 
-  QObject::connect(view->engine(), SIGNAL(quit()), app, SLOT(quit()));
+  QObject::connect(engine, SIGNAL(quit()), app, SLOT(quit()));
 
   ThemeImageProvider *theme = new ThemeImageProvider(DATA_DIR "/themes/");
 
-  view->engine()->addImageProvider("quran", new LogoProvider);
-  view->engine()->addImageProvider("theme", theme);
+  engine->addImageProvider("quran", new LogoProvider);
+  engine->addImageProvider("theme", theme);
 
-  view->rootContext()->setContextProperty("_settings", &settings);
-  view->rootContext()->setContextProperty("_data", &data);
-  view->rootContext()->setContextProperty("_bookmarks", &bookmarks);
-  view->rootContext()->setContextProperty("_formatter", &formatter);
-  view->rootContext()->setContextProperty("_about", &about);
-  view->rootContext()->setContextProperty("_translations", &translations);
-  view->rootContext()->setContextProperty("_downloader", &downloader);
-  view->rootContext()->setContextProperty("_fsmon", &monitor);
-  view->rootContext()->setContextProperty("_theme", theme);
-  view->rootContext()->setContextProperty("_search", &search);
-  view->rootContext()->setContextProperty("_recitations", &recitations);
+  rootContext->setContextProperty("_settings", &settings);
+  rootContext->setContextProperty("_data", &data);
+  rootContext->setContextProperty("_bookmarks", &bookmarks);
+  rootContext->setContextProperty("_formatter", &formatter);
+  rootContext->setContextProperty("_about", &about);
+  rootContext->setContextProperty("_translations", &translations);
+  rootContext->setContextProperty("_downloader", &downloader);
+  rootContext->setContextProperty("_fsmon", &monitor);
+  rootContext->setContextProperty("_theme", theme);
+  rootContext->setContextProperty("_search", &search);
+  rootContext->setContextProperty("_recitations", &recitations);
 
-  if (dev) {
-    view->setSource(QUrl::fromLocalFile(QDir::currentPath() + "/main.qml"));
-  }
-  else {
-    view->engine()->addImportPath(DATA_DIR "/qml");
-    view->setSource(QUrl::fromLocalFile(DATA_DIR "/qml/" "main.qml"));
+  QUrl sourceUrl = dev ? QUrl::fromLocalFile(QDir::currentPath() + "/main.qml")
+    : QUrl::fromLocalFile(DATA_DIR "/qml/" "main.qml");
+  if (!dev) {
+    engine->addImportPath(DATA_DIR "/qml");
   }
 
-  WindowController controller(view, &settings);
+  QDeclarativeItem *root = 0;
 
 #ifdef Q_WS_MAEMO_5
-  controller.setOrientation();
-#endif
-
-  controller.show();
-
-  /*
-#ifndef Q_WS_MAEMO_5
-  view->showFullScreen();
+  view->setSource(sourceUrl);
 #else
-  view->showMaximized();
+  QDeclarativeComponent component(engine, sourceUrl);
+  QGraphicsObject *content = qobject_cast<QGraphicsObject *>(component.create());
+
+  root = qobject_cast<QDeclarativeItem *>(content);
+
+  MWidget *centralWidget = new MWidget;
+  content->setParentItem(centralWidget);
+  centralWidget->setMinimumSize(864, 400);
+  page->setCentralWidget(centralWidget);
 #endif
-  */
+
+  WindowController controller(view, &settings, root);
+
+#ifndef Q_WS_MAEMO_5
+  controller.exposedContentRectChanged();
+#endif
+
+  controller.setOrientation();
+  controller.show();
 
   int ret = app->exec();
 

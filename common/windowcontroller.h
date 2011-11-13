@@ -3,26 +3,30 @@
 
 #include <QObject>
 
-class QDeclarativeView;
+class QWidget;
 class Settings;
+class QDeclarativeItem;
 
 class WindowController : public QObject {
   Q_OBJECT
 
 public:
-  WindowController(QDeclarativeView *view, Settings *settings, QObject *parent = 0);
+  WindowController(QWidget *view, Settings *settings, QDeclarativeItem *root, QObject *parent = 0);
   ~WindowController();
 
 public slots:
   void show();
 
-#ifdef Q_WS_MAEMO_5
   void setOrientation();
+
+#ifndef Q_WS_MAEMO_5
+  void exposedContentRectChanged();
 #endif
 
 private:
-  QDeclarativeView *m_view;
+  QWidget *m_view;
   Settings *m_settings;
+  QDeclarativeItem *m_root;
 };
 
 #endif /* WINDOW_CONTROLLER_H */
