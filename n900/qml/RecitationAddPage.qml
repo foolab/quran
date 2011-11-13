@@ -37,7 +37,7 @@ Page {
                         Label {
                                 id: help
                                 width: parent.width
-                                text: "<b>To install a recitation:</b><ul><li>Go to <a href='http://zekr.org/resources.html#recitation'>recitations download page</a> and download an offline recitation</li>                <li>Extract the downloaded zip file. It will create a <i>recitation.properties</i> file and a directory</li><li>Connect your N900 to your PC in <i>mass storage mode</i></li><li>Create a folder on the device underneath <i>.n900-quran/recitations/</i></li><li>Copy the result of the zip file extraction to the newly created directory</li><li>Restart this application.</li></ul><br />"
+                                text: "<b>To install a recitation:</b><ul><li>Go to <a href='http://zekr.org/resources.html#recitation'>recitations download page</a> and download an offline recitation</li>                <li>Extract the downloaded zip file. It will create a <i>recitation.properties</i> file and a directory</li><li>Connect your phone to your PC in <i>mass storage mode</i></li><li>Create a folder on the device underneath <i>.n900-quran/recitations/</i></li><li>Copy the result of the zip file extraction to the newly created directory</li><li>Restart this application.</li></ul><br />"
 
                                 onLinkActivated: Qt.openUrlExternally(link);
                         }
