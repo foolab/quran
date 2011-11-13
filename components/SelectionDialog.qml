@@ -34,13 +34,13 @@ Dialog {
                 id: delegate
                 Rectangle {
                         id: rect
-                        width: label.width
+                        width: view.width
                         height: label.height * 2
                         color: mouse.pressed ? "lightsteelblue" : index == dialog.selectedIndex ? "steelblue" : "white"
 
                         Label {
                                 id: label
-                                width: view.width
+                                width: parent.width - 20
                                 text: name
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: index == dialog.selectedIndex ? "white" : "black"
