@@ -34,11 +34,12 @@ Page {
                         id: col
                         width: parent.width
 
+                        property string __path: _about.platform == "Maemo5" ? ".n900-quran/recitations/" : ".n9-quran/recitations/"
+
                         Label {
                                 id: help
                                 width: parent.width
-                                property string __path: _about.platform == "Maemo5" ? ".n900-quran/recitations/" : ".n9-quran/recitations/"
-                                text: "<b>To install a recitation:</b><ul><li>Go to <a href='http://zekr.org/resources.html#recitation'>recitations download page</a> and download an offline recitation</li>                <li>Extract the downloaded zip file. It will create a <i>recitation.properties</i> file and a directory</li><li>Connect your phone to your PC in <i>mass storage mode</i></li><li>Create a folder on the device underneath <i>" + __path + "</i></li><li>Copy the result of the zip file extraction to the newly created directory</li><li>Restart this application.</li></ul><br />"
+                                text: "<b>To install a recitation:</b><ul><li>Go to <a href='http://zekr.org/resources.html#recitation'>recitations download page</a> and download an offline recitation</li>                <li>Extract the downloaded zip file. It will create a <i>recitation.properties</i> file and a directory</li><li>Connect your phone to your PC in <i>mass storage mode</i></li><li>Create a folder on the device underneath <i>" + parent.__path + "</i></li><li>Copy the result of the zip file extraction to the newly created directory</li><li>Restart this application.</li></ul><br />"
 
                                 onLinkActivated: Qt.openUrlExternally(link);
                         }
@@ -46,7 +47,7 @@ Page {
                         Label {
                                 id: helpAdvanced
                                 width: parent.width
-                                text: "<b>Create a recitation:</b><ul><li>Follow the zekr recitations naming convention and format</li><li>All mp3 files should be placed in a directoryy underneath <i>.n900-quran/recitations/</i></li><li>Put a file called <i>info.ini</i> with the mp3 files and include the following content:<br />[recitation]<br />name=&lt;a unique name to identify the recitation&gt;</li><li>Restart the application</li></ul>"
+                                text: "<b>Create a recitation:</b><ul><li>Follow the zekr recitations naming convention and format</li><li>All mp3 files should be placed in a directoryy underneath <i>" + parent.__path + "</i></li><li>Put a file called <i>info.ini</i> with the mp3 files and include the following content:<br />[recitation]<br />name=&lt;a unique name to identify the recitation&gt;</li><li>Restart the application</li></ul>"
                         }
                 }
         }
