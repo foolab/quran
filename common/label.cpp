@@ -8,8 +8,11 @@
 Label::Label(QDeclarativeItem *parent)
   : QDeclarativeItem(parent), m_doc(new QTextDocument(this)) {
 
-  // TODO: harmattan
+#ifdef Q_WS_MAEMO_5
   setFont(QFont("Nokia Sans", 18));
+#else
+  setFont(QFont("Nokia Pure Text", 24));
+#endif
 
   setColor(Qt::black);
 
