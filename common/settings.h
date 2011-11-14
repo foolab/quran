@@ -44,7 +44,6 @@ class Settings : public QObject {
   Q_PROPERTY(QColor subtitleColor READ subtitleColor CONSTANT);
   Q_PROPERTY(QString version READ version CONSTANT);
   Q_PROPERTY(bool fontLoaded READ isFontLoaded CONSTANT);
-  Q_PROPERTY(int y READ y WRITE setY NOTIFY yChanged);
   Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged);
   Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY orientationChanged);
   Q_PROPERTY(int translationMode READ translationMode WRITE setTranslationMode NOTIFY translationModeChanged);
@@ -118,17 +117,12 @@ public:
   void setDefaultRecitation(const QString& id);
   QString defaultRecitation() const;
 
-
-  // TODO: use or kill
-  int y() const;
-
 public slots:
   void reset();
 
   void setFontSize(int size);
   void setNumberFormat(int format);
   void setTextType(int type);
-  void setY(int y);
   void setTranslationFontSize(int size);
 
 signals:

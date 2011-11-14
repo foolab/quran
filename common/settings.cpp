@@ -25,7 +25,6 @@
 #define DEFAULT_FONT_SIZE          36
 #define DEFAULT_NUMBER_FORMAT      0
 #define DEFAULT_PAGE_NUMBER        0
-#define DEFAULT_Y                  0
 #define DEFAULT_FULL_SCREEN        false
 #define DEFAULT_ORIENTATION        1
 #define DEFAULT_TRANSLATION_MODE   0
@@ -174,17 +173,6 @@ bool Settings::isFontLoaded() const {
   return m_font != -1;
 }
 
-int Settings::y() const {
-  return m_settings->value("General/y", DEFAULT_Y).toInt();
-}
-
-void Settings::setY(int y) {
-  if (y != Settings::y()) {
-    m_settings->setValue("General/y", y);
-    emit yChanged();
-  }
-}
-
 void Settings::setFullScreen(bool fs) {
   if (fullScreen() != fs) {
     m_settings->setValue("General/fullScreen", fs);
@@ -310,5 +298,4 @@ void Settings::reset() {
   setTranslationFontSize(DEFAULT_TRANSLATION_FONT_SIZE);
   setCenterText(DEFAULT_CENTER_TEXT);
   setRecitationMode(DEFAULT_RECITATION_MODE);
-  setY(DEFAULT_Y);
 }
