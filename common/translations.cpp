@@ -17,7 +17,6 @@
 #define INDEX_FILTER "*" INDEX_SUFFIX
 
 // TODO: limit the number of simultaneously downloaded translations.
-// TODO: We don't notify the user when we finish or fail or ...
 
 Translations::Translations(const QString& dir, Downloader *downloader, Settings *settings,
 			   DataProvider *data, QObject *parent)
