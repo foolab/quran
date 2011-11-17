@@ -81,6 +81,7 @@ QString AboutData::contributors() const {
 
   list << tr("<a href=\"mailto:ayman@aymansmail.co.cc\">Ayman Siddiqui</a>: The default theme.");
   list << tr("<a href=\"mailto:khaledhosny@eglug.org\">Khaled Hosny</a>: Great help with the font.");
+  list << tr("<a href=\"mailto:cloud596@hotmail.com\">Alfiansyah Rahman</a>: Creating the great logo.");
 
   return list.join("<br />");
 }
