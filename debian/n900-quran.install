@@ -7,7 +7,7 @@ data/n900-quran-logo.png usr/share/icons/
 data/themes/blue/*.png usr/share/n900-quran/themes/blue/
 data/SimplifiedNaskh.ttf usr/share/n900-quran/
 debian/n900-quran.desktop usr/share/applications/hildon/
-n900/qml/*.qml usr/share/n900-quran/qml/
-n900/qml/*.js usr/share/n900-quran/qml/
+qml/*.qml usr/share/n900-quran/qml/
+qml/*.js usr/share/n900-quran/qml/
 components/*.qml usr/share/n900-quran/qml/
 components/*.js usr/share/n900-quran/qml/
