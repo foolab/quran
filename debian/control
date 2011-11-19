@@ -2,7 +2,7 @@ Source: n9-quran
 Section: user/education
 Priority: optional
 Maintainer: Mohammed Sameer <msameer@foolab.org>
-Build-Depends: debhelper (>= 7.1), applauncherd-dev, libsqlite3-dev, libmeegotouch-dev, libresourceqt-dev, libqtm-multimedia-dev, libqtm-sensors-dev
+Build-Depends: debhelper (>= 7.1), applauncherd-dev, libsqlite3-dev, libmeegotouch-dev, libresourceqt-dev, libqtm-multimedia-dev, libqtm-sensors-dev, libqmsystem2-dev
 Standards-Version: 3.9.1
 
 Package: n9-quran
