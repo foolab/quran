@@ -89,10 +89,10 @@ void WindowController::setOrientation() {
     return;
   }
 }
-#endif
 
 void WindowController::exposedContentRectChanged() {
   QRectF rect = MApplication::activeApplicationWindow()->currentPage()->exposedContentRect();
   m_root->setWidth(rect.width());
   m_root->setHeight(rect.height());
 }
+#endif
