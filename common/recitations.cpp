@@ -182,6 +182,10 @@ bool Recitations::isPlaying() const {
 
 void Recitations::playerStateChanged() {
   emit playingChanged();
+
+  if (m_player->state() != QMediaPlayer::PlayingState) {
+    stop();
+  }
 }
 
 void Recitations::playerError() {
