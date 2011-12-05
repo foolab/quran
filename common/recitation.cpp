@@ -2,6 +2,8 @@
 #include <QFile>
 #include <QDir>
 #include <QSettings>
+#include <QDebug>
+#include "quazipfile.h"
 
 #define SIMPLE_INFO_FILE               "info.ini"
 #define ZEKR_INFO_FILE                 "recitation.properties"
@@ -66,9 +68,7 @@ protected:
 
 class RecitationZekr : public Recitation {
 public:
-
   static RecitationZekr *create(const QString& id, const QString& dir) {
-
     QDir d(dir);
     QString path = d.filePath(ZEKR_INFO_FILE);
 
@@ -88,7 +88,22 @@ public:
       return 0;
     }
 
-    QString subdir, name, localizedName;
+    QString name, subdir;
+
+    if (!RecitationZekr::info(file, name, subdir)) {
+      return 0;
+    }
+
+    return new RecitationZekr(name, id, QDir(dir).filePath(subdir));
+  }
+
+  QUrl mediaUrl(int chapter, int verse) {
+    QString mp3 = QString("%1/%2/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
+
+    return QUrl::fromLocalFile(mp3);
+  }
+
+  static bool info(QIODevice& file, QString& name, QString& subdir) {
     QByteArray lang;
 
     QMap<QByteArray, QByteArray> map;
@@ -114,35 +129,59 @@ public:
       lang = map["audio.language"];
     }
 
-    if (map.contains("audio.reciter")) {
+    if (name.isEmpty() && map.contains("audio.reciter")) {
       name = QString::fromUtf8(map["audio.reciter"]);
     }
 
-    if (map.contains("audio.reciter." + lang)) {
-      localizedName = QString::fromUtf8(map["audio.reciter." + lang]);
+    if (!lang.isEmpty() && map.contains("audio.reciter." + lang)) {
+      name = QString::fromUtf8(map["audio.reciter." + lang]);
     }
-
 
     if (name.isEmpty() || subdir.isEmpty()) {
+      return false;
+    }
+
+    return true;
+  }
+
+private:
+  RecitationZekr(const QString& name, const QString& id, const QString& dir)
+    : Recitation(name, id, dir) {
+  }
+};
+
+class RecitationZekrZip : public Recitation {
+public:
+  static RecitationZekrZip *create(const QString& id, const QString& dir) {
+    if (!dir.endsWith(".zip", Qt::CaseInsensitive)) {
       return 0;
     }
 
-    if (name.isEmpty() && localizedName.isEmpty()) {
+    QuaZipFile z(dir, ZEKR_INFO_FILE);
+
+    if (!z.open(QIODevice::ReadOnly)) {
       return 0;
     }
 
-    return new RecitationZekr(localizedName.isEmpty() ? name : localizedName,
-			      id, QDir(dir).filePath(subdir));
+    QString name, subdir;
+
+    if (!RecitationZekr::info(z, name, subdir)) {
+      return 0;
+    }
+
+    QString zip = QString("zip:%1//%2").arg(dir).arg(subdir);
+
+    return new RecitationZekrZip(name, id, zip);
   }
 
   QUrl mediaUrl(int chapter, int verse) {
     QString mp3 = QString("%1/%2/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
 
-    return QUrl::fromLocalFile(mp3);
+    return QUrl(mp3);
   }
 
 private:
-  RecitationZekr(const QString& name, const QString& id, const QString& dir)
+  RecitationZekrZip(const QString& name, const QString& id, const QString& dir)
     : Recitation(name, id, dir) {
   }
 };
@@ -152,6 +191,10 @@ Recitation *Recitation::create(const QString& id, const QString& dir) {
 
   if (!r) {
     r = RecitationZekr::create(id, dir);
+  }
+
+  if (!r) {
+    r = RecitationZekrZip::create(id, dir);
   }
 
   if (!r) {

@@ -5,7 +5,7 @@
 
 MediaPlaylist::MediaPlaylist(Settings *settings, DataProvider *data, QObject *parent)
   : QMediaPlaylist(parent), m_settings(settings), m_data(data), m_recitation(0),
-    m_page(0), m_chapter(0) {
+    m_chapter(0), m_page(0) {
 
 }
 

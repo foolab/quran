@@ -37,6 +37,7 @@
 #include "label.h"
 #include "search.h"
 #include "recitations.h"
+#include "gstzipsrc.h"
 
 #ifndef Q_WS_MAEMO_5
 #include <MDeclarativeCache>
@@ -65,6 +66,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   QApplication::setStyle("clearlooks");
   QApplication *app = new QApplication(argc, argv);
 #endif
+
+  gst_init(0, 0);
+  gst_zip_src_register();
 
   bool dev = false;
   for (int x = 0; x < argc; x++) {

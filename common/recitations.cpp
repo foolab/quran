@@ -81,6 +81,8 @@ void Recitations::refresh() {
 
   QStringList entries(m_dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
 
+  entries += m_dir.entryList(QStringList() << "*.zip", QDir::Files | QDir::NoDotAndDotDot);
+
   int x = 0;
 
   foreach (const QString& entry, entries) {
@@ -89,6 +91,7 @@ void Recitations::refresh() {
       m_installed.insert(x++, r);
     }
   }
+
 
   emit installedChanged();
 }
