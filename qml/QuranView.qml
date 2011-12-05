@@ -228,7 +228,6 @@ Flickable {
 
                         QuranPageContextMenu {
                                 id: menu
-                                width: parent.width
                                 verse: col.verse
                                 chapter: col.chapter
                         }
