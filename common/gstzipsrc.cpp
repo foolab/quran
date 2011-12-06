@@ -98,6 +98,9 @@ static gboolean gst_zip_src_set_uri (GstZipSrc * src, const gchar * uri) {
   g_free(src->uri);
   src->uri = g_strdup(uri);
 
+  g_object_notify (G_OBJECT (src), "uri");
+  gst_uri_handler_new_uri (GST_URI_HANDLER (src), src->uri);
+
   return TRUE;
 }
 
