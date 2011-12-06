@@ -10,6 +10,11 @@ GST_DEBUG_CATEGORY_STATIC (gst_zip_src_debug);
 #define PACKAGE "zipsrc"
 #endif
 
+enum {
+  ARG_0,
+  ARG_URI,
+};
+
 static GstStaticPadTemplate src_factory = GST_STATIC_PAD_TEMPLATE ("src",
     GST_PAD_SRC,
     GST_PAD_ALWAYS,
@@ -22,8 +27,13 @@ static gboolean gst_zip_src_start (GstBaseSrc * basesrc);
 static gboolean gst_zip_src_stop (GstBaseSrc * basesrc);
 static GstFlowReturn gst_zip_src_create (GstBaseSrc * basesrc, guint64 offset,
 					 guint length, GstBuffer ** buffer);
+static void gst_zip_src_set_property (GObject * object, guint prop_id,
+				      const GValue * value, GParamSpec * pspec);
+static void gst_zip_src_get_property (GObject * object, guint prop_id,
+				      GValue * value, GParamSpec * pspec);
 
 static void gst_zip_src_do_init(GType type);
+static gboolean gst_zip_src_set_uri (GstZipSrc * src, const gchar * uri);
 
 GST_BOILERPLATE_FULL (GstZipSrc, gst_zip_src, GstBaseSrc,
 		      GST_TYPE_BASE_SRC, gst_zip_src_do_init);
@@ -57,6 +67,10 @@ static gboolean
 gst_zip_src_uri_set_uri (GstURIHandler * handler, const gchar * uri) {
   GstZipSrc *src = GST_ZIPSRC(handler);
 
+  return gst_zip_src_set_uri(src, uri);
+}
+
+static gboolean gst_zip_src_set_uri (GstZipSrc * src, const gchar * uri) {
   GST_OBJECT_LOCK(src);
 
   GstState state = GST_STATE(src);
@@ -134,10 +148,19 @@ gst_zip_src_class_init (GstZipSrcClass * klass) {
   gstbasesrc_class = (GstBaseSrcClass *)klass;
 
   gobject_class->finalize = gst_zip_src_finalize;
+  gobject_class->get_property = gst_zip_src_get_property;
+  gobject_class->set_property = gst_zip_src_set_property;
   gstbasesrc_class->is_seekable = GST_DEBUG_FUNCPTR(gst_zip_src_is_seekable);
   gstbasesrc_class->start = GST_DEBUG_FUNCPTR(gst_zip_src_start);
   gstbasesrc_class->stop = GST_DEBUG_FUNCPTR(gst_zip_src_stop);
   gstbasesrc_class->create = GST_DEBUG_FUNCPTR(gst_zip_src_create);
+
+  GParamFlags flags =
+    (GParamFlags)(G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | GST_PARAM_MUTABLE_READY);
+  g_object_class_install_property (gobject_class, ARG_URI,
+				   g_param_spec_string ("uri", "File URI",
+							"URI of the file to read", NULL,
+							flags));
 }
 
 static void
@@ -239,6 +262,47 @@ static GstFlowReturn gst_zip_src_create (GstBaseSrc * basesrc, guint64 offset,
   src->read_position += read;
 
   return GST_FLOW_OK;
+}
+
+static void
+gst_zip_src_set_property (GObject * object, guint prop_id,
+			  const GValue * value, GParamSpec * pspec) {
+  GstZipSrc *src;
+
+  g_return_if_fail (GST_IS_ZIPSRC (object));
+
+  src = GST_ZIPSRC (object);
+
+  switch (prop_id) {
+    case ARG_URI:
+      if (!gst_zip_src_set_uri(src, g_value_get_string (value))) {
+	g_warning ("Failed to set 'uri'");
+      }
+
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
+}
+
+static void
+gst_zip_src_get_property (GObject * object, guint prop_id, GValue * value,
+			  GParamSpec * pspec) {
+  GstZipSrc *src;
+
+  g_return_if_fail (GST_IS_ZIPSRC (object));
+
+  src = GST_ZIPSRC (object);
+
+  switch (prop_id) {
+    case ARG_URI:
+      g_value_set_string (value, src->uri);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
 }
 
 gboolean
