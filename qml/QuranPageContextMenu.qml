@@ -10,6 +10,36 @@ Row {
 
         anchors.horizontalCenter: parent.horizontalCenter
 
+        PropertyAnimation {
+                id: showAnimation
+                target: contextMenu
+                properties: "opacity"
+                from: 0
+                to: 1
+                duration: 100
+        }
+
+        PropertyAnimation {
+                id: hideAnimation
+                target: contextMenu
+                properties: "opacity"
+                from: 1
+                to: 0
+                duration: 100
+        }
+
+        onVisibleChanged: {
+                if (visible) {
+                        hideAnimation.stop();
+                        showAnimation.start();
+
+                }
+                else {
+                        showAnimation.stop();
+                        hideAnimation.start();
+                }
+        }
+
         ToolButton {
                 id: button
                 anchors.verticalCenter: parent.verticalCenter

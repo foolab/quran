@@ -15,6 +15,36 @@ Column {
         onChapterChanged: translation.resetText();
         onVerseChanged: translation.resetText();
 
+        PropertyAnimation {
+                id: showAnimation
+                target: col
+                properties: "opacity"
+                from: 0
+                to: 1
+                duration: 100
+        }
+
+        PropertyAnimation {
+                id: hideAnimation
+                target: col
+                properties: "opacity"
+                from: 1
+                to: 0
+                duration: 100
+        }
+
+        onVisibleChanged: {
+                if (visible) {
+                        hideAnimation.stop();
+                        showAnimation.start();
+
+                }
+                else {
+                        showAnimation.stop();
+                        hideAnimation.start();
+                }
+        }
+
         Image {
                 id: borderTop
                 width: parent.width
