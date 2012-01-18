@@ -1,3 +1,11 @@
+n9-quran (0.5.0-1) unstable; urgency=low
+
+  * Fixed overlapping fonts with PR1.1.1
+  * Added the ability to use compressed zekr recitations
+  * Small UI improvements
+
+ -- Mohammed Sameer <msameer@foolab.org>  Wed, 18 Jan 2012 22:25:36 +0200
+
 n9-quran (0.4.1-1) unstable; urgency=low
 
   * Initial release.
