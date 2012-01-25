@@ -1,3 +1,11 @@
+n9-quran (0.5.0-2) unstable; urgency=low
+
+  * Optified
+  * Don't Build-Depend on libresourceqt-dev anymore. We don't use it.
+  * Don't run make install. dh_install will take care of everything.
+
+ -- Mohammed Sameer <msameer@debian.org>  Wed, 25 Jan 2012 22:51:44 +0200
+
 n9-quran (0.5.0-1) unstable; urgency=low
 
   * Fixed overlapping fonts with PR1.1.1
