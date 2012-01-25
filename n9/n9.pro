@@ -12,4 +12,4 @@ SOURCES += fsmonitor.cpp audiopolicy.cpp
 
 HEADERS += fsmonitor.h audiopolicy.h
 
-DEFINES += DATA_DIR=\\\"/usr/share/n9-quran/\\\"
+DEFINES += DATA_DIR=\\\"/opt/n9-quran/\\\"
