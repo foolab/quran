@@ -5,6 +5,8 @@ SelectionDialog {
         id: partDialog
         titleText: qsTr("Choose a part");
 
+        delegate: PartSelectionDialogRow {}
+
         model: ListModel {
                 Component.onCompleted: {
                         for (var x = 0; x < 30; x++) {
