@@ -44,6 +44,7 @@ public:
   Q_INVOKABLE int pageNumberForSura(int sura);
   Q_INVOKABLE int pageNumberForSuraAndAya(int sura, int aya);
   Q_INVOKABLE QString partNameForPage(int page);
+  Q_INVOKABLE QString partName(int part);
 
   Q_INVOKABLE int firstSuraForPage(int page);
 

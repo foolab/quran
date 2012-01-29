@@ -119,6 +119,10 @@ QString DataProvider::partNameForPage(int page) {
   return QString::fromUtf8(Parts[p->part].name);
 }
 
+QString DataProvider::partName(int part) {
+  return QString::fromUtf8(Parts[part].name);
+}
+
 bool DataProvider::hasPage(int page) const {
   return page >= MIN_PAGE && page <= MAX_PAGE;
 }

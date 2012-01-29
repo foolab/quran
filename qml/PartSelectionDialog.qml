@@ -8,7 +8,7 @@ SelectionDialog {
         model: ListModel {
                 Component.onCompleted: {
                         for (var x = 0; x < 30; x++) {
-                                append({"name": _formatter.number(x + 1) });
+                                append({"name": _data.partName(x) });
                         }
                 }
         }
