@@ -324,6 +324,23 @@ int DataProvider::suraSize(int sura) {
   return Suras[sura].length;
 }
 
+
+QList<Fragment> DataProvider::fragmentsForPart(int part) {
+  QList<Fragment> frags;
+
+  for (int x = 0; x <= MAX_PAGE; x++) {
+    if (Pages[x].part == part) {
+      frags += pageFromIndex(x).fragments();
+    }
+    else if (!frags.isEmpty()) {
+      // We filled our list already
+      break;
+    }
+  }
+
+  return frags;
+}
+
 int Fragment::sura() const {
   return Fragments[m_index].sura;
 }

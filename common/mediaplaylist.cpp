@@ -5,7 +5,7 @@
 
 MediaPlaylist::MediaPlaylist(Settings *settings, DataProvider *data, QObject *parent)
   : QMediaPlaylist(parent), m_settings(settings), m_data(data), m_recitation(0),
-    m_chapter(0), m_page(0) {
+    m_chapter(0), m_page(0), m_part(0) {
 
 }
 
@@ -27,6 +27,10 @@ int MediaPlaylist::page() {
 
 int MediaPlaylist::chapter() {
   return m_chapter;
+}
+
+int MediaPlaylist::part() {
+  return m_part;
 }
 
 void MediaPlaylist::playPage(int page) {
@@ -88,4 +92,32 @@ void MediaPlaylist::playVerse(int chapter, int verse) {
   m_mode = PlayVerse;
 
   addMedia(m_recitation->mediaUrl(chapter + 1, verse + 1));
+}
+
+void MediaPlaylist::playPart(int part) {
+  if (!m_recitation) {
+    return;
+  }
+
+  clear();
+
+  m_part = part;
+
+  m_mode = PlayPart;
+
+  QList<Fragment> frags = m_data->fragmentsForPart(part);
+
+  foreach (const Fragment& frag, frags) {
+    if (frag.start() == 0) {
+      Sura s = m_data->sura(frag.sura());
+
+      if (s.hasBasmala()) {
+	addMedia(m_recitation->mediaUrl(1, 1));
+      }
+    }
+
+    for (int x = frag.start(); x < frag.start() + frag.size(); x++) {
+      addMedia(m_recitation->mediaUrl(frag.sura() + 1, x + 1));
+    }
+  }
 }

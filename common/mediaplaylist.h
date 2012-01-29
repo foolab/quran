@@ -15,6 +15,7 @@ public:
     PlayPage,
     PlayChapter,
     PlayVerse,
+    PlayPart,
   };
 
   MediaPlaylist(Settings *settings, DataProvider *data, QObject *parent = 0);
@@ -25,11 +26,13 @@ public:
   void playPage(int page);
   void playChapter(int chapter);
   void playVerse(int chapter, int verse);
+  void playPart(int part);
 
   PlayMode mode();
 
   int page();
   int chapter();
+  int part();
 
 private:
   Settings *m_settings;
@@ -40,6 +43,7 @@ private:
 
   int m_chapter;
   int m_page;
+  int m_part;
 };
 
 #endif /* MEDIA_PLAYLIST_H */

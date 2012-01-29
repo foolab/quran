@@ -216,7 +216,8 @@ void Recitations::playerMediaChanged() {
     break;
 
   case MediaPlaylist::PlayPage:
-    // We are playing the first page.
+    // We are playing a basmala that is not on the first page.
+    // Just unset the position.
     if (chapter == 0 && verse == 0 && m_playlist->page() != 0) {
       setChapter(-1);
       setVerse(-1);
@@ -237,6 +238,35 @@ void Recitations::playerMediaChanged() {
       setVerse(-1);
 
       break;
+    }
+
+    emit positionChanged(chapter, verse);
+
+    setChapter(chapter);
+    setVerse(verse);
+
+    break;
+
+  case MediaPlaylist::PlayPart:
+    if (verse == 0 && chapter == 0) {
+      if (m_playlist->part() == 0) {
+	// We have 2 basmalas in the first part
+	if (m_playlist->currentIndex() == 0) {
+	  // First sura.
+	  // Nothing.
+	}
+	else {
+	  setChapter(-1);
+	  setVerse(-1);
+	  break;
+	}
+      }
+      else {
+	// Any other part. Don't set a position
+	setChapter(-1);
+	setVerse(-1);
+	break;
+      }
     }
 
     emit positionChanged(chapter, verse);
@@ -300,6 +330,18 @@ void Recitations::playChapter(int chapter) {
 
   m_player->stop();
   m_playlist->playChapter(chapter);
+
+  m_play = true;
+  m_policy->acquire();
+}
+
+void Recitations::playPart(int part) {
+  if (!m_player || !m_recitation) {
+    return;
+  }
+
+  m_player->stop();
+  m_playlist->playPart(part);
 
   m_play = true;
   m_policy->acquire();

@@ -11,7 +11,12 @@ Row {
                 icon: theme.playPart
                 enabled: _settings.recitationMode != 0 && _fsmon.available
                 color: text.color
-                onClicked: _recitations.playPart(index);
+                onClicked: {
+                        _settings.pageNumber = _data.pageNumberForPart(selectedIndex);
+                        _recitations.playPart(index);
+                        accept();
+                }
+
                 height: text.height
         }
 

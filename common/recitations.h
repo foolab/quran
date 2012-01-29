@@ -55,6 +55,7 @@ public slots:
   void unload();
   void playPage(int number);
   void playChapter(int chapter);
+  void playPart(int part);
   void stop();
 
 signals:

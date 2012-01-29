@@ -83,6 +83,8 @@ public:
 
   Q_INVOKABLE int suraSize(int sura);
 
+  QList<Fragment> fragmentsForPart(int part);
+
 private:
   const QString m_dir;
 
