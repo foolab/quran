@@ -73,7 +73,7 @@ Row {
 
         ToolButton {
                 anchors.verticalCenter: parent.verticalCenter
-                icon: theme.recitations
+                icon: theme.playVerse
                 enabled: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.play(contextMenu.chapter, contextMenu.verse);
         }
