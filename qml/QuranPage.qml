@@ -59,7 +59,7 @@ Page {
                         id: part
                         anchors.right: parent.right
                         anchors.rightMargin: 10
-                        text: _data.partName(_settings.pageNumber);
+                        text: _data.partNameForPage(_settings.pageNumber);
                 }
         }
 

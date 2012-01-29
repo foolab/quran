@@ -113,7 +113,7 @@ int DataProvider::pageNumberForSuraAndAya(int sura, int aya) {
   return p->index;
 }
 
-QString DataProvider::partName(int page) {
+QString DataProvider::partNameForPage(int page) {
   _Page *p = &Pages[page];
 
   return QString::fromUtf8(Parts[p->part].name);
