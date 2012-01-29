@@ -37,8 +37,10 @@ QtObject {
         property string addRecitation: "add-recitation"
 
         property string stop: "stop"
+        property string playVerse: "play-verse"
         property string playPage: "play-page"
         property string playChapter: "play-chapter"
+        property string playPart: "play-part"
 
 //        property string translationBorderTop: "translation-border-top"
         property string translationBorder: "translation-border"
