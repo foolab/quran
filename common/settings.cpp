@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Mohammed Sameer <msameer@foolab.org>. All rights reserved.
+ * Copyright (c) 2011-2012 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #define DEFAULT_FULL_SCREEN        false
 #define DEFAULT_ORIENTATION        1
 #define DEFAULT_TRANSLATION_MODE   0
+#define DEFAULT_FLIP_TO_STOP_RECITATION       true
 
 #define FONT_FAMILY                "Simplified Naskh"
 #define FONT_MIN_SIZE              16
@@ -293,6 +294,18 @@ QString Settings::defaultRecitation() const {
   return m_settings->value("General/defaultRecitation").toString();
 }
 
+void Settings::setFlipToStopRecitation(bool enabled) {
+  if (enabled != flipToStopRecitation()) {
+    m_settings->setValue("General/flipToStopRecitation", enabled);
+    emit flipToStopRecitationChanged();
+  }
+}
+
+bool Settings::flipToStopRecitation() {
+  return m_settings->value("General/flipToStopRecitation",
+			   DEFAULT_FLIP_TO_STOP_RECITATION).toBool();
+}
+
 void Settings::reset() {
   setFullScreen(DEFAULT_FULL_SCREEN);
   setOrientation(DEFAULT_ORIENTATION);
@@ -302,4 +315,5 @@ void Settings::reset() {
   setTranslationFontSize(DEFAULT_TRANSLATION_FONT_SIZE);
   setCenterText(DEFAULT_CENTER_TEXT);
   setRecitationMode(DEFAULT_RECITATION_MODE);
+  setFlipToStopRecitation(DEFAULT_FLIP_TO_STOP_RECITATION);
 }

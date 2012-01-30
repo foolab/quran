@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Mohammed Sameer <msameer@foolab.org>. All rights reserved.
+ * Copyright (c) 2011-2012 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ class Settings : public QObject {
 
   Q_PROPERTY(int recitationMode READ recitationMode WRITE setRecitationMode NOTIFY recitationModeChanged);
   Q_PROPERTY(QString defaultRecitation READ defaultRecitation WRITE setDefaultRecitation NOTIFY defaultRecitationChanged);
+  Q_PROPERTY(bool flipToStopRecitation READ flipToStopRecitation WRITE setFlipToStopRecitation NOTIFY flipToStopRecitationChanged);
 
 public:
   Settings(QObject *parent = 0);
@@ -117,6 +118,9 @@ public:
   void setDefaultRecitation(const QString& id);
   QString defaultRecitation() const;
 
+  void setFlipToStopRecitation(bool enabled);
+  bool flipToStopRecitation();
+
 public slots:
   void reset();
 
@@ -140,6 +144,7 @@ signals:
   void centerTextChanged();
   void recitationModeChanged();
   void defaultRecitationChanged();
+  void flipToStopRecitationChanged();
 
 private:
   QSettings *m_settings;

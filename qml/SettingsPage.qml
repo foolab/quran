@@ -208,6 +208,19 @@ Page {
                                 subtitle: _recitations.installed.length + qsTr(" installed.");
                        }
 
+                        SettingsPageEntry {
+                                id: flipToStopRecitation
+                                entries: [
+                                QtObject {property string name: qsTr("Yes") },
+                                QtObject {property string name: qsTr("No") }
+                                ]
+
+                                title: qsTr("Flip phone to stop recitation")
+                                subtitle: entries[selectedIndex].name;
+                                selectedIndex: _settings.flipToStopRecitation ? 0 : 1
+                                onAccepted: _settings.flipToStopRecitation = (selectedIndex == 0)
+                        }
+
                 }
         }
 

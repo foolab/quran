@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QDir>
 #include <QMap>
-#include <qmobilityglobal.h>
 
 class Downloader;
 class Settings;
@@ -13,12 +12,7 @@ class Recitation;
 class QMediaPlayer;
 class AudioPolicy;
 class MediaPlaylist;
-
-QTM_BEGIN_NAMESPACE
-class QOrientationSensor;
-QTM_END_NAMESPACE
-
-QTM_USE_NAMESPACE;
+class PhoneFlipControl;
 
 class Recitations : public QObject {
   Q_OBJECT
@@ -74,7 +68,6 @@ private slots:
   void policyDenied();
   void playerError();
   void playerMediaChanged();
-  void sensorReadingChanged();
 
 private:
   void setChapter(int chapter);
@@ -100,7 +93,7 @@ private:
   int m_chapter;
   int m_verse;
 
-  QOrientationSensor *m_sensor;
+  PhoneFlipControl *m_flipControl;
 };
 
 #endif /* RECITATIONS_H */
