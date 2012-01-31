@@ -125,7 +125,7 @@ Flickable {
                                 width: parent.width
                                 font.family: _settings.fontFamily
                                 font.pointSize: _settings.fontSize
-	                            color: _settings.titleColor
+	                            color: colors.titleColor
                                 center: true
 
                                 Image {
@@ -153,7 +153,7 @@ Flickable {
                                 font.pointSize: _settings.fontSize
                                 width: parent.width
                                 center: true
-	                            color: _settings.subtitleColor
+	                            color: colors.subtitleColor
 
                                 Image {
                                         anchors.fill: parent
@@ -204,7 +204,7 @@ Flickable {
                                 id: label
                                 chapter: col.chapter
                                 verse: col.verse
-                                color: _recitations.chapter == chapter && _recitations.verse == verse ? "red" : _settings.verseColor
+                                color: _recitations.chapter == chapter && _recitations.verse == verse ? colors.highlightColor : colors.verseColor
 
                                 onClicked: {
                                         menu.visible = !menu.visible

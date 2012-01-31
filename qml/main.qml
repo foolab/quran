@@ -5,6 +5,10 @@ PageStackWindow {
         id: root
         property alias theme: themeManager.theme
 
+        Colors {
+                id: colors
+        }
+
         TranslationsManager {
                 id: translationsManager
         }

@@ -13,7 +13,7 @@ Rectangle {
 
         property list<QtObject> entries
 
-        color: mouse.pressed ? "lightsteelblue" : "white"
+        color: mouse.pressed ? "lightsteelblue" : colors.backgroundColor
 
         width: parent ? parent.width: undefined
 
@@ -31,6 +31,7 @@ Rectangle {
                         font.bold: true
                         x: 10
                         anchors.horizontalCenter: parent.horizontalCenter
+                        color: colors.textColor
                 }
 
                 Label {
@@ -38,6 +39,7 @@ Rectangle {
                         width: parent.width - 20
                         x: 10
                         anchors.horizontalCenter: parent.horizontalCenter
+                        color: colors.textColor
                 }
         }
 

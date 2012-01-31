@@ -43,6 +43,7 @@ Page {
                                 font.bold: true
                                 width: parent.width
                                 horizontalAlignment: Text.AlignHCenter
+                                color: colors.textColor
                         }
 
                         Label {
@@ -53,6 +54,7 @@ Page {
                                 width: parent.width
                                 wrapMode: Text.WordWrap
                                 textFormat: Text.RichText
+                                color: colors.textColor
                         }
 
 

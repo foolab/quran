@@ -126,7 +126,7 @@ Page {
 
                 Rectangle {
                         width: view.width
-                        color: _settings.highlightColor
+                        color: colors.sectionColor
                         height: title.height
 
                         Label {
@@ -151,7 +151,8 @@ Page {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         height: Math.max(n.height, ayaText.height);
-                        color: index % 2 ? Qt.lighter(_settings.highlightColor, 1.2) : Qt.lighter(_settings.highlightColor, 1.3)
+                        color: colors.backgroundColor
+//                        color: index % 2 ? Qt.lighter(_settings.highlightColor, 1.2) : Qt.lighter(_settings.highlightColor, 1.3)
 
                         NumberLabel {
                                 id: n
@@ -159,7 +160,7 @@ Page {
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
                                 anchors.right: parent.right
-                                color: "black"
+                                color: colors.textColor
                                 width: 70
                                 horizontalAlignment: Text.AlignRight
                         }

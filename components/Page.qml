@@ -5,6 +5,9 @@ Rectangle {
 	    // TODO: for every page: reset flick when the orientation changes
         id: page
 
+        // TODO: dependency from components to qml :(
+        color: colors.backgroundColor
+
         anchors.fill: parent
 
         function isPortrait() {

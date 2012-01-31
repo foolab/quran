@@ -62,7 +62,7 @@ Page {
                                 center: true
                                 font.family: _settings.fontFamily
                                 font.pointSize: _settings.fontSize
-
+                                color: colors.textColor
                                 Component.onCompleted: populate();
 
                                 function populate() {
@@ -168,13 +168,18 @@ Page {
                                 subtitle: "TODO";
                         }
 */
-/*
+
                         SettingsPageEntry {
-                                // TODO:
+                                id: nightMode
+                                entries: [
+                                QtObject {property string name: qsTr("On (Experimental)") },
+                                QtObject {property string name: qsTr("Off") }
+                                ]
                                 title: qsTr("Night mode");
-                                subtitle: "TODO";
+                                subtitle: entries[selectedIndex].name;
+                                selectedIndex: _settings.nightMode ? 0 : 1;
+                                onAccepted: _settings.nightMode = (selectedIndex == 0);
                         }
-*/
 
                         SettingsPageEntry {
                                 id: textAlignmentEntry

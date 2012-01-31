@@ -33,7 +33,7 @@ Page {
                 id: sectionDelegate
                 Rectangle {
                         width: view.width
-                        color: _settings.highlightColor
+                        color: colors.sectionColor
                         height: title.height
 
                         Label {
@@ -58,7 +58,8 @@ Page {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         height: Math.max(rm.height, ayaText.height)
-                        color: index % 2 ? Qt.lighter(_settings.highlightColor, 1.2) : Qt.lighter(_settings.highlightColor, 1.3)
+                        color: colors.backgroundColor
+//                        color: index % 2 ? Qt.lighter(_settings.highlightColor, 1.2) : Qt.lighter(_settings.highlightColor, 1.3)
 
                         ToolButton {
                                 id: rm
@@ -100,6 +101,7 @@ Page {
                                 text: _data.text(sura, aya);
                                 elide: Text.ElideRight
                                 textAlignment: Text.AlignRight
+
                                 onClicked: {
                                         pagePosition.setPosition(sura, aya);
                                         pageStack.pop();

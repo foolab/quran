@@ -114,6 +114,7 @@ Item {
                 id: fader
                 z: 999
                 anchors.fill: parent
-                color: "steelblue"
+                // TODO: dependency from components to qml
+                color: colors.faderColor
         }
 }

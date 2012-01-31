@@ -14,7 +14,7 @@ Rectangle {
 
         signal clicked
 
-        color: mouse.pressed ? "steelblue" : "white"
+        color: mouse.pressed ? "steelblue" : colors.backgroundColor
 
         width: slider.width + 20 + installed.width + 10
         height: Math.max(slider.y + slider.height + 10, 100)
@@ -32,7 +32,7 @@ Rectangle {
                 width: slider.width
                 anchors.top: parent.top
                 anchors.topMargin: 10
-                color: mouse.pressed ? "white" : "black"
+                color: mouse.pressed ? "white" : colors.textColor
         }
 
         ProgressBar {

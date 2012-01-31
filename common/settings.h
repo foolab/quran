@@ -19,7 +19,6 @@
 #define SETTINGS_H
 
 #include <QObject>
-#include <QColor>
 #include <QPoint>
 
 class QSettings;
@@ -38,10 +37,7 @@ class Settings : public QObject {
   Q_PROPERTY(int minTranslationFontSize READ minTranslationFontSize CONSTANT);
   Q_PROPERTY(int maxTranslationFontSize READ maxTranslationFontSize CONSTANT);
   Q_PROPERTY(int translationFontSize READ translationFontSize WRITE setTranslationFontSize NOTIFY translationFontSizeChanged);
-  Q_PROPERTY(QColor highlightColor READ highlightColor CONSTANT);
-  Q_PROPERTY(QColor verseColor READ verseColor CONSTANT);
-  Q_PROPERTY(QColor titleColor READ titleColor CONSTANT);
-  Q_PROPERTY(QColor subtitleColor READ subtitleColor CONSTANT);
+
   Q_PROPERTY(QString version READ version CONSTANT);
   Q_PROPERTY(bool fontLoaded READ isFontLoaded CONSTANT);
   Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged);
@@ -56,6 +52,8 @@ class Settings : public QObject {
   Q_PROPERTY(int recitationMode READ recitationMode WRITE setRecitationMode NOTIFY recitationModeChanged);
   Q_PROPERTY(QString defaultRecitation READ defaultRecitation WRITE setDefaultRecitation NOTIFY defaultRecitationChanged);
   Q_PROPERTY(bool flipToStopRecitation READ flipToStopRecitation WRITE setFlipToStopRecitation NOTIFY flipToStopRecitationChanged);
+
+  Q_PROPERTY(bool nightMode READ isNightModeEnabled WRITE setNightModeEnabled NOTIFY nightModeChanged);
 
 public:
   Settings(QObject *parent = 0);
@@ -82,11 +80,6 @@ public:
 
   void setBookmarks(const QList<uint>& bookmarks);
   QList<uint> bookmarks() const;
-
-  QColor highlightColor() const;
-  QColor verseColor() const;
-  QColor titleColor() const;
-  QColor subtitleColor() const;
 
   QString version() const;
 
@@ -121,6 +114,9 @@ public:
   void setFlipToStopRecitation(bool enabled);
   bool flipToStopRecitation();
 
+  void setNightModeEnabled(bool enabled);
+  bool isNightModeEnabled();
+
 public slots:
   void reset();
 
@@ -145,6 +141,7 @@ signals:
   void recitationModeChanged();
   void defaultRecitationChanged();
   void flipToStopRecitationChanged();
+  void nightModeChanged();
 
 private:
   QSettings *m_settings;

@@ -29,14 +29,11 @@
 #define DEFAULT_ORIENTATION        1
 #define DEFAULT_TRANSLATION_MODE   0
 #define DEFAULT_FLIP_TO_STOP_RECITATION       true
+#define DEFAULT_NIGHT_MODE         false
 
 #define FONT_FAMILY                "Simplified Naskh"
 #define FONT_MIN_SIZE              16
 #define FONT_MAX_SIZE              48
-#define HIGHLIGHT_COLOR            QColor(163, 218, 244)
-#define TITLE_COLOR                Qt::black
-#define SUBTITLE_COLOR             Qt::black
-#define VERSE_COLOR                Qt::black
 #define FONT_FILE                  "SimplifiedNaskh.ttf"
 
 #define MIN_TRANSLATION_FONT_SIZE  FONT_MIN_SIZE
@@ -144,22 +141,6 @@ void Settings::setBookmarks(const QList<uint>& bookmarks) {
 
 QList<uint> Settings::bookmarks() const {
   return m_settings->value("General/bookmarks").value<QList<uint> >();
-}
-
-QColor Settings::highlightColor() const {
-  return HIGHLIGHT_COLOR;
-}
-
-QColor Settings::verseColor() const {
-  return VERSE_COLOR;
-}
-
-QColor Settings::titleColor() const {
-  return TITLE_COLOR;
-}
-
-QColor Settings::subtitleColor() const {
-  return SUBTITLE_COLOR;
 }
 
 QString Settings::version() const {
@@ -306,6 +287,17 @@ bool Settings::flipToStopRecitation() {
 			   DEFAULT_FLIP_TO_STOP_RECITATION).toBool();
 }
 
+void Settings::setNightModeEnabled(bool enabled) {
+  if (enabled != isNightModeEnabled()) {
+    m_settings->setValue("General/nightMode", enabled);
+    emit nightModeChanged();
+  }
+}
+
+bool Settings::isNightModeEnabled() {
+  return m_settings->value("General/nightMode", DEFAULT_NIGHT_MODE).toBool();
+}
+
 void Settings::reset() {
   setFullScreen(DEFAULT_FULL_SCREEN);
   setOrientation(DEFAULT_ORIENTATION);
@@ -316,4 +308,5 @@ void Settings::reset() {
   setCenterText(DEFAULT_CENTER_TEXT);
   setRecitationMode(DEFAULT_RECITATION_MODE);
   setFlipToStopRecitation(DEFAULT_FLIP_TO_STOP_RECITATION);
+  setNightModeEnabled(DEFAULT_NIGHT_MODE);
 }

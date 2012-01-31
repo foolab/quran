@@ -9,7 +9,8 @@ Item {
         Rectangle {
                 id: fader
                 anchors.fill: parent
-                color: "steelblue"
+                // TODO: dependency from components to qml
+                color: colors.faderColor
         }
 
         MouseArea {

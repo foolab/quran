@@ -3,6 +3,12 @@ import QtQuick 1.0
 import Label2 1.0
 
 Label2 {
+        Rectangle {
+                anchors.fill: parent
+                color: colors.backgroundColor
+                z: label.z - 1
+        }
+
         id: label
         property int verse: -1
         property int chapter: -1
@@ -15,7 +21,7 @@ Label2 {
 
         font.family: _settings.fontFamily
         font.pointSize: _settings.fontSize
-	    color: _settings.verseColor
+	    color: colors.verseColor
         center: _settings.centerText
 
         MouseArea {

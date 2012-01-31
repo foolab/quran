@@ -25,6 +25,7 @@ Page {
                 width: parent.width
                 font.pixelSize: 26
                 horizontalAlignment: Text.AlignHCenter
+                color: colors.textColor
         }
 
         ToolBar {

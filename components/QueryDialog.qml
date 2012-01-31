@@ -19,6 +19,8 @@ Dialog {
                 //                        style: Text.Outline
                 //                        styleColor: "grey"
                 smooth: true
+                // TODO: dependency from components to qml
+                color: colors.textColor
         }
 
 // TODO: label2 ? font ?
@@ -30,6 +32,8 @@ Dialog {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 smooth: true
+                // TODO: dependency from components to qml
+                color: colors.textColor
         }
 
 

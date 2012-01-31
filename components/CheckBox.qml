@@ -9,7 +9,8 @@ Rectangle {
         height: Math.max(label.height, tick.height);
         property alias text: label.text
 
-        color: mouse.pressed ? "steelblue" : "white"
+        // TODO: dependency from components to qml
+        color: mouse.pressed ? "steelblue" : colors.backgroundColor
 
         MouseArea {
                 id: mouse
@@ -44,5 +45,7 @@ Rectangle {
                 font.pointSize: 22
                 anchors.verticalCenter: parent.verticalCenter
                 verticalAlignment: Text.AlignVCenter
+                // TODO: dependency from components to qml
+                color: colors.textColor
         }
 }
