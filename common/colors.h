@@ -22,11 +22,12 @@
 #include <QColor>
 
 class QSettings;
+class Settings;
 
 class Colors : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(QString id READ id WRITE setId NOTIFY colorsChanged);
+  Q_PROPERTY(QString themeId READ themeId WRITE setThemeId NOTIFY colorsChanged);
   Q_PROPERTY(bool nightMode READ nightMode WRITE setNightMode NOTIFY colorsChanged);
 
   Q_PROPERTY(QColor textColor READ textColor NOTIFY colorsChanged);
@@ -39,11 +40,11 @@ class Colors : public QObject {
   Q_PROPERTY(QColor sectionColor READ sectionColor NOTIFY colorsChanged);
 
 public:
-  Colors(const QString& path, QObject *parent = 0);
+  Colors(const QString& path, Settings *settings, QObject *parent = 0);
   ~Colors();
 
-  void setId(const QString& id);
-  QString id() const;
+  void setThemeId(const QString& id);
+  QString themeId() const;
 
   void setNightMode(bool enabled);
   bool nightMode() const;
@@ -60,10 +61,14 @@ public:
 signals:
   void colorsChanged();
 
+private slots:
+  void themeChanged();
+
 private:
   QColor value(const QString& name, const QColor& day, const QColor& night) const;
 
   QSettings *m_ini;
+  Settings *m_settings;
   const QString m_path;
   QString m_id;
   bool m_nightMode;

@@ -18,17 +18,26 @@
 #include "colors.h"
 #include <QSettings>
 #include <QDir>
+#include <QDebug>
+#include "settings.h"
 
-Colors::Colors(const QString& path, QObject *parent) : QObject(parent), m_ini(0),
-						       m_path(path), m_nightMode(false) {
+Colors::Colors(const QString& path, Settings *settings, QObject *parent) :
+  QObject(parent), m_ini(0), m_settings(settings), m_path(path), m_nightMode(false) {
 
+  QObject::connect(m_settings, SIGNAL(themeChanged()), this, SLOT(themeChanged()));
+
+  themeChanged();
 }
 
 Colors::~Colors() {
 
 }
 
-void Colors::setId(const QString& id) {
+void Colors::themeChanged() {
+  setThemeId(m_settings->theme());
+}
+
+void Colors::setThemeId(const QString& id) {
   if (m_id != id) {
     m_id = id;
     if (m_ini) {
@@ -42,7 +51,7 @@ void Colors::setId(const QString& id) {
   }
 }
 
-QString Colors::id() const {
+QString Colors::themeId() const {
   return m_id;
 }
 

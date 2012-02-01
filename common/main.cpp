@@ -99,7 +99,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   Search search(DATA_DIR "/search.db");
 
-  Colors c(USER_DIR "themes");
+  Colors c(USER_DIR "themes", &settings);
 
   // TODO: Is all this needed ?
   qmlRegisterType<DataProvider>();
