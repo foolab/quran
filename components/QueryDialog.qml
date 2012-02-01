@@ -20,7 +20,7 @@ Dialog {
                 //                        styleColor: "grey"
                 smooth: true
                 // TODO: dependency from components to qml
-                color: colors.textColor
+                color: _colors.textColor
         }
 
 // TODO: label2 ? font ?
@@ -33,7 +33,7 @@ Dialog {
                 verticalAlignment: Text.AlignVCenter
                 smooth: true
                 // TODO: dependency from components to qml
-                color: colors.textColor
+                color: _colors.textColor
         }
 
 

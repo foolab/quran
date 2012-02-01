@@ -60,7 +60,7 @@ Page {
                         anchors.right: parent.right
                         anchors.rightMargin: 10
                         text: _data.partNameForPage(_settings.pageNumber);
-                        color: colors.textColor
+                        color: _colors.textColor
                 }
         }
 

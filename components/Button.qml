@@ -29,7 +29,7 @@ Rectangle {
                 id: label
                 width: parent.width - (parent.border.width * 2)
                 // TODO: dependency from components to qml
-                color: mouse.pressed || checked ? "darkgrey" : colors.textColor
+                color: mouse.pressed || checked ? "darkgrey" : _colors.textColor
                 anchors.centerIn: parent
                 font.pointSize: 20
 

@@ -33,7 +33,7 @@ Page {
                 id: sectionDelegate
                 Rectangle {
                         width: view.width
-                        color: colors.sectionColor
+                        color: _colors.sectionColor
                         height: title.height
 
                         Label {
@@ -58,7 +58,7 @@ Page {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         height: Math.max(rm.height, ayaText.height)
-                        color: colors.backgroundColor
+                        color: _colors.backgroundColor
 //                        color: index % 2 ? Qt.lighter(_settings.highlightColor, 1.2) : Qt.lighter(_settings.highlightColor, 1.3)
 
                         ToolButton {

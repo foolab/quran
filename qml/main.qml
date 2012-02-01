@@ -7,10 +7,6 @@ PageStackWindow {
                 id: theme
         }
 
-        Colors {
-                id: colors
-        }
-
         TranslationsManager {
                 id: translationsManager
         }

@@ -59,7 +59,7 @@ Column {
                 width: parent.width
                 font.family: _settings.translationFontFamily
                 font.pointSize: _settings.translationFontSize
-                color: colors.verseColor
+                color: _colors.verseColor
                 center: _settings.centerText
 
                 Image {

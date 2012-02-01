@@ -10,7 +10,7 @@ Rectangle {
         property alias text: label.text
 
         // TODO: dependency from components to qml
-        color: mouse.pressed ? "steelblue" : colors.backgroundColor
+        color: mouse.pressed ? "steelblue" : _colors.backgroundColor
 
         MouseArea {
                 id: mouse
@@ -46,6 +46,6 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 verticalAlignment: Text.AlignVCenter
                 // TODO: dependency from components to qml
-                color: colors.textColor
+                color: _colors.textColor
         }
 }

@@ -5,7 +5,7 @@ import Label2 1.0
 Label2 {
         Rectangle {
                 anchors.fill: parent
-                color: colors.backgroundColor
+                color: _colors.backgroundColor
                 z: label.z - 1
         }
 
@@ -21,7 +21,7 @@ Label2 {
 
         font.family: _settings.fontFamily
         font.pointSize: _settings.fontSize
-	    color: colors.verseColor
+	    color: _colors.verseColor
         center: _settings.centerText
 
         MouseArea {

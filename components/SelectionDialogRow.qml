@@ -6,7 +6,7 @@ Rectangle {
         width: view.width
         height: label.height * 2
         // TODO: dependency from components to qml
-        color: mouse.pressed ? "lightsteelblue" : index == dialog.selectedIndex ? "steelblue" : colors.backgroundColor
+        color: mouse.pressed ? "lightsteelblue" : index == dialog.selectedIndex ? "steelblue" : _colors.backgroundColor
 
         Label {
                 id: label
@@ -14,7 +14,7 @@ Rectangle {
                 text: name
                 anchors.verticalCenter: parent.verticalCenter
                 // TODO: dependency from components to qml
-                color: index == dialog.selectedIndex ? "white" : colors.textColor
+                color: index == dialog.selectedIndex ? "white" : _colors.textColor
                 x: 10
         }
 

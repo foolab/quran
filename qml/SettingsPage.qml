@@ -62,7 +62,7 @@ Page {
                                 center: true
                                 font.family: _settings.fontFamily
                                 font.pointSize: _settings.fontSize
-                                color: colors.textColor
+                                color: _colors.textColor
                                 Component.onCompleted: populate();
 
                                 function populate() {
