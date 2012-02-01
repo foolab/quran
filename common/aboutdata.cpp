@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Mohammed Sameer <msameer@foolab.org>. All rights reserved.
+ * Copyright (c) 2011-2012 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ AboutData::~AboutData() {
 }
 
 QString AboutData::copyright() const {
-  return tr("Copyright &copy; 2011 <a href=\"mailto:msameer@foolab.org\">Mohammed Sameer</a>. All rights reserved.");
+  return tr("Copyright &copy; 2011-2012 <a href=\"mailto:msameer@foolab.org\">Mohammed Sameer</a>.");
 }
 
 QString AboutData::appLicense() const {
