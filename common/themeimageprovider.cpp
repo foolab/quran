@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Mohammed Sameer <msameer@foolab.org>. All rights reserved.
+ * Copyright (c) 2011-2012 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,25 +30,25 @@ ThemeImageProvider::~ThemeImageProvider() {
 }
 
 QString ThemeImageProvider::path(const QString& id) const {
-  return QString("%1%2%3%2%4.png").arg(m_path).arg(QDir::separator()).arg(m_id).arg(id);
+  return QString("%1%2%3.png").arg(m_path).arg(QDir::separator()).arg(id);
 }
 
 QPixmap ThemeImageProvider::requestPixmap(const QString & id, QSize *size,
 					  const QSize& requestedSize) {
-
   *size = requestedSize;
   QImageReader r(path(id));
+  r.setScaledSize(requestedSize);
+  QPixmap pix = QPixmap::fromImage(r.read());
+
+  if (!pix.isNull()) {
+    return pix;
+  }
+
+  r.setFileName(path(QString("blue/%1").arg(id.section('/', 1, 1))));
   r.setScaledSize(requestedSize);
   return QPixmap::fromImage(r.read());
 }
 
-void ThemeImageProvider::setId(const QString& id) {
-  if (id != m_id) {
-    m_id = id;
-    emit idChanged();
-  }
-}
-
-QString ThemeImageProvider::id() const {
-  return m_id;
+QStringList ThemeImageProvider::themes() const {
+  return QDir(m_path).entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
 }

@@ -211,7 +211,7 @@ Page {
                                 title: qsTr("Show recitations")
                                 onClicked: pageStack.push("RecitationsListPage");
                                 subtitle: _recitations.installed.length + qsTr(" installed.");
-                       }
+                        }
 
                         SettingsPageEntry {
                                 id: flipToStopRecitation
@@ -224,6 +224,13 @@ Page {
                                 subtitle: entries[selectedIndex].name;
                                 selectedIndex: _settings.flipToStopRecitation ? 0 : 1
                                 onAccepted: _settings.flipToStopRecitation = (selectedIndex == 0)
+                        }
+
+                        SettingsPageEntry {
+                                id: applicationTheme
+                                title: qsTr("Theme")
+                                subtitle: _settings.theme
+                                onClicked: pageStack.push("ThemeListPage");
                         }
 
                 }

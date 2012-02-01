@@ -30,6 +30,7 @@
 #define DEFAULT_TRANSLATION_MODE   0
 #define DEFAULT_FLIP_TO_STOP_RECITATION       true
 #define DEFAULT_NIGHT_MODE         false
+#define DEFAULT_THEME              "blue"
 
 #define FONT_FAMILY                "Simplified Naskh"
 #define FONT_MIN_SIZE              16
@@ -298,6 +299,17 @@ bool Settings::isNightModeEnabled() {
   return m_settings->value("General/nightMode", DEFAULT_NIGHT_MODE).toBool();
 }
 
+void Settings::setTheme(const QString& theme) {
+  if (theme != Settings::theme()) {
+    m_settings->setValue("General/theme", theme);
+    emit themeChanged();
+  }
+}
+
+QString Settings::theme() {
+  return m_settings->value("General/theme", DEFAULT_THEME).toString();
+}
+
 void Settings::reset() {
   setFullScreen(DEFAULT_FULL_SCREEN);
   setOrientation(DEFAULT_ORIENTATION);
@@ -309,4 +321,5 @@ void Settings::reset() {
   setRecitationMode(DEFAULT_RECITATION_MODE);
   setFlipToStopRecitation(DEFAULT_FLIP_TO_STOP_RECITATION);
   setNightModeEnabled(DEFAULT_NIGHT_MODE);
+  setTheme(DEFAULT_THEME);
 }

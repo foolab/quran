@@ -3,7 +3,9 @@ import QtQuick 1.0
 
 PageStackWindow {
         id: root
-        property alias theme: themeManager.theme
+        Theme {
+                id: theme
+        }
 
         Colors {
                 id: colors
@@ -20,11 +22,6 @@ PageStackWindow {
 	    // TODO: duplicate of Page::isPortrait()
         function isPortrait() {
                 return height > width;
-        }
-
-        ThemeManager {
-                id: themeManager
-                Component.onCompleted: loadTheme("blue"); // TODO: hardcode
         }
 
         QtObject {

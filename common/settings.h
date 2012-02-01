@@ -54,6 +54,7 @@ class Settings : public QObject {
   Q_PROPERTY(bool flipToStopRecitation READ flipToStopRecitation WRITE setFlipToStopRecitation NOTIFY flipToStopRecitationChanged);
 
   Q_PROPERTY(bool nightMode READ isNightModeEnabled WRITE setNightModeEnabled NOTIFY nightModeChanged);
+  Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged);
 
 public:
   Settings(QObject *parent = 0);
@@ -117,6 +118,9 @@ public:
   void setNightModeEnabled(bool enabled);
   bool isNightModeEnabled();
 
+  void setTheme(const QString& theme);
+  QString theme();
+
 public slots:
   void reset();
 
@@ -142,6 +146,7 @@ signals:
   void defaultRecitationChanged();
   void flipToStopRecitationChanged();
   void nightModeChanged();
+  void themeChanged();
 
 private:
   QSettings *m_settings;

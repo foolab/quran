@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Mohammed Sameer <msameer@foolab.org>. All rights reserved.
+ * Copyright (c) 2011-2012 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,25 +24,17 @@
 class ThemeImageProvider : public QObject, public QDeclarativeImageProvider {
   Q_OBJECT
 
-  Q_PROPERTY(QString id READ id WRITE setId NOTIFY idChanged);
-
 public:
   ThemeImageProvider(const QString& path, QObject *parent = 0);
   ~ThemeImageProvider();
 
-  void setId(const QString& id);
-  QString id() const;
-
   virtual QPixmap requestPixmap(const QString & id, QSize *size, const QSize& requestedSize);
 
   Q_INVOKABLE QString path(const QString& id) const;
-
-signals:
-  void idChanged();
+  Q_INVOKABLE QStringList themes() const;
 
 private:
   const QString m_path;
-  QString m_id;
 };
 
 #endif /* THEME_IMAGE_PROVIDER_H */
