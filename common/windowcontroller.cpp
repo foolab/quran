@@ -68,8 +68,6 @@ void WindowController::setOrientation() {
 #else
 void WindowController::setOrientation() {
   MApplicationWindow *win = MApplication::activeApplicationWindow();
-#warning TODO
-  // TODO:
   switch (m_settings->orientation()) {
   case 0: // Auto
     win->setOrientationLocked(false);
