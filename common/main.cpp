@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Mohammed Sameer <msameer@foolab.org>. All rights reserved.
+ * Copyright (c) 2011-2012 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@
 #include "search.h"
 #include "recitations.h"
 #include "gstzipsrc.h"
+#include "colors.h"
 
 #ifndef Q_WS_MAEMO_5
 #include <MDeclarativeCache>
@@ -98,6 +99,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   Search search(DATA_DIR "/search.db");
 
+  Colors c(USER_DIR "themes");
+
   // TODO: Is all this needed ?
   qmlRegisterType<DataProvider>();
   qmlRegisterType<Settings>();
@@ -147,6 +150,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   rootContext->setContextProperty("_theme", theme);
   rootContext->setContextProperty("_search", &search);
   rootContext->setContextProperty("_recitations", &recitations);
+  rootContext->setContextProperty("_colors", &c);
 
   QUrl sourceUrl = dev ? QUrl::fromLocalFile(QDir::currentPath() + "/main.qml")
     : QUrl::fromLocalFile(DATA_DIR "/qml/" "main.qml");

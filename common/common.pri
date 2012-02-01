@@ -19,13 +19,13 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            position.cpp aboutdata.cpp logoprovider.cpp windowcontroller.cpp \
            translations.cpp translation.cpp downloader.cpp translation_p.cpp textprovider.cpp \
            index.cpp label.cpp search.cpp recitations.cpp recitation.cpp mediaplaylist.cpp \
-           main.cpp themeimageprovider.cpp gstzipsrc.cpp phoneflipcontrol.cpp
+           main.cpp themeimageprovider.cpp gstzipsrc.cpp phoneflipcontrol.cpp colors.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h quranviewmodel.h \
            position.h aboutdata.h logoprovider.h windowcontroller.h trans-meta.h \
            translations.h translation.h downloader.h translation_p.h textprovider.h \
            index.h label.h search.h recitations.h recitation.h mediaplaylist.h \
-           themeimageprovider.h gstzipsrc.h phoneflipcontrol.h
+           themeimageprovider.h gstzipsrc.h phoneflipcontrol.h colors.h
 
 target.path = /usr/bin/
 
