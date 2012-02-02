@@ -24,48 +24,112 @@
 class QSettings;
 class Settings;
 
+#define ADD_FUNCTION(name, day, night)      \
+QColor name() const {                       \
+  return value(#name, day, night);          \
+}
+
 class Colors : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(QString themeId READ themeId WRITE setThemeId NOTIFY colorsChanged);
-  Q_PROPERTY(bool nightMode READ nightMode WRITE setNightMode NOTIFY colorsChanged);
-
   Q_PROPERTY(QColor textColor READ textColor NOTIFY colorsChanged);
+  ADD_FUNCTION(textColor, Qt::black, Qt::white);
+
   Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(backgroundColor, Qt::white, Qt::black);
+
   Q_PROPERTY(QColor verseColor READ verseColor NOTIFY colorsChanged);
+  ADD_FUNCTION(verseColor, Qt::black, Qt::white);
+
   Q_PROPERTY(QColor titleColor READ titleColor NOTIFY colorsChanged);
+  ADD_FUNCTION(titleColor, Qt::white, Qt::black);
+
   Q_PROPERTY(QColor subtitleColor READ subtitleColor NOTIFY colorsChanged);
+  ADD_FUNCTION(subtitleColor, Qt::white, Qt::black);
+
   Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY colorsChanged);
+  ADD_FUNCTION(highlightColor, Qt::red, Qt::red);
+
   Q_PROPERTY(QColor faderColor READ faderColor NOTIFY colorsChanged);
+  ADD_FUNCTION(faderColor, "steelblue", Qt::black);
+
   Q_PROPERTY(QColor sectionColor READ sectionColor NOTIFY colorsChanged);
+  ADD_FUNCTION(sectionColor, QColor(163, 218, 244), QColor(163, 218, 244));
+
+  Q_PROPERTY(QColor pageTitleTextColor READ pageTitleTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(pageTitleTextColor, Qt::white, Qt::white);
+
+  Q_PROPERTY(QColor pageTitleBackgroundColor READ pageTitleBackgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(pageTitleBackgroundColor, "steelblue", "steelblue");
+
+  Q_PROPERTY(QColor dialogTitleTextColor READ dialogTitleTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(dialogTitleTextColor, Qt::white, Qt::white);
+
+  Q_PROPERTY(QColor dialogTitleBackgroundColor READ dialogTitleBackgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(dialogTitleBackgroundColor, "steelblue", "steelblue");
+
+  Q_PROPERTY(QColor dialogTextColor READ dialogTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(dialogTextColor, Qt::black, Qt::white);
+
+  Q_PROPERTY(QColor buttonBackgroundColor READ buttonBackgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(buttonBackgroundColor, "steelblue", "steelblue");
+
+  Q_PROPERTY(QColor buttonTextColor READ buttonTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(buttonBorderColor, Qt::black, Qt::white);
+
+  Q_PROPERTY(QColor buttonBorderColor READ buttonBorderColor NOTIFY colorsChanged);
+  ADD_FUNCTION(buttonTextColor, Qt::black, Qt::white);
+
+  Q_PROPERTY(QColor infoBannerTextColor READ infoBannerTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(infoBannerTextColor, Qt::white, Qt::white);
+
+  Q_PROPERTY(QColor infoBannerBackgroundColor READ infoBannerBackgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(infoBannerBackgroundColor, "steelblue", "steelblue");
+
+  Q_PROPERTY(QColor infoBannerBorderColor READ infoBannerBorderColor NOTIFY colorsChanged);
+  ADD_FUNCTION(infoBannerBorderColor, Qt::black, Qt::black);
+
+  Q_PROPERTY(QColor pressedColor READ pressedColor NOTIFY colorsChanged);
+  ADD_FUNCTION(pressedColor, "lightsteelblue", "lightsteelblue");
+
+  Q_PROPERTY(QColor pressedTextColor READ pressedTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(pressedTextColor, "white", "white");
+
+  Q_PROPERTY(QColor errorColor READ errorColor NOTIFY colorsChanged);
+  ADD_FUNCTION(errorColor, "red", "red");
+
+  Q_PROPERTY(QColor selectionTextColor READ selectionTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(selectionTextColor, "white", "white");
+
+  Q_PROPERTY(QColor selectionBackgroundColor READ selectionBackgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(selectionBackgroundColor, "steelblue", "steelblue");
+
+  Q_PROPERTY(QColor textFieldColor READ textFieldColor NOTIFY colorsChanged);
+  ADD_FUNCTION(textFieldColor, "lightsteelblue", "lightsteelblue");
+
+  Q_PROPERTY(QColor textFieldBorderColor READ textFieldBorderColor NOTIFY colorsChanged);
+  ADD_FUNCTION(textFieldBorderColor, "steelblue", "steelblue");
+
+  Q_PROPERTY(QColor textFieldTextColor READ textFieldTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(textFieldTextColor, Qt::black, Qt::black);
+
+  Q_PROPERTY(QColor textFieldPlaceholderTextColor READ textFieldPlaceholderTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(textFieldPlaceholderTextColor, "lightsteelblue", "lightsteelblue");
 
 public:
   Colors(const QString& path, Settings *settings, QObject *parent = 0);
   ~Colors();
-
-  void setThemeId(const QString& id);
-  QString themeId() const;
-
-  void setNightMode(bool enabled);
-  bool nightMode() const;
-
-  QColor textColor() const;
-  QColor backgroundColor() const;
-  QColor verseColor() const;
-  QColor titleColor() const;
-  QColor subtitleColor() const;
-  QColor highlightColor() const;
-  QColor faderColor() const;
-  QColor sectionColor() const;
 
 signals:
   void colorsChanged();
 
 private slots:
   void themeChanged();
+  void nightModeChanged();
 
 private:
   QColor value(const QString& name, const QColor& day, const QColor& night) const;
+  QColor value(const QString& section, const QColor& defaultColor) const;
 
   QSettings *m_ini;
   Settings *m_settings;

@@ -10,7 +10,7 @@ Rectangle {
         property alias text: label.text
 
         // TODO: dependency from components to qml
-        color: mouse.pressed ? "steelblue" : _colors.backgroundColor
+        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
 
         MouseArea {
                 id: mouse

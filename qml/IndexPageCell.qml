@@ -8,7 +8,7 @@ Rectangle {
         property int sura: 0
         property bool selected: false
 
-        color: selected || mouse.pressed ? "steelblue" : _colors.backgroundColor
+        color: selected || mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
 
         width: parent.width / 2
         height: verse.height * 2
@@ -20,7 +20,7 @@ Rectangle {
         }
 
         NumberLabel {
-                color: _colors.textColor
+                color: verse.color
                 id: number
                 number: root.sura
                 width: 70
@@ -42,6 +42,6 @@ Rectangle {
                 anchors.top: parent.top
                 anchors.topMargin: parent.height/4
                 horizontalAlignment: Text.AlignRight
-                color: _colors.textColor
+                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
         }
 }

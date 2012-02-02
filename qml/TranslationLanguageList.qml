@@ -20,7 +20,7 @@ TranslationsPage {
                 Rectangle {
                         width: view.width
                         height: label.height * 2
-                        color: mouse.pressed ? "steelblue" : _colors.backgroundColor
+                        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
 
                         MouseArea {
                                 id: mouse
@@ -36,7 +36,7 @@ TranslationsPage {
                                 x: 16
                                 font.pointSize: 24
                                 text: _translations.categoryName(modelData)
-                                color: mouse.pressed ? "white" : _colors.textColor
+                                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
                                 anchors.verticalCenter: parent.verticalCenter
                         }
                 }

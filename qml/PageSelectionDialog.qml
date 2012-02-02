@@ -20,12 +20,12 @@ Dialog {
                 height: label.height
 
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: "steelblue"
+                color: _colors.dialogTitleBackgroundColor
 
                 Label {
                         id: label
                         width: parent.width
-                        color: "white";
+                        color: _colors.dialogTitleTextColor
                         x: 10
                         anchors.verticalCenter: parent.verticalCenter
                         text: qsTr("Choose a page");
@@ -35,11 +35,11 @@ Dialog {
         content: Rectangle {
                 width: pageDialogTitle.width
                 height: 50
-                color: "white"
+                color: _colors.textFieldColor
                 anchors.horizontalCenter: parent.horizontalCenter
                 radius: 20
                 border.width: 2
-                border.color: "steelblue"
+                border.color: _colors.textFieldBorderColor
                 smooth: true
 
                 Component.onCompleted: parent.anchors.topMargin = 0; // HACK
@@ -54,6 +54,7 @@ Dialog {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: _formatter.number(value);
+                        color: _colors.textFieldTextColor
                 }
         }
 

@@ -24,7 +24,7 @@ Page {
                 text: qsTr("Failed to load the Quran text. Please reinstall");
                 font.bold: true
                 font.pixelSize: 36
-                color: "red"
+                color: _colors.errorColor
                 wrapMode: Text.WordWrap
         }
 }

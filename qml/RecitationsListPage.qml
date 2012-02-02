@@ -19,14 +19,14 @@ Page {
                 Rectangle {
                         width: view.width
                         height: label.height * 2
-                        color: mouse.pressed ? "steelblue" : _colors.backgroundColor
+                        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
 
                         Label {
                                 id: label
                                 text: _recitations.recitationName(modelData);
                                 width: parent.width
                                 anchors.verticalCenter: parent.verticalCenter
-                                color: mouse.pressed ? "black" : _colors.textColor
+                                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
                         }
 
                         MouseArea {

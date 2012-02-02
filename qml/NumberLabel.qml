@@ -13,7 +13,7 @@ Label {
 
         property int number: 0
         property int format: _settings.numberFormat
-        color: "white"
+        color: _colors.textColor
 
         font.bold: true
 

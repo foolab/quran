@@ -13,7 +13,7 @@ Rectangle {
 
         property list<QtObject> entries
 
-        color: mouse.pressed ? "lightsteelblue" : _colors.backgroundColor
+        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
 
         width: parent ? parent.width: undefined
 

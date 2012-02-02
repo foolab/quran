@@ -35,7 +35,7 @@ Page {
                 anchors.right: parent.right
                 z: 4000
                 state: _fsmon.available ? "fsAvailable" : "fsUnavailable"
-                color: "steelblue"
+                color: _colors.faderColor
 
                 states: [
                 State {
