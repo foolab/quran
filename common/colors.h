@@ -29,6 +29,11 @@ QColor name() const {                       \
   return value(#name, day, night);          \
 }
 
+/*
+ * Colors from:
+ * - http://www.w3.org/TR/SVG/types.html#ColorKeywords
+ * - http://developer.qt.nokia.com/doc/qt-4.8/qcolor.html#setNamedColor
+ */
 class Colors : public QObject {
   Q_OBJECT
 
@@ -77,6 +82,9 @@ class Colors : public QObject {
   Q_PROPERTY(QColor buttonTextColor READ buttonTextColor NOTIFY colorsChanged);
   ADD_FUNCTION(buttonBorderColor, Qt::black, Qt::white);
 
+  Q_PROPERTY(QColor buttonSelectedOrPressedTextColor READ buttonSelectedOrPressedTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(buttonSelectedOrPressedTextColor, "darkgrey", "darkgrey");
+
   Q_PROPERTY(QColor buttonBorderColor READ buttonBorderColor NOTIFY colorsChanged);
   ADD_FUNCTION(buttonTextColor, Qt::black, Qt::white);
 
@@ -115,6 +123,48 @@ class Colors : public QObject {
 
   Q_PROPERTY(QColor textFieldPlaceholderTextColor READ textFieldPlaceholderTextColor NOTIFY colorsChanged);
   ADD_FUNCTION(textFieldPlaceholderTextColor, "lightsteelblue", "lightsteelblue");
+
+  Q_PROPERTY(QColor menuTextColor READ menuTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(menuTextColor, Qt::black, Qt::black);
+
+  Q_PROPERTY(QColor menuPressedTextColor READ menuPressedTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(menuPressedTextColor, Qt::black, Qt::black);
+
+  Q_PROPERTY(QColor menuBackgroundColor READ menuBackgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(menuBackgroundColor, Qt::white, Qt::white);
+
+  Q_PROPERTY(QColor menuPressedBackgroundColor READ menuPressedBackgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(menuPressedBackgroundColor, "steelblue", "steelblue");
+
+  Q_PROPERTY(QColor menuBorderColor READ menuBorderColor NOTIFY colorsChanged);
+  ADD_FUNCTION(menuBorderColor, Qt::black, Qt::black);
+
+  Q_PROPERTY(QColor progressBarColor READ progressBarColor NOTIFY colorsChanged);
+  ADD_FUNCTION(progressBarColor, "steelblue", "steelblue");
+
+  Q_PROPERTY(QColor progressBarBorderColor READ progressBarBorderColor NOTIFY colorsChanged);
+  ADD_FUNCTION(progressBarBorderColor, "steelblue", "steelblue");
+
+  Q_PROPERTY(QColor progressBarBackgroundColor READ progressBarBackgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(progressBarBackgroundColor, Qt::white, Qt::white);
+
+  Q_PROPERTY(QColor checkBoxPressedBackgroundColor READ checkBoxPressedBackgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(checkBoxPressedBackgroundColor, "lightsteelblue", "lightsteelblue");
+
+  Q_PROPERTY(QColor checkBoxBackgroundColor READ checkBoxBackgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(checkBoxBackgroundColor, Qt::white, Qt::black);
+
+  Q_PROPERTY(QColor checkBoxTextColor READ checkBoxTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(checkBoxTextColor, Qt::black, Qt::white);
+
+  Q_PROPERTY(QColor checkBoxPressedTextColor READ checkBoxPressedTextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(checkBoxPressedTextColor, Qt::black, Qt::white);
+
+  Q_PROPERTY(QColor checkBoxBoxBorderColor READ checkBoxBoxBorderColor NOTIFY colorsChanged);
+  ADD_FUNCTION(checkBoxBoxBorderColor, Qt::white, Qt::white);
+
+  Q_PROPERTY(QColor checkBoxBoxBackgroundColor READ checkBoxBoxBackgroundColor NOTIFY colorsChanged);
+  ADD_FUNCTION(checkBoxBoxBackgroundColor, "lightsteelblue", "lightsteelblue");
 
 public:
   Colors(const QString& path, Settings *settings, QObject *parent = 0);

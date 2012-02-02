@@ -10,7 +10,7 @@ Rectangle {
         property alias text: label.text
 
         // TODO: dependency from components to qml
-        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
+        color: mouse.pressed ? _colors.checkBoxPressedBackgroundColor : _colors.checkBoxBackgroundColor
 
         MouseArea {
                 id: mouse
@@ -24,9 +24,9 @@ Rectangle {
                 width: 60
                 height: 60
                 radius: 10
-                color: "lightsteelblue"
+                color: _colors.checkBoxBoxBackgroundColor
                 border.width: 1
-                border.color: "white"
+                border.color: _colors.checkBoxBoxBorderColor
                 smooth: true
                 anchors.verticalCenter: parent.verticalCenter
 
@@ -46,6 +46,6 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 verticalAlignment: Text.AlignVCenter
                 // TODO: dependency from components to qml
-                color: _colors.textColor
+                color: mouse.pressed ? _colors.checkBoxPressedTextColor : _colors.checkBoxTextColor
         }
 }
