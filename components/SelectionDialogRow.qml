@@ -8,6 +8,8 @@ Rectangle {
         // TODO: dependency from components to qml
         color: mouse.pressed ? _colors.pressedColor : index == dialog.selectedIndex ? _colors.selectionBackgroundColor : _colors.backgroundColor
 
+        property alias textHorizontalAlignment: label.horizontalAlignment
+
         Label {
                 id: label
                 width: parent.width - 20

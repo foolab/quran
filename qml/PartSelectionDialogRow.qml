@@ -23,6 +23,7 @@ Row {
         SelectionDialogRow {
                 id: text
                 width: parent.width - icon.width
+                textHorizontalAlignment: Text.AlignRight
         }
 
 }
