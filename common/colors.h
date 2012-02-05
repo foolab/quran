@@ -47,7 +47,7 @@ class Colors : public QObject {
   ADD_FUNCTION(verseColor, Qt::black, Qt::white);
 
   Q_PROPERTY(QColor titleColor READ titleColor NOTIFY colorsChanged);
-  ADD_FUNCTION(titleColor, Qt::white, Qt::black);
+  ADD_FUNCTION(titleColor, Qt::black, Qt::black);
 
   Q_PROPERTY(QColor subtitleColor READ subtitleColor NOTIFY colorsChanged);
   ADD_FUNCTION(subtitleColor, Qt::white, Qt::black);
