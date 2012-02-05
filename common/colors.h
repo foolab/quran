@@ -166,6 +166,9 @@ class Colors : public QObject {
   Q_PROPERTY(QColor checkBoxBoxBackgroundColor READ checkBoxBoxBackgroundColor NOTIFY colorsChanged);
   ADD_FUNCTION(checkBoxBoxBackgroundColor, "lightsteelblue", "lightsteelblue");
 
+  Q_PROPERTY(QColor numberLabeltextColor READ numberLabeltextColor NOTIFY colorsChanged);
+  ADD_FUNCTION(numberLabeltextColor, Qt::white, Qt::white);
+
 public:
   Colors(const QString& path, Settings *settings, QObject *parent = 0);
   ~Colors();
