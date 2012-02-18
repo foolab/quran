@@ -1,3 +1,9 @@
+n900-quran (0.5.2-1) unstable; urgency=low
+
+  * Added the missing QML file to make the theme selector work.
+
+ -- Mohammed Sameer <msameer@debian.org>  Sat, 18 Feb 2012 21:54:39 +0200
+
 n900-quran (0.5.1-1) unstable; urgency=low
 
   * Add an option to disable stopping recitation if phone is flipped.
