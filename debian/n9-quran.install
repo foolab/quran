@@ -1,0 +1,13 @@
+n9/n9-quran opt/n9-quran/
+data/text/quran-uthmani.xml opt/n9-quran/text/
+data/text/quran-simple-enhanced.xml opt/n9-quran/text/
+data/search.db opt/n9-quran/
+data/logo_160.png opt/n9-quran/
+data/n9-quran-logo.png usr/share/themes/base/meegotouch/icons/
+data/themes/blue/*.png opt/n9-quran/themes/blue/
+data/SimplifiedNaskh.ttf opt/n9-quran/
+debian/n9-quran.desktop usr/share/applications/
+qml/*.qml opt/n9-quran/qml/
+qml/*.js opt/n9-quran/qml/
+components/*.qml opt/n9-quran/qml/
+components/*.js opt/n9-quran/qml/
