@@ -64,7 +64,7 @@ Page {
                         ToolButton {
                                 id: rm
                                 color: parent.color
-                                icon: theme.remove
+                                icon: theme.close
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
                                 anchors.right: parent.right
