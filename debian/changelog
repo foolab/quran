@@ -1,3 +1,10 @@
+n9-quran (0.5.3-1) unstable; urgency=low
+
+  * Updated text to fix some mistakes
+  * Don't use the trash icon for removing favorites.
+
+ -- Mohammed Sameer <msameer@foolab.org>  Fri, 04 Jan 2013 01:21:44 +0200
+
 n9-quran (0.5.0-2) unstable; urgency=low
 
   * Optified
