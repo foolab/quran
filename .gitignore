@@ -6,7 +6,6 @@
 data/*/*.o
 data/text/*.idx
 data/search.db
-data/search/*.xml
 data/search/search
 */Makefile
 */*/Makefile
