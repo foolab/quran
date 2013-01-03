@@ -13,7 +13,7 @@ MOBILITY = multimedia sensors
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/
 
-DEFINES += VERSION=\\\"0.5.2\\\"
+DEFINES += VERSION=\\\"0.5.3\\\"
 
 SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quranviewmodel.cpp \
            position.cpp aboutdata.cpp logoprovider.cpp windowcontroller.cpp \
