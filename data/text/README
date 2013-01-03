@@ -3,15 +3,13 @@ by me to fix the beginning of some parts.
 
 The original license allows doing whatever with that file.
 
-Obtaining the data files:
+quran-uthmani.xml: Downloaded from tanzil.net
+quran-simple-enhanced.xml: Downloaded from tanzil.net
 
-- Main data:
+Downloading from tanzil.net
    - Go to http://tanzil.net/download/
    - Select Uthmani, check everything and XML as the format. Save as quran-uthmani.xml
    - Select Simple Enhanced, check everything and XML as the format. Save as quran-simple-enhanced.xml
-
-- Metadata:
-   Already included now.
 
 Building:
   qmake && make

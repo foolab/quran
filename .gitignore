@@ -5,7 +5,6 @@
 */moc_*
 data/*/*.o
 data/text/*.idx
-data/text/*.xml
 data/search.db
 data/search/*.xml
 data/search/search
