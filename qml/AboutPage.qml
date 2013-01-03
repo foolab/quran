@@ -72,7 +72,7 @@ Page {
 
                         AboutPageBlock {
                                 id: textLicense
-                                title: qsTr("Text license:");
+                                title: qsTr("License for simplified text:");
                                 text: _about.textLicense
                         }
 
