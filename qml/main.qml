@@ -88,16 +88,6 @@ PageStackWindow {
         }
 
         InfoBanner {
-                id: maxFontSize
-                text: qsTr("Maximum font size reached");
-        }
-
-        InfoBanner {
-                id: minFontSize
-                text: qsTr("Minimum font size reached");
-        }
-
-        InfoBanner {
                 id: fontError
                 text: qsTr("Failed to load application font");
         }
