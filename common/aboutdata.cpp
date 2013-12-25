@@ -85,11 +85,3 @@ QString AboutData::contributors() const {
 
   return list.join("<br />");
 }
-
-QString AboutData::platform() const {
-#ifdef Q_WS_MAEMO_5
-  return "Maemo5";
-#else
-  return "Harmattan";
-#endif
-}

@@ -34,7 +34,7 @@ Page {
                         id: col
                         width: parent.width
 
-                        property string __path: _about.platform == "Maemo5" ? ".n900-quran/recitations/" : ".n9-quran/recitations/"
+                        property string __path: ".n9-quran/recitations/"
 
                         Label {
                                 id: help

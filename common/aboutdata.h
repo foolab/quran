@@ -28,7 +28,6 @@ class AboutData : public QObject {
   Q_PROPERTY(QString textLicense READ textLicense CONSTANT);
   Q_PROPERTY(QString transLicense READ transLicense CONSTANT);
   Q_PROPERTY(QString contributors READ contributors CONSTANT);
-  Q_PROPERTY(QString platform READ platform CONSTANT);
 
 public:
   AboutData(QObject *parent = 0);

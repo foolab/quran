@@ -40,33 +40,17 @@
 #include "gstzipsrc.h"
 #include "colors.h"
 
-#ifndef Q_WS_MAEMO_5
 #include <MDeclarativeCache>
 #include <MApplication>
 #include <MApplicationWindow>
 #include <MApplicationPage>
 #include <MPannableViewport>
 #include <MPositionIndicator>
-#else
-#define M_DECL_EXPORT
-#endif
 
-#ifndef Q_WS_MAEMO_5
 #define USER_DIR "/home/user/MyDocs/.n9-quran/"
-#else
-#define USER_DIR "/home/user/MyDocs/.n900-quran/"
-#endif
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
-#ifndef Q_WS_MAEMO_5
   MApplication *app = new MApplication(argc, argv);
-#else
-  // PR 1.3 Qt hildon style will crash when we are launched in portrait mode.
-  // We don't use Qt so we choose an arbitrary style.
-  // TODO: seems the only way is to pass -style
-  QApplication::setStyle("clearlooks");
-  QApplication *app = new QApplication(argc, argv);
-#endif
 
   gst_init(0, 0);
   gst_zip_src_register();
@@ -114,7 +98,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<QuranViewModel>("QuranViewModel", 1, 0, "QuranViewModel");
   qmlRegisterType<Label>("Label2", 1, 0, "Label2");
 
-#ifndef Q_WS_MAEMO_5
   MApplicationWindow *view = new MApplicationWindow;
   view->setRoundedCornersEnabled(false);
   MApplicationPage *page = new MApplicationPage();
@@ -122,11 +105,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   page->appear();
   page->pannableViewport()->positionIndicator()->hide();
   QDeclarativeEngine *engine = new QDeclarativeEngine;
-#else
-  QDeclarativeView *view = new QDeclarativeView;
-  view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
-  QDeclarativeEngine *engine = view->engine();
-#endif
 
   QDeclarativeContext *rootContext = engine->rootContext();
 
@@ -160,9 +138,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   QDeclarativeItem *root = 0;
 
-#ifdef Q_WS_MAEMO_5
-  view->setSource(sourceUrl);
-#else
   QDeclarativeComponent component(engine, sourceUrl);
   QGraphicsObject *content = qobject_cast<QGraphicsObject *>(component.create());
 
@@ -172,13 +147,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   content->setParentItem(centralWidget);
   centralWidget->setMinimumSize(864, 400);
   page->setCentralWidget(centralWidget);
-#endif
 
   WindowController controller(view, &settings, root);
 
-#ifndef Q_WS_MAEMO_5
   controller.exposedContentRectChanged();
-#endif
 
   controller.setOrientation();
   controller.show();
@@ -186,12 +158,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   int ret = app->exec();
 
   delete view;
-
-#ifndef Q_WS_MAEMO_5
-  // We get a crash deep in the stack from Qt
-  // We will not delete QApplication until I debug that properly
   delete app;
-#endif
 
   return ret;
 }

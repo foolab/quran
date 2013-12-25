@@ -19,9 +19,7 @@ public slots:
 
   void setOrientation();
 
-#ifndef Q_WS_MAEMO_5
   void exposedContentRectChanged();
-#endif
 
 private:
   QWidget *m_view;
