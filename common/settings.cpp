@@ -35,7 +35,7 @@
 #define FONT_FAMILY                "Simplified Naskh"
 #define FONT_MIN_SIZE              16
 #define FONT_MAX_SIZE              48
-#define FONT_FILE                  "SimplifiedNaskh.ttf"
+#define FONT_FILE                  ":/SimplifiedNaskh.ttf"
 
 #define MIN_TRANSLATION_FONT_SIZE  FONT_MIN_SIZE
 #define MAX_TRANSLATION_FONT_SIZE  FONT_MAX_SIZE
@@ -64,7 +64,7 @@ Q_DECLARE_METATYPE(QList<uint>);
  * 1 = On
  * 2 = Hidden
  */
-Settings::Settings(QObject *parent) : QObject(parent), m_font(-1) {
+Settings::Settings(QObject *parent) : QObject(parent) {
   qRegisterMetaType<QList<uint> >("QList<uint>");
   qRegisterMetaTypeStreamOperators<QList<uint> >("QList<uint>");
 
@@ -149,15 +149,7 @@ QString Settings::version() const {
 }
 
 void Settings::loadFont() {
-  if (m_font != -1) {
-    return;
-  }
-
-  m_font = QFontDatabase::addApplicationFont(DATA_DIR FONT_FILE);
-}
-
-bool Settings::isFontLoaded() const {
-  return m_font != -1;
+  QFontDatabase::addApplicationFont(FONT_FILE);
 }
 
 void Settings::setFullScreen(bool fs) {

@@ -88,11 +88,6 @@ PageStackWindow {
         }
 
         InfoBanner {
-                id: fontError
-                text: qsTr("Failed to load application font");
-        }
-
-        InfoBanner {
                 id: textError
                 text: qsTr("Failed to load the text");
         }
@@ -173,15 +168,7 @@ PageStackWindow {
         }
 
         Component.onCompleted: {
-                if (!_settings.fontLoaded) {
-                        fontError.show();
-                }
-
-                if (_data.setTextType(_settings.textType)) {
-                        pageStack.push("QuranPage", Qt.point(0, 0), true);
-                }
-                else {
-                        pageStack.push("ErrorPage", Qt.point(0, 0), true);
-                }
+                _data.setTextType(_settings.textType)
+                pageStack.push("QuranPage", Qt.point(0, 0), true);
         }
 }

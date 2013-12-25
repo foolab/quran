@@ -31,7 +31,7 @@ class DataProvider : public QObject {
   Q_OBJECT
 
 public:
-  DataProvider(const QString& dir, QObject *parent = 0);
+  DataProvider(QObject *parent = 0);
   ~DataProvider();
 
   Q_INVOKABLE int pageCount();
@@ -86,8 +86,6 @@ public:
   QList<Fragment> fragmentsForPart(int part);
 
 private:
-  const QString m_dir;
-
   int m_index;
   TextProvider *m_data;
   TextProvider *m_secondary;

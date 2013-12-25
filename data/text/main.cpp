@@ -541,8 +541,8 @@ bool output() {
   for (int x = 0; x < offsets.size(); x++) {
     const Offset& o = offsets.at(x);
     printf("{\"%s\", \"%s\", %i, \"%s\"},\n",
-	   encode(o.name).toLatin1().data(), encode(o.id).toLatin1().data(),
-	   o.len, encode(":/" + QFileInfo(o.idx).fileName()).toLatin1().data());
+	   encode(":/text/" + o.name).toLatin1().data(), encode(o.id).toLatin1().data(),
+	   o.len, encode(":/text/" + QFileInfo(o.idx).fileName()).toLatin1().data());
   }
   puts("};");
 

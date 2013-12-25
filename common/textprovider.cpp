@@ -1,9 +1,7 @@
 #include "textprovider.h"
 #include <QSettings>
 #include "index.h"
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
+#include <QFile>
 #include <QDebug>
 
 class TextProviderPrivate {
@@ -14,6 +12,7 @@ public:
   char *ptr;
   off_t size;
   int id;
+  QFile *file;
 };
 
 TextProvider::TextProvider(int id, const QString& dataFile, const QString& indexFile)
@@ -23,11 +22,13 @@ TextProvider::TextProvider(int id, const QString& dataFile, const QString& index
   d_ptr->index = indexFile;
   d_ptr->data = dataFile;
   d_ptr->id = id;
+  d_ptr->file = new QFile(dataFile);
 }
 
 TextProvider::~TextProvider() {
   unload();
 
+  delete d_ptr->file;
   delete d_ptr;
 }
 
@@ -49,36 +50,24 @@ bool TextProvider::load() {
 
   qlonglong size = meta["size"].toLongLong();
 
-  int fd = open(d_ptr->data.toLocal8Bit().data(), O_RDONLY);
-  if (fd == -1) {
+  if (!d_ptr->file->open(QFile::ReadOnly)) {
     d_ptr->offsets.clear();
     return false;
   }
 
-  struct stat buf;
-  if (fstat(fd, &buf) != 0) {
-    close(fd);
+  if (d_ptr->file->size() != size) {
     d_ptr->offsets.clear();
     return false;
   }
 
-  if (buf.st_size != size) {
-    close(fd);
-    d_ptr->offsets.clear();
-    return false;
-  }
-
-  char *data = (char *)mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
-  if (data == MAP_FAILED) {
-    close(fd);
+  char *data = (char *)d_ptr->file->map(0, size);
+  if (data == 0) {
     d_ptr->offsets.clear();
     return false;
   }
 
   d_ptr->ptr = data;
   d_ptr->size = size;
-
-  close(fd);
 
   return true;
 }
@@ -96,6 +85,7 @@ void TextProvider::unload() {
     return;
   }
 
-  munmap(d_ptr->ptr, d_ptr->size);
+  d_ptr->file->unmap((uchar *)d_ptr->ptr);
+  d_ptr->file->close();
   d_ptr->ptr = 0;
 }

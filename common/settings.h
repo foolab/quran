@@ -39,7 +39,6 @@ class Settings : public QObject {
   Q_PROPERTY(int translationFontSize READ translationFontSize WRITE setTranslationFontSize NOTIFY translationFontSizeChanged);
 
   Q_PROPERTY(QString version READ version CONSTANT);
-  Q_PROPERTY(bool fontLoaded READ isFontLoaded CONSTANT);
   Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged);
   Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY orientationChanged);
   Q_PROPERTY(int translationMode READ translationMode WRITE setTranslationMode NOTIFY translationModeChanged);
@@ -150,7 +149,6 @@ signals:
 
 private:
   QSettings *m_settings;
-  int m_font;
 };
 
 #endif /* SETTINGS_H */

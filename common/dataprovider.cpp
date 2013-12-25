@@ -27,8 +27,8 @@
 
 #define CLAMP(min, x, max) qMax(qMin(x, max), min)
 
-DataProvider::DataProvider(const QString& dir, QObject *parent) :
-  QObject(parent), m_dir(dir), m_index(-1), m_data(0), m_secondary(0) {
+DataProvider::DataProvider(QObject *parent) :
+  QObject(parent), m_index(-1), m_data(0), m_secondary(0) {
 
 }
 
@@ -210,7 +210,7 @@ bool DataProvider::setTextType(int index) {
     return true;
   }
 
-  QString data = QString("%1%2%3").arg(m_dir).arg(QDir::separator()).arg(Texts[index].name);
+  QString data = Texts[index].name;
   QString idx = Texts[index].idx;
 
   TextProvider *p = new TextProvider(index, data, idx);

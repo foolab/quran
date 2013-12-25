@@ -86,7 +86,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   Downloader downloader;
 
-  DataProvider data(DATA_DIR "/text/");
+  DataProvider data;
 
   Translations translations(USER_DIR "translations/", &downloader, &settings, &data);
   Recitations recitations(USER_DIR "recitations/", &downloader, &settings, &data);
