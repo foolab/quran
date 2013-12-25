@@ -153,7 +153,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   rootContext->setContextProperty("_colors", &c);
 
   QUrl sourceUrl = dev ? QUrl::fromLocalFile(QDir::currentPath() + "/main.qml")
-    : QUrl::fromLocalFile(DATA_DIR "/qml/" "main.qml");
+    : QUrl("qrc:/qml/main.qml");
   if (!dev) {
     engine->addImportPath(DATA_DIR "/qml");
   }
