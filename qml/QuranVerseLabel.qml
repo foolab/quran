@@ -1,8 +1,7 @@
 // -*- qml -*-
 import QtQuick 1.0
-import Label2 1.0
 
-Label2 {
+Label {
         Rectangle {
                 anchors.fill: parent
                 color: _colors.backgroundColor
@@ -22,7 +21,7 @@ Label2 {
         font.family: _settings.fontFamily
         font.pointSize: _settings.fontSize
 	    color: _colors.verseColor
-        center: _settings.centerText
+        horizontalAlignment: _settings.centerText ? Text.AlignHCenter : Text.AlignHRight
 
         MouseArea {
                 anchors.fill: parent

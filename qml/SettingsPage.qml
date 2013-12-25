@@ -1,6 +1,5 @@
 // -*- qml -*-
 import QtQuick 1.0
-import Label2 1.0
 
 // We can't use simple list models because of https://bugreports.qt.nokia.com//browse/QTBUG-16289
 
@@ -55,11 +54,11 @@ Page {
                         id: col
                         width: parent.width
 
-                        Label2 {
+                        Label {
                                 id: previewLabel
                                 width: parent.width
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                center: true
+                                horizontalAlignment: Text.AlignHCenter
                                 font.family: _settings.fontFamily
                                 font.pointSize: _settings.fontSize
                                 color: _colors.textColor

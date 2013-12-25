@@ -1,6 +1,5 @@
 // -*- qml -*-
 import QtQuick 1.0
-import Label2 1.0
 
 Column {
         id: col
@@ -53,14 +52,14 @@ Column {
                 visible: col.visible
         }
 
-        Label2 {
+        Label {
                 id: translation
                 visible: col.visible
                 width: parent.width
                 font.family: _settings.translationFontFamily
                 font.pointSize: _settings.translationFontSize
                 color: _colors.verseColor
-                center: _settings.centerText
+                horizontalAlignment: _settings.centerText ? Text.AlignHCenter : undefined
 
                 Image {
                         anchors.fill: parent

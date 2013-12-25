@@ -34,7 +34,6 @@
 #include "translation.h"
 #include "downloader.h"
 #include "fsmonitor.h"
-#include "label.h"
 #include "search.h"
 #include "recitations.h"
 #include "gstzipsrc.h"
@@ -96,7 +95,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<Search>();
   qmlRegisterType<Translation>("Translations", 1, 0, "Translation");
   qmlRegisterType<QuranViewModel>("QuranViewModel", 1, 0, "QuranViewModel");
-  qmlRegisterType<Label>("Label2", 1, 0, "Label2");
 
   MApplicationWindow *view = new MApplicationWindow;
   view->setRoundedCornersEnabled(false);

@@ -1,10 +1,7 @@
 // -*- qml -*-
 import QtQuick 1.0
 import QuranViewModel 1.0
-import Label2 1.0
-
 import "QuranView.js" as QV
-
 
 Flickable {
         id: flick
@@ -120,13 +117,13 @@ Flickable {
                                 source: "image://theme/" + theme.chapterBorder
                         }
 
-                        Label2 {
+                        Label {
                                 id: title
                                 width: parent.width
                                 font.family: _settings.fontFamily
                                 font.pointSize: _settings.fontSize
 	                            color: _colors.titleColor
-                                center: true
+                                horizontalAlignment: Text.AlignHCenter
 
                                 Image {
                                         anchors.fill: parent
@@ -147,12 +144,12 @@ Flickable {
                                 Component.onCompleted: populate();
                         }
 
-                        Label2 {
+                        Label {
                                 id: subtitle
                                 font.family: _settings.fontFamily
                                 font.pointSize: _settings.fontSize
                                 width: parent.width
-                                center: true
+                                horizontalAlignment: Text.AlignHCenter
 	                            color: _colors.subtitleColor
 
                                 Image {
