@@ -26,7 +26,6 @@
     <file alias="qml/AboutPage.qml">qml/AboutPage.qml</file>
     <file alias="qml/DownloadLabel.qml">qml/DownloadLabel.qml</file>
     <file alias="qml/FavoritesModel.qml">qml/FavoritesModel.qml</file>
-    <file alias="qml/FavoritesPageEmpty.qml">qml/FavoritesPageEmpty.qml</file>
     <file alias="qml/FavoritesPage.qml">qml/FavoritesPage.qml</file>
     <file alias="qml/IndexPageCell.qml">qml/IndexPageCell.qml</file>
     <file alias="qml/IndexPage.qml">qml/IndexPage.qml</file>

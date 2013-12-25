@@ -196,9 +196,7 @@ Page {
 
                         ToolButton {
                                 icon: theme.favorites
-                                onClicked: {
-                                        pageStack.push(_bookmarks.empty ? "FavoritesPageEmpty" : "FavoritesPage");
-                                }
+                                onClicked: pageStack.push("FavoritesPage");
                         }
 
                         ToolButton {
