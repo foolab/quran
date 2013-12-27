@@ -19,44 +19,46 @@
 #include <QSettings>
 #include <QDir>
 #include <QDebug>
-#include "settings.h"
 
-Colors::Colors(const QString& path, Settings *settings, QObject *parent) :
-  QObject(parent), m_ini(0), m_settings(settings), m_path(path), m_nightMode(false) {
+#define THEMES_DIR DATA_DIR "themes"
 
-  QObject::connect(m_settings, SIGNAL(themeChanged()), this, SLOT(themeChanged()));
-  QObject::connect(m_settings, SIGNAL(nightModeChanged()), this, SLOT(nightModeChanged()));
+Colors::Colors(QObject *parent) :
+  QObject(parent), m_ini(0), m_nightMode(false) {
 
-  themeChanged();
-  nightModeChanged();
 }
 
 Colors::~Colors() {
 
 }
 
-void Colors::themeChanged() {
-  QString id = m_settings->theme();
-
+void Colors::setTheme(const QString& id) {
   if (m_id != id) {
     m_id = id;
     if (m_ini) {
       delete m_ini;
     }
 
-    QString path = QString("%1%2%3%2theme.ini").arg(m_path).arg(QDir::separator()).arg(id);
+    QString path = QString("%1%2%3%2theme.ini").arg(THEMES_DIR).arg(QDir::separator()).arg(id);
 
     m_ini = new QSettings(path, QSettings::IniFormat, this);
 
+    emit themeChanged();
     emit colorsChanged();
   }
 }
 
-void Colors::nightModeChanged() {
-  bool enabled = m_settings->isNightModeEnabled();
+QString Colors::theme() {
+  return m_id;
+}
 
+bool Colors::isNightModeEnabled() {
+  return m_nightMode;
+}
+
+void Colors::setNightModeEnabled(bool enabled) {
   if (m_nightMode != enabled) {
     m_nightMode = enabled;
+    emit nightModeChanged();
     emit colorsChanged();
   }
 }
@@ -71,6 +73,10 @@ QColor Colors::value(const QString& name, const QColor& day, const QColor& night
 }
 
 QColor Colors::value(const QString& section, const QColor& defaultColor) const {
+  if (!m_ini) {
+    return QColor();
+  }
+
   QString color = m_ini->value(section).toString();
 
   if (color.isEmpty()) {

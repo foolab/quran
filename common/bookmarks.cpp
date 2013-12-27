@@ -18,15 +18,28 @@
 #include "bookmarks.h"
 #include "settings.h"
 
-Bookmarks::Bookmarks(Settings *settings, QObject *parent) :
-  QObject(parent), m_settings(settings) {
+Bookmarks::Bookmarks(QObject *parent) :
+  QObject(parent), m_settings(0) {
 
-  m_bookmarks = m_settings->bookmarks();
-  qSort(m_bookmarks);
 }
 
 Bookmarks::~Bookmarks() {
   m_settings = 0;
+}
+
+Settings *Bookmarks::settings() {
+  return m_settings;
+}
+
+void Bookmarks::setSettings(Settings *settings) {
+  if (m_settings != settings) {
+    m_settings = settings;
+
+    m_bookmarks = m_settings->bookmarks();
+    qSort(m_bookmarks);
+
+    emit settingsChanged();
+  }
 }
 
 bool Bookmarks::isEmpty() {

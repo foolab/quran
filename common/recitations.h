@@ -22,7 +22,6 @@
 #include <QDir>
 #include <QMap>
 
-class Downloader;
 class Settings;
 class DataProvider;
 class Recitation;
@@ -39,11 +38,11 @@ class Recitations : public QObject {
   Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY playingChanged);
   Q_PROPERTY(int chapter READ chapter NOTIFY chapterChanged);
   Q_PROPERTY(int verse READ verse NOTIFY verseChanged);
+  Q_PROPERTY(Settings *settings READ settings WRITE setSettings NOTIFY settingsChanged);
+  Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
 
 public:
-  Recitations(const QString& dir, Downloader *downloader, Settings *settings,
-	      DataProvider *data, QObject *parent = 0);
-
+  Recitations(QObject *parent = 0);
   ~Recitations();
 
   QList<int> installed() const;
@@ -59,6 +58,12 @@ public:
 
   int chapter() const;
   int verse() const;
+
+  Settings *settings() const;
+  void setSettings(Settings *settings);
+
+  DataProvider *data() const;
+  void setData(DataProvider *data);
 
 public slots:
   void refresh();
@@ -78,6 +83,10 @@ signals:
   void verseChanged();
   void chapterChanged();
 
+  void settingsChanged();
+  void downloaderChanged();
+  void dataChanged();
+
 private slots:
   void playerStateChanged();
   void policyAcquired();
@@ -89,10 +98,6 @@ private slots:
 private:
   void setChapter(int chapter);
   void setVerse(int verse);
-
-  Downloader *m_downloader;
-
-  const QDir m_dir;
 
   Settings *m_settings;
   DataProvider *m_data;

@@ -19,29 +19,41 @@
 #define WINDOW_CONTROLLER_H
 
 #include <QObject>
-
-class QWidget;
-class Settings;
-class QDeclarativeItem;
+#include <QRectF>
 
 class WindowController : public QObject {
   Q_OBJECT
+  Q_PROPERTY(int width READ width NOTIFY widthChanged);
+  Q_PROPERTY(int height READ height NOTIFY heightChanged);
+  Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY orientationChanged);
+  Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged);
 
 public:
-  WindowController(QWidget *view, Settings *settings, QDeclarativeItem *root, QObject *parent = 0);
+  WindowController(QObject *parent = 0);
   ~WindowController();
+
+  int width() const;
+  int height() const;
+  int orientation() const;
+  void setOrientation(int orientation);
+  bool fullScreen() const;
+  void setFullScreen(bool fullScreen);
+
+signals:
+  void fullScreenChanged();
+  void widthChanged();
+  void heightChanged();
+  void orientationChanged();
 
 public slots:
   void show();
-
-  void setOrientation();
-
   void exposedContentRectChanged();
+  void applyOrientation();
 
 private:
-  QWidget *m_view;
-  Settings *m_settings;
-  QDeclarativeItem *m_root;
+  QRectF m_rect;
+  bool m_fullScreen;
+  int m_orientation;
 };
 
 #endif /* WINDOW_CONTROLLER_H */

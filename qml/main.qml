@@ -1,8 +1,76 @@
 // -*- qml -*-
 import QtQuick 1.0
+import Quran 1.0
 
 PageStackWindow {
         id: root
+        width: _controller.width
+        height: _controller.height
+
+        FSMonitor {
+                id: _fsmon
+        }
+
+        Settings {
+                id: _settings
+        }
+
+        Downloader {
+                id: _downloader
+        }
+
+        AboutData {
+                id: _about
+        }
+
+        DataProvider {
+                id: _data
+        }
+
+        Bookmarks {
+                id: _bookmarks
+                settings: _settings
+        }
+
+        NumberFormatter {
+                id: _formatter
+                format: _settings.numberFormat
+        }
+
+        Search {
+                id: _search
+        }
+
+        Colors {
+                id: _colors
+                theme: _settings.theme
+                nightMode: _settings.nightMode
+        }
+
+        Translations {
+                id: _translations
+                settings: _settings
+                downloader: _downloader
+                data: _data
+        }
+
+        Recitations {
+                id: _recitations
+                settings: _settings
+                data: _data
+        }
+
+        WindowController {
+                id: _controller
+                orientation: _settings.orientation
+                fullScreen: _settings.fullScreen
+                Component.onCompleted: {
+                        exposedContentRectChanged();
+                        applyOrientation();
+                        show();
+                }
+        }
+
         Theme {
                 id: theme
         }

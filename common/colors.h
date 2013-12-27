@@ -22,7 +22,6 @@
 #include <QColor>
 
 class QSettings;
-class Settings;
 
 #define ADD_FUNCTION(name, day, night)      \
 QColor name() const {                       \
@@ -169,24 +168,29 @@ class Colors : public QObject {
   Q_PROPERTY(QColor numberLabeltextColor READ numberLabeltextColor NOTIFY colorsChanged);
   ADD_FUNCTION(numberLabeltextColor, Qt::white, Qt::white);
 
+  Q_PROPERTY(bool nightMode READ isNightModeEnabled WRITE setNightModeEnabled NOTIFY nightModeChanged);
+  Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged);
+
 public:
-  Colors(const QString& path, Settings *settings, QObject *parent = 0);
+  Colors(QObject *parent = 0);
   ~Colors();
+
+  void setNightModeEnabled(bool enabled);
+  bool isNightModeEnabled();
+
+  void setTheme(const QString& id);
+  QString theme();
 
 signals:
   void colorsChanged();
-
-private slots:
-  void themeChanged();
   void nightModeChanged();
+  void themeChanged();
 
 private:
   QColor value(const QString& name, const QColor& day, const QColor& night) const;
   QColor value(const QString& section, const QColor& defaultColor) const;
 
   QSettings *m_ini;
-  Settings *m_settings;
-  const QString m_path;
   QString m_id;
   bool m_nightMode;
 };

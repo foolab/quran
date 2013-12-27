@@ -27,10 +27,14 @@ class Bookmarks : public QObject {
   Q_OBJECT
 
   Q_PROPERTY(bool empty READ isEmpty NOTIFY emptyChanged);
+  Q_PROPERTY(Settings *settings READ settings WRITE setSettings NOTIFY settingsChanged);
 
 public:
-  Bookmarks(Settings *settings, QObject *parent = 0);
+  Bookmarks(QObject *parent = 0);
   ~Bookmarks();
+
+  Settings *settings();
+  void setSettings(Settings *settings);
 
   Q_INVOKABLE static uint serialize(int sura, int aya);
 
@@ -58,6 +62,7 @@ signals:
   void bookmarkRemoved(uint bookmark, int index);
   void cleared();
   void emptyChanged();
+  void settingsChanged();
 
 private:
   void deserialize(uint bookmark, int& sura, int& aya);

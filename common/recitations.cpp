@@ -24,17 +24,15 @@
 #include "mediaplaylist.h"
 #include "phoneflipcontrol.h"
 
-Recitations::Recitations(const QString& dir, Downloader *downloader, Settings *settings,
-			 DataProvider *data, QObject *parent)
-  : QObject(parent), m_downloader(downloader), m_dir(dir), m_settings(settings),
-    m_data(data), m_player(0), m_playlist(0), m_recitation(0), m_current(0),
+Recitations::Recitations(QObject *parent)
+  : QObject(parent), m_settings(0),
+    m_data(0), m_player(0), m_playlist(0), m_recitation(0), m_current(0),
     m_policy(new AudioPolicy(this)), m_play(false),
-    m_chapter(-1), m_verse(-1), m_flipControl(new PhoneFlipControl(m_settings, this)) {
+    m_chapter(-1), m_verse(-1), m_flipControl(0) {
 
   QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
   QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
   QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
-  QObject::connect(m_flipControl, SIGNAL(flipped()), this, SLOT(stop()));
 }
 
 Recitations::~Recitations() {
@@ -54,6 +52,34 @@ Recitations::~Recitations() {
   m_player = 0;
 
   m_recitation = 0;
+}
+
+Settings *Recitations::settings() const {
+  return m_settings;
+}
+
+void Recitations::setSettings(Settings *settings) {
+  if (m_settings != settings) {
+    m_settings = settings;
+    if (!m_flipControl) {
+      m_flipControl = new PhoneFlipControl(m_settings, this);
+      QObject::connect(m_flipControl, SIGNAL(flipped()), this, SLOT(stop()));
+    }
+
+    emit settingsChanged();
+  }
+}
+
+DataProvider *Recitations::data() const {
+  return m_data;
+}
+
+void Recitations::setData(DataProvider *data) {
+  if (m_data != data) {
+
+    m_data = data;
+    emit dataChanged();
+  }
 }
 
 int Recitations::chapter() const {
@@ -87,19 +113,20 @@ QList<int> Recitations::installed() const {
 }
 
 void Recitations::refresh() {
-  m_dir.mkpath(".");
+  QDir dir(m_settings->recitationsDir());
+  dir.mkpath(".");
 
   qDeleteAll(m_installed.values());
   m_installed.clear();
 
-  QStringList entries(m_dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
+  QStringList entries(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
 
-  entries += m_dir.entryList(QStringList() << "*.zip", QDir::Files | QDir::NoDotAndDotDot);
+  entries += dir.entryList(QStringList() << "*.zip", QDir::Files | QDir::NoDotAndDotDot);
 
   int x = 0;
 
   foreach (const QString& entry, entries) {
-    Recitation *r = Recitation::create(entry, m_dir.filePath(entry));
+    Recitation *r = Recitation::create(entry, dir.filePath(entry));
     if (r) {
       m_installed.insert(x++, r);
     }

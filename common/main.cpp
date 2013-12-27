@@ -46,10 +46,11 @@
 #include <MPannableViewport>
 #include <MPositionIndicator>
 
-#define USER_DIR "/home/user/MyDocs/.n9-quran/"
+#define FONT_FILE                  ":/SimplifiedNaskh.ttf"
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
   MApplication *app = new MApplication(argc, argv);
+  QFontDatabase::addApplicationFont(FONT_FILE);
 
   gst_init(0, 0);
   gst_zip_src_register();
@@ -62,39 +63,20 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
     }
   }
 
-  FSMonitor monitor;
-
-  Settings settings;
-  settings.loadFont();
-
-  Downloader downloader;
-
-  DataProvider data;
-
-  Translations translations(USER_DIR "translations/", &downloader, &settings, &data);
-  Recitations recitations(USER_DIR "recitations/", &downloader, &settings, &data);
-
-  Bookmarks bookmarks(&settings);
-
-  NumberFormatter formatter(&settings);
-
-  AboutData about;
-
-  Search search(DATA_DIR "/search.db");
-
-  Colors c(DATA_DIR "themes", &settings);
-
-  // TODO: Is all this needed ?
-  qmlRegisterType<DataProvider>();
-  qmlRegisterType<Settings>();
-  qmlRegisterType<Bookmarks>();
-  qmlRegisterType<NumberFormatter>();
-  qmlRegisterType<AboutData>();
-  qmlRegisterType<Translations>();
-  qmlRegisterType<FSMonitor>();
-  qmlRegisterType<Search>();
-  qmlRegisterType<Translation>("Translations", 1, 0, "Translation");
-  qmlRegisterType<QuranViewModel>("QuranViewModel", 1, 0, "QuranViewModel");
+  qmlRegisterType<DataProvider>("Quran", 1, 0, "DataProvider");
+  qmlRegisterType<Settings>("Quran", 1, 0, "Settings");
+  qmlRegisterType<Downloader>("Quran", 1, 0, "Downloader");
+  qmlRegisterType<Bookmarks>("Quran", 1, 0, "Bookmarks");
+  qmlRegisterType<NumberFormatter>("Quran", 1, 0, "NumberFormatter");
+  qmlRegisterType<AboutData>("Quran", 1, 0, "AboutData");
+  qmlRegisterType<Translations>("Quran", 1, 0, "Translations");
+  qmlRegisterType<Recitations>("Quran", 1, 0, "Recitations");
+  qmlRegisterType<FSMonitor>("Quran", 1, 0, "FSMonitor");
+  qmlRegisterType<Search>("Quran", 1, 0, "Search");
+  qmlRegisterType<Colors>("Quran", 1, 0, "Colors");
+  qmlRegisterType<Translation>("Quran", 1, 0, "Translation");
+  qmlRegisterType<QuranViewModel>("Quran", 1, 0, "QuranViewModel");
+  qmlRegisterType<WindowController>("Quran", 1, 0, "WindowController");
 
   MApplicationWindow *view = new MApplicationWindow;
   view->setRoundedCornersEnabled(false);
@@ -115,18 +97,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   engine->addImageProvider("quran", new LogoProvider);
   engine->addImageProvider("theme", theme);
 
-  rootContext->setContextProperty("_settings", &settings);
-  rootContext->setContextProperty("_data", &data);
-  rootContext->setContextProperty("_bookmarks", &bookmarks);
-  rootContext->setContextProperty("_formatter", &formatter);
-  rootContext->setContextProperty("_about", &about);
-  rootContext->setContextProperty("_translations", &translations);
-  rootContext->setContextProperty("_downloader", &downloader);
-  rootContext->setContextProperty("_fsmon", &monitor);
   rootContext->setContextProperty("_theme", theme);
-  rootContext->setContextProperty("_search", &search);
-  rootContext->setContextProperty("_recitations", &recitations);
-  rootContext->setContextProperty("_colors", &c);
 
   QUrl sourceUrl = dev ? QUrl::fromLocalFile(QDir::currentPath() + "/main.qml")
     : QUrl("qrc:/qml/main.qml");
@@ -137,21 +108,23 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   QDeclarativeItem *root = 0;
 
   QDeclarativeComponent component(engine, sourceUrl);
-  QGraphicsObject *content = qobject_cast<QGraphicsObject *>(component.create());
+  if (component.isError()) {
+    QList<QDeclarativeError> errors = component.errors();
 
+    foreach (const QDeclarativeError& error, errors) {
+      qWarning() << error.toString();
+    }
+
+    return 1;
+  }
+
+  QGraphicsObject *content = qobject_cast<QGraphicsObject *>(component.create());
   root = qobject_cast<QDeclarativeItem *>(content);
 
   MWidget *centralWidget = new MWidget;
   content->setParentItem(centralWidget);
   centralWidget->setMinimumSize(864, 400);
   page->setCentralWidget(centralWidget);
-
-  WindowController controller(view, &settings, root);
-
-  controller.exposedContentRectChanged();
-
-  controller.setOrientation();
-  controller.show();
 
   int ret = app->exec();
 

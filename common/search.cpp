@@ -20,6 +20,8 @@
 #include "bookmarks.h"
 #include <QDebug>
 
+#define DB_PATH DATA_DIR "/search.db"
+
 #define MATCH_PART_QUERY "SELECT chapter, verse FROM search WHERE text LIKE ?1 ORDER BY chapter, verse ASC;"
 
 #define MATCH_ALL_QUERY "SELECT chapter, verse FROM search WHERE text MATCH ?1 ORDER BY chapter, verse ASC;"
@@ -30,9 +32,9 @@ public:
   QString path;
 };
 
-Search::Search(const QString& path, QObject *parent) : QObject(parent), d_ptr(new SearchPrivate) {
+Search::Search(QObject *parent) : QObject(parent), d_ptr(new SearchPrivate) {
   d_ptr->db = 0;
-  d_ptr->path = path;
+  d_ptr->path = DB_PATH;
 }
 
 Search::~Search() {

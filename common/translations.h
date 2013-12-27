@@ -37,11 +37,12 @@ class Translations : public QObject {
   Q_PROPERTY(QList<int> active READ active NOTIFY activeChanged);
 
   Q_PROPERTY(int current READ current NOTIFY currentChanged);
+  Q_PROPERTY(Settings *settings READ settings WRITE setSettings NOTIFY settingsChanged);
+  Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
+  Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
 
 public:
-  Translations(const QString& dir, Downloader *downloader, Settings *settings,
-	       DataProvider *data, QObject *parent = 0);
-
+  Translations(QObject *parent = 0);
   ~Translations();
 
   QList<int> installed() const;
@@ -71,6 +72,15 @@ public:
 
   Q_INVOKABLE QString id(int tid) const;
 
+  Settings *settings() const;
+  void setSettings(Settings *settings);
+
+  Downloader *downloader() const;
+  void setDownloader(Downloader *downloader);
+
+  DataProvider *data() const;
+  void setData(DataProvider *data);
+
 public slots:
   void refresh();
   void startDownload(int tid);
@@ -90,6 +100,10 @@ signals:
   void failed(int id);
   void removed(int id);
 
+  void settingsChanged();
+  void downloaderChanged();
+  void dataChanged();
+
 private:
   TranslationPrivate *info(int tid);
   int tid(const QString& id);
@@ -97,8 +111,6 @@ private:
   void setCurrent(int tid);
 
   Downloader *m_downloader;
-
-  const QDir m_dir;
 
   Settings *m_settings;
   DataProvider *m_data;

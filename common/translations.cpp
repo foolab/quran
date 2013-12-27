@@ -35,15 +35,49 @@
 
 // TODO: limit the number of simultaneously downloaded translations.
 
-Translations::Translations(const QString& dir, Downloader *downloader, Settings *settings,
-			   DataProvider *data, QObject *parent)
-  : QObject(parent), m_downloader(downloader), m_dir(dir), m_settings(settings),
-    m_data(data), m_current(0) {
+Translations::Translations(QObject *parent)
+  : QObject(parent), m_downloader(0), m_settings(0),
+    m_data(0), m_current(0) {
 
 }
 
 Translations::~Translations() {
   qDeleteAll(m_info);
+}
+
+Settings *Translations::settings() const {
+  return m_settings;
+}
+
+void Translations::setSettings(Settings *settings) {
+  if (m_settings != settings) {
+    m_settings = settings;
+    emit settingsChanged();
+  }
+}
+
+Downloader *Translations::downloader() const {
+  return m_downloader;
+}
+
+void Translations::setDownloader(Downloader *downloader) {
+  if (m_downloader != downloader) {
+
+    m_downloader = downloader;
+    emit downloaderChanged();
+  }
+}
+
+DataProvider *Translations::data() const {
+  return m_data;
+}
+
+void Translations::setData(DataProvider *data) {
+  if (m_data != data) {
+
+    m_data = data;
+    emit dataChanged();
+  }
 }
 
 TranslationPrivate *Translations::info(int tid) {
@@ -118,9 +152,10 @@ bool Translations::loadDefault() {
 }
 
 void Translations::refresh() {
-  m_dir.mkpath(".");
+  QDir dir(m_settings->translationsDir());
+  dir.mkpath(".");
 
-  QStringList list = m_dir.entryList(QStringList() << INDEX_FILTER,
+  QStringList list = dir.entryList(QStringList() << INDEX_FILTER,
 				     QDir::Files | QDir::NoDotAndDotDot, QDir::Name);
 
   m_installed.clear();
@@ -304,12 +339,12 @@ int Translations::tid(const QString& id) {
 }
 
 QString Translations::index(int tid) const {
-  return QString("%1%2%3%4").arg(m_dir.absolutePath()).arg(QDir::separator())
+  return QString("%1%2%3%4").arg(m_settings->translationsDir()).arg(QDir::separator())
     .arg(id(tid)).arg(INDEX_SUFFIX);
 }
 
 QString Translations::data(int tid) const {
-  return QString("%1%2%3%4").arg(m_dir.absolutePath()).arg(QDir::separator())
+  return QString("%1%2%3%4").arg(m_settings->translationsDir()).arg(QDir::separator())
     .arg(id(tid)).arg(DATA_SUFFIX);
 }
 

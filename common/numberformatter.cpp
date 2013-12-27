@@ -16,15 +16,9 @@
  */
 
 #include "numberformatter.h"
-#include "settings.h"
 
-NumberFormatter::NumberFormatter(Settings *settings, QObject *parent) :
-  QObject(parent), m_settings(settings), m_format(-1) {
-
-  QObject::connect(m_settings, SIGNAL(numberFormatChanged()),
-		   this, SLOT(numberFormatChanged()));
-
-  numberFormatChanged();
+NumberFormatter::NumberFormatter(QObject *parent) :
+  QObject(parent), m_format(-1) {
 }
 
 NumberFormatter::~NumberFormatter() {
@@ -32,8 +26,15 @@ NumberFormatter::~NumberFormatter() {
 }
 
 
-void NumberFormatter::numberFormatChanged() {
-  m_format = m_settings->numberFormat();
+int NumberFormatter::format() const {
+  return m_format;
+}
+
+void NumberFormatter::setFormat(int format) {
+  if (NumberFormatter::format() != format) {
+    m_format = format;
+    emit formatChanged();
+  }
 }
 
 QString NumberFormatter::number(int number) {

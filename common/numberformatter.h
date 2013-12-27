@@ -20,24 +20,25 @@
 
 #include <QObject>
 
-class Settings;
-
 class NumberFormatter : public QObject {
   Q_OBJECT
+  Q_PROPERTY(int format READ format WRITE setFormat NOTIFY formatChanged);
 
 public:
-  NumberFormatter(Settings *settings, QObject *parent = 0);
+  NumberFormatter(QObject *parent = 0);
   ~NumberFormatter();
 
   Q_INVOKABLE QString number(int number);
 
   Q_INVOKABLE QString toHindi(int number);
 
-private slots:
-  void numberFormatChanged();
+  int format() const;
+  void setFormat(int format);
+
+signals:
+  void formatChanged();
 
 private:
-  Settings *m_settings;
   int m_format;
 };
 

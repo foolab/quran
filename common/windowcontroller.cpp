@@ -23,13 +23,8 @@
 #include <MApplicationPage>
 #include <QDeclarativeItem>
 
-WindowController::WindowController(QWidget *view, Settings *settings, QDeclarativeItem *root,
-				   QObject *parent)
-  : QObject(parent), m_view(view), m_settings(settings), m_root(root) {
-
-  QObject::connect(m_settings, SIGNAL(fullScreenChanged()), this, SLOT(show()));
-
-  QObject::connect(m_settings, SIGNAL(orientationChanged()), this, SLOT(setOrientation()));
+WindowController::WindowController(QObject *parent)
+  : QObject(parent), m_fullScreen(false), m_orientation(2) {
 
   QObject::connect(MApplication::activeApplicationWindow()->currentPage(),
 		   SIGNAL(exposedContentRectChanged()),
@@ -37,12 +32,11 @@ WindowController::WindowController(QWidget *view, Settings *settings, QDeclarati
 }
 
 WindowController::~WindowController() {
-  m_view = 0;
-  m_settings = 0;
+
 }
 
 void WindowController::show() {
-  if (m_settings->fullScreen()) {
+  if (m_fullScreen) {
     MApplication::activeApplicationWindow()->showFullScreen();
   }
   else {
@@ -50,9 +44,9 @@ void WindowController::show() {
   }
 }
 
-void WindowController::setOrientation() {
+void WindowController::applyOrientation() {
   MApplicationWindow *win = MApplication::activeApplicationWindow();
-  switch (m_settings->orientation()) {
+  switch (m_orientation) {
   case 0: // Auto
     win->setOrientationLocked(false);
     return;
@@ -73,7 +67,39 @@ void WindowController::setOrientation() {
 }
 
 void WindowController::exposedContentRectChanged() {
-  QRectF rect = MApplication::activeApplicationWindow()->currentPage()->exposedContentRect();
-  m_root->setWidth(rect.width());
-  m_root->setHeight(rect.height());
+  m_rect = MApplication::activeApplicationWindow()->currentPage()->exposedContentRect();
+  emit widthChanged();
+  emit heightChanged();
+}
+
+int WindowController::width() const {
+  return m_rect.width();
+}
+
+int WindowController::height() const {
+  return m_rect.height();
+}
+
+int WindowController::orientation() const {
+  return m_orientation;
+}
+
+void WindowController::setOrientation(int orientation) {
+  if (m_orientation != orientation) {
+    m_orientation = orientation;
+    applyOrientation();
+    emit orientationChanged();
+  }
+}
+
+bool WindowController::fullScreen() const {
+  return m_fullScreen;
+}
+
+void WindowController::setFullScreen(bool fullScreen) {
+  if (m_fullScreen != fullScreen) {
+    m_fullScreen = fullScreen;
+    show();
+    emit fullScreenChanged();
+  }
 }

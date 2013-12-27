@@ -1,6 +1,6 @@
 // -*- qml -*-
 import QtQuick 1.0
-import Translations 1.0
+import Quran 1.0
 
 TranslationsPage {
         id: translationEditPage

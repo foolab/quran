@@ -1,6 +1,6 @@
 // -*- qml -*-
 import QtQuick 1.0
-import QuranViewModel 1.0
+import Quran 1.0
 import "QuranView.js" as QV
 
 Flickable {

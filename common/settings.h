@@ -54,6 +54,10 @@ class Settings : public QObject {
 
   Q_PROPERTY(bool nightMode READ isNightModeEnabled WRITE setNightModeEnabled NOTIFY nightModeChanged);
   Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged);
+  Q_PROPERTY(QString recitationsDir READ recitationsDir CONSTANT);
+  Q_PROPERTY(QString translationsDir READ translationsDir CONSTANT);
+  Q_PROPERTY(QString dataDir READ dataDir CONSTANT);
+  Q_PROPERTY(QString recitationsSubDir READ recitationsSubDir CONSTANT);
 
 public:
   Settings(QObject *parent = 0);
@@ -82,8 +86,6 @@ public:
   QList<uint> bookmarks() const;
 
   QString version() const;
-
-  void loadFont();
 
   bool isFontLoaded() const;
 
@@ -119,6 +121,11 @@ public:
 
   void setTheme(const QString& theme);
   QString theme();
+
+  QString recitationsDir() const;
+  QString translationsDir() const;
+  QString dataDir() const;
+  QString recitationsSubDir() const;
 
 public slots:
   void reset();

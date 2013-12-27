@@ -35,7 +35,6 @@
 #define FONT_FAMILY                "Simplified Naskh"
 #define FONT_MIN_SIZE              16
 #define FONT_MAX_SIZE              48
-#define FONT_FILE                  ":/SimplifiedNaskh.ttf"
 
 #define MIN_TRANSLATION_FONT_SIZE  FONT_MIN_SIZE
 #define MAX_TRANSLATION_FONT_SIZE  FONT_MAX_SIZE
@@ -47,6 +46,8 @@
 
 #define DEFAULT_RECITATION_MODE             0
 Q_DECLARE_METATYPE(QList<uint>);
+
+#define USER_DIR "/home/user/MyDocs/.n9-quran/"
 
 /*!
  * Orientations:
@@ -72,6 +73,22 @@ Settings::Settings(QObject *parent) : QObject(parent) {
 Settings::~Settings() {
   delete m_settings;
   m_settings = 0;
+}
+
+QString Settings::recitationsDir() const {
+  return USER_DIR "translations/";
+}
+
+QString Settings::translationsDir() const {
+  return USER_DIR "recitations/";
+}
+
+QString Settings::dataDir() const {
+  return DATA_DIR "/";
+}
+
+QString Settings::recitationsSubDir() const {
+  return ".n9-quran/recitations/";
 }
 
 QString Settings::fontFamily() const {
@@ -142,10 +159,6 @@ QList<uint> Settings::bookmarks() const {
 
 QString Settings::version() const {
   return VERSION;
-}
-
-void Settings::loadFont() {
-  QFontDatabase::addApplicationFont(FONT_FILE);
 }
 
 void Settings::setFullScreen(bool fs) {
