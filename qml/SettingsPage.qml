@@ -230,6 +230,7 @@ Page {
                                 title: qsTr("Theme")
                                 subtitle: _settings.theme
                                 onClicked: pageStack.push("ThemeListPage");
+                                visible: _theme.themes().length > 1
                         }
 
                 }
