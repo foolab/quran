@@ -1,0 +1,34 @@
+<!DOCTYPE RCC><RCC version="1.0">
+  <qresource prefix="/">
+    <file alias="themes/blue/add-recitation.png">data/themes/blue/add-recitation.png</file>
+    <file alias="themes/blue/add-translation.png">data/themes/blue/add-translation.png</file>
+    <file alias="themes/blue/chapter-border.png">data/themes/blue/chapter-border.png</file>
+    <file alias="themes/blue/close.png">data/themes/blue/close.png</file>
+    <file alias="themes/blue/downloaded.png">data/themes/blue/downloaded.png</file>
+    <file alias="themes/blue/favorites-add.png">data/themes/blue/favorites-add.png</file>
+    <file alias="themes/blue/favorites-remove.png">data/themes/blue/favorites-remove.png</file>
+    <file alias="themes/blue/full-screen-view.png">data/themes/blue/full-screen-view.png</file>
+    <file alias="themes/blue/index.png">data/themes/blue/index.png</file>
+    <file alias="themes/blue/menu.png">data/themes/blue/menu.png</file>
+    <file alias="themes/blue/next.png">data/themes/blue/next.png</file>
+    <file alias="themes/blue/normal-view.png">data/themes/blue/normal-view.png</file>
+    <file alias="themes/blue/page-back.png">data/themes/blue/page-back.png</file>
+    <file alias="themes/blue/page.png">data/themes/blue/page.png</file>
+    <file alias="themes/blue/part.png">data/themes/blue/part.png</file>
+    <file alias="themes/blue/play-chapter.png">data/themes/blue/play-chapter.png</file>
+    <file alias="themes/blue/play-page.png">data/themes/blue/play-page.png</file>
+    <file alias="themes/blue/play-part.png">data/themes/blue/play-part.png</file>
+    <file alias="themes/blue/play-verse.png">data/themes/blue/play-verse.png</file>
+    <file alias="themes/blue/previous.png">data/themes/blue/previous.png</file>
+    <file alias="themes/blue/recitations.png">data/themes/blue/recitations.png</file>
+    <file alias="themes/blue/remove.png">data/themes/blue/remove.png</file>
+    <file alias="themes/blue/search.png">data/themes/blue/search.png</file>
+    <file alias="themes/blue/stop.png">data/themes/blue/stop.png</file>
+    <file alias="themes/blue/tool-bar-background-landscape.png">data/themes/blue/tool-bar-background-landscape.png</file>
+    <file alias="themes/blue/tool-bar-background-portrait.png">data/themes/blue/tool-bar-background-portrait.png</file>
+    <file alias="themes/blue/translation-background.png">data/themes/blue/translation-background.png</file>
+    <file alias="themes/blue/translation-border.png">data/themes/blue/translation-border.png</file>
+    <file alias="themes/blue/translations.png">data/themes/blue/translations.png</file>
+    <file alias="themes/blue/verse.png">data/themes/blue/verse.png</file>
+  </qresource>
+</RCC>

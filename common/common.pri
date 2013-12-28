@@ -31,5 +31,5 @@ target.path = /usr/bin/
 
 INSTALLS += target
 
-RESOURCES += data.qrc ../qml.qrc
+RESOURCES += data.qrc ../qml.qrc ../theme.qrc
 QMAKE_RESOURCE_FLAGS += -no-compress

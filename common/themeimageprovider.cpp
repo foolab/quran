@@ -44,11 +44,15 @@ QPixmap ThemeImageProvider::requestPixmap(const QString & id, QSize *size,
     return pix;
   }
 
-  r.setFileName(path(QString("blue/%1").arg(id.section('/', 1, 1))));
+  QString qrc = QString(":/themes/blue/%1").arg(id.section('/', 1, 1));
+  r.setFileName(qrc);
   r.setScaledSize(requestedSize);
   return QPixmap::fromImage(r.read());
 }
 
 QStringList ThemeImageProvider::themes() const {
-  return QDir(m_path).entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+  QStringList themes = QDir(m_path).entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+  themes.prepend("blue");
+
+  return themes;
 }
