@@ -8,6 +8,7 @@ QT = core
 SOURCES += main.cpp index.cpp
 HEADERS += index.h
 
+VPATH += ../../common/
 DEPENDPATH += . ../../common/
 INCLUDEPATH += . ../../common/
 

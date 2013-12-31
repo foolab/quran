@@ -21,7 +21,7 @@
 #include <QDir>
 
 ThemeImageProvider::ThemeImageProvider(const QString& path, QObject *parent)
-  : QObject(parent), QDeclarativeImageProvider(QDeclarativeImageProvider::Pixmap), m_path(path) {
+  : QObject(parent), PARENT(PARENT::Pixmap), m_path(path) {
 
 }
 

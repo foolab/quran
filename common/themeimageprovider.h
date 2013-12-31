@@ -18,10 +18,16 @@
 #ifndef THEME_IMAGE_PROVIDER_H
 #define THEME_IMAGE_PROVIDER_H
 
+#ifdef SAILFISH
+#include <QQuickImageProvider>
+#define PARENT QQuickImageProvider
+#else
 #include <QDeclarativeImageProvider>
+#define PARENT QDeclarativeImageProvider
+#endif
 #include <QObject>
 
-class ThemeImageProvider : public QObject, public QDeclarativeImageProvider {
+class ThemeImageProvider : public QObject, public PARENT {
   Q_OBJECT
 
 public:
