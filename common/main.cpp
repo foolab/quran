@@ -25,7 +25,6 @@
 #include "quranviewmodel.h"
 #include "bookmarks.h"
 #include "numberformatter.h"
-#include "logoprovider.h"
 #include "themeimageprovider.h"
 #include "aboutdata.h"
 #include <QDir>
@@ -94,7 +93,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   ThemeImageProvider *theme = new ThemeImageProvider(DATA_DIR "/themes/");
 
-  engine->addImageProvider("quran", new LogoProvider);
   engine->addImageProvider("theme", theme);
 
   rootContext->setContextProperty("_theme", theme);

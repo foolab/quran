@@ -29,7 +29,7 @@ Page {
                         Image {
                                 id: logo
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                source: "image://quran/logo.svg"
+                                source: "qrc:/logo.png"
                                 //          cache: false
                                 width: 160
                                 height: 160
