@@ -19,10 +19,6 @@ PageStackWindow {
                 id: _downloader
         }
 
-        AboutData {
-                id: _about
-        }
-
         DataProvider {
                 id: _data
         }

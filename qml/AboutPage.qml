@@ -1,10 +1,15 @@
 // -*- qml -*-
 import QtQuick 1.0
+import Quran 1.0
 
 Page {
         id: aboutPage
 
         tools: toolBar
+
+        AboutData {
+                id: _about
+        }
 
         Flickable {
                 id: flick
