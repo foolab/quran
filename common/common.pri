@@ -33,8 +33,3 @@ INSTALLS += target
 
 RESOURCES += data.qrc ../qml.qrc ../theme.qrc ../logo.qrc
 QMAKE_RESOURCE_FLAGS += -no-compress
-
-!sailfish {
-SOURCES += windowcontroller.cpp
-HEADERS += windowcontroller.h
-}
