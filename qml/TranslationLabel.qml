@@ -41,5 +41,6 @@ DownloadLabel {
                 id: translation
                 tid: label.tid
                 translations: _translations
+                Component.onCompleted: init();
         }
 }

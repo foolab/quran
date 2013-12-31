@@ -20,8 +20,8 @@
 #include "translation_p.h"
 #include <QDebug>
 
-Translation::Translation(QDeclarativeItem *parent)
-  : QDeclarativeItem(parent), m_tid(-1),
+Translation::Translation(QObject *parent)
+  : QObject(parent), m_tid(-1),
     d_ptr(0), m_translations(0) {
 }
 
@@ -33,9 +33,7 @@ Translation::~Translation() {
   d_ptr = 0;
 }
 
-void Translation::componentComplete() {
-  QDeclarativeItem::componentComplete();
-
+void Translation::init() {
   d_ptr = m_translations->registerTranslation(this);
 }
 

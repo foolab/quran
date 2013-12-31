@@ -18,13 +18,13 @@
 #ifndef TRANSLATION_H
 #define TRANSLATION_H
 
-#include <QDeclarativeItem>
+#include <QObject>
 #include <QPointer>
 
 class Translations;
 class TranslationPrivate;
 
-class Translation : public QDeclarativeItem {
+class Translation : public QObject {
   Q_OBJECT
 
   Q_ENUMS(Status);
@@ -46,10 +46,8 @@ public:
     Error,
   };
 
-  Translation(QDeclarativeItem *parent = 0);
+  Translation(QObject *parent = 0);
   ~Translation();
-
-  virtual void componentComplete();
 
   void setTid(int tid);
   int tid() const;
@@ -66,6 +64,9 @@ signals:
   void downloadProgressChanged();
   void statusChanged();
   void errorChanged();
+
+public slots:
+  void init();
 
 private:
   int m_tid;
