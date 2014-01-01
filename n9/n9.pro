@@ -14,4 +14,4 @@ HEADERS += fsmonitor.h audiopolicy.h windowcontroller.h
 
 DEFINES += DATA_DIR=\\\"/opt/n9-quran/\\\"
 
-RESOURCES += ../qml.qrc
+RESOURCES += qml.qrc
