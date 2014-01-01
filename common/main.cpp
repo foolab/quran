@@ -128,9 +128,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   QUrl sourceUrl = dev ? QUrl::fromLocalFile(QDir::currentPath() + "/main.qml")
     : QUrl("qrc:/qml/main.qml");
-  if (!dev) {
-    engine->addImportPath(DATA_DIR "/qml");
-  }
 
 #ifdef SAILFISH
   view->setSource(QUrl("qrc:/qml/main.qml"));
