@@ -1,29 +1,12 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-Rectangle {
-        color: "transparent"
+IconButton {
         id: button
-        property string icon: ""
-        signal clicked
+        property string image
+        width: Theme.itemSizeSmall
+        height: Theme.itemSizeSmall
 
-        opacity: enabled ? 1.0 : 0.0
-        width: 60
-        height: 60
-
-        onIconChanged: img.source = "image://theme/" + icon
-
-        MouseArea {
-                anchors.fill: parent
-                onClicked: button.clicked();
-        }
-
-        Image {
-                width: 50
-                height: 50
-                anchors.centerIn: parent
-
-                id: img
-                smooth: true
-        }
+        onImageChanged: icon.source = "image://theme/" + image
 }

@@ -1,57 +1,68 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 import Quran 1.0
 import "QuranView.js" as QV
 
-Flickable {
+SilicaFlickable {
         id: flick
-        clip: true
-        width: parent ? parent.width : undefined
-
-//        interactive: !_recitations.isPlaying
-
-        property int page: -1
-
-        property Item item: null
+        property int page: index
+        property Item item
 
         signal scrollRequest
 
-        function show() {
-                state = "shown"
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        contentHeight: upper.height + column.height
+
+        Component.onCompleted: scrollRequest()
+
+        Item {
+                id: upper
+                anchors.top: parent.top
+                width: parent.width
+                height: Math.max(verse.height, part.height)
+
+                SuraList {
+                        id: verse
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
+                        suras: _data.surasForPage(page)
+                }
+
+                Label {
+                        id: part
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        text: _data.partNameForPage(page)
+                        color: _colors.textColor
+                }
         }
 
-        function hide() {
-                state = "hidden"
-                flick.destroy(300);
+        Column {
+                id: column
+                anchors.top: upper.bottom
+                width: parent.width
+
+                Repeater {
+                        model: QuranViewModel {
+                                page: flick.page
+                                data: _data
+                        }
+
+                        delegate: Loader {
+                                id: loader
+                                property int _chapter: chapter
+                                property int _verse: verse
+                                width: parent.width
+                                sourceComponent: verse == -1 ? chapterDelegate : verseDelegate
+                        }
+                }
         }
-
-        state: "hidden"
-
-        states: [
-        State {
-                name: "shown"
-                PropertyChanges { target: flick; opacity: 1.0 }
-                },
-        State {
-                name: "hidden"
-                PropertyChanges { target: flick; opacity: 0.0 }
-              }
-        ]
-
-        transitions: [
-        Transition {
-                from: "shown"; to: "hidden"
-                PropertyAnimation { properties: "opacity"; duration: 250 }
-        },
-        Transition {
-                from: "hidden"; to: "shown"
-                PropertyAnimation { properties: "opacity"; duration: 250 }
-        }
-        ]
 
         Connections {
                 target: pagePosition
-                onChanged: scrollRequest();
+                onChanged: scrollRequest()
         }
 
         onItemChanged: {
@@ -80,35 +91,11 @@ Flickable {
                 QV.scrollToItem(item);
         }
 
-        onPageChanged: {
-                if (page != -1) {
-                        model.page = page;
-                        model.populate();
-                        QV.populate(column);
-                        scrollRequest();
-                }
-        }
-
-        property QuranViewModel model: QuranViewModel {data: _data}
-
-        anchors.fill: parent
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
-        contentHeight: column.height
-
         Component {
                 id: chapterDelegate
 
                 Column {
-                        property int chapter: -1
-                        onChapterChanged: populate();
-
-                        function populate() {
-                                title.populate();
-                                subtitle.populate();
-                        }
-
-                        width: parent ? parent.width : undefined
+                        width: parent.width
 
                         Image {
                                 id: chapterBorderTop
@@ -124,24 +111,12 @@ Flickable {
                                 font.pointSize: _settings.fontSize
 	                            color: _colors.titleColor
                                 horizontalAlignment: Text.AlignHCenter
-
+                                text: _data.fullSuraName(_chapter);
                                 Image {
                                         anchors.fill: parent
                                         source: "image://theme/" + theme.chapterBackground
                                         z: title.z - 1
                                 }
-
-                                function populate() {
-                                        if (parent.chapter == -1) {
-                                                height = 0;
-                                                return;
-                                        }
-
-                                        height = undefined;
-                                        text = _data.fullSuraName(parent.chapter);
-                                }
-
-                                Component.onCompleted: populate();
                         }
 
                         Label {
@@ -151,31 +126,12 @@ Flickable {
                                 width: parent.width
                                 horizontalAlignment: Text.AlignHCenter
 	                            color: _colors.subtitleColor
-
+                                text: _data.hasBasmala(_chapter) ? _data.basmala : ""
+                                visible: text != ""
                                 Image {
                                         anchors.fill: parent
                                         source: "image://theme/" + theme.chapterBackground
                                         z: subtitle.z - 1
-                                }
-
-                                function populate() {
-                                        if (parent.chapter == -1) {
-                                                height = 0;
-                                                return;
-                                        }
-
-                                        if (!_data.hasBasmala(parent.chapter)) {
-                                                height = 0;
-                                                return;
-                                        }
-
-                                        height = undefined;
-                                        text = _data.basmala();
-                                }
-
-                                Component.onCompleted: {
-                                        _settings.textTypeChanged.connect(populate);
-                                        populate();
                                 }
                         }
 
@@ -183,7 +139,6 @@ Flickable {
                                 id: chapterBorderBottom
                                 width: parent.width
                                 height: 5
-//                                height: _settings.translationMode != 0 ? 5 : 0
                                 source: "image://theme/" + theme.chapterBorder
                         }
                 }
@@ -193,14 +148,12 @@ Flickable {
                 id: verseDelegate
                 Column {
                         id: col
-                        property int chapter: -1
-                        property int verse: -1
-                        width: parent ? parent.width : undefined
+                        width: parent.width
 
                         QuranVerseLabel {
                                 id: label
-                                chapter: col.chapter
-                                verse: col.verse
+                                chapter: _chapter
+                                verse: _verse
                                 color: _recitations.chapter == chapter && _recitations.verse == verse ? _colors.highlightColor : _colors.verseColor
 
                                 onClicked: {
@@ -225,20 +178,15 @@ Flickable {
 
                         QuranPageContextMenu {
                                 id: menu
-                                verse: col.verse
-                                chapter: col.chapter
+                                verse: _verse
+                                chapter: _chapter
                         }
 
                         QuranTranslationLabel {
                                 id: translation
-                                chapter: col.chapter
-                                verse: col.verse
+                                chapter: _chapter
+                                verse: _verse
                         }
                 }
-        }
-
-        Column {
-                id: column
-                width: parent.width
         }
 }

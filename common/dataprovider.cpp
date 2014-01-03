@@ -225,6 +225,8 @@ bool DataProvider::setTextType(int index) {
 
   m_data = p;
 
+  emit basmalaChanged();
+
   return true;
 }
 

@@ -1,11 +1,12 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
 Rectangle {
         border.color: color
         border.width: 5
 	    width: parent.width
-	    height: 60
+	    height: Theme.itemSizeSmall
 
         anchors.left: parent.left
         anchors.right: parent.right

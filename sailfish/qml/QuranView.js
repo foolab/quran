@@ -1,4 +1,4 @@
-/* c-mode */
+/* js-mode */
 
 function scrollToItem(iten) {
   var upper = flick.mapFromItem(item, 0, item.y).y + flick.contentY;
@@ -30,23 +30,4 @@ function scrollToItem(iten) {
   var part = upper + (lower - (upper + flick.height));
 
   animation.run(part);
-}
-
-function populate(parentItem) {
-  var chapters = model.chapters();
-  for (var x = 0; x < chapters.length; x++) {
-    var chapter = chapters[x];
-    var verses = model.verses(chapters[x]);
-    if (verses[0] == 0) {
-      var item = chapterDelegate.createObject(parentItem);
-      item.chapter = chapter;
-    }
-
-    for (var i = 0; i < verses.length; i++) {
-      var verse = verses[i];
-      var item = verseDelegate.createObject(parentItem);
-      item.chapter = chapter;
-      item.verse = verse;
-    }
-  }
 }

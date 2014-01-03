@@ -1,10 +1,11 @@
 // -*- qml -*-
 import QtQuick 2.0
+import QtQuick.Layouts 1.1
 
-Row {
+RowLayout {
         id: toolBarLayout
         width: parent.width
-
+/*
         onChildrenChanged: layout();
         onWidthChanged: layout();
 
@@ -41,4 +42,5 @@ Row {
                         spacing = (width - (totalWidth))/(len - 1);
                 }
         }
+*/
 }

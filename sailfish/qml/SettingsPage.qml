@@ -4,7 +4,7 @@ import QtQuick 2.0
 // We can't use simple list models because of https://bugreports.qt.nokia.com//browse/QTBUG-16289
 
         // TODO: Group similar items together ?
-Page {
+QuranPage {
         id: settingsPage
 
         tools: toolBar

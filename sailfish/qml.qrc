@@ -18,7 +18,6 @@
     <file alias="qml/SelectionDialog.qml">qml/SelectionDialog.qml</file>
     <file alias="qml/SelectionDialogRow.qml">qml/SelectionDialogRow.qml</file>
     <file alias="qml/TextField.qml">qml/TextField.qml</file>
-    <file alias="qml/ToolBarLayout.qml">qml/ToolBarLayout.qml</file>
     <file alias="qml/ToolBar.qml">qml/ToolBar.qml</file>
     <file alias="qml/ToolButton.qml">qml/ToolButton.qml</file>
     <file alias="qml/PageStack.js">qml/PageStack.js</file>
@@ -31,7 +30,6 @@
     <file alias="qml/IndexPage.qml">qml/IndexPage.qml</file>
     <file alias="qml/main.qml">qml/main.qml</file>
     <file alias="qml/MassStorageQueryDialog.qml">qml/MassStorageQueryDialog.qml</file>
-    <file alias="qml/NavigationBar.qml">qml/NavigationBar.qml</file>
     <file alias="qml/NumberLabel.qml">qml/NumberLabel.qml</file>
     <file alias="qml/NumPadButton.qml">qml/NumPadButton.qml</file>
     <file alias="qml/NumPad.qml">qml/NumPad.qml</file>

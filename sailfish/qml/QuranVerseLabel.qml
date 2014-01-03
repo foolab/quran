@@ -1,18 +1,14 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
 Label {
-        Rectangle {
-                anchors.fill: parent
-                color: _colors.backgroundColor
-                z: label.z - 1
-        }
-
         id: label
         property int verse: -1
         property int chapter: -1
         onChapterChanged: populate();
         onVerseChanged: populate();
+        wrapMode: Text.WordWrap
 
         width: parent.width
 
@@ -30,13 +26,12 @@ Label {
 
         function populate() {
                 if (label.chapter != -1 && label.verse != -1) {
-                text = _data.text(label.chapter, label.verse)
-                       + " (" + _formatter.number(label.verse + 1) + ")";
+                        text = qsTr("%1 (%2)").arg(_data.text(label.chapter, label.verse)).arg(_formatter.number(label.verse + 1))
                 }
         }
 
         Component.onCompleted: {
-                _settings.textTypeChanged.connect(populate);
+                _data.basmalaChanged.connect(populate);
                 _settings.numberFormatChanged.connect(populate);
                 label.populate();
         }

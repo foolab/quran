@@ -29,6 +29,7 @@ class TextProvider;
 
 class DataProvider : public QObject {
   Q_OBJECT
+  Q_PROPERTY(QString basmala READ basmala NOTIFY basmalaChanged);
 
 public:
   DataProvider(QObject *parent = 0);
@@ -84,6 +85,9 @@ public:
   Q_INVOKABLE int suraSize(int sura);
 
   QList<Fragment> fragmentsForPart(int part);
+
+signals:
+  void basmalaChanged();
 
 private:
   int m_index;

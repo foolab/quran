@@ -1,5 +1,6 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
 Row {
         id: contextMenu
@@ -51,14 +52,14 @@ Row {
                         onCleared: button.resetIcon();
                 }
 
-                icon: _bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? theme.favoritesRemove : theme.favoritesAdd
+                image: _bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? theme.favoritesRemove : theme.favoritesAdd
 
                 function resetIcon() {
                         if (_bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse)) {
-                                icon = theme.favoritesRemove;
+                                image = theme.favoritesRemove;
                         }
                         else {
-                                icon = theme.favoritesAdd;
+                                image = theme.favoritesAdd;
                         }
                 }
 
@@ -66,35 +67,35 @@ Row {
         }
 
         ToolButton {
-                icon: theme.translations
+                image: theme.translations
                 enabled: _settings.translationMode == 2 && _fsmon.available
                 onClicked: translation.shown = !translation.shown;
         }
 
         ToolButton {
                 anchors.verticalCenter: parent.verticalCenter
-                icon: theme.playVerse
+                image: theme.playVerse
                 enabled: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.play(contextMenu.chapter, contextMenu.verse);
         }
 
         ToolButton {
                 id: playPage
-                icon: theme.playPage
+                image: theme.playPage
                 enabled: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.playPage(_settings.pageNumber);
         }
 
         ToolButton {
                 id: playChapter
-                icon: theme.playChapter
+                image: theme.playChapter
                 enabled: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.playChapter(contextMenu.chapter);
         }
 
         ToolButton {
                 id: stop
-                icon: theme.stop
+                image: theme.stop
                 onClicked: _recitations.stop();
                 enabled: _recitations.isPlaying
         }

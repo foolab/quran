@@ -9,6 +9,4 @@ Page {
         }
 
         anchors.fill: parent
-
-        property ToolBar tools: null
 }

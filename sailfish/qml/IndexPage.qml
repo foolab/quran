@@ -1,11 +1,11 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
+import Quran 1.0
 
 // TODO: use positionViewAtIndex ?
-Page {
+QuranPage {
         id: indexPage
-
-        tools: toolBar
 
         property Component partDialogComponent: null
         property Item partDialog: null
@@ -45,13 +45,6 @@ Page {
                 verseDialog.open();
         }
 
-        TitleLabel {
-                id: title
-                width: parent.width
-                anchors.top: parent.top
-                text: qsTr("Index")
-        }
-
         Component {
                 id: indexPageDelegate
 
@@ -60,12 +53,12 @@ Page {
                         sura: index
                         width: view.width
                         onClicked: {
-                                pagePosition.setPosition(sura, 0);
+                                pagePosition.setPosition(sura, 0)
                                 pageStack.pop();
                         }
 
                         ToolButton {
-                                icon: theme.verse
+                                image: theme.verse
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 onClicked: showVerseDialog(sura);
@@ -73,26 +66,30 @@ Page {
                 }
         }
 
-        ListView {
+        SilicaListView {
                 id: view
-                clip: true
                 model: _data.suraCount();
-                anchors.top: title.bottom
+                anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
                 anchors.bottom: toolBar.top
                 delegate: indexPageDelegate
+                header: PageHeader {
+                        width: view.width
+                        title: qsTr("Index")
+                }
         }
 
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
-                        ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
-                        ToolButton { icon: theme.page; onClicked: showPageDialog(); }
-                        ToolButton { icon: theme.part; onClicked: showPartDialog(); }
-                        ToolButton { icon: theme.search; onClicked: pageStack.replace("SearchPage"); }
+                        anchors.fill: parent
+                        Component.onCompleted: setItems(children);
+                        ToolButton { image: theme.page; onClicked: showPageDialog(); }
+                        ToolButton { image: theme.part; onClicked: showPartDialog(); }
+                        ToolButton { image: theme.search; onClicked: pageStack.replace("SearchPage"); }
                 }
         }
 }

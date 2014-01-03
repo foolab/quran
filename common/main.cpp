@@ -41,6 +41,7 @@
 #include "recitations.h"
 #include "gstzipsrc.h"
 #include "colors.h"
+#include "toolbarlayout.h"
 
 #ifndef SAILFISH
 #include <MDeclarativeCache>
@@ -103,6 +104,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 #ifndef SAILFISH
   qmlRegisterType<WindowController>("Quran", 1, 0, "WindowController");
 #endif
+  qmlRegisterType<ToolBarLayout>("Quran", 1, 0, "ToolBarLayout");
 
 #ifndef SAILFISH
   MApplicationWindow *view = new MApplicationWindow;

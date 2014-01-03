@@ -11,7 +11,7 @@ Rectangle {
         color: selected || mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
 
         width: parent.width / 2
-        height: verse.height * 2
+        height: verse.height * 1.5
 
         MouseArea {
                 id: mouse

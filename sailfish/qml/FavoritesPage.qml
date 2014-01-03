@@ -1,16 +1,12 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-Page {
+QuranPage {
         id: favoritesPage
 
-        tools: toolBar
-
-        TitleLabel {
-                id: title
-                width: parent.width
-                anchors.top: parent.top
-                text: qsTr("Favorites")
+        RemorsePopup {
+                id: pageRemorse
         }
 
         Label {
@@ -20,20 +16,21 @@ Page {
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
-                anchors.top: title.bottom
+                anchors.top: parent.top
                 anchors.topMargin: 26
                 width: parent.width
                 font.pixelSize: 26
                 horizontalAlignment: Text.AlignHCenter
                 color: _colors.textColor
                 visible: _bookmarks.empty
+                wrapMode: Text.WordWrap
         }
 
         Connections {
                 target: _bookmarks
                 onCleared: {
-                        view.model.clear();
-                        pageStack.pop();
+                        view.model.clear()
+                        pageStack.pop()
                 }
         }
 
@@ -68,109 +65,69 @@ Page {
         Component {
                 id: favoritesPageDelegate
 
-                Rectangle {
-                        id: rect
+                BackgroundItem {
+                        id: item
                         width: parent.width
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        height: Math.max(rm.height, ayaText.height)
-                        color: _colors.backgroundColor
-//                        color: index % 2 ? Qt.lighter(_settings.highlightColor, 1.2) : Qt.lighter(_settings.highlightColor, 1.3)
+                        height: menu.active ? Theme.itemSizeSmall + menu.height : Theme.itemSizeSmall
 
-                        ToolButton {
-                                id: rm
-                                color: parent.color
-                                icon: theme.close
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-                                anchors.right: parent.right
-                                onClicked: {
-                                        rmDialog.message = _data.text(sura, aya);
-                                        rmDialog.open();
-                                        rmDialog.accepted.connect(accepted);
-                                        rmDialog.rejected.connect(rejected);
-                                }
-
-                                function accepted() {
-                                        _bookmarks.remove(bookmark);
-                                        rmDialog.accepted.disconnect(accepted);
-                                        rmDialog.rejected.disconnect(rejected);
-                                }
-
-                                function rejected() {
-                                        rmDialog.accepted.disconnect(accepted);
-                                        rmDialog.rejected.disconnect(rejected);
-                                }
-
+                        onClicked: {
+                                pagePosition.setPosition(sura, aya)
+                                pageStack.pop()
                         }
 
-                        Button {
-                                id: ayaText
-                                anchors.verticalCenter: parent.verticalCenter
-                                border.width: 0
-                                color: parent.color
-                                clip: true
-                                anchors.left: parent.left
-                                anchors.right: rm.left
+                        Label {
+                                anchors.fill: parent
                                 font.pointSize: 18
                                 font.family: _settings.fontFamily
-                                text: _data.text(sura, aya);
+                                text: qsTr("(%1) %2").arg(_formatter.number(aya + 1)).arg(_data.text(sura, aya))
                                 elide: Text.ElideRight
-                                textAlignment: Text.AlignRight
+                                horizontalAlignment: Text.AlignRight
+                                color: _colors.textColor
+                        }
 
-                                onClicked: {
-                                        pagePosition.setPosition(sura, aya);
-                                        pageStack.pop();
+                        onPressAndHold: menu.show(item)
+
+                        ContextMenu {
+                                id: menu
+                                MenuItem {
+                                        text: qsTr("Remove")
+                                        onClicked: remorse.execute(item, "Removing", function() { _bookmarks.remove(bookmark) } )
+
                                 }
                         }
+
+                        RemorseItem { id: remorse }
                 }
         }
 
-        ListView {
+        SilicaListView {
                 id: view
                 clip: true
                 model: FavoritesModel {}
-                anchors.top: title.bottom
+                anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
-                anchors.bottom: toolBar.top
+                anchors.bottom: parent.bottom
+                header: PageHeader {
+                        width: parent.width
+                        title: qsTr("Favorites")
+                }
 
                 section.property: "sura"
                 section.criteria: ViewSection.FullString
                 section.delegate: sectionDelegate
                 delegate: favoritesPageDelegate
-        }
 
-        ToolBar {
-                id: toolBar
-                ToolBarLayout {
-                        ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
+                PullDownMenu {
+                        MenuItem {
+                                text: qsTr("Clear")
+                                onClicked: {
+                                        pageRemorse.execute("Clearing", function() { _bookmarks.clear() } )
 
-                        DialogButton {
-                                id: clearButton
-                                text: qsTr("Clear");
-                                onClicked: clearDialog.open();
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: !_bookmarks.empty
-                                // TODO: border or padding
+                                }
                         }
                 }
-        }
-
-        QueryDialog {
-                id: rmDialog
-                titleText: qsTr("Remove favorite?")
-                acceptButtonText: qsTr("Yes")
-                rejectButtonText: qsTr("No")
-        }
-
-        QueryDialog {
-                id: clearDialog
-                titleText: qsTr("Clear all favorites?")
-                acceptButtonText: qsTr("Yes")
-                rejectButtonText: qsTr("No")
-                onAccepted: _bookmarks.clear();
         }
 }
