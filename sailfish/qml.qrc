@@ -1,15 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource prefix="/">
-    <file alias="qml/Button.qml">qml/Button.qml</file>
-    <file alias="qml/ButtonRow.qml">qml/ButtonRow.qml</file>
-    <file alias="qml/CheckBox.qml">qml/CheckBox.qml</file>
-    <file alias="qml/DialogButton.qml">qml/DialogButton.qml</file>
-    <file alias="qml/Dialog.qml">qml/Dialog.qml</file>
     <file alias="qml/InfoBanner.qml">qml/InfoBanner.qml</file>
     <file alias="qml/Label.qml">qml/Label.qml</file>
-    <file alias="qml/MenuItem.qml">qml/MenuItem.qml</file>
-    <file alias="qml/MenuLayout.qml">qml/MenuLayout.qml</file>
-    <file alias="qml/Menu.qml">qml/Menu.qml</file>
     <file alias="qml/MainPage.qml">qml/MainPage.qml</file>
     <file alias="qml/SelectionDialog.qml">qml/SelectionDialog.qml</file>
     <file alias="qml/SelectionDialogRow.qml">qml/SelectionDialogRow.qml</file>
@@ -45,7 +37,6 @@
     <file alias="qml/SuraList.qml">qml/SuraList.qml</file>
     <file alias="qml/ThemeListPage.qml">qml/ThemeListPage.qml</file>
     <file alias="qml/QuranTheme.qml">qml/QuranTheme.qml</file>
-    <file alias="qml/TitleLabel.qml">qml/TitleLabel.qml</file>
     <file alias="qml/TranslationLabel.qml">qml/TranslationLabel.qml</file>
     <file alias="qml/TranslationLanguageList.qml">qml/TranslationLanguageList.qml</file>
     <file alias="qml/TranslationsAddPage.qml">qml/TranslationsAddPage.qml</file>
