@@ -33,8 +33,13 @@
 #define DEFAULT_THEME              "blue"
 
 #define FONT_FAMILY                "Simplified Naskh"
+#ifdef SAILFISH
+#define FONT_MIN_SIZE              22
+#define FONT_MAX_SIZE              54
+#else
 #define FONT_MIN_SIZE              16
 #define FONT_MAX_SIZE              48
+#endif
 
 #define MIN_TRANSLATION_FONT_SIZE  FONT_MIN_SIZE
 #define MAX_TRANSLATION_FONT_SIZE  FONT_MAX_SIZE

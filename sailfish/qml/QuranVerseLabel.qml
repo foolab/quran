@@ -15,7 +15,7 @@ Label {
         signal clicked
 
         font.family: _settings.fontFamily
-        font.pointSize: _settings.fontSize
+        font.pixelSize: _settings.fontSize
 	    color: _colors.verseColor
         horizontalAlignment: _settings.centerText ? Text.AlignHCenter : Text.AlignHRight
 
