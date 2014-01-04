@@ -1,19 +1,18 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-Rectangle {
+BackgroundItem {
         property alias title: titleLabel.text
         property alias text: textLabel.text
 
         height: titleLabel.height + textLabel.height
         width: parent.width
 
-        color: _colors.backgroundColor
-
         Label {
                 id: titleLabel
                 font.bold: true
-                color: _colors.textColor
+                color: Theme.primaryColor
         }
 
         Label {
@@ -22,6 +21,6 @@ Rectangle {
                 anchors.top: titleLabel.bottom
                 width: parent.width
                 textFormat: Text.RichText
-                color: _colors.textColor
+                color: Theme.primaryColor
         }
 }

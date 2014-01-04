@@ -27,7 +27,7 @@ AboutData::~AboutData() {
 }
 
 QString AboutData::copyright() const {
-  return tr("Copyright &copy; 2011-2013 <a href=\"mailto:msameer@foolab.org\">Mohammed Sameer</a>.");
+  return tr("Copyright &copy; 2011-2014 <a href=\"mailto:msameer@foolab.org\">Mohammed Sameer</a>.");
 }
 
 QString AboutData::appLicense() const {
