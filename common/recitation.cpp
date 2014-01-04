@@ -20,7 +20,9 @@
 #include <QDir>
 #include <QSettings>
 #include <QDebug>
+#ifndef SAILFISH
 #include "quazipfile.h"
+#endif
 
 #define SIMPLE_INFO_FILE               "info.ini"
 #define ZEKR_INFO_FILE                 "recitation.properties"
@@ -167,6 +169,7 @@ private:
   }
 };
 
+#ifndef SAILFISH
 class RecitationZekrZip : public Recitation {
 public:
   static RecitationZekrZip *create(const QString& id, const QString& dir) {
@@ -202,6 +205,7 @@ private:
     : Recitation(name, id, dir) {
   }
 };
+#endif
 
 Recitation *Recitation::create(const QString& id, const QString& dir) {
   Recitation *r = RecitationSimple::create(id, dir);
@@ -210,9 +214,11 @@ Recitation *Recitation::create(const QString& id, const QString& dir) {
     r = RecitationZekr::create(id, dir);
   }
 
+#ifndef SAILFISH
   if (!r) {
     r = RecitationZekrZip::create(id, dir);
   }
+#endif
 
   if (!r) {
     return 0;
