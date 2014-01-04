@@ -19,6 +19,11 @@ Page {
                                         remorse.execute("Resetting", function() { _settings.reset() })
                                 }
                         }
+
+                        MenuItem {
+                                text: qsTr("Manage translations")
+                                onClicked: pageStack.push(Qt.resolvedUrl("TranslationsListPage.qml"))
+                        }
                 }
 
                 Column {
@@ -69,19 +74,18 @@ Page {
                                 value: _settings.fontSize
                                 onValueChanged: _settings.fontSize = value
                         }
-/*
 
-                        SettingsPageEntry {
-                                id: translationFontSizeEntry
-
-                                entries: range(_settings.minTranslationFontSize, _settings.maxTranslationFontSize, translationFontSizeEntry);
-
-                                title: qsTr("Translation font size");
-                                subtitle: _settings.translationFontSize
-                                selectedIndex: _settings.translationFontSize - _settings.minTranslationFontSize;
-                                onAccepted: _settings.translationFontSize = selectedIndex + _settings.minTranslationFontSize;
+                        Slider {
+                                width: parent.width
+                                label: qsTr("Translation font size");
+                                minimumValue: _settings.minTranslationFontSize
+                                maximumValue: _settings.maxTranslationFontSize
+                                valueText: value
+                                stepSize: 1
+                                value: _settings.translationFontSize
+                                onValueChanged: _settings.translationFontSize = value
                         }
-*/
+
                         ComboBox {
                                 menu: ContextMenu {
                                         MenuItem { text: qsTr("Uthmani") }
@@ -94,7 +98,6 @@ Page {
                         }
 
                         ComboBox {
-                                id: numberFormatEntry
                                 menu: ContextMenu {
                                         MenuItem { text: qsTr("Hindi") }
                                         MenuItem { text: qsTr("Arabic") }
@@ -119,28 +122,19 @@ Page {
                                 onAccepted: _settings.orientation = selectedIndex;
                         }
 */
-/*
-                        SettingsPageEntry {
-                                id: translationModeEntry
-                                entries: [
-                                QtObject {property string name: qsTr("Disabled") },
-                                QtObject {property string name: qsTr("Enabled") },
-                                QtObject {property string name: qsTr("Hidden") }
-                                ]
 
-                                title: qsTr("Translation")
-                                subtitle: entries[_settings.translationMode].name;
-                                selectedIndex: _settings.translationMode
-                                onAccepted: _settings.translationMode = selectedIndex;
+                        ComboBox {
+                                menu: ContextMenu {
+                                        MenuItem { text: qsTr("Disabled") }
+                                        MenuItem { text: qsTr("Enabled") }
+                                        MenuItem { text: qsTr("Hidden") }
+                                }
+
+                                label: qsTr("Translation")
+                                currentIndex: _settings.translationMode
+                                onCurrentIndexChanged: _settings.translationMode = currentIndex
                        }
 
-                        SettingsPageEntry {
-                                id: translations
-                                title: qsTr("Manage translations")
-                                onClicked: pageStack.push("TranslationsListPage");
-                                subtitle: _translations.installed.length + qsTr(" installed.");
-                       }
-*/
                         TextSwitch {
                                 text: qsTr("Night mode")
                                 checked: _settings.nightMode

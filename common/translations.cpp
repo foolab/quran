@@ -201,7 +201,7 @@ void Translations::unregisterTranslation(Translation *t) {
   }
 }
 
-QList<int> Translations::categories() const {
+QVariantList Translations::categories() const {
   QList<int> res;
 
   for (int x = 0; x < TRANSLATIONS_LEN; x++) {
@@ -213,14 +213,14 @@ QList<int> Translations::categories() const {
 
   qSort(res);
 
-  return res;
+  return listToVariantList(res);
 }
 
 QString Translations::categoryName(int category) {
   return QLocale::languageToString(static_cast<QLocale::Language>(category));
 }
 
-QList<int> Translations::translations(int category) {
+QVariantList Translations::translations(int category) {
   QList<int> res;
 
   for (int x = 0; x < TRANSLATIONS_LEN; x++) {
@@ -229,7 +229,7 @@ QList<int> Translations::translations(int category) {
     }
   }
 
-  return res;
+  return listToVariantList(res);
 }
 
 QString Translations::translationName(int translation) {
@@ -240,12 +240,12 @@ QString Translations::categoryNameForTranslation(int translation) {
   return categoryName(Ts[translation].language);
 }
 
-QList<int> Translations::installed() const {
-  return m_installed;
+QVariantList Translations::installed() const {
+  return listToVariantList(m_installed);
 }
 
-QList<int> Translations::active() const {
-  QList<int> res = m_installed;
+QVariantList Translations::active() const {
+  QVariantList res = listToVariantList(m_installed);
 
   res += downloads();
 
@@ -278,14 +278,14 @@ void Translations::stopDownload(int tid) {
 }
 
 void Translations::stopDownloads() {
-  QList<int> d = downloads();
-
-  foreach (int tid, d) {
-    stopDownload(tid);
+  foreach (const TranslationPrivate *p, m_info) {
+    if (p->status() == Translation::Downloading) {
+      stopDownload(p->tid());
+    }
   }
 }
 
-QList<int> Translations::downloads() const {
+QVariantList Translations::downloads() const {
   QList<int> res;
 
   foreach (const TranslationPrivate *p, m_info) {
@@ -296,10 +296,10 @@ QList<int> Translations::downloads() const {
 
   qSort(res);
 
-  return res;
+  return listToVariantList(res);
 }
 
-QList<int> Translations::error() const {
+QVariantList Translations::error() const {
   QList<int> res;
 
   foreach (const TranslationPrivate *p, m_info) {
@@ -310,7 +310,7 @@ QList<int> Translations::error() const {
 
   qSort(res);
 
-  return res;
+  return listToVariantList(res);
 }
 
 void Translations::removeTranslation(int tid) {
@@ -389,4 +389,14 @@ void Translations::statusChanged(int tid, Translation::Status oldStatus,
     // Error!
     emit failed(tid);
   }
+}
+
+QVariantList Translations::listToVariantList(const QList<int>& list) const {
+  QVariantList ret;
+
+  foreach (int x, list) {
+    ret << x;
+  }
+
+  return ret;
 }

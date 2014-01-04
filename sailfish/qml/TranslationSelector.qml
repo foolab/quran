@@ -1,50 +1,56 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-SelectionDialog {
+Dialog {
         id: dialog
-
-        model: ListModel {
-                id: model
-
-                function currentChanged() {
-                        var len = _translations.installed.length;
-
-                        for (var x = 0; x < len; x++) {
-                                if (_translations.current == get(x).tid) {
-                                        selectedIndex = x;
-                                        return;
-                                }
-                        }
-                }
-
-                function populate() {
-                        clear();
-
-                        var len = _translations.installed.length;
-
-                        for (var x = 0; x < len; x++) {
-                                var tid = _translations.installed[x];
-                                var name = _translations.translationName(tid);
-                                append({"tid": tid, "name": name});
-                        }
-
-                        currentChanged();
-                }
-        }
-
-        titleText: qsTr("Choose translation");
 
         Connections {
                 target: _translations
-                onInstalledChanged: model.populate();
-                onCurrentChanged: model.currentChanged();
+                onInstalledChanged: model.populate()
+                onCurrentChanged: model.currentChanged()
         }
 
-        Component.onCompleted: model.populate();
+        DialogHeader {
+                id: header
+                title: qsTr("Choose translation")
+                acceptText: title
+        }
 
-        onAccepted: {
-                var tid = model.get(selectedIndex).tid;
-                translationsManager.changeTranslation(tid);
+        SilicaListView {
+                id: view
+                model: _translations.installed
+
+                anchors {
+                        top: header.bottom
+                        bottom: parent.bottom
+                        right: parent.right
+                        left: parent.left
+                }
+
+                delegate: BackgroundItem {
+                        property int tid: _translations.installed[modelData]
+                        onClicked: {
+                                translationsManager.changeTranslation(tid)
+                                pageStack.pop()
+                        }
+
+                        anchors {
+                                left: parent.left
+                                leftMargin: 16
+                                right: parent.right
+                                rightMargin: 16
+                        }
+
+                        height: Theme.itemSizeSmall
+
+                        Label {
+                                anchors.fill: parent
+                                wrapMode: Text.WordWrap
+                                truncationMode: TruncationMode.Fade
+                                text: _translations.translationName(tid)
+                                color: _translations.current == tid ? Theme.highlightColor : Theme.primaryColor
+                        }
+                }
         }
 }

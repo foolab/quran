@@ -52,14 +52,12 @@
     <file alias="qml/ThemeListPage.qml">qml/ThemeListPage.qml</file>
     <file alias="qml/QuranTheme.qml">qml/QuranTheme.qml</file>
     <file alias="qml/TitleLabel.qml">qml/TitleLabel.qml</file>
-    <file alias="qml/TranslationEditPage.qml">qml/TranslationEditPage.qml</file>
     <file alias="qml/TranslationLabel.qml">qml/TranslationLabel.qml</file>
     <file alias="qml/TranslationLanguageList.qml">qml/TranslationLanguageList.qml</file>
     <file alias="qml/TranslationsAddPage.qml">qml/TranslationsAddPage.qml</file>
     <file alias="qml/TranslationSelector.qml">qml/TranslationSelector.qml</file>
     <file alias="qml/TranslationsListPage.qml">qml/TranslationsListPage.qml</file>
     <file alias="qml/TranslationsManager.qml">qml/TranslationsManager.qml</file>
-    <file alias="qml/TranslationsPage.qml">qml/TranslationsPage.qml</file>
     <file alias="qml/VerseSelectionDialog.qml">qml/VerseSelectionDialog.qml</file>
     <file alias="qml/QuranView.js">qml/QuranView.js</file>
   </qresource>

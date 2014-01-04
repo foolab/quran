@@ -1,14 +1,13 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 import Quran 1.0
 
 DownloadLabel {
         id: label
 
         property int tid: -1
-
         property alias status: translation.status
-
         property bool showCategory: false
 
         showProgress: translation.status == Translation.Downloading
@@ -17,6 +16,28 @@ DownloadLabel {
         progress: translation.downloadProgress
         showInstalled: translation.status == Translation.Installed
         errorText: translation.error
+
+        RemorseItem { id: remorse }
+
+        menu: ContextMenu {
+                MenuItem {
+                        text: qsTr("Download")
+                        onClicked: _translations.startDownload(tid)
+                        visible: status == Translation.None || status == Translation.Error
+                }
+
+                MenuItem {
+                        text: qsTr("Stop")
+                        onClicked: _translations.stopDownload(tid)
+                        visible: status == Translation.Downloading
+                }
+
+                MenuItem {
+                        text: qsTr("Remove")
+                        onClicked: remorse.execute(label, "Removing", function() { _translations.removeTranslation(tid) } )
+                        visible: status == Translation.Installed
+                }
+        }
 
         function resetText() {
                 if (tid < 0) {

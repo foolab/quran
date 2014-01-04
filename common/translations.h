@@ -22,6 +22,7 @@
 #include <QStringList>
 #include "translation.h"
 #include <QDir>
+#include <QVariant>
 
 class Downloader;
 class TranslationPrivate;
@@ -31,10 +32,10 @@ class DataProvider;
 class Translations : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(QList<int> installed READ installed NOTIFY installedChanged);
-  Q_PROPERTY(QList<int> downloads READ downloads NOTIFY downloadsChanged);
-  Q_PROPERTY(QList<int> categories READ categories NOTIFY categoriesChanged);
-  Q_PROPERTY(QList<int> active READ active NOTIFY activeChanged);
+  Q_PROPERTY(QVariantList installed READ installed NOTIFY installedChanged);
+  Q_PROPERTY(QVariantList downloads READ downloads NOTIFY downloadsChanged);
+  Q_PROPERTY(QVariantList categories READ categories NOTIFY categoriesChanged);
+  Q_PROPERTY(QVariantList active READ active NOTIFY activeChanged);
 
   Q_PROPERTY(int current READ current NOTIFY currentChanged);
   Q_PROPERTY(Settings *settings READ settings WRITE setSettings NOTIFY settingsChanged);
@@ -45,16 +46,16 @@ public:
   Translations(QObject *parent = 0);
   ~Translations();
 
-  QList<int> installed() const;
-  QList<int> downloads() const;
-  QList<int> categories() const;
-  QList<int> active() const;
-  QList<int> error() const;
+  QVariantList installed() const;
+  QVariantList downloads() const;
+  QVariantList categories() const;
+  QVariantList active() const;
+  QVariantList error() const;
 
   int current() const;
 
   Q_INVOKABLE QString categoryName(int category);
-  Q_INVOKABLE QList<int> translations(int category);
+  Q_INVOKABLE QVariantList translations(int category);
   Q_INVOKABLE QString translationName(int translation);
 
   Q_INVOKABLE QString categoryNameForTranslation(int translation);
@@ -110,6 +111,7 @@ private:
 
   void setCurrent(int tid);
 
+  QVariantList listToVariantList(const QList<int>& list) const;
   Downloader *m_downloader;
 
   Settings *m_settings;

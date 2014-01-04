@@ -1,63 +1,66 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-Rectangle {
+BackgroundItem {
         id: downloadLabel
         property bool showProgress: true
+        property bool showInstalled: true
+        property bool showError: false
+
         property alias text: label.text
         property alias progress: slider.value
         property alias errorText: error.text
 
-        property bool showInstalled: true
+        property Item menu
 
-        property bool showError: false
+        width: parent.width
+        height: menu && menu.active ? menu.height + Theme.itemSizeLarge : Theme.itemSizeLarge
 
-        signal clicked
-
-        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
-
-        width: slider.width + 20 + installed.width + 10
-        height: Math.max(slider.y + slider.height + 10, 100)
-
-        MouseArea {
-                id: mouse
-                anchors.fill: parent
-                onClicked: parent.clicked()
-        }
-
-        Label {
-                id: label
-                x: 10
-                font.pointSize: 24
-                width: slider.width
-                anchors.top: parent.top
-                anchors.topMargin: 10
-                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
-        }
-
-        ProgressBar {
-                id: slider
-                x: label.x
-                opacity: showProgress ? 1.0 : 0.0
-                minimumValue: 0
-                maximumValue: 100
-                anchors.top: label.bottom
-                anchors.topMargin: 10
-        }
-
-        Label {
-                id: error
-                color: _colors.errorColor
-                anchors.fill: slider
-                opacity: showError ? 1.0 : 0.0
+        onPressAndHold: {
+                if (menu) {
+                        menu.show(downloadLabel)
+                }
         }
 
         ToolButton {
                 id: installed
-                icon: theme.downloaded
-                opacity: showInstalled ? 1.0 : 0.0
-                anchors.verticalCenter: parent.verticalCenter
+                image: theme.downloaded
+                visible: showInstalled
+                y: (Theme.itemSizeLarge - height) / 2
                 anchors.right: parent.right
-                color: parent.color
+        }
+
+        Label {
+                id: label
+                anchors.top: parent.top
+                anchors.right: installed.left
+                anchors.rightMargin: 10
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                // TODO:
+                height: slider.visible ? Theme.itemSizeSmall : Theme.itemSizeMedium
+                wrapMode: Text.WordWrap
+                color: Theme.primaryColor
+                truncationMode: TruncationMode.Fade
+        }
+
+        ProgressBar {
+                id: slider
+                visible: showProgress
+                minimumValue: 0
+                maximumValue: 100
+                anchors.top: label.bottom
+                anchors.right: installed.left
+                anchors.rightMargin: 10
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+        }
+
+        Label {
+                id: error
+                color: Theme.highlightColor
+                anchors.fill: slider
+                visible: showError
         }
 }

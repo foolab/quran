@@ -52,7 +52,13 @@
 #define DEFAULT_RECITATION_MODE             0
 Q_DECLARE_METATYPE(QList<uint>);
 
+#ifdef SAILFISH
+#define USER_DIR "/home/nemo/.local/share/harbour-quran/"
+#define CONF_FILE "harbour-quran.conf"
+#else
 #define USER_DIR "/home/user/MyDocs/.n9-quran/"
+#define CONF_FILE "quran.conf"
+#endif
 
 /*!
  * Orientations:
@@ -70,8 +76,8 @@ Settings::Settings(QObject *parent) : QObject(parent) {
   qRegisterMetaType<QList<uint> >("QList<uint>");
   qRegisterMetaTypeStreamOperators<QList<uint> >("QList<uint>");
 
-  m_settings = new QSettings(QString("%1%2.config%2quran.conf")
-			     .arg(QDir::homePath()).arg(QDir::separator()),
+  m_settings = new QSettings(QString("%1%2.config%2%3")
+			     .arg(QDir::homePath()).arg(QDir::separator()).arg(CONF_FILE),
 			     QSettings::IniFormat);
 }
 
@@ -81,11 +87,11 @@ Settings::~Settings() {
 }
 
 QString Settings::recitationsDir() const {
-  return USER_DIR "translations/";
+  return USER_DIR "recitations/";
 }
 
 QString Settings::translationsDir() const {
-  return USER_DIR "recitations/";
+  return USER_DIR "translations/";
 }
 
 QString Settings::dataDir() const {
