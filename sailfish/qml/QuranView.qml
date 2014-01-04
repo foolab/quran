@@ -108,7 +108,7 @@ SilicaFlickable {
                                 id: title
                                 width: parent.width
                                 font.family: _settings.fontFamily
-                                font.pointSize: _settings.fontSize
+                                font.pixelSize: _settings.fontSize
 	                            color: _colors.titleColor
                                 horizontalAlignment: Text.AlignHCenter
                                 text: _data.fullSuraName(_chapter);
@@ -122,7 +122,7 @@ SilicaFlickable {
                         Label {
                                 id: subtitle
                                 font.family: _settings.fontFamily
-                                font.pointSize: _settings.fontSize
+                                font.pixelSize: _settings.fontSize
                                 width: parent.width
                                 horizontalAlignment: Text.AlignHCenter
 	                            color: _colors.subtitleColor
