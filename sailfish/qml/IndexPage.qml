@@ -4,9 +4,9 @@ import Sailfish.Silica 1.0
 import Quran 1.0
 
 // TODO: use positionViewAtIndex ?
-QuranPage {
+Page {
         id: indexPage
-
+/*
         property Component partDialogComponent: null
         property Item partDialog: null
 
@@ -44,7 +44,7 @@ QuranPage {
 
                 verseDialog.open();
         }
-
+*/
         Component {
                 id: indexPageDelegate
 
@@ -54,34 +54,36 @@ QuranPage {
                         width: view.width
                         onClicked: {
                                 pagePosition.setPosition(sura, 0)
-                                pageStack.pop();
+                                pageStack.pop()
                         }
-
+/*
                         ToolButton {
                                 image: theme.verse
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
-                                onClicked: showVerseDialog(sura);
+                                onClicked: showVerseDialog(sura)
                         }
+*/
                 }
         }
 
         SilicaListView {
                 id: view
-                model: _data.suraCount();
+                model: _data.suraCount()
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
-                anchors.bottom: toolBar.top
+                anchors.bottom: parent.bottom
                 delegate: indexPageDelegate
                 header: PageHeader {
                         width: view.width
                         title: qsTr("Index")
                 }
         }
-
+/*
+// TODO:
         ToolBar {
                 id: toolBar
                 ToolBarLayout {
@@ -92,4 +94,5 @@ QuranPage {
                         ToolButton { image: theme.search; onClicked: pageStack.replace("SearchPage"); }
                 }
         }
+*/
 }

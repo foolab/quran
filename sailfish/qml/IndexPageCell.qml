@@ -1,47 +1,39 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-Rectangle {
+BackgroundItem {
         id: root
-        signal clicked
+        property int sura
+        width: parent.width
+        height: Theme.itemSizeMedium
 
-        property int sura: 0
-        property bool selected: false
-
-        color: selected || mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
-
-        width: parent.width / 2
-        height: verse.height * 1.5
-
-        MouseArea {
-                id: mouse
+        Item {
                 anchors.fill: parent
-                onClicked: root.clicked();
-        }
 
-        NumberLabel {
-                color: verse.color
-                id: number
-                number: root.sura
-                width: 70
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                anchors.top: parent.top
-                anchors.topMargin: parent.height/4
-                horizontalAlignment: Text.AlignRight
-                font.pointSize: 24
-        }
+                NumberLabel {
+                        id: number
+                        color: Theme.primaryColor
+                        number: root.sura
+                        width: 70
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        horizontalAlignment: Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
+                }
 
-        Label {
-                id: verse
-                font.pointSize: 24
-                width: parent.width - number.width
-                text: _data.fullSuraName(root.sura);
-                font.bold: true
-                anchors.right: number.left
-                anchors.top: parent.top
-                anchors.topMargin: parent.height/4
-                horizontalAlignment: Text.AlignRight
-                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
+                Label {
+                        width: parent.width - number.width
+                        text: _data.fullSuraName(root.sura);
+                        font.bold: true
+                        anchors.right: number.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        horizontalAlignment: Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
+                        color: Theme.primaryColor
+                }
         }
 }
