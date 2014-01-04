@@ -95,7 +95,12 @@ SilicaFlickable {
                 id: chapterDelegate
 
                 Column {
-                        width: parent.width
+                        anchors {
+                                left: parent.left
+                                right: parent.right
+                                rightMargin: 16
+                                leftMargin: 16
+                        }
 
                         Image {
                                 id: chapterBorderTop
@@ -148,7 +153,12 @@ SilicaFlickable {
                 id: verseDelegate
                 Column {
                         id: col
-                        width: parent.width
+                        anchors {
+                                left: parent.left
+                                right: parent.right
+                                rightMargin: 16
+                                leftMargin: 16
+                        }
 
                         QuranVerseLabel {
                                 id: label
