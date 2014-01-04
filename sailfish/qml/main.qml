@@ -106,18 +106,17 @@ ApplicationWindow {
 //                onAyaChanged: console.log("Aya " + aya);
 //                onYChanged: console.log("Y " + y);
         }
-/*
+
         Connections {
                 target: _settings
                 onTextTypeChanged: {
                         var type = _data.textType();
                         if (!_data.setTextType(_settings.textType)) {
-                                textError.show();
                                 _settings.textType = type;
                         }
                 }
         }
-
+/*
         InfoBanner {
                 id: favoriteAdded
                 text: qsTr("Favorite added");
@@ -143,11 +142,6 @@ ApplicationWindow {
                 Component.onCompleted: {
                         _bookmarks.cleared.connect(show);
                 }
-        }
-
-        InfoBanner {
-                id: textError
-                text: qsTr("Failed to load the text");
         }
 
         InfoBanner {

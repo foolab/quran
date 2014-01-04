@@ -41,14 +41,14 @@ Page {
                                         anchors.horizontalCenter: parent.horizontalCenter
                                         horizontalAlignment: Text.AlignHCenter
                                         font.family: _settings.fontFamily
-                                        font.pointSize: _settings.fontSize
+                                        font.pixelSize: _settings.fontSize
                                         color: _colors.textColor
                                         wrapMode: Text.WordWrap
 
                                         Component.onCompleted: populate();
 
                                         function populate() {
-                                                text = _data.text(0, 0) + " (" + _formatter.number(1) + ")"
+                                                text = qsTr("%1 (%2)").arg(_data.basmala).arg(_formatter.number(1))
                                         }
 
                                         Connections {
@@ -60,7 +60,6 @@ Page {
                         }
 
                         Slider {
-                                // TODO: initial drag makes text size jump
                                 width: parent.width
                                 label: qsTr("Text size")
                                 minimumValue: _settings.minFontSize
@@ -90,7 +89,7 @@ Page {
                                 }
 
                                 label: qsTr("Text type")
-                                currentIndex: _settings.textType;
+                                currentIndex: _settings.textType
                                 onCurrentIndexChanged: _settings.textType = currentIndex
                         }
 
