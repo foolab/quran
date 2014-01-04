@@ -1,90 +1,76 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
-// We can't use simple list models because of https://bugreports.qt.nokia.com//browse/QTBUG-16289
-
-        // TODO: Group similar items together ?
-QuranPage {
+Page {
         id: settingsPage
 
-        tools: toolBar
+        RemorsePopup { id: remorse }
 
-        TitleLabel {
-                id: title
-                width: parent.width
-                anchors.top: parent.top
-                text: qsTr("Settings")
-        }
-
-        function range(start, end, parentObject) {
-                var arr = new Array();
-
-                var str = "import QtQuick 2.0; QtObject { property string name }";
-                for (var x = start; x <= end; x++) {
-                        var o = Qt.createQmlObject(str, parentObject);
-                        o.name = x;
-                        arr.push(o);
-                }
-
-                return arr;
-        }
-
-        Menu {
-                id: menu
-
-                MenuLayout {
-                        MenuItem { text: qsTr("Reset settings"); onClicked: { menu.close(); resetDialog.open(); } }
-                }
-        }
-
-        Flickable {
+        SilicaFlickable {
                 id: flick
-                clip: true
-                anchors.top: title.bottom
-                anchors.topMargin: 16
-                anchors.bottom: toolBar.top
-                anchors.left: parent.left
-                anchors.right: parent.right
+                anchors.fill: parent
                 contentHeight: col.height
 
-                height: parent.height
-                width: parent.width
+                PullDownMenu {
+                        MenuItem {
+                                text: qsTr("Reset")
+                                onClicked: {
+                                        remorse.execute("Resetting", function() { _settings.reset() })
+                                }
+                        }
+                }
 
                 Column {
                         id: col
                         width: parent.width
 
-                        Label {
-                                id: previewLabel
+                        PageHeader {
                                 width: parent.width
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                horizontalAlignment: Text.AlignHCenter
-                                font.family: _settings.fontFamily
-                                font.pointSize: _settings.fontSize
-                                color: _colors.textColor
-                                Component.onCompleted: populate();
-
-                                function populate() {
-                                        text = _data.text(0, 0) + " (" + _formatter.number(1) + ")"
-                                }
-
-                                Connections {
-                                        target: _settings
-                                        onNumberFormatChanged: previewLabel.populate();
-                                        onTextTypeChanged: previewLabel.populate();
-                                }
-
+                                title: qsTr("Settings")
                         }
 
-                        SettingsPageEntry {
-                                id: fontSizeEntry
+                        Rectangle {
+                                width: parent.width
+                                height: previewLabel.height
+                                color: _colors.backgroundColor
 
-                                entries: range(_settings.minFontSize, _settings.maxFontSize, fontSizeEntry);
-                                title: qsTr("Font size");
-                                subtitle: _settings.fontSize
-                                selectedIndex: _settings.fontSize - _settings.minFontSize
-                                onAccepted: _settings.fontSize = selectedIndex + _settings.minFontSize;
+                                Label {
+                                        id: previewLabel
+                                        width: parent.width
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        horizontalAlignment: Text.AlignHCenter
+                                        font.family: _settings.fontFamily
+                                        font.pointSize: _settings.fontSize
+                                        color: _colors.textColor
+                                        wrapMode: Text.WordWrap
+
+                                        Component.onCompleted: populate();
+
+                                        function populate() {
+                                                text = _data.text(0, 0) + " (" + _formatter.number(1) + ")"
+                                        }
+
+                                        Connections {
+                                                target: _settings
+                                                onNumberFormatChanged: previewLabel.populate();
+                                                onTextTypeChanged: previewLabel.populate();
+                                        }
+                                }
                         }
+
+                        Slider {
+                                // TODO: initial drag makes text size jump
+                                width: parent.width
+                                label: qsTr("Text size")
+                                minimumValue: _settings.minFontSize
+                                maximumValue: _settings.maxFontSize
+                                valueText: value
+                                stepSize: 1
+                                value: _settings.fontSize
+                                onValueChanged: _settings.fontSize = value
+                        }
+/*
 
                         SettingsPageEntry {
                                 id: translationFontSizeEntry
@@ -96,35 +82,30 @@ QuranPage {
                                 selectedIndex: _settings.translationFontSize - _settings.minTranslationFontSize;
                                 onAccepted: _settings.translationFontSize = selectedIndex + _settings.minTranslationFontSize;
                         }
+*/
+                        ComboBox {
+                                menu: ContextMenu {
+                                        MenuItem { text: qsTr("Uthmani") }
+                                        MenuItem { text: qsTr("Simple") }
+                                }
 
-                        SettingsPageEntry {
-                                id: textTypeEntry
-                                entries: [
-                                QtObject {property string name: qsTr("Uthmani") },
-                                QtObject {property string name: qsTr("Simple") }
-                                ]
-
-                                title: qsTr("Text type")
-                                subtitle: entries[_settings.textType].name;
-                                selectedIndex: _settings.textType;
-                                onAccepted: _settings.textType = selectedIndex;
+                                label: qsTr("Text type")
+                                currentIndex: _settings.textType;
+                                onCurrentIndexChanged: _settings.textType = currentIndex
                         }
 
-                        SettingsPageEntry {
+                        ComboBox {
                                 id: numberFormatEntry
-                                property int __number: 123
+                                menu: ContextMenu {
+                                        MenuItem { text: qsTr("Hindi") }
+                                        MenuItem { text: qsTr("Arabic") }
+                                }
 
-                                entries: [
-                                QtObject {property string name: qsTr("Hindi") },
-                                QtObject {property string name: qsTr("Arabic") }
-                                ]
-
-                                title: qsTr("Number format")
-                                subtitle: entries[_settings.numberFormat].name;
-                                selectedIndex: _settings.numberFormat;
-                                onAccepted: _settings.numberFormat = selectedIndex;
+                                label: qsTr("Number format")
+                                currentIndex: _settings.numberFormat
+                                onCurrentIndexChanged: _settings.numberFormat = currentIndex
                         }
-
+/*
                         SettingsPageEntry {
                                 id: orientationEntry
                                 entries: [
@@ -138,7 +119,8 @@ QuranPage {
                                 selectedIndex: _settings.orientation
                                 onAccepted: _settings.orientation = selectedIndex;
                         }
-
+*/
+/*
                         SettingsPageEntry {
                                 id: translationModeEntry
                                 entries: [
@@ -159,39 +141,23 @@ QuranPage {
                                 onClicked: pageStack.push("TranslationsListPage");
                                 subtitle: _translations.installed.length + qsTr(" installed.");
                        }
-
-/*
-                        SettingsPageEntry {
-                                // TODO:
-                                title: qsTr("Application language");
-                                subtitle: "TODO";
-                        }
 */
-
-                        SettingsPageEntry {
-                                id: nightMode
-                                entries: [
-                                QtObject {property string name: qsTr("On (Experimental)") },
-                                QtObject {property string name: qsTr("Off") }
-                                ]
-                                title: qsTr("Night mode");
-                                subtitle: entries[selectedIndex].name;
-                                selectedIndex: _settings.nightMode ? 0 : 1;
-                                onAccepted: _settings.nightMode = (selectedIndex == 0);
+                        TextSwitch {
+                                text: qsTr("Night mode")
+                                checked: _settings.nightMode
+                                onCheckedChanged: _settings.nightMode = checked
                         }
 
-                        SettingsPageEntry {
-                                id: textAlignmentEntry
-                                entries: [
-                                QtObject {property string name: qsTr("Automatic") },
-                                QtObject {property string name: qsTr("Center") }
-                                ]
-                                title: qsTr("Text alignment");
-                                subtitle: entries[selectedIndex].name;
-                                selectedIndex: _settings.centerText ? 1 : 0;
-                                onAccepted: _settings.centerText = (selectedIndex == 1);
+                        ComboBox {
+                                menu: ContextMenu {
+                                        MenuItem { text: qsTr("Automatic") }
+                                        MenuItem { text: qsTr("Center") }
+                                }
+                                label: qsTr("Text alignment");
+                                currentIndex: _settings.centerText ? 1 : 0;
+                                onCurrentIndexChanged: _settings.centerText = (currentIndex == 1);
                         }
-
+/*
                         SettingsPageEntry {
                                 id: recitationModeEntry
                                 entries: [
@@ -232,28 +198,7 @@ QuranPage {
                                 onClicked: pageStack.push("ThemeListPage");
                                 visible: _theme.themes().length > 1
                         }
-
+*/
                 }
-        }
-
-        InfoBanner {
-                id: settingsReset
-                text: qsTr("Settings reset");
-        }
-
-        ToolBar {
-                id: toolBar
-                ToolBarLayout {
-                        ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
-                        ToolButton { icon: theme.menuIcon; onClicked: menu.open(); }
-                }
-        }
-
-        QueryDialog {
-                id: resetDialog
-                titleText: qsTr("Reset settings?")
-                acceptButtonText: qsTr("Yes")
-                rejectButtonText: qsTr("No")
-                onAccepted: { _settings.reset(); settingsReset.show(); }
         }
 }
