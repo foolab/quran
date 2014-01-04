@@ -2,28 +2,11 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-QuranPage {
+Page {
         id: favoritesPage
 
         RemorsePopup {
                 id: pageRemorse
-        }
-
-        Label {
-                id: error
-                text: qsTr("No favorites added.\nTap on a verse then tap the star button to add or remove favorites")
-                anchors.left: parent.left
-                anchors.leftMargin: 16
-                anchors.right: parent.right
-                anchors.rightMargin: 16
-                anchors.top: parent.top
-                anchors.topMargin: 26
-                width: parent.width
-                font.pixelSize: 26
-                horizontalAlignment: Text.AlignHCenter
-                color: _colors.textColor
-                visible: _bookmarks.empty
-                wrapMode: Text.WordWrap
         }
 
         Connections {
@@ -44,21 +27,16 @@ QuranPage {
 
         Component {
                 id: sectionDelegate
-                Rectangle {
-                        width: view.width
-                        color: _colors.sectionColor
-                        height: title.height
 
-                        Label {
-                                anchors.right: parent.right
-                                anchors.rightMargin: 20
-                                id: title
-                                font.pointSize: 26
-                                font.family: _settings.fontFamily
-                                horizontalAlignment: Text.AlignRight
-                                verticalAlignment: Text.AlignVCenter
-                                text: _data.fullSuraName(section)
-                        }
+                Label {
+                        id: title
+                        anchors.right: parent.right
+                        anchors.rightMargin: 20
+                        font.family: _settings.fontFamily
+                        horizontalAlignment: Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
+                        text: _data.fullSuraName(section)
+                        color: Theme.highlightColor
                 }
         }
 
@@ -76,19 +54,26 @@ QuranPage {
                         }
 
                         Label {
-                                anchors.fill: parent
-                                font.pointSize: 18
+                                anchors {
+                                        top: parent.top
+                                        bottom: parent.bottom
+                                        left: parent.left
+                                        right: parent.right
+                                        rightMargin: 16
+                                }
+
                                 font.family: _settings.fontFamily
                                 text: qsTr("(%1) %2").arg(_formatter.number(aya + 1)).arg(_data.text(sura, aya))
                                 elide: Text.ElideRight
                                 horizontalAlignment: Text.AlignRight
-                                color: _colors.textColor
+                                color: Theme.primaryColor
                         }
 
                         onPressAndHold: menu.show(item)
 
                         ContextMenu {
                                 id: menu
+
                                 MenuItem {
                                         text: qsTr("Remove")
                                         onClicked: remorse.execute(item, "Removing", function() { _bookmarks.remove(bookmark) } )
@@ -102,14 +87,8 @@ QuranPage {
 
         SilicaListView {
                 id: view
-                clip: true
                 model: FavoritesModel {}
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.leftMargin: 16
-                anchors.right: parent.right
-                anchors.rightMargin: 16
-                anchors.bottom: parent.bottom
+                anchors.fill: parent
                 header: PageHeader {
                         width: parent.width
                         title: qsTr("Favorites")
@@ -120,12 +99,16 @@ QuranPage {
                 section.delegate: sectionDelegate
                 delegate: favoritesPageDelegate
 
+                ViewPlaceholder {
+                        text: qsTr("No favorites added.\nTap on a verse then tap the star button to add or remove favorites")
+                        enabled: _bookmarks.empty
+                }
+
                 PullDownMenu {
                         MenuItem {
                                 text: qsTr("Clear")
                                 onClicked: {
                                         pageRemorse.execute("Clearing", function() { _bookmarks.clear() } )
-
                                 }
                         }
                 }
