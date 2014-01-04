@@ -136,15 +136,6 @@ ApplicationWindow {
         }
 
         InfoBanner {
-                id: favoritesCleared
-                text: qsTr("Favorites cleared");
-
-                Component.onCompleted: {
-                        _bookmarks.cleared.connect(show);
-                }
-        }
-
-        InfoBanner {
                 id: firstPageReached
                 text: qsTr("This is the first page");
         }
@@ -209,7 +200,7 @@ ApplicationWindow {
                         translations.show();
                 }
         }
-
+*/
         Connections {
                 target: _fsmon
                 onAvailableChanged: {
@@ -218,105 +209,4 @@ ApplicationWindow {
                         }
                 }
         }
-
-        initialPage: Component {
-                MainPage {}
-        }
-
-        Component.onCompleted: {
-                _data.setTextType(_settings.textType)
-        }
-*/
-/*
-        initialPage: Component {
-                Page {
-                        anchors.fill: parent
-                        SilicaListView {
-                                id: view
-                                anchors.top: parent.top
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                anchors.bottom: row.top
-//                                anchors.fill: parent
-                                model: 114
-                                orientation: ListView.Horizontal
-                                snapMode: ListView.SnapOneItem
-                                highlightRangeMode: ListView.StrictlyEnforceRange
-                                LayoutMirroring.enabled: true
-//                                LayoutMirroring.childrenInherit: true
-                                interactive: false
-                                PullDownMenu {
-                                        MenuItem {
-                                                text: "foo"
-                                        }
-                                }
-                                delegate: SilicaFlickable {
-                                        width: view.width
-                                        height: view.height
-                                        contentHeight: column.height
-                                        Column {
-                                                id: column
-                                                width: parent.width
-                                                Label {
-                                                        width: parent.width
-                                                        text: modelData
-                                                        height: 200
-                                                }
-                                                Label {
-                                                        width: parent.width
-                                                        text: modelData
-                                                        height: 200
-                                                }
-                                                Label {
-                                                        width: parent.width
-                                                        text: modelData
-                                                        height: 200
-                                                }
-                                                Label {
-                                                        width: parent.width
-                                                        text: modelData
-                                                        height: 200
-                                                }
-                                                Label {
-                                                        width: parent.width
-                                                        text: modelData
-                                                        height: 200
-                                                }
-                                                Label {
-                                                        width: parent.width
-                                                        text: modelData
-                                                        height: 200
-                                                }
-                                                Label {
-                                                        width: parent.width
-                                                        text: modelData
-                                                        height: 200
-                                                }
-                                                Label {
-                                                        width: parent.width
-                                                        text: modelData
-                                                        height: 200
-                                                }
-                                        }
-                                }
-                        }
-                        Row {
-                                id: row
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                anchors.bottom: parent.bottom
-                                height: prev.height
-                                Button {
-                                        id: prev
-                                        text: "Previous"
-                                        onClicked: view.currentIndex = view.currentIndex - 1
-                                }
-                                Button {
-                                        text: "Next"
-                                        onClicked: view.currentIndex = view.currentIndex + 1
-                                }
-                        }
-                }
-        }
-*/
 }
