@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2013 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include <QObject>
 #include <QDir>
 #include <QMap>
+#include <QVariant>
 
 class Settings;
 class DataProvider;
@@ -33,7 +34,7 @@ class PhoneFlipControl;
 class Recitations : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(QList<int> installed READ installed NOTIFY installedChanged);
+  Q_PROPERTY(QVariantList installed READ installed NOTIFY installedChanged);
   Q_PROPERTY(int current READ current NOTIFY currentChanged);
   Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY playingChanged);
   Q_PROPERTY(int chapter READ chapter NOTIFY chapterChanged);
@@ -45,7 +46,7 @@ public:
   Recitations(QObject *parent = 0);
   ~Recitations();
 
-  QList<int> installed() const;
+  QVariantList installed() const;
 
   Q_INVOKABLE QString recitationName(int id);
 

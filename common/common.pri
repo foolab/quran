@@ -25,7 +25,7 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            main.cpp themeimageprovider.cpp phoneflipcontrol.cpp colors.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h quranviewmodel.h \
-           position.h aboutdata.h trans-meta.h toolbarlayout.h \
+           position.h aboutdata.h trans-meta.h recite-meta.h toolbarlayout.h \
            translations.h translation.h downloader.h translation_p.h textprovider.h \
            index.h search.h recitations.h recitation.h mediaplaylist.h \
            themeimageprovider.h phoneflipcontrol.h colors.h

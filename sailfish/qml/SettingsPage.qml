@@ -146,42 +146,30 @@ Page {
                                         MenuItem { text: qsTr("Automatic") }
                                         MenuItem { text: qsTr("Center") }
                                 }
+
                                 label: qsTr("Text alignment");
                                 currentIndex: _settings.centerText ? 1 : 0;
                                 onCurrentIndexChanged: _settings.centerText = (currentIndex == 1);
                         }
+
+                        TextSwitch {
+                                text: qsTr("Enable recitations")
+                                checked: _settings.recitationMode == 1
+                                onCheckedChanged: _settings.recitationMode = checked ? 1 : 0
+                        }
+
+                        TextSwitch {
+                                text: qsTr("Flip phone to stop recitation")
+                                checked: _settings.flipToStopRecitation
+                                onCheckedChanged: _settings.flipToStopRecitation = checked
+                        }
+
 /*
-                        SettingsPageEntry {
-                                id: recitationModeEntry
-                                entries: [
-                                QtObject {property string name: qsTr("Disabled") },
-                                QtObject {property string name: qsTr("Enabled") }
-                                ]
-
-                                title: qsTr("Recitation")
-                                subtitle: entries[_settings.recitationMode].name;
-                                selectedIndex: _settings.recitationMode
-                                onAccepted: _settings.recitationMode = selectedIndex;
-                       }
-
                         SettingsPageEntry {
                                 id: recitationsEntry
                                 title: qsTr("Show recitations")
                                 onClicked: pageStack.push("RecitationsListPage");
                                 subtitle: _recitations.installed.length + qsTr(" installed.");
-                        }
-
-                        SettingsPageEntry {
-                                id: flipToStopRecitation
-                                entries: [
-                                QtObject {property string name: qsTr("Yes") },
-                                QtObject {property string name: qsTr("No") }
-                                ]
-
-                                title: qsTr("Flip phone to stop recitation")
-                                subtitle: entries[selectedIndex].name;
-                                selectedIndex: _settings.flipToStopRecitation ? 0 : 1
-                                onAccepted: _settings.flipToStopRecitation = (selectedIndex == 0)
                         }
 
                         SettingsPageEntry {

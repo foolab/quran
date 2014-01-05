@@ -46,8 +46,6 @@ QuranPage {
                 }
         }
 
-/*
-// TODO:
         Connections {
                 target: _recitations
                 onPositionChanged: {
@@ -55,6 +53,7 @@ QuranPage {
                 }
         }
 
+/*
         RecitationSelector {
                 id: recitationSelector
         }
@@ -74,6 +73,12 @@ QuranPage {
                                 visible: _settings.translationMode != 0 && _translations.active.length > 1
                                 onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
                         }
+
+                        MenuItem {
+                                text: qsTr("Select recitation")
+                                visible: _settings.recitationMode != 0 // && _recitations.installed > 1
+                                onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
+                        }
                 }
 
                 Row {
@@ -81,12 +86,6 @@ QuranPage {
                         anchors.centerIn: parent
 
                         ToolButton {
-                                image: theme.recitations
-                                visible: _settings.recitationMode != 0
-                                onClicked: _fsmon.available ? recitationSelector.open() : massStorage.show();
-                        }
-
-                        ToolButton {
                                 image: theme.next
                                 onClicked: {
                                         var newIndex = _settings.pageNumber + 1;
@@ -120,54 +119,4 @@ QuranPage {
                         }
                 }
         }
-/*
-        ToolBar {
-                id: toolBar
-                ToolBarLayout {
-                        id: layout
-                        anchors.fill: parent
-                        Component.onCompleted: setItems(children);
-
-                        ToolButton {
-                                image: theme.recitations
-                                visible: _settings.recitationMode != 0
-                                onClicked: _fsmon.available ? recitationSelector.open() : massStorage.show();
-                        }
-
-                        ToolButton {
-                                image: theme.next
-                                onClicked: {
-                                        var newIndex = _settings.pageNumber + 1;
-                                        if (_data.hasPage(newIndex)) {
-                                                _settings.pageNumber = newIndex;
-                                        }
-                                        else {
-                                                lastPageReached.show();
-                                        }
-                                }
-                        }
-
-                        NumberLabel {
-                                width: 60
-                                height: Theme.itemSizeSmall
-                                number: _settings.pageNumber
-                                onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"));
-                        }
-
-                        ToolButton {
-                                image: theme.previous
-                                onClicked: {
-                                        var newIndex = _settings.pageNumber - 1;
-                                        if (_data.hasPage(newIndex)) {
-                                                _settings.pageNumber = newIndex;
-                                        }
-                                        else {
-                                                firstPageReached.show();
-                                        }
-                                }
-                        }
-
-                }
-        }
-*/
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2013 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 #define SIMPLE_INFO_FILE               "info.ini"
 #define ZEKR_INFO_FILE                 "recitation.properties"
+#define ONLINE_INFO_FILE               "data.ini"
 
 Recitation::~Recitation() {
 
@@ -83,6 +84,49 @@ protected:
     Recitation(name, id, dir) {
 
   }
+};
+
+class RecitationOnline : public Recitation {
+public:
+  static RecitationOnline *create(const QString& id, const QString& dir) {
+    QDir d(dir);
+    QString path = d.filePath(ONLINE_INFO_FILE);
+
+    QFileInfo inf(path);
+
+    if (!inf.exists() || !inf.isReadable()) {
+      return 0;
+    }
+
+    QSettings s(path, QSettings::IniFormat);
+    QUrl url = s.value("url/url").toUrl();
+
+    if (url.isEmpty() || !url.isValid()) {
+      return 0;
+    }
+
+    return new RecitationOnline(id, dir, url);
+  }
+
+  QUrl mediaUrl(int chapter, int verse) {
+    QString mp3 = QString("%1/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
+    if (QFile::exists(mp3)) {
+      return QUrl::fromLocalFile(mp3);
+    }
+
+    QUrl url(QString("%1/%2%3.mp3").arg(m_url.toString()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0')));
+
+    return url;
+  }
+
+protected:
+  RecitationOnline(const QString& name, const QString& dir, const QUrl& url) :
+    Recitation(name, name, dir) {
+    m_url = url;
+  }
+
+private:
+  QUrl m_url;
 };
 
 class RecitationZekr : public Recitation {
