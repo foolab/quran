@@ -17,8 +17,6 @@
     <file alias="qml/IndexPage.qml">qml/IndexPage.qml</file>
     <file alias="qml/main.qml">qml/main.qml</file>
     <file alias="qml/NumberLabel.qml">qml/NumberLabel.qml</file>
-    <file alias="qml/NumPadButton.qml">qml/NumPadButton.qml</file>
-    <file alias="qml/NumPad.qml">qml/NumPad.qml</file>
     <file alias="qml/PageSelectionPage.qml">qml/PageSelectionPage.qml</file>
     <file alias="qml/PartSelectionPage.qml">qml/PartSelectionPage.qml</file>
     <file alias="qml/QuranPageContextMenu.qml">qml/QuranPageContextMenu.qml</file>
@@ -42,7 +40,6 @@
     <file alias="qml/TranslationSelector.qml">qml/TranslationSelector.qml</file>
     <file alias="qml/TranslationsListPage.qml">qml/TranslationsListPage.qml</file>
     <file alias="qml/TranslationsManager.qml">qml/TranslationsManager.qml</file>
-    <file alias="qml/VerseSelectionDialog.qml">qml/VerseSelectionDialog.qml</file>
     <file alias="qml/QuranView.js">qml/QuranView.js</file>
   </qresource>
 </RCC>

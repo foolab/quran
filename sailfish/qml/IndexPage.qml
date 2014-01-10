@@ -13,33 +13,6 @@ Page {
                 }
         }
 
-/*
-        property Component pageDialogComponent: null
-        property Item pageDialog: null
-
-        property Component verseDialogComponent: null
-        property Item verseDialog: null
-
-        function showPageDialog() {
-                if (!pageDialogComponent) {
-                        pageDialogComponent = Qt.createComponent("PageSelectionDialog.qml");
-                        pageDialog = pageDialogComponent.createObject(indexPage);
-                }
-
-                pageDialog.open();
-        }
-
-        function showVerseDialog(chapter) {
-                if (!verseDialogComponent) {
-                        verseDialogComponent = Qt.createComponent("VerseSelectionDialog.qml");
-                        verseDialog = verseDialogComponent.createObject(indexPage);
-                }
-
-                verseDialog.chapter = chapter;
-
-                verseDialog.open();
-        }
-*/
         Component {
                 id: indexPageDelegate
 
@@ -51,31 +24,70 @@ Page {
                                 pagePosition.setPosition(sura, 0)
                                 pageStack.pop()
                         }
-/*
-// TODO:
-                        ToolButton {
-                                image: theme.verse
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                onClicked: showVerseDialog(sura)
+
+                        onPressAndHold: {
+                                grid.chapter = sura
+                                drawer.open = true
                         }
-*/
                 }
         }
 
-        SilicaListView {
-                id: view
-                model: _data.suraCount()
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.leftMargin: 16
-                anchors.right: parent.right
-                anchors.rightMargin: 16
-                anchors.bottom: parent.bottom
-                delegate: indexPageDelegate
-                header: PageHeader {
-                        width: view.width
-                        title: qsTr("Index")
+        Drawer {
+                id: drawer
+                anchors.fill: parent
+
+                background: SilicaGridView {
+                        id: grid
+                        property int chapter: -1
+                        model: grid.chapter == -1 ? undefined : _data.suraSize(grid.chapter)
+                        cellWidth: view.width / 7
+                        cellHeight: cellWidth
+                        anchors {
+                                fill: parent
+                                leftMargin: 16
+                                rightMargin: 16
+                        }
+
+                        header: PageHeader {
+                                width: view.width
+                                title: qsTr("Choose a verse")
+                        }
+
+                        delegate: BackgroundItem {
+                                width: grid.cellWidth
+                                height: grid.cellHeight
+                                NumberLabel {
+                                        anchors.fill: parent
+                                        color: Theme.primaryColor
+                                        horizontalAlignment: Text.AlignHCenter
+                                        verticalAlignment: Text.AlignVCenter
+                                        number: index
+                                        enableSignals: false
+                                }
+
+                                onClicked: {
+                                        pagePosition.setPosition(grid.chapter, index)
+                                        pageStack.pop()
+                                }
+                        }
+                }
+
+                // TODO: not dimmed when drawer is open?
+                foreground: SilicaListView {
+                        id: view
+                        model: _data.suraCount()
+
+                        anchors {
+                                fill: parent
+                                leftMargin: 16
+                                rightMargin: 16
+                        }
+
+                        delegate: indexPageDelegate
+                        header: PageHeader {
+                                width: view.width
+                                title: qsTr("Index")
+                        }
                 }
         }
 }
