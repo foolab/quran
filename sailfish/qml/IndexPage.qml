@@ -6,24 +6,19 @@ import Quran 1.0
 // TODO: use positionViewAtIndex ?
 Page {
         id: indexPage
-/*
-        property Component partDialogComponent: null
-        property Item partDialog: null
 
+        onStatusChanged: {
+                if (status == PageStatus.Active) {
+                        pageStack.pushAttached(Qt.resolvedUrl("PartSelectionPage.qml"))
+                }
+        }
+
+/*
         property Component pageDialogComponent: null
         property Item pageDialog: null
 
         property Component verseDialogComponent: null
         property Item verseDialog: null
-
-        function showPartDialog() {
-                if (!partDialogComponent) {
-                        partDialogComponent = Qt.createComponent("PartSelectionDialog.qml");
-                        partDialog = partDialogComponent.createObject(indexPage);
-                }
-
-                partDialog.open();
-        }
 
         function showPageDialog() {
                 if (!pageDialogComponent) {
@@ -57,6 +52,7 @@ Page {
                                 pageStack.pop()
                         }
 /*
+// TODO:
                         ToolButton {
                                 image: theme.verse
                                 anchors.left: parent.left
@@ -82,17 +78,4 @@ Page {
                         title: qsTr("Index")
                 }
         }
-/*
-// TODO:
-        ToolBar {
-                id: toolBar
-                ToolBarLayout {
-                        anchors.fill: parent
-                        Component.onCompleted: setItems(children);
-                        ToolButton { image: theme.page; onClicked: showPageDialog(); }
-                        ToolButton { image: theme.part; onClicked: showPartDialog(); }
-                        ToolButton { image: theme.search; onClicked: pageStack.replace("SearchPage"); }
-                }
-        }
-*/
 }

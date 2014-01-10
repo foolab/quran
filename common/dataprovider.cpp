@@ -49,6 +49,10 @@ int DataProvider::pageCount() {
   return MAX_PAGE + 1;
 }
 
+int DataProvider::partCount() {
+  return 30;
+}
+
 QStringList DataProvider::surasForPage(int page) {
   QList<Fragment> frags = pageFromIndex(page).fragments();
 

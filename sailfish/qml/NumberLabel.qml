@@ -5,11 +5,15 @@ import Sailfish.Silica 1.0
 // HACK: Seems the only way to listen to _settings.numberFormat is to alias it to a property!
 Label {
         id: label
+        property bool enableSignals: true
         signal clicked
+        signal pressAndHold
 
         MouseArea {
                 anchors.fill: parent
-                onClicked: label.clicked();
+                onClicked: label.clicked()
+                onPressAndHold: label.pressAndHold()
+                enabled: parent.enableSignals
         }
 
         property int number: 0

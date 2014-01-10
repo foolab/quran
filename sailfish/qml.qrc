@@ -19,9 +19,8 @@
     <file alias="qml/NumberLabel.qml">qml/NumberLabel.qml</file>
     <file alias="qml/NumPadButton.qml">qml/NumPadButton.qml</file>
     <file alias="qml/NumPad.qml">qml/NumPad.qml</file>
-    <file alias="qml/PageSelectionDialog.qml">qml/PageSelectionDialog.qml</file>
-    <file alias="qml/PartSelectionDialog.qml">qml/PartSelectionDialog.qml</file>
-    <file alias="qml/PartSelectionDialogRow.qml">qml/PartSelectionDialogRow.qml</file>
+    <file alias="qml/PageSelectionPage.qml">qml/PageSelectionPage.qml</file>
+    <file alias="qml/PartSelectionPage.qml">qml/PartSelectionPage.qml</file>
     <file alias="qml/QuranPageContextMenu.qml">qml/QuranPageContextMenu.qml</file>
     <file alias="qml/QuranPage.qml">qml/QuranPage.qml</file>
     <file alias="qml/QuranTranslationLabel.qml">qml/QuranTranslationLabel.qml</file>

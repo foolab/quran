@@ -36,6 +36,7 @@ public:
   ~DataProvider();
 
   Q_INVOKABLE int pageCount();
+  Q_INVOKABLE int partCount();
   Q_INVOKABLE QStringList surasForPage(int page);
   Q_INVOKABLE int suraCount();
   Q_INVOKABLE QString suraName(int sura);
