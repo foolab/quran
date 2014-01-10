@@ -74,28 +74,28 @@ Row {
 
         ToolButton {
                 image: theme.translations
-                enabled: _settings.translationMode == 2 && _fsmon.available
+                visible: _settings.translationMode == 2 && _fsmon.available
                 onClicked: translation.shown = !translation.shown;
         }
 
         ToolButton {
                 anchors.verticalCenter: parent.verticalCenter
                 image: theme.playVerse
-                enabled: _settings.recitationMode != 0 && _fsmon.available
+                visible: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.play(contextMenu.chapter, contextMenu.verse);
         }
 
         ToolButton {
                 id: playPage
                 image: theme.playPage
-                enabled: _settings.recitationMode != 0 && _fsmon.available
+                visible: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.playPage(_settings.pageNumber);
         }
 
         ToolButton {
                 id: playChapter
                 image: theme.playChapter
-                enabled: _settings.recitationMode != 0 && _fsmon.available
+                visible: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.playChapter(contextMenu.chapter);
         }
 
@@ -103,6 +103,6 @@ Row {
                 id: stop
                 image: theme.stop
                 onClicked: _recitations.stop();
-                enabled: _recitations.isPlaying
+                visible: _recitations.isPlaying
         }
 }
