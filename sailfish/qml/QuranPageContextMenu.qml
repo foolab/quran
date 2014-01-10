@@ -63,7 +63,13 @@ Row {
                         }
                 }
 
-                onClicked: { _bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? _bookmarks.remove(contextMenu.chapter, contextMenu.verse) : _bookmarks.add(contextMenu.chapter, contextMenu.verse); }
+                onClicked: {
+                        if (_bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse)) {
+                                _bookmarks.remove(contextMenu.chapter, contextMenu.verse)
+                        } else {
+                                _bookmarks.add(contextMenu.chapter, contextMenu.verse)
+                        }
+                }
         }
 
         ToolButton {
