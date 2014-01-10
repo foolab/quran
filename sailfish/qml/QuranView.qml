@@ -164,6 +164,8 @@ SilicaFlickable {
                                 id: label
                                 chapter: _chapter
                                 verse: _verse
+                                dataProvider: _data
+                                numberFormatter: _formatter
                                 color: _recitations.chapter == chapter && _recitations.verse == verse ? _colors.highlightColor : _colors.verseColor
 
                                 onClicked: {
