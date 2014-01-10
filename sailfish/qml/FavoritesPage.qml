@@ -46,7 +46,7 @@ Page {
                 BackgroundItem {
                         id: item
                         width: parent.width
-                        height: menu.active ? Theme.itemSizeSmall + menu.height : Theme.itemSizeSmall
+                        height: menu.active ? label.height + menu.height : label.height
 
                         onClicked: {
                                 pagePosition.setPosition(sura, aya)
@@ -54,17 +54,18 @@ Page {
                         }
 
                         Label {
+                                id: label
                                 anchors {
                                         top: parent.top
-                                        bottom: parent.bottom
-                                        left: parent.left
                                         right: parent.right
+                                        left: parent.left
                                         rightMargin: 16
+                                        leftMargin: 16
                                 }
 
                                 font.family: _settings.fontFamily
                                 text: qsTr("(%1) %2").arg(_formatter.number(aya + 1)).arg(_data.text(sura, aya))
-                                elide: Text.ElideRight
+                                wrapMode: Text.WordWrap
                                 horizontalAlignment: Text.AlignRight
                                 color: Theme.primaryColor
                         }
