@@ -27,6 +27,7 @@ QuranPage {
                 highlightMoveDuration: 0
                 delegate: quranPageDelegate
                 currentIndex: _settings.pageNumber
+                clip: true
         }
 
         Component {
