@@ -35,6 +35,7 @@ Page {
         Drawer {
                 id: drawer
                 anchors.fill: parent
+                hideOnMinimize: true
 
                 background: SilicaGridView {
                         id: grid
