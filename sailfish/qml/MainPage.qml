@@ -103,6 +103,7 @@ QuranPage {
                                 height: Theme.itemSizeSmall
                                 number: _settings.pageNumber
                                 onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"));
+                                color: "black"
                         }
 
                         ToolButton {
