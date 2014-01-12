@@ -6,11 +6,9 @@ BackgroundItem {
         id: downloadLabel
         property bool showProgress: true
         property bool showInstalled: true
-        property bool showError: false
 
         property alias text: label.text
         property alias progress: slider.value
-        property alias errorText: error.text
 
         property Item menu
 
@@ -46,6 +44,7 @@ BackgroundItem {
         }
 
         ProgressBar {
+                // TODO: not positioned correctly
                 id: slider
                 visible: showProgress
                 minimumValue: 0
@@ -55,12 +54,5 @@ BackgroundItem {
                 anchors.rightMargin: 10
                 anchors.left: parent.left
                 anchors.leftMargin: 10
-        }
-
-        Label {
-                id: error
-                color: Theme.highlightColor
-                anchors.fill: slider
-                visible: showError
         }
 }

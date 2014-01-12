@@ -116,6 +116,43 @@ ApplicationWindow {
                         }
                 }
         }
+
+        Rectangle {
+                id: banner
+                width: parent.width
+                height: Theme.itemSizeSmall
+                color: Theme.highlightColor
+                anchors.top: parent.top
+                opacity: 0
+                visible: opacity > 0
+
+                Behavior on opacity {
+                        NumberAnimation {}
+                }
+
+                function show(text) {
+                        timer.restart()
+                        label.text = text
+                        banner.opacity = 1
+                }
+
+                Timer {
+                        id: timer
+                        interval: 3000
+                        running: banner.opacity == 1
+                        onTriggered: banner.opacity = 0
+                }
+
+                Label {
+                        id: label
+                        anchors.fill: parent
+                        anchors.leftMargin: 20
+                        color: Theme.secondaryColor
+                        truncationMode: TruncationMode.Fade
+                        verticalAlignment: Text.AlignVCenter
+                }
+        }
+
 /*
         InfoBanner {
                 id: favoriteAdded

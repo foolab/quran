@@ -8,14 +8,18 @@ DownloadLabel {
 
         property int tid: -1
         property alias status: translation.status
+
+        onStatusChanged: {
+                if (status == Translation.Error) {
+                        banner.show(translation.error)
+                }
+        }
+
         property bool showCategory: false
 
         showProgress: translation.status == Translation.Downloading
-        showError: translation.status == Translation.Error
-
         progress: translation.downloadProgress
         showInstalled: translation.status == Translation.Installed
-        errorText: translation.error
 
         RemorseItem { id: remorse }
 
