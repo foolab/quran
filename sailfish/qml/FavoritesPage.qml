@@ -71,7 +71,7 @@ Page {
                         }
 
                         onPressAndHold: menu.show(item)
-
+        // TODO: menu close animation is broken
                         ContextMenu {
                                 id: menu
 

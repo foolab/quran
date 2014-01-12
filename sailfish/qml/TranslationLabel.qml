@@ -23,6 +23,7 @@ DownloadLabel {
 
         RemorseItem { id: remorse }
 
+        // TODO: menu close animation is broken
         menu: ContextMenu {
                 MenuItem {
                         text: qsTr("Download")
