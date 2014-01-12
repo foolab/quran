@@ -9,6 +9,6 @@ SOURCES += main.cpp
 
 DEPENDPATH += .
 
-QMAKE_POST_LINK += ./recitations recitations.js > ../recite-meta.h
+QMAKE_POST_LINK += ./recitations recite.ini > ../recite-meta.h
 
 QMAKE_CLEAN += ../recite-meta.h

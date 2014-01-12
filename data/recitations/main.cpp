@@ -1,9 +1,8 @@
 #include <QCoreApplication>
 #include <QDebug>
-#include <QScriptValue>
-#include <QScriptEngine>
-#include <QFile>
+#include <QSettings>
 #include <QStringList>
+#include <QLocale>
 
 QString encode(const QString& in) {
   QByteArray a(in.toUtf8());
@@ -19,13 +18,6 @@ QString encode(const QString& in) {
   return out;
 }
 
-class Recitation {
-public:
-  QString name;
-  QString bitrate;
-  QString subfolder;
-};
-
 int main(int argc, char *argv[]) {
   if (argc != 2) {
     qCritical() << "Invalid arguments!";
@@ -34,28 +26,10 @@ int main(int argc, char *argv[]) {
 
   QCoreApplication app(argc, argv);
 
-  QFile f(argv[1]);
-  if (!f.open(QFile::ReadOnly)) {
-    qCritical() << "Error opening" << argv[1] << f.errorString();
-    return 1;
-  }
+  QSettings s(argv[1], QSettings::IniFormat);
 
-  QString data = f.readAll();
-  if (f.error() != QFile::NoError) {
-    qCritical() << "Error reading" << argv[1] << f.errorString();
-    return 1;
-  }
+  QStringList groups = s.childGroups();
 
-  f.close();
-
-  QScriptEngine e;
-  QScriptValue json = e.evaluate("JSON.parse").call(QScriptValue(), QScriptValueList() << data);
-
-  QVariantMap map = json.toVariant().toMap();
-  if (map.remove("ayahCount") != 1) {
-    qCritical() << "Invalid input";
-    return 1;
-  }
 
   puts("#ifndef RECITE_META_H");
   puts("#define RECITE_META_H");
@@ -66,45 +40,51 @@ int main(int argc, char *argv[]) {
   printf("// %s\n", app.arguments().join(" ").toLatin1().data());
   puts("");
 
-  QMap<int, Recitation> recitations;
+  printf("#define RECITATIONS_LEN %d\n", groups.size());
+  puts("");
 
-  foreach (const QString& key, map.keys()) {
-    Recitation r;
-    int k = key.toInt();
-    if (k == 0) {
-      qCritical() << "Got zero key!";
-      return 1;
-    }
-
-    QVariantMap values = map[key].toMap();
-    r.bitrate = values["bitrate"].toString();
-    r.name = values["name"].toString();
-    r.subfolder = values["subfolder"].toString();
-
-    if (recitations.contains(k)) {
-      qCritical() << "Duplicate key!";
-      return 1;
-    }
-
-    recitations[k] = r;
-  }
-
-  printf("#define RECITATIONS_LEN      %i\n\n", recitations.size());
   puts("struct _Recitation {");
+  puts("  const char *id;");
   puts("  const char *name;");
-  puts("  const char *subfolder;");
-  puts("  const char *bitrate;");
+  puts("  const char *translated_name;");
+  puts("  const char *quality;");
+  puts("  const char *url;");
+  puts("  int language;");
   puts("} Rs[] = {");
 
-  foreach (Recitation r, recitations.values()) {
-    printf("{\"%s\", \"%s\", \"%s\"},\n", encode(r.name).toLatin1().data(), encode(r.subfolder).toLatin1().data(), encode(r.bitrate).toLatin1().data());
+  foreach (const QString& group, groups) {
+    s.beginGroup(group);
+    QString id = group;
+    QString reciter = s.value("reciter").toString();
+    QString translated_recitor = s.value("reciterArabic").toString();
+    QString quality = s.value("quality").toString();
+    QString url = s.value("downloadUrl").toString();
+    QString language = s.value("language").toString();
+    QLocale locale(language);
+
+    if (id.isEmpty() || reciter.isEmpty() || language.isEmpty() || url.isEmpty() || translated_recitor.isEmpty() || quality.isEmpty()) {
+      qFatal("Missing meta data");
+      return 1;
+    }
+
+    int lang = locale.language();
+    if (lang == QLocale::C) {
+      lang = QLocale::English;
+    }
+
+    printf("{\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", %i},\n", encode(id).toLatin1().data(),
+	   encode(reciter).toLatin1().data(), encode(translated_recitor).toLatin1().data(),
+	   encode(quality).toLatin1().data(), encode(url).toLatin1().data(), lang);
+
+    s.endGroup();
   }
 
   puts("};");
 
-  printf("\n");
-
+  puts("");
   puts("#endif /* RECITE_META_H */");
+
+  //    printf("{\"%s\", \"%s\", \"%s\"},\n", encode(r.name).toLatin1().data(), encode(r.subfolder).toLatin1().data(), encode(r.bitrate).toLatin1().data());
 
   return 0;
 }
