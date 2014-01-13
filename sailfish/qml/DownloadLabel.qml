@@ -10,12 +10,18 @@ BackgroundItem {
         property alias text: label.text
         property alias progress: slider.value
 
+        property Component menuComponent
         property Item menu
+        property Item visualParent
 
         width: parent.width
-        height: menu && menu.active ? menu.height + Theme.itemSizeLarge : Theme.itemSizeLarge
+        height: menu && menu.parent == downloadLabel ? menu.height + Theme.itemSizeLarge : Theme.itemSizeLarge
 
         onPressAndHold: {
+                if (menuComponent && !menu) {
+                        menu = menuComponent.createObject(visualParent)
+                }
+
                 if (menu) {
                         menu.show(downloadLabel)
                 }

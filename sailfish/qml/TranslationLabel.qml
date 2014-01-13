@@ -23,24 +23,25 @@ DownloadLabel {
 
         RemorseItem { id: remorse }
 
-        // TODO: menu close animation is broken
-        menu: ContextMenu {
-                MenuItem {
-                        text: qsTr("Download")
-                        onClicked: _translations.startDownload(tid)
-                        visible: status == Translation.None || status == Translation.Error
-                }
+        menuComponent: Component {
+                ContextMenu {
+                        MenuItem {
+                                text: qsTr("Download")
+                                onClicked: _translations.startDownload(tid)
+                                visible: status == Translation.None || status == Translation.Error
+                        }
 
-                MenuItem {
-                        text: qsTr("Stop")
-                        onClicked: _translations.stopDownload(tid)
-                        visible: status == Translation.Downloading
-                }
+                        MenuItem {
+                                text: qsTr("Stop")
+                                onClicked: _translations.stopDownload(tid)
+                                visible: status == Translation.Downloading
+                        }
 
-                MenuItem {
-                        text: qsTr("Remove")
-                        onClicked: remorse.execute(label, "Removing", function() { _translations.removeTranslation(tid) } )
-                        visible: status == Translation.Installed
+                        MenuItem {
+                                text: qsTr("Remove")
+                                onClicked: remorse.execute(label, "Removing", function() { _translations.removeTranslation(tid) } )
+                                visible: status == Translation.Installed
+                        }
                 }
         }
 

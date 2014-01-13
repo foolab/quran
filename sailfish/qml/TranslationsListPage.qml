@@ -15,6 +15,7 @@ Page {
                         anchors.leftMargin: 16
                         anchors.right: parent.right
                         anchors.rightMargin: 16
+                        visualParent: view
                 }
         }
 

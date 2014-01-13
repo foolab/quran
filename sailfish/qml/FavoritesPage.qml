@@ -4,6 +4,7 @@ import Sailfish.Silica 1.0
 
 Page {
         id: favoritesPage
+        property Item menu
 
         RemorsePopup {
                 id: pageRemorse
@@ -41,12 +42,32 @@ Page {
         }
 
         Component {
+                id: contextMenuComponent
+                ContextMenu {
+                        id: menu
+
+                        MenuItem {
+                                text: qsTr("Remove")
+                                onClicked: remorse.execute(item, "Removing", function() { _bookmarks.remove(bookmark) } )
+                        }
+                }
+        }
+
+        Component {
                 id: favoritesPageDelegate
 
                 BackgroundItem {
                         id: item
                         width: parent.width
-                        height: menu.active ? label.height + menu.height : label.height
+                        height: menu && menu.parent == item ? label.height + menu.height : label.height
+
+                        onPressAndHold: {
+                                if (!menu) {
+                                        menu = contextMenuComponent.createObject(view)
+                                }
+
+                                menu.show(item)
+                        }
 
                         onClicked: {
                                 pagePosition.setPosition(sura, aya)
@@ -68,18 +89,6 @@ Page {
                                 wrapMode: Text.WordWrap
                                 horizontalAlignment: Text.AlignRight
                                 color: Theme.primaryColor
-                        }
-
-                        onPressAndHold: menu.show(item)
-        // TODO: menu close animation is broken
-                        ContextMenu {
-                                id: menu
-
-                                MenuItem {
-                                        text: qsTr("Remove")
-                                        onClicked: remorse.execute(item, "Removing", function() { _bookmarks.remove(bookmark) } )
-
-                                }
                         }
 
                         RemorseItem { id: remorse }

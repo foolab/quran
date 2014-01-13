@@ -15,6 +15,7 @@ Page {
                         id: label
                         tid: modelData
                         width: view.width
+                        visualParent: view
                 }
         }
 
