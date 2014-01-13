@@ -4,9 +4,9 @@ import Sailfish.Silica 1.0
 
 BackgroundItem {
         id: downloadLabel
-        property bool showProgress: true
-        property bool showInstalled: true
 
+        property alias showInstalled: installed.visible
+        property alias showProgress: slider.visible
         property alias text: label.text
         property alias progress: slider.value
 
@@ -15,7 +15,8 @@ BackgroundItem {
         property Item visualParent
 
         width: parent.width
-        height: menu && menu.parent == downloadLabel ? menu.height + Theme.itemSizeLarge : Theme.itemSizeLarge
+        property real itemHeight: showProgress ? Theme.itemSizeMedium : Theme.itemSizeSmall
+        height: menu && menu.parent == downloadLabel ? menu.height + itemHeight : itemHeight
 
         onPressAndHold: {
                 if (menuComponent && !menu) {
@@ -27,9 +28,8 @@ BackgroundItem {
                 }
         }
 
-        ToolButton {
+        GlassItem {
                 id: installed
-                image: theme.downloaded
                 visible: showInstalled
                 y: (Theme.itemSizeLarge - height) / 2
                 anchors.right: parent.right
@@ -37,13 +37,16 @@ BackgroundItem {
 
         Label {
                 id: label
-                anchors.top: parent.top
-                anchors.right: installed.left
-                anchors.rightMargin: 10
-                anchors.left: parent.left
-                anchors.leftMargin: 10
+                anchors {
+                        top: parent.top
+                        right: installed.left
+                        rightMargin: 10
+                        left: parent.left
+                        leftMargin: 10
+                }
+
                 // TODO:
-                height: slider.visible ? Theme.itemSizeSmall : Theme.itemSizeMedium
+                height: itemHeight
                 wrapMode: Text.WordWrap
                 color: Theme.primaryColor
                 truncationMode: TruncationMode.Fade
@@ -55,10 +58,12 @@ BackgroundItem {
                 visible: showProgress
                 minimumValue: 0
                 maximumValue: 100
-                anchors.top: label.bottom
-                anchors.right: installed.left
-                anchors.rightMargin: 10
-                anchors.left: parent.left
-                anchors.leftMargin: 10
+                anchors {
+                        top: label.bottom
+                        right: installed.left
+                        rightMargin: 10
+                        left: parent.left
+                        leftMargin: 10
+                }
         }
 }

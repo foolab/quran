@@ -3,6 +3,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Quran 1.0
 
+// TODO: add -> download -> stop -> canceled download still shows here
 Page {
         Component {
                 id: translationsDelegate
@@ -11,11 +12,8 @@ Page {
                         id: label
                         tid: modelData
                         showCategory: true
-                        anchors.left: parent.left
-                        anchors.leftMargin: 16
-                        anchors.right: parent.right
-                        anchors.rightMargin: 16
                         visualParent: view
+                        showInstalled: false
                 }
         }
 
@@ -26,7 +24,7 @@ Page {
                 delegate: translationsDelegate
                 header: PageHeader {
                         width: parent.width
-                        title: qsTr("Translations")
+                        title: qsTr("Available translations")
                 }
 
                 ViewPlaceholder {
