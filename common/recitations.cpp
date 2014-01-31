@@ -22,13 +22,19 @@
 #include <QMediaPlayer>
 #include "audiopolicy.h"
 #include "mediaplaylist.h"
-#include "phoneflipcontrol.h"
 
 Recitations::Recitations(QObject *parent)
-  : QObject(parent), m_settings(0),
-    m_data(0), m_player(0), m_playlist(0), m_recitation(0), m_current(0),
-    m_policy(new AudioPolicy(this)), m_play(false),
-    m_chapter(-1), m_verse(-1), m_flipControl(0) {
+  : QObject(parent),
+    m_settings(0),
+    m_data(0),
+    m_player(0),
+    m_playlist(0),
+    m_recitation(0),
+    m_current(0),
+    m_policy(new AudioPolicy(this)),
+    m_play(false),
+    m_chapter(-1),
+    m_verse(-1){
 
   QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
   QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
@@ -38,8 +44,6 @@ Recitations::Recitations(QObject *parent)
 Recitations::~Recitations() {
   qDeleteAll(m_installed.values());
   m_installed.clear();
-
-  m_flipControl->stop();
 
   if (m_player) {
     m_player->stop();
@@ -61,11 +65,6 @@ Settings *Recitations::settings() const {
 void Recitations::setSettings(Settings *settings) {
   if (m_settings != settings) {
     m_settings = settings;
-    if (!m_flipControl) {
-      m_flipControl = new PhoneFlipControl(m_settings, this);
-      QObject::connect(m_flipControl, SIGNAL(flipped()), this, SLOT(stop()));
-    }
-
     emit settingsChanged();
   }
 }
@@ -219,8 +218,6 @@ void Recitations::unload() {
   m_player = 0;
 
   m_recitation = 0;
-
-  m_flipControl->stop();
 }
 
 bool Recitations::isPlaying() const {
@@ -237,7 +234,6 @@ void Recitations::playerStateChanged() {
 
 void Recitations::playerError() {
   m_play = false;
-  m_flipControl->stop();
   m_player->stop();
   emit error(m_player->errorString());
 
@@ -327,7 +323,6 @@ void Recitations::playerMediaChanged() {
 
 void Recitations::policyAcquired() {
   if (m_player && m_play) {
-    m_flipControl->start();
     m_player->play();
   }
 }
@@ -339,7 +334,6 @@ void Recitations::stop() {
     return;
   }
 
-  m_flipControl->stop();
   m_player->stop();
 
   setChapter(-1);
@@ -403,7 +397,6 @@ void Recitations::policyLost() {
   m_play = false;
 
   if (m_player) {
-    m_flipControl->stop();
     m_player->stop();
   }
 }

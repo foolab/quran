@@ -21,44 +21,31 @@
 #include "settings.h"
 #include <QDebug>
 
-PhoneFlipControl::PhoneFlipControl(Settings *settings, QObject *parent)
-  : QObject(parent), m_settings(settings), m_sensor(new QOrientationSensor(this)), m_run(false) {
+PhoneFlipControl::PhoneFlipControl(QObject *parent)
+  : QObject(parent),
+    m_sensor(new QOrientationSensor(this)) {
 
   QObject::connect(m_sensor, SIGNAL(readingChanged()), this, SLOT(sensorReadingChanged()));
-  QObject::connect(m_settings, SIGNAL(flipToStopRecitationChanged()),
-		   this, SLOT(flipToStopRecitationChanged()));
-
-  flipToStopRecitationChanged();
 }
 
 PhoneFlipControl::~PhoneFlipControl() {
   m_sensor->stop();
 }
 
-void PhoneFlipControl::start() {
-  m_run = true;
-
-  flipToStopRecitationChanged();
+bool PhoneFlipControl::isActive() const {
+  return m_sensor->isActive();
 }
 
-void PhoneFlipControl::stop() {
-  m_run = false;
-
-  m_sensor->stop();
-}
-
-void PhoneFlipControl::flipToStopRecitationChanged() {
-  if (m_run && m_settings->flipToStopRecitation()) {
-    m_sensor->start();
+void PhoneFlipControl::setActive(bool active) {
+  if (active == isActive()) {
+    return;
   }
-  else {
-    m_sensor->stop();
-  }
+
+  m_sensor->setActive(active);
 }
 
 void PhoneFlipControl::sensorReadingChanged() {
-  if (m_run && m_settings->flipToStopRecitation() &&
-      m_sensor->reading()->orientation() == QOrientationReading::FaceDown) {
+  if (m_sensor->reading()->orientation() == QOrientationReading::FaceDown) {
     emit flipped();
   }
 }

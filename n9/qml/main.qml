@@ -50,6 +50,12 @@ PageStackWindow {
                 data: _data
         }
 
+        PhoneFlipControl {
+                id: flipControl
+                active: _settings.flipToStopRecitation && _recitations.isPlaying
+                onFlipped: _recitations.stop()
+        }
+
         Recitations {
                 id: _recitations
                 settings: _settings

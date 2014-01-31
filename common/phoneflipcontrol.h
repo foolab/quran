@@ -23,8 +23,6 @@
 #include <qmobilityglobal.h>
 #endif
 
-class Settings;
-
 #ifndef SAILFISH
 QTM_BEGIN_NAMESPACE
 #endif
@@ -38,27 +36,24 @@ QTM_USE_NAMESPACE;
 
 class PhoneFlipControl : public QObject {
   Q_OBJECT
+  Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged);
 
 public:
-  PhoneFlipControl(Settings *settings, QObject *parent = 0);
+  PhoneFlipControl(QObject *parent = 0);
   ~PhoneFlipControl();
 
-  void start();
-  void stop();
+  bool isActive() const;
+  void setActive(bool active);
 
 signals:
+  void activeChanged();
   void flipped();
 
 private slots:
-  void flipToStopRecitationChanged();
   void sensorReadingChanged();
 
 private:
-  Settings *m_settings;
-
   QOrientationSensor *m_sensor;
-
-  bool m_run;
 };
 
 #endif /* PHONE_FLIP_CONTROL_H */

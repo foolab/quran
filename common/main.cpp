@@ -44,7 +44,7 @@
 #endif
 #include "colors.h"
 #include "toolbarlayout.h"
-
+#include "phoneflipcontrol.h"
 #ifndef SAILFISH
 #include <MDeclarativeCache>
 #include <MApplication>
@@ -109,6 +109,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<WindowController>("Quran", 1, 0, "WindowController");
 #endif
   qmlRegisterType<ToolBarLayout>("Quran", 1, 0, "ToolBarLayout");
+  qmlRegisterType<PhoneFlipControl>("Quran", 1, 0, "PhoneFlipControl");
 
 #ifndef SAILFISH
   MApplicationWindow *view = new MApplicationWindow;

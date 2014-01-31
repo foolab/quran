@@ -29,7 +29,6 @@ class Recitation;
 class QMediaPlayer;
 class AudioPolicy;
 class MediaPlaylist;
-class PhoneFlipControl;
 
 class Recitations : public QObject {
   Q_OBJECT
@@ -115,8 +114,6 @@ private:
 
   int m_chapter;
   int m_verse;
-
-  PhoneFlipControl *m_flipControl;
 };
 
 #endif /* RECITATIONS_H */
