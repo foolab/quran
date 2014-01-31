@@ -76,7 +76,7 @@ Page {
         ListView {
                 id: view
                 clip: true
-                model: _data.suraCount();
+                model: quranData.suraCount();
                 anchors.top: title.bottom
                 anchors.left: parent.left
                 anchors.leftMargin: 16

@@ -19,7 +19,7 @@ Page {
                 Rectangle {
                         width: view.width
                         height: label.height * 2
-                        color: mouse.pressed ? _colors.pressedColor : modelData == _settings.theme ? _colors.selectionBackgroundColor : _colors.backgroundColor
+                        color: mouse.pressed ? colors.pressedColor : modelData == settings.theme ? colors.selectionBackgroundColor : colors.backgroundColor
 
                         Label {
                                 id: label
@@ -27,13 +27,13 @@ Page {
                                 text: modelData
                                 width: parent.width
                                 anchors.verticalCenter: parent.verticalCenter
-                                color: modelData == _settings.theme ? _colors.selectionTextColor : _colors.textColor
+                                color: modelData == settings.theme ? colors.selectionTextColor : colors.textColor
                         }
 
                         MouseArea {
                                 id: mouse
                                 anchors.fill: parent
-                                onClicked: _settings.theme = modelData;
+                                onClicked: settings.theme = modelData;
                         }
                 }
         }

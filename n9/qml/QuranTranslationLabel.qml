@@ -6,7 +6,7 @@ Column {
         width: parent.width
         property bool shown: false
 
-        visible: col.chapter != -1 && col.verse != -1 && translationsManager.enabled && (_settings.translationMode == 1 || col.shown && _settings.translationMode == 2)
+        visible: col.chapter != -1 && col.verse != -1 && translationsManager.enabled && (settings.translationMode == 1 || col.shown && settings.translationMode == 2)
 
         property int verse: -1
         property int chapter: -1
@@ -56,10 +56,10 @@ Column {
                 id: translation
                 visible: col.visible
                 width: parent.width
-                font.family: _settings.translationFontFamily
-                font.pointSize: _settings.translationFontSize
-                color: _colors.verseColor
-                horizontalAlignment: _settings.centerText ? Text.AlignHCenter : undefined
+                font.family: settings.translationFontFamily
+                font.pointSize: settings.translationFontSize
+                color: colors.verseColor
+                horizontalAlignment: settings.centerText ? Text.AlignHCenter : undefined
 
                 Image {
                         anchors.fill: parent
@@ -69,14 +69,14 @@ Column {
 
                 function resetText() {
                         if (col.chapter != -1 && col.verse != -1) {
-                                translation.text = _data.secondaryText(col.chapter, col.verse);
+                                translation.text = quranData.secondaryText(col.chapter, col.verse);
                         }
                 }
 
                 MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                                if (_settings.translationMode == 2) {
+                                if (settings.translationMode == 2) {
                                         shown = !shown;
                                 }
                         }
@@ -88,7 +88,7 @@ Column {
                 }
 
                 Component.onCompleted: {
-                        _settings.defaultTranslationChanged.connect(resetText);
+                        settings.defaultTranslationChanged.connect(resetText);
                         translation.resetText();
                 }
         }

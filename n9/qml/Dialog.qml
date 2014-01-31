@@ -115,6 +115,6 @@ Item {
                 z: 999
                 anchors.fill: parent
                 // TODO: dependency from components to qml
-                color: _colors.faderColor
+                color: colors.faderColor
         }
 }

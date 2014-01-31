@@ -6,12 +6,12 @@ Rectangle {
         property alias horizontalAlignment: label.horizontalAlignment
 
         height: label.height + 16
-        color: _colors.pageTitleBackgroundColor
+        color: colors.pageTitleBackgroundColor
 
         Label {
                 id: label
                 font.pointSize: 28
-                color: _colors.pageTitleTextColor
+                color: colors.pageTitleTextColor
                 width: parent.width - 32
                 anchors.centerIn: parent
         }

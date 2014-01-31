@@ -11,15 +11,15 @@ QtObject {
                         translationError.show();
                 }
 
-                if (!_translations.load(id)) {
+                if (!translations.load(id)) {
                         translationError.show();
                 }
         }
 
         function translationModeChanged() {
-                if (_settings.translationMode != 0) {
-                        if (!_translations.loadDefault()) {
-                                if (_translations.installed.length == 0) {
+                if (settings.translationMode != 0) {
+                        if (!translations.loadDefault()) {
+                                if (translations.installed.length == 0) {
                                         noTranslations.show();
                                 }
                                 else {
@@ -35,26 +35,26 @@ QtObject {
                         return;
                 }
                 else {
-                        _translations.unload();
+                        translations.unload();
                        enabled = false;
                 }
         }
 
         function reset() {
-                if (!_fsmon.available) {
+                if (!fsmon.available) {
                         massStorage.show();
                         enabled = false;
                         return;
                 }
 
-                _translations.refresh();
+                translations.refresh();
 
                 translationModeChanged();
         }
 
         Component.onCompleted: {
-                _fsmon.availabilityChanged.connect(reset);
-                _settings.translationModeChanged.connect(translationModeChanged);
+                fsmon.availabilityChanged.connect(reset);
+                settings.translationModeChanged.connect(translationModeChanged);
                 reset();
         }
 }

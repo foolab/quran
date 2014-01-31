@@ -13,7 +13,7 @@ TranslationsPage {
                 id: title
                 width: parent.width
                 anchors.top: parent.top
-                text: _translations.translationName(parent.tid);
+                text: translations.translationName(parent.tid);
         }
 
         DialogButton {

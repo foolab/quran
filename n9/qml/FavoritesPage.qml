@@ -25,12 +25,12 @@ Page {
                 width: parent.width
                 font.pixelSize: 26
                 horizontalAlignment: Text.AlignHCenter
-                color: _colors.textColor
-                visible: _bookmarks.empty
+                color: colors.textColor
+                visible: bookmarks.empty
         }
 
         Connections {
-                target: _bookmarks
+                target: bookmarks
                 onCleared: {
                         view.model.clear();
                         pageStack.pop();
@@ -38,18 +38,18 @@ Page {
         }
 
         Component.onCompleted: {
-            _bookmarks.bookmarkRemoved.connect(view.model.bookmarkRemoved);
+            bookmarks.bookmarkRemoved.connect(view.model.bookmarkRemoved);
         }
 
         Component.onDestruction: {
-            _bookmarks.bookmarkRemoved.disconnect(view.model.bookmarkRemoved);
+            bookmarks.bookmarkRemoved.disconnect(view.model.bookmarkRemoved);
         }
 
         Component {
                 id: sectionDelegate
                 Rectangle {
                         width: view.width
-                        color: _colors.sectionColor
+                        color: colors.sectionColor
                         height: title.height
 
                         Label {
@@ -57,10 +57,10 @@ Page {
                                 anchors.rightMargin: 20
                                 id: title
                                 font.pointSize: 26
-                                font.family: _settings.fontFamily
+                                font.family: settings.fontFamily
                                 horizontalAlignment: Text.AlignRight
                                 verticalAlignment: Text.AlignVCenter
-                                text: _data.fullSuraName(section)
+                                text: quranData.fullSuraName(section)
                         }
                 }
         }
@@ -74,8 +74,8 @@ Page {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         height: Math.max(rm.height, ayaText.height)
-                        color: _colors.backgroundColor
-//                        color: index % 2 ? Qt.lighter(_settings.highlightColor, 1.2) : Qt.lighter(_settings.highlightColor, 1.3)
+                        color: colors.backgroundColor
+//                        color: index % 2 ? Qt.lighter(settings.highlightColor, 1.2) : Qt.lighter(settings.highlightColor, 1.3)
 
                         ToolButton {
                                 id: rm
@@ -85,14 +85,14 @@ Page {
                                 anchors.bottom: parent.bottom
                                 anchors.right: parent.right
                                 onClicked: {
-                                        rmDialog.message = _data.text(sura, aya);
+                                        rmDialog.message = quranData.text(sura, aya);
                                         rmDialog.open();
                                         rmDialog.accepted.connect(accepted);
                                         rmDialog.rejected.connect(rejected);
                                 }
 
                                 function accepted() {
-                                        _bookmarks.remove(bookmark);
+                                        bookmarks.remove(bookmark);
                                         rmDialog.accepted.disconnect(accepted);
                                         rmDialog.rejected.disconnect(rejected);
                                 }
@@ -113,8 +113,8 @@ Page {
                                 anchors.left: parent.left
                                 anchors.right: rm.left
                                 font.pointSize: 18
-                                font.family: _settings.fontFamily
-                                text: _data.text(sura, aya);
+                                font.family: settings.fontFamily
+                                text: quranData.text(sura, aya);
                                 elide: Text.ElideRight
                                 textAlignment: Text.AlignRight
 
@@ -153,7 +153,7 @@ Page {
                                 text: qsTr("Clear");
                                 onClicked: clearDialog.open();
                                 anchors.verticalCenter: parent.verticalCenter
-                                visible: !_bookmarks.empty
+                                visible: !bookmarks.empty
                                 // TODO: border or padding
                         }
                 }
@@ -171,6 +171,6 @@ Page {
                 titleText: qsTr("Clear all favorites?")
                 acceptButtonText: qsTr("Yes")
                 rejectButtonText: qsTr("No")
-                onAccepted: _bookmarks.clear();
+                onAccepted: bookmarks.clear();
         }
 }

@@ -7,7 +7,7 @@ Dialog {
 
         InfoBanner {
                 id: pageError
-                // TODO: use _formatter for those digits.
+                // TODO: use formatter for those digits.
                 text: qsTr("Please choose a page between 1 and 604");
                 // TODO: something wrong with the animation
                 parent: parent ? parent : pageDialog
@@ -20,12 +20,12 @@ Dialog {
                 height: label.height
 
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: _colors.dialogTitleBackgroundColor
+                color: colors.dialogTitleBackgroundColor
 
                 Label {
                         id: label
                         width: parent.width
-                        color: _colors.dialogTitleTextColor
+                        color: colors.dialogTitleTextColor
                         x: 10
                         anchors.verticalCenter: parent.verticalCenter
                         text: qsTr("Choose a page");
@@ -35,11 +35,11 @@ Dialog {
         content: Rectangle {
                 width: pageDialogTitle.width
                 height: 50
-                color: _colors.textFieldColor
+                color: colors.textFieldColor
                 anchors.horizontalCenter: parent.horizontalCenter
                 radius: 20
                 border.width: 2
-                border.color: _colors.textFieldBorderColor
+                border.color: colors.textFieldBorderColor
                 smooth: true
 
                 Component.onCompleted: parent.anchors.topMargin = 0; // HACK
@@ -53,8 +53,8 @@ Dialog {
                         anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        text: _formatter.number(value);
-                        color: _colors.textFieldTextColor
+                        text: formatter.number(value);
+                        color: colors.textFieldTextColor
                 }
         }
 
@@ -75,12 +75,12 @@ Dialog {
                         width: pageDialogTitle.width
                         anchors.horizontalCenter: parent.horizontalCenter
                         onClicked: {
-                                if (!_data.hasPage(pageDialogLabel.value - 1)) {
+                                if (!quranData.hasPage(pageDialogLabel.value - 1)) {
                                         pageError.show();
                                         return;
                                 }
 
-                                _settings.pageNumber = pageDialogLabel.value - 1;
+                                settings.pageNumber = pageDialogLabel.value - 1;
 
                                 pageDialogLabel.value = "";
                                 pageDialog.accept();

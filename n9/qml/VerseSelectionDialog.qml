@@ -18,10 +18,10 @@ SelectionDialog {
                                 return;
                         }
 
-                        var len = _data.suraSize(dialog.chapter);
+                        var len = quranData.suraSize(dialog.chapter);
 
                         for (var x = 0; x < len; x++) {
-                                append({"verse": x, "name": _formatter.number(x + 1)});
+                                append({"verse": x, "name": formatter.number(x + 1)});
                         }
                 }
         }

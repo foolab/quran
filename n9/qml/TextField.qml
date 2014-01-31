@@ -8,8 +8,8 @@ Rectangle {
 
         id: rect
         border.width: 2
-        border.color: _colors.textFieldBorderColor
-        color: _colors.textFieldColor
+        border.color: colors.textFieldBorderColor
+        color: colors.textFieldColor
         width: 300
         height: input.height
 
@@ -17,7 +17,7 @@ Rectangle {
                 id: input
                 font.pointSize: 24
                 font.family: "Nokia Sans"
-                color: _colors.textFieldTextColor
+                color: colors.textFieldTextColor
                 width: parent.width - 10
                 height: 50
 //                validator: IntValidator {}
@@ -30,7 +30,7 @@ Rectangle {
 //                        font.pointSize: parent.font.pointSize
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
-                        color: _colors.textFieldPlaceholderTextColor
+                        color: colors.textFieldPlaceholderTextColor
                 }
 
                 MouseArea {

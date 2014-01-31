@@ -22,9 +22,9 @@ Item {
                 }
 
                 y: 50
-                color: _colors.infoBannerBackgroundColor
+                color: colors.infoBannerBackgroundColor
                 border.width: 2
-                border.color: _colors.infoBannerBorderColor
+                border.color: colors.infoBannerBorderColor
                 width: parent.width * 3/4
                 height: label.height + 20
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -34,7 +34,7 @@ Item {
                         y: 10
                         id: label
                         font.pointSize: 28
-                        color: _colors.infoBannerTextColor
+                        color: colors.infoBannerTextColor
                         horizontalAlignment: Text.AlignHCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                 }

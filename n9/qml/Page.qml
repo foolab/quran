@@ -6,7 +6,7 @@ Rectangle {
         id: page
 
         // TODO: dependency from components to qml :(
-        color: _colors.backgroundColor
+        color: colors.backgroundColor
 
         anchors.fill: parent
 

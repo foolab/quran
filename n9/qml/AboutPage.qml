@@ -42,13 +42,13 @@ Page {
 
                         Label {
                                 id: name
-                                text: qsTr("Holy Quran Version ") + _settings.version;
+                                text: qsTr("Holy Quran Version %1").arg(settings.version)
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 font.pixelSize: 36
                                 font.bold: true
                                 width: parent.width
                                 horizontalAlignment: Text.AlignHCenter
-                                color: _colors.textColor
+                                color: colors.textColor
                         }
 
                         Label {
@@ -59,7 +59,7 @@ Page {
                                 width: parent.width
                                 wrapMode: Text.WordWrap
                                 textFormat: Text.RichText
-                                color: _colors.textColor
+                                color: colors.textColor
                         }
 
 

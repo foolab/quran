@@ -34,8 +34,8 @@ Page {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 z: 4000
-                state: _fsmon.available ? "fsAvailable" : "fsUnavailable"
-                color: _colors.faderColor
+                state: fsmon.available ? "fsAvailable" : "fsUnavailable"
+                color: colors.faderColor
 
                 states: [
                 State {
@@ -80,7 +80,7 @@ Page {
         function __stopDialogAccepted() {
                 stopDialog.accepted.disconnect(__stopDialogAccepted);
                 stopDialog.rejected.disconnect(__stopDialogRejected);
-                _translations.stopDownload(__tid);
+                translations.stopDownload(__tid);
         }
 
         function __stopDialogRejected() {
@@ -91,7 +91,7 @@ Page {
         function __dlDialogAccepted() {
                 dlDialog.accepted.disconnect(__dlDialogAccepted);
                 dlDialog.rejected.disconnect(__dlDialogRejected);
-                _translations.startDownload(__tid);
+                translations.startDownload(__tid);
         }
 
         function __dlDialogRejected() {
@@ -102,7 +102,7 @@ Page {
         function __rmDialogAccepted() {
                 rmDialog.accepted.disconnect(__rmDialogAccepted);
                 rmDialog.rejected.disconnect(__rmDialogRejected);
-                _translations.removeTranslation(__tid);
+                translations.removeTranslation(__tid);
                 pageStack.pop();
         }
 
@@ -113,7 +113,7 @@ Page {
 
         function askForStop(tid) {
                 __tid = tid;
-                stopDialog.message = _translations.translationName(__tid);
+                stopDialog.message = translations.translationName(__tid);
                 stopDialog.accepted.connect(__stopDialogAccepted);
                 stopDialog.rejected.connect(__stopDialogRejected);
                 stopDialog.open();
@@ -121,7 +121,7 @@ Page {
 
         function askForDownload(tid) {
                 __tid = tid;
-                dlDialog.message = _translations.translationName(__tid);
+                dlDialog.message = translations.translationName(__tid);
                 dlDialog.accepted.connect(__dlDialogAccepted);
                 dlDialog.rejected.connect(__dlDialogRejected);
                 dlDialog.open();
@@ -129,7 +129,7 @@ Page {
 
         function askForRemoval(tid) {
                 __tid = tid;
-                rmDialog.message = _translations.translationName(__tid);
+                rmDialog.message = translations.translationName(__tid);
                 rmDialog.accepted.connect(__rmDialogAccepted);
                 rmDialog.rejected.connect(__rmDialogRejected);
                 rmDialog.open();

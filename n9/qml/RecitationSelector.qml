@@ -8,10 +8,10 @@ SelectionDialog {
                 id: model
 
                 function currentChanged() {
-                        var len = _recitations.installed.length;
+                        var len = recitations.installed.length;
 
                         for (var x = 0; x < len; x++) {
-                                if (_recitations.current == get(x).rid) {
+                                if (recitations.current == get(x).rid) {
                                         selectedIndex = x;
                                         return;
                                 }
@@ -21,11 +21,11 @@ SelectionDialog {
                 function populate() {
                         clear();
 
-                        var len = _recitations.installed.length;
+                        var len = recitations.installed.length;
 
                         for (var x = 0; x < len; x++) {
-                                var rid = _recitations.installed[x];
-                                var name = _recitations.recitationName(rid);
+                                var rid = recitations.installed[x];
+                                var name = recitations.recitationName(rid);
                                 append({"rid": rid, "name": name});
                         }
 
@@ -36,7 +36,7 @@ SelectionDialog {
         titleText: qsTr("Choose recitation");
 
         Connections {
-                target: _recitations
+                target: recitations
                 onInstalledChanged: model.populate();
                 onCurrentChanged: model.currentChanged();
         }

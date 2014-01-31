@@ -19,14 +19,14 @@ Page {
                 Rectangle {
                         width: view.width
                         height: label.height * 2
-                        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
+                        color: mouse.pressed ? colors.pressedColor : colors.backgroundColor
 
                         Label {
                                 id: label
-                                text: _recitations.recitationName(modelData);
+                                text: recitations.recitationName(modelData);
                                 width: parent.width
                                 anchors.verticalCenter: parent.verticalCenter
-                                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
+                                color: mouse.pressed ? colors.pressedTextColor : colors.textColor
                         }
 
                         MouseArea {
@@ -45,7 +45,7 @@ Page {
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
-                model: _recitations.installed
+                model: recitations.installed
                 delegate: recitationssDelegate
         }
 

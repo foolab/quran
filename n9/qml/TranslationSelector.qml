@@ -8,10 +8,10 @@ SelectionDialog {
                 id: model
 
                 function currentChanged() {
-                        var len = _translations.installed.length;
+                        var len = translations.installed.length;
 
                         for (var x = 0; x < len; x++) {
-                                if (_translations.current == get(x).tid) {
+                                if (translations.current == get(x).tid) {
                                         selectedIndex = x;
                                         return;
                                 }
@@ -21,11 +21,11 @@ SelectionDialog {
                 function populate() {
                         clear();
 
-                        var len = _translations.installed.length;
+                        var len = translations.installed.length;
 
                         for (var x = 0; x < len; x++) {
-                                var tid = _translations.installed[x];
-                                var name = _translations.translationName(tid);
+                                var tid = translations.installed[x];
+                                var name = translations.translationName(tid);
                                 append({"tid": tid, "name": name});
                         }
 
@@ -36,7 +36,7 @@ SelectionDialog {
         titleText: qsTr("Choose translation");
 
         Connections {
-                target: _translations
+                target: translations
                 onInstalledChanged: model.populate();
                 onCurrentChanged: model.currentChanged();
         }
