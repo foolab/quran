@@ -4,7 +4,7 @@ import QtQuick 1.0
 Label {
         Rectangle {
                 anchors.fill: parent
-                color: colors.backgroundColor
+                color: _colors.backgroundColor
                 z: label.z - 1
         }
 
@@ -18,10 +18,10 @@ Label {
 
         signal clicked
 
-        font.family: settings.fontFamily
-        font.pointSize: settings.fontSize
-	    color: colors.verseColor
-        horizontalAlignment: settings.centerText ? Text.AlignHCenter : Text.AlignHRight
+        font.family: _settings.fontFamily
+        font.pointSize: _settings.fontSize
+	    color: _colors.verseColor
+        horizontalAlignment: _settings.centerText ? Text.AlignHCenter : Text.AlignHRight
 
         MouseArea {
                 anchors.fill: parent
@@ -30,14 +30,14 @@ Label {
 
         function populate() {
                 if (label.chapter != -1 && label.verse != -1) {
-                text = quranData.text(label.chapter, label.verse)
-                       + " (" + formatter.number(label.verse + 1) + ")";
+                text = _data.text(label.chapter, label.verse)
+                       + " (" + _formatter.number(label.verse + 1) + ")";
                 }
         }
 
         Component.onCompleted: {
-                settings.textTypeChanged.connect(populate);
-                settings.numberFormatChanged.connect(populate);
+                _settings.textTypeChanged.connect(populate);
+                _settings.numberFormatChanged.connect(populate);
                 label.populate();
         }
 }

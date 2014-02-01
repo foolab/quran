@@ -8,7 +8,7 @@ Rectangle {
         property int sura: 0
         property bool selected: false
 
-        color: selected || mouse.pressed ? colors.pressedColor : colors.backgroundColor
+        color: selected || mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
 
         width: parent.width / 2
         height: verse.height * 2
@@ -36,12 +36,12 @@ Rectangle {
                 id: verse
                 font.pointSize: 24
                 width: parent.width - number.width
-                text: quranData.fullSuraName(root.sura);
+                text: _data.fullSuraName(root.sura);
                 font.bold: true
                 anchors.right: number.left
                 anchors.top: parent.top
                 anchors.topMargin: parent.height/4
                 horizontalAlignment: Text.AlignRight
-                color: mouse.pressed ? colors.pressedTextColor : colors.textColor
+                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
         }
 }

@@ -6,7 +6,7 @@ Rectangle {
         width: view.width
         height: label.height * 2
         // TODO: dependency from components to qml
-        color: mouse.pressed ? colors.pressedColor : index == dialog.selectedIndex ? colors.selectionBackgroundColor : colors.backgroundColor
+        color: mouse.pressed ? _colors.pressedColor : index == dialog.selectedIndex ? _colors.selectionBackgroundColor : _colors.backgroundColor
 
         property alias textHorizontalAlignment: label.horizontalAlignment
 
@@ -16,7 +16,7 @@ Rectangle {
                 text: name
                 anchors.verticalCenter: parent.verticalCenter
                 // TODO: dependency from components to qml
-                color: mouse.pressed ? colors.pressedTextColor : index == dialog.selectedIndex ? colors.selectionTextColor : colors.textColor
+                color: mouse.pressed ? _colors.pressedTextColor : index == dialog.selectedIndex ? _colors.selectionTextColor : _colors.textColor
                 x: 10
         }
 

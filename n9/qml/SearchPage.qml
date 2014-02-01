@@ -61,8 +61,8 @@ Page {
                 text: qsTr("Search")
         }
 
-        Component.onCompleted: search.enable();
-        Component.onDestruction: search.disable();
+        Component.onCompleted: _search.enable();
+        Component.onDestruction: _search.disable();
 
         Component {
                 id: headerDelegate
@@ -82,7 +82,7 @@ Page {
                                 id: matchWhole
                                 text: qsTr("Match whole words only");
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                checked: settings.searchMatchWholeWords
+                                checked: _settings.searchMatchWholeWords
                         }
 
                         DialogButton {
@@ -96,9 +96,9 @@ Page {
                                                 return;
                                         }
 
-                                        settings.searchMatchWholeWords = matchWhole.checked;
+                                        _settings.searchMatchWholeWords = matchWhole.checked;
 
-                                        var result = search.search(text, matchWhole.checked);
+                                        var result = _search.search(text, matchWhole.checked);
                                         if (result.length == 0) {
                                                 view.clearModel();
                                                 noResults.show();
@@ -126,7 +126,7 @@ Page {
 
                 Rectangle {
                         width: view.width
-                        color: colors.sectionColor
+                        color: _colors.sectionColor
                         height: title.height
 
                         Label {
@@ -134,10 +134,10 @@ Page {
                                 anchors.rightMargin: 20
                                 id: title
                                 font.pointSize: 26
-                                font.family: settings.fontFamily
+                                font.family: _settings.fontFamily
                                 horizontalAlignment: Text.AlignRight
                                 verticalAlignment: Text.AlignVCenter
-                                text: quranData.fullSuraName(section)
+                                text: _data.fullSuraName(section)
                         }
                 }
         }
@@ -151,8 +151,8 @@ Page {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         height: Math.max(n.height, ayaText.height);
-                        color: colors.backgroundColor
-//                        color: index % 2 ? Qt.lighter(settings.highlightColor, 1.2) : Qt.lighter(settings.highlightColor, 1.3)
+                        color: _colors.backgroundColor
+//                        color: index % 2 ? Qt.lighter(_settings.highlightColor, 1.2) : Qt.lighter(_settings.highlightColor, 1.3)
 
                         NumberLabel {
                                 id: n
@@ -160,7 +160,7 @@ Page {
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
                                 anchors.right: parent.right
-                                color: colors.textColor
+                                color: _colors.textColor
                                 width: 70
                                 horizontalAlignment: Text.AlignRight
                         }
@@ -174,8 +174,8 @@ Page {
                                 anchors.left: parent.left
                                 anchors.right: n.left
                                 font.pointSize: 18
-                                font.family: settings.fontFamily
-                                text: quranData.text(sura, aya);
+                                font.family: _settings.fontFamily
+                                text: _data.text(sura, aya);
                                 elide: Text.ElideRight
                                 textAlignment: Text.AlignRight
                                 onClicked: {
@@ -217,8 +217,8 @@ Page {
 
                         function populate(result) {
                                 for (var x = 0; x < result.length; x++) {
-                                        var sura = bookmarks.sura(result[x]);
-                                        var aya = bookmarks.aya(result[x]);
+                                        var sura = _bookmarks.sura(result[x]);
+                                        var aya = _bookmarks.aya(result[x]);
                                         append({"sura": sura, "aya": aya});
                                 }
                         }

@@ -10,19 +10,19 @@ SelectionDialog {
         model: ListModel {
                 Component.onCompleted: {
                         for (var x = 0; x < 30; x++) {
-                                append({"name": quranData.partName(x) });
+                                append({"name": _data.partName(x) });
                         }
                 }
         }
 
         onStateChanged: {
                 if (isOpen()) {
-                        selectedIndex = quranData.partNumberForPage(settings.pageNumber);
+                        selectedIndex = _data.partNumberForPage(_settings.pageNumber);
                 }
         }
 
         onAccepted: {
-                settings.pageNumber = quranData.pageNumberForPart(selectedIndex);
+                _settings.pageNumber = _data.pageNumberForPart(selectedIndex);
                 pageStack.pop();
         }
 }

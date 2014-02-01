@@ -8,12 +8,12 @@ Rectangle {
         height: titleLabel.height + textLabel.height
         width: parent.width
 
-        color: colors.backgroundColor
+        color: _colors.backgroundColor
 
         Label {
                 id: titleLabel
                 font.bold: true
-                color: colors.textColor
+                color: _colors.textColor
         }
 
         Label {
@@ -22,6 +22,6 @@ Rectangle {
                 anchors.top: titleLabel.bottom
                 width: parent.width
                 textFormat: Text.RichText
-                color: colors.textColor
+                color: _colors.textColor
         }
 }

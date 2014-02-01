@@ -59,17 +59,17 @@ Page {
                                 width: parent.width
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 horizontalAlignment: Text.AlignHCenter
-                                font.family: settings.fontFamily
-                                font.pointSize: settings.fontSize
-                                color: colors.textColor
+                                font.family: _settings.fontFamily
+                                font.pointSize: _settings.fontSize
+                                color: _colors.textColor
                                 Component.onCompleted: populate();
 
                                 function populate() {
-                                        text = quranData.basmala + " (" + formatter.number(1) + ")"
+                                        text = _data.basmala + " (" + _formatter.number(1) + ")"
                                 }
 
                                 Connections {
-                                        target: settings
+                                        target: _settings
                                         onNumberFormatChanged: previewLabel.populate();
                                         onTextTypeChanged: previewLabel.populate();
                                 }
@@ -79,22 +79,22 @@ Page {
                         SettingsPageEntry {
                                 id: fontSizeEntry
 
-                                entries: range(settings.minFontSize, settings.maxFontSize, fontSizeEntry);
+                                entries: range(_settings.minFontSize, _settings.maxFontSize, fontSizeEntry);
                                 title: qsTr("Font size");
-                                subtitle: settings.fontSize
-                                selectedIndex: settings.fontSize - settings.minFontSize
-                                onAccepted: settings.fontSize = selectedIndex + settings.minFontSize;
+                                subtitle: _settings.fontSize
+                                selectedIndex: _settings.fontSize - _settings.minFontSize
+                                onAccepted: _settings.fontSize = selectedIndex + _settings.minFontSize;
                         }
 
                         SettingsPageEntry {
                                 id: translationFontSizeEntry
 
-                                entries: range(settings.minTranslationFontSize, settings.maxTranslationFontSize, translationFontSizeEntry);
+                                entries: range(_settings.minTranslationFontSize, _settings.maxTranslationFontSize, translationFontSizeEntry);
 
                                 title: qsTr("Translation font size");
-                                subtitle: settings.translationFontSize
-                                selectedIndex: settings.translationFontSize - settings.minTranslationFontSize;
-                                onAccepted: settings.translationFontSize = selectedIndex + settings.minTranslationFontSize;
+                                subtitle: _settings.translationFontSize
+                                selectedIndex: _settings.translationFontSize - _settings.minTranslationFontSize;
+                                onAccepted: _settings.translationFontSize = selectedIndex + _settings.minTranslationFontSize;
                         }
 
                         SettingsPageEntry {
@@ -105,9 +105,9 @@ Page {
                                 ]
 
                                 title: qsTr("Text type")
-                                subtitle: entries[settings.textType].name;
-                                selectedIndex: settings.textType;
-                                onAccepted: settings.textType = selectedIndex;
+                                subtitle: entries[_settings.textType].name;
+                                selectedIndex: _settings.textType;
+                                onAccepted: _settings.textType = selectedIndex;
                         }
 
                         SettingsPageEntry {
@@ -120,9 +120,9 @@ Page {
                                 ]
 
                                 title: qsTr("Number format")
-                                subtitle: entries[settings.numberFormat].name;
-                                selectedIndex: settings.numberFormat;
-                                onAccepted: settings.numberFormat = selectedIndex;
+                                subtitle: entries[_settings.numberFormat].name;
+                                selectedIndex: _settings.numberFormat;
+                                onAccepted: _settings.numberFormat = selectedIndex;
                         }
 
                         SettingsPageEntry {
@@ -134,9 +134,9 @@ Page {
                                 ]
 
                                 title: qsTr("Orientation")
-                                subtitle: entries[settings.orientation].name;
-                                selectedIndex: settings.orientation
-                                onAccepted: settings.orientation = selectedIndex;
+                                subtitle: entries[_settings.orientation].name;
+                                selectedIndex: _settings.orientation
+                                onAccepted: _settings.orientation = selectedIndex;
                         }
 
                         SettingsPageEntry {
@@ -148,16 +148,16 @@ Page {
                                 ]
 
                                 title: qsTr("Translation")
-                                subtitle: entries[settings.translationMode].name;
-                                selectedIndex: settings.translationMode
-                                onAccepted: settings.translationMode = selectedIndex;
+                                subtitle: entries[_settings.translationMode].name;
+                                selectedIndex: _settings.translationMode
+                                onAccepted: _settings.translationMode = selectedIndex;
                        }
 
                         SettingsPageEntry {
                                 id: translations
                                 title: qsTr("Manage translations")
                                 onClicked: pageStack.push("TranslationsListPage");
-                                subtitle: translations.installed.length + qsTr(" installed.");
+                                subtitle: _translations.installed.length + qsTr(" installed.");
                        }
 
 /*
@@ -176,8 +176,8 @@ Page {
                                 ]
                                 title: qsTr("Night mode");
                                 subtitle: entries[selectedIndex].name;
-                                selectedIndex: settings.nightMode ? 0 : 1;
-                                onAccepted: settings.nightMode = (selectedIndex == 0);
+                                selectedIndex: _settings.nightMode ? 0 : 1;
+                                onAccepted: _settings.nightMode = (selectedIndex == 0);
                         }
 
                         SettingsPageEntry {
@@ -188,8 +188,8 @@ Page {
                                 ]
                                 title: qsTr("Text alignment");
                                 subtitle: entries[selectedIndex].name;
-                                selectedIndex: settings.centerText ? 1 : 0;
-                                onAccepted: settings.centerText = (selectedIndex == 1);
+                                selectedIndex: _settings.centerText ? 1 : 0;
+                                onAccepted: _settings.centerText = (selectedIndex == 1);
                         }
 
                         SettingsPageEntry {
@@ -200,16 +200,16 @@ Page {
                                 ]
 
                                 title: qsTr("Recitation")
-                                subtitle: entries[settings.recitationMode].name;
-                                selectedIndex: settings.recitationMode
-                                onAccepted: settings.recitationMode = selectedIndex;
+                                subtitle: entries[_settings.recitationMode].name;
+                                selectedIndex: _settings.recitationMode
+                                onAccepted: _settings.recitationMode = selectedIndex;
                        }
 
                         SettingsPageEntry {
                                 id: recitationsEntry
                                 title: qsTr("Show recitations")
                                 onClicked: pageStack.push("RecitationsListPage");
-                                subtitle: recitations.installed.length + qsTr(" installed.");
+                                subtitle: _recitations.installed.length + qsTr(" installed.");
                         }
 
                         SettingsPageEntry {
@@ -221,14 +221,14 @@ Page {
 
                                 title: qsTr("Flip phone to stop recitation")
                                 subtitle: entries[selectedIndex].name;
-                                selectedIndex: settings.flipToStopRecitation ? 0 : 1
-                                onAccepted: settings.flipToStopRecitation = (selectedIndex == 0)
+                                selectedIndex: _settings.flipToStopRecitation ? 0 : 1
+                                onAccepted: _settings.flipToStopRecitation = (selectedIndex == 0)
                         }
 
                         SettingsPageEntry {
                                 id: applicationTheme
                                 title: qsTr("Theme")
-                                subtitle: settings.theme
+                                subtitle: _settings.theme
                                 onClicked: pageStack.push("ThemeListPage");
                                 visible: _theme.themes().length > 1
                         }
@@ -254,6 +254,6 @@ Page {
                 titleText: qsTr("Reset settings?")
                 acceptButtonText: qsTr("Yes")
                 rejectButtonText: qsTr("No")
-                onAccepted: { settings.reset(); settingsReset.show(); }
+                onAccepted: { _settings.reset(); settingsReset.show(); }
         }
 }

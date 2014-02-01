@@ -13,7 +13,7 @@ TranslationsPage {
                 id: title
                 width: parent.width
                 anchors.top: parent.top
-                text: translations.categoryName(parent.cid)
+                text: _translations.categoryName(parent.cid)
                 // TODO: proper alignment
         }
 
@@ -50,7 +50,7 @@ TranslationsPage {
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
-                model: translations.translations(parent.cid)
+                model: _translations.translations(parent.cid)
                 delegate: delegate
         }
 

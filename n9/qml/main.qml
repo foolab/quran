@@ -4,68 +4,68 @@ import Quran 1.0
 
 PageStackWindow {
         id: root
-        width: controller.width
-        height: controller.height
+        width: _controller.width
+        height: _controller.height
 
         FSMonitor {
-                id: fsmon
+                id: _fsmon
         }
 
         Settings {
-                id: settings
+                id: _settings
         }
 
         Downloader {
-                id: downloader
+                id: _downloader
         }
 
         DataProvider {
-                id: quranData
+                id: _data
         }
 
         Bookmarks {
-                id: bookmarks
-                settings: settings
+                id: _bookmarks
+                settings: _settings
         }
 
         NumberFormatter {
-                id: formatter
-                format: settings.numberFormat
+                id: _formatter
+                format: _settings.numberFormat
         }
 
         Search {
-                id: search
+                id: _search
         }
 
         Colors {
-                id: colors
-                theme: settings.theme
-                nightMode: settings.nightMode
+                id: _colors
+                theme: _settings.theme
+                nightMode: _settings.nightMode
         }
 
         Translations {
-                id: translations
-                settings: settings
-                downloader: downloader
-                data: quranData
+                id: _translations
+                settings: _settings
+                downloader: _downloader
+                data: _data
         }
 
         PhoneFlipControl {
                 id: flipControl
-                active: settings.flipToStopRecitation && recitations.isPlaying
-                onFlipped: recitations.stop()
+                active: _settings.flipToStopRecitation && _recitations.isPlaying
+                onFlipped: _recitations.stop()
         }
 
         Recitations {
-                id: recitations
-                settings: settings
-                data: quranData
+                id: _recitations
+                settings: _settings
+                data: _data
         }
 
         WindowController {
-                id: controller
-                orientation: settings.orientation
-                fullScreen: settings.fullScreen
+                id: _controller
+                orientation: _settings.orientation
+                fullScreen: _settings.fullScreen
                 Component.onCompleted: {
                         exposedContentRectChanged();
                         applyOrientation();
@@ -110,7 +110,7 @@ PageStackWindow {
                 function setPosition(sura, aya) {
                         pagePosition.sura = sura;
                         pagePosition.aya = aya;
-                        settings.pageNumber = quranData.pageNumberForSuraAndAya(sura, aya);
+                        _settings.pageNumber = _data.pageNumberForSuraAndAya(sura, aya);
                         changed();
                 }
 
@@ -120,12 +120,12 @@ PageStackWindow {
         }
 
         Connections {
-                target: settings
+                target: _settings
                 onTextTypeChanged: {
-                        var type = quranData.textType();
-                        if (!quranData.setTextType(settings.textType)) {
+                        var type = _data.textType();
+                        if (!_data.setTextType(_settings.textType)) {
                                 textError.show();
-                                settings.textType = type;
+                                _settings.textType = type;
                         }
                 }
         }
@@ -135,7 +135,7 @@ PageStackWindow {
                 text: qsTr("Favorite added");
 
                 Component.onCompleted: {
-                        bookmarks.bookmarkAdded.connect(show);
+                        _bookmarks.bookmarkAdded.connect(show);
                 }
         }
 
@@ -144,7 +144,7 @@ PageStackWindow {
                 text: qsTr("Favorite removed");
 
                 Component.onCompleted: {
-                        bookmarks.bookmarkRemoved.connect(show);
+                        _bookmarks.bookmarkRemoved.connect(show);
                 }
         }
 
@@ -153,7 +153,7 @@ PageStackWindow {
                 text: qsTr("Favorites cleared");
 
                 Component.onCompleted: {
-                        bookmarks.cleared.connect(show);
+                        _bookmarks.cleared.connect(show);
                 }
         }
 
@@ -198,7 +198,7 @@ PageStackWindow {
         }
 
         InfoBanner {
-                id: translationsBanner
+                id: translations
         }
 
         InfoBanner {
@@ -206,39 +206,39 @@ PageStackWindow {
         }
 
         Connections {
-                target: recitations
+                target: _recitations
                 onError: { playerError.text = msg; playerError.show(); }
         }
 
         Connections {
-                target: translations
+                target: _translations
                 onInstalled: {
-                        translationsBanner.text = qsTr("Installed %1").arg(translations.translationName(id))
-                        translationsBanner.show();
+                        translations.text = qsTr("Installed ") + _translations.translationName(id);
+                        translations.show();
                 }
 
                 onFailed: {
-                        translationsBanner.text = qsTr("Failed to download %1").arg(translations.translationName(id));
-                        translationsBanner.show();
+                        translations.text = qsTr("Failed to download ") + _translations.translationName(id);
+                        translations.show();
                 }
 
                 onRemoved: {
-                        translationsBanner.text = qsTr("Removed %1").arg(translations.translationName(id));
-                        translationsBanner.show();
+                        translations.text = qsTr("Removed ") + _translations.translationName(id);
+                        translations.show();
                 }
         }
 
         Connections {
-                target: fsmon
+                target: _fsmon
                 onAvailableChanged: {
-                        if (!fsmon.available) {
-                                translations.stopDownloads();
+                        if (!_fsmon.available) {
+                                _translations.stopDownloads();
                         }
                 }
         }
 
         Component.onCompleted: {
-                quranData.setTextType(settings.textType)
+                _data.setTextType(_settings.textType)
                 pageStack.push("QuranPage", Qt.point(0, 0), true);
         }
 }

@@ -20,7 +20,7 @@ TranslationsPage {
                 Rectangle {
                         width: view.width
                         height: label.height * 2
-                        color: mouse.pressed ? colors.pressedColor : colors.backgroundColor
+                        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
 
                         MouseArea {
                                 id: mouse
@@ -35,8 +35,8 @@ TranslationsPage {
                                 id: label
                                 x: 16
                                 font.pointSize: 24
-                                text: translations.categoryName(modelData)
-                                color: mouse.pressed ? colors.pressedTextColor : colors.textColor
+                                text: _translations.categoryName(modelData)
+                                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
                                 anchors.verticalCenter: parent.verticalCenter
                         }
                 }
@@ -51,7 +51,7 @@ TranslationsPage {
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
-                model: translations.categories
+                model: _translations.categories
                 delegate: delegate
         }
 

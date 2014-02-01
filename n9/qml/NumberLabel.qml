@@ -1,7 +1,7 @@
 // -*- qml -*-
 import QtQuick 1.0
 
-// HACK: Seems the only way to listen to settings.numberFormat is to alias it to a property!
+// HACK: Seems the only way to listen to _settings.numberFormat is to alias it to a property!
 Label {
         id: label
         signal clicked
@@ -12,8 +12,8 @@ Label {
         }
 
         property int number: 0
-        property int format: settings.numberFormat
-        color: colors.numberLabeltextColor
+        property int format: _settings.numberFormat
+        color: _colors.numberLabeltextColor
 
         font.bold: true
 
@@ -21,7 +21,7 @@ Label {
         horizontalAlignment: Text.AlignHCenter
 
         function resetText() {
-                text = formatter.number(number + 1);
+                text = _formatter.number(number + 1);
         }
 
         onNumberChanged: resetText();

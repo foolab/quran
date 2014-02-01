@@ -5,7 +5,7 @@ ListModel {
         id: model
 
         Component.onCompleted: {
-            var bs = bookmarks.bookmarks();
+            var bs = _bookmarks.bookmarks();
 
             for (var x = 0; x < bs.length; x++) {
                 addBookmark(bs[x]);
@@ -13,7 +13,7 @@ ListModel {
         }
 
         function removeBookmark(index) {
-                bookmarks.removeByIndex(index);
+                _bookmarks.removeByIndex(index);
         }
 
         function bookmarkRemoved(b, index) {
@@ -21,8 +21,8 @@ ListModel {
         }
 
         function addBookmark(b) {
-                var sura = bookmarks.sura(b);
-                var aya = bookmarks.aya(b);
+                var sura = _bookmarks.sura(b);
+                var aya = _bookmarks.aya(b);
                 append({"bookmark": b, "sura": sura, "aya": aya});
         }
 }

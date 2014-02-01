@@ -25,10 +25,10 @@ DownloadLabel {
 
                 var t = "";
                 if (showCategory) {
-                        t = translations.categoryNameForTranslation(tid) + " - ";
+                        t = _translations.categoryNameForTranslation(tid) + " - ";
                 }
 
-                t += translations.translationName(tid);
+                t += _translations.translationName(tid);
 
                 text = t;
         }
@@ -40,7 +40,7 @@ DownloadLabel {
         Translation {
                 id: translation
                 tid: label.tid
-                translations: translations
+                translations: _translations
                 Component.onCompleted: init();
         }
 }

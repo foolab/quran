@@ -8,9 +8,9 @@ Page {
         tools: toolBar
 
         Connections {
-                target: recitations
+                target: _recitations
                 onPositionChanged: {
-                        settings.pageNumber = quranData.pageNumberForSuraAndAya(chapter, verse);
+                        _settings.pageNumber = _data.pageNumberForSuraAndAya(chapter, verse);
                         pagePosition.setPosition(chapter, verse);
                 }
         }
@@ -22,7 +22,7 @@ Page {
                 anchors.bottom: toolBar.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-//                visible: !recitations.isPlaying
+//                visible: !_recitations.isPlaying
         }
 
         TranslationSelector {
@@ -52,15 +52,15 @@ Page {
                         id: verse
                         anchors.left: parent.left
                         anchors.leftMargin: 10
-                        suras: quranData.surasForPage(settings.pageNumber);
+                        suras: _data.surasForPage(_settings.pageNumber);
                 }
 
                 Label {
                         id: part
                         anchors.right: parent.right
                         anchors.rightMargin: 10
-                        text: quranData.partNameForPage(settings.pageNumber);
-                        color: colors.textColor
+                        text: _data.partNameForPage(_settings.pageNumber);
+                        color: _colors.textColor
                 }
         }
 
@@ -73,12 +73,12 @@ Page {
                 width: parent.width
 
                 function pageNumberChanged() {
-                        if (page && page.page == settings.pageNumber) {
+                        if (page && page.page == _settings.pageNumber) {
                                 return;
                         }
 
                         var newPage = quranPageDelegate.createObject(view);
-                        newPage.page = settings.pageNumber;
+                        newPage.page = _settings.pageNumber;
 
                         if (page) {
                                 page.hide();
@@ -89,7 +89,7 @@ Page {
                 }
 
                 Component.onCompleted: {
-                        settings.pageNumberChanged.connect(pageNumberChanged);
+                        _settings.pageNumberChanged.connect(pageNumberChanged);
                         pageNumberChanged();
                 }
 
@@ -149,9 +149,9 @@ Page {
                 target: navBar
                 onNextClicked: {
                         navBar.show();
-                        var newIndex = settings.pageNumber + 1;
-                        if (quranData.hasPage(newIndex)) {
-                                settings.pageNumber = newIndex;
+                        var newIndex = _settings.pageNumber + 1;
+                        if (_data.hasPage(newIndex)) {
+                                _settings.pageNumber = newIndex;
                         }
                         else {
                                 lastPageReached.show();
@@ -160,9 +160,9 @@ Page {
 
                 onPreviousClicked: {
                         navBar.show();
-                        var newIndex = settings.pageNumber - 1;
-                        if (quranData.hasPage(newIndex)) {
-                                settings.pageNumber = newIndex;
+                        var newIndex = _settings.pageNumber - 1;
+                        if (_data.hasPage(newIndex)) {
+                                _settings.pageNumber = newIndex;
                         }
                         else {
                                 firstPageReached.show();
@@ -190,7 +190,7 @@ Page {
                         NumberLabel {
                                 width: 60
                                 height: 60
-                                number: settings.pageNumber
+                                number: _settings.pageNumber
                                 onClicked: pageStack.push("IndexPage");
                         }
 
@@ -201,25 +201,25 @@ Page {
 
                         ToolButton {
                                 icon: theme.translations
-                                enabled: settings.translationMode != 0
+                                enabled: _settings.translationMode != 0
 
                                 onEnabledChanged: layout.layout();
 
-                                onClicked: fsmon.available ? translationSelector.open() : massStorage.show();
+                                onClicked: _fsmon.available ? translationSelector.open() : massStorage.show();
                         }
 
                         ToolButton {
                                 icon: theme.recitations
-                                enabled: settings.recitationMode != 0
+                                enabled: _settings.recitationMode != 0
 
                                 onEnabledChanged: layout.layout();
 
-                                onClicked: fsmon.available ? recitationSelector.open() : massStorage.show();
+                                onClicked: _fsmon.available ? recitationSelector.open() : massStorage.show();
                         }
 
                         ToolButton {
-                                icon: settings.fullScreen ? theme.normalView : theme.fullScreenView
-                                onClicked: settings.fullScreen = !settings.fullScreen;
+                                icon: _settings.fullScreen ? theme.normalView : theme.fullScreenView
+                                onClicked: _settings.fullScreen = !_settings.fullScreen;
                         }
 
                         ToolButton { icon: theme.menuIcon; onClicked: menu.open(); }

@@ -45,16 +45,16 @@ Row {
                 anchors.verticalCenter: parent.verticalCenter
 
                 Connections {
-                        target: bookmarks
+                        target: _bookmarks
                         onBookmarkAdded: button.resetIcon();
                         onBookmarkRemoved: button.resetIcon();
                         onCleared: button.resetIcon();
                 }
 
-                icon: bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? theme.favoritesRemove : theme.favoritesAdd
+                icon: _bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? theme.favoritesRemove : theme.favoritesAdd
 
                 function resetIcon() {
-                        if (bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse)) {
+                        if (_bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse)) {
                                 icon = theme.favoritesRemove;
                         }
                         else {
@@ -62,40 +62,40 @@ Row {
                         }
                 }
 
-                onClicked: { bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? bookmarks.remove(contextMenu.chapter, contextMenu.verse) : bookmarks.add(contextMenu.chapter, contextMenu.verse); }
+                onClicked: { _bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? _bookmarks.remove(contextMenu.chapter, contextMenu.verse) : _bookmarks.add(contextMenu.chapter, contextMenu.verse); }
         }
 
         ToolButton {
                 icon: theme.translations
-                enabled: settings.translationMode == 2 && fsmon.available
+                enabled: _settings.translationMode == 2 && _fsmon.available
                 onClicked: translation.shown = !translation.shown;
         }
 
         ToolButton {
                 anchors.verticalCenter: parent.verticalCenter
                 icon: theme.playVerse
-                enabled: settings.recitationMode != 0 && fsmon.available
-                onClicked: recitations.play(contextMenu.chapter, contextMenu.verse);
+                enabled: _settings.recitationMode != 0 && _fsmon.available
+                onClicked: _recitations.play(contextMenu.chapter, contextMenu.verse);
         }
 
         ToolButton {
                 id: playPage
                 icon: theme.playPage
-                enabled: settings.recitationMode != 0 && fsmon.available
-                onClicked: recitations.playPage(settings.pageNumber);
+                enabled: _settings.recitationMode != 0 && _fsmon.available
+                onClicked: _recitations.playPage(_settings.pageNumber);
         }
 
         ToolButton {
                 id: playChapter
                 icon: theme.playChapter
-                enabled: settings.recitationMode != 0 && fsmon.available
-                onClicked: recitations.playChapter(contextMenu.chapter);
+                enabled: _settings.recitationMode != 0 && _fsmon.available
+                onClicked: _recitations.playChapter(contextMenu.chapter);
         }
 
         ToolButton {
                 id: stop
                 icon: theme.stop
-                onClicked: recitations.stop();
-                enabled: recitations.isPlaying
+                onClicked: _recitations.stop();
+                enabled: _recitations.isPlaying
         }
 }

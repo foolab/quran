@@ -8,7 +8,7 @@ Flickable {
         clip: true
         width: parent ? parent.width : undefined
 
-//        interactive: !recitations.isPlaying
+//        interactive: !_recitations.isPlaying
 
         property int page: -1
 
@@ -89,7 +89,7 @@ Flickable {
                 }
         }
 
-        property QuranViewModel model: QuranViewModel {data: quranData}
+        property QuranViewModel model: QuranViewModel {data: _data}
 
         anchors.fill: parent
         anchors.leftMargin: 10
@@ -120,9 +120,9 @@ Flickable {
                         Label {
                                 id: title
                                 width: parent.width
-                                font.family: settings.fontFamily
-                                font.pointSize: settings.fontSize
-	                            color: colors.titleColor
+                                font.family: _settings.fontFamily
+                                font.pointSize: _settings.fontSize
+	                            color: _colors.titleColor
                                 horizontalAlignment: Text.AlignHCenter
 
                                 Image {
@@ -138,7 +138,7 @@ Flickable {
                                         }
 
                                         height = undefined;
-                                        text = quranData.fullSuraName(parent.chapter);
+                                        text = _data.fullSuraName(parent.chapter);
                                 }
 
                                 Component.onCompleted: populate();
@@ -146,11 +146,11 @@ Flickable {
 
                         Label {
                                 id: subtitle
-                                font.family: settings.fontFamily
-                                font.pointSize: settings.fontSize
+                                font.family: _settings.fontFamily
+                                font.pointSize: _settings.fontSize
                                 width: parent.width
                                 horizontalAlignment: Text.AlignHCenter
-	                            color: colors.subtitleColor
+	                            color: _colors.subtitleColor
 
                                 Image {
                                         anchors.fill: parent
@@ -164,17 +164,17 @@ Flickable {
                                                 return;
                                         }
 
-                                        if (!quranData.hasBasmala(parent.chapter)) {
+                                        if (!_data.hasBasmala(parent.chapter)) {
                                                 height = 0;
                                                 return;
                                         }
 
                                         height = undefined;
-                                        text = quranData.basmala
+                                        text = _data.basmala
                                 }
 
                                 Component.onCompleted: {
-                                        settings.textTypeChanged.connect(populate);
+                                        _settings.textTypeChanged.connect(populate);
                                         populate();
                                 }
                         }
@@ -183,7 +183,7 @@ Flickable {
                                 id: chapterBorderBottom
                                 width: parent.width
                                 height: 5
-//                                height: settings.translationMode != 0 ? 5 : 0
+//                                height: _settings.translationMode != 0 ? 5 : 0
                                 source: "image://theme/" + theme.chapterBorder
                         }
                 }
@@ -201,11 +201,11 @@ Flickable {
                                 id: label
                                 chapter: col.chapter
                                 verse: col.verse
-                                color: recitations.chapter == chapter && recitations.verse == verse ? colors.highlightColor : colors.verseColor
+                                color: _recitations.chapter == chapter && _recitations.verse == verse ? _colors.highlightColor : _colors.verseColor
 
                                 onClicked: {
                                         menu.visible = !menu.visible
-                                        if (!menu.visible && settings.translationMode == 2) {
+                                        if (!menu.visible && _settings.translationMode == 2) {
                                                 translation.shown = false;
                                         }
                                 }

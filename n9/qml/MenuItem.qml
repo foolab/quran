@@ -8,10 +8,10 @@ Rectangle {
 //        radius: 20
         width: parent.width
         height: label.height * 2
-        color: mouse.pressed ? colors.menuPressedBackgroundColor : colors.menuBackgroundColor
+        color: mouse.pressed ? _colors.menuPressedBackgroundColor : _colors.menuBackgroundColor
 
         border.width: 1
-        border.color: colors.menuBorderColor
+        border.color: _colors.menuBorderColor
 
         signal clicked
 
@@ -29,6 +29,6 @@ Rectangle {
                 y: height/2
                 x: 20
 
-                color: mouse.pressed ? colors.menuPressedTextColor : colors.menuTextColor
+                color: mouse.pressed ? _colors.menuPressedTextColor : _colors.menuTextColor
         }
 }

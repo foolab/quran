@@ -11,9 +11,9 @@ Rectangle {
         property alias textAlignment: label.horizontalAlignment
         property bool checked: false
 
-        color: colors.buttonBackgroundColor
+        color: _colors.buttonBackgroundColor
         border.width: 2
-        border.color: colors.buttonBorderColor
+        border.color: _colors.buttonBorderColor
         width: 300
         height: 50
         radius: 5
@@ -29,7 +29,7 @@ Rectangle {
                 id: label
                 width: parent.width - (parent.border.width * 2)
                 // TODO: dependency from components to qml
-                color: mouse.pressed || checked ? colors.buttonSelectedOrPressedTextColor : colors.buttonTextColor
+                color: mouse.pressed || checked ? _colors.buttonSelectedOrPressedTextColor : _colors.buttonTextColor
                 anchors.centerIn: parent
                 font.pointSize: 20
 

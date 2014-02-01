@@ -10,7 +10,7 @@ Item {
                 id: fader
                 anchors.fill: parent
                 // TODO: dependency from components to qml
-                color: colors.faderColor
+                color: _colors.faderColor
         }
 
         MouseArea {

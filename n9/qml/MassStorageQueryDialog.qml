@@ -4,9 +4,9 @@ import QtQuick 1.0
 QueryDialog {
         id: dialog
         Connections {
-                target: fsmon
+                target: _fsmon
                 onAvailableChanged: {
-                        if (!fsmon.available) {
+                        if (!_fsmon.available) {
                                 dialog.close();
                                 dialog.rejected();
                         }

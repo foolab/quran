@@ -11,15 +11,15 @@ QtObject {
                         recitationError.show();
                 }
 
-                if (!recitations.load(id)) {
+                if (!_recitations.load(id)) {
                         recitationError.show();
                 }
         }
 
         function recitationModeChanged() {
-                if (settings.recitationMode != 0) {
-                        if (!recitations.loadDefault()) {
-                                if (recitations.installed.length == 0) {
+                if (_settings.recitationMode != 0) {
+                        if (!_recitations.loadDefault()) {
+                                if (_recitations.installed.length == 0) {
                                         noRecitations.show();
                                 }
                                 else {
@@ -35,25 +35,25 @@ QtObject {
                         return;
                 }
                 else {
-                        recitations.unload();
+                        _recitations.unload();
                         enabled = false;
                 }
         }
 
         function reset() {
-                if (!fsmon.available) {
+                if (!_fsmon.available) {
                         massStorage.show();
                         enabled = false;
                         return;
                 }
 
-                recitations.refresh();
+                _recitations.refresh();
                 recitationModeChanged();
         }
 
         Component.onCompleted: {
-                fsmon.availabilityChanged.connect(reset);
-                settings.recitationModeChanged.connect(recitationModeChanged);
+                _fsmon.availabilityChanged.connect(reset);
+                _settings.recitationModeChanged.connect(recitationModeChanged);
                 reset();
         }
 }

@@ -47,7 +47,7 @@ TranslationsPage {
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
-                model: translations.active
+                model: _translations.active
                 delegate: translationsDelegate
         }
 

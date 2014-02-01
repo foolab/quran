@@ -9,11 +9,11 @@ Row {
         ToolButton {
                 id: icon
                 icon: theme.playPart
-                enabled: settings.recitationMode != 0 && fsmon.available
+                enabled: _settings.recitationMode != 0 && _fsmon.available
                 color: text.color
                 onClicked: {
-                        settings.pageNumber = quranData.pageNumberForPart(selectedIndex);
-                        recitations.playPart(index);
+                        _settings.pageNumber = _data.pageNumberForPart(selectedIndex);
+                        _recitations.playPart(index);
                         accept();
                 }
 

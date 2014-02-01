@@ -40,12 +40,12 @@ Dialog {
                 height: label.height
 
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: colors.dialogTitleBackgroundColor
+                color: _colors.dialogTitleBackgroundColor
 
                 Label {
                         id: label
                         width: parent.width
-                        color: colors.dialogTitleTextColor
+                        color: _colors.dialogTitleTextColor
                         text: parent.text
                         x: 10
                         anchors.verticalCenter: parent.verticalCenter

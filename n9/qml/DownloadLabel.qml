@@ -14,7 +14,7 @@ Rectangle {
 
         signal clicked
 
-        color: mouse.pressed ? colors.pressedColor : colors.backgroundColor
+        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
 
         width: slider.width + 20 + installed.width + 10
         height: Math.max(slider.y + slider.height + 10, 100)
@@ -32,7 +32,7 @@ Rectangle {
                 width: slider.width
                 anchors.top: parent.top
                 anchors.topMargin: 10
-                color: mouse.pressed ? colors.pressedTextColor : colors.textColor
+                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
         }
 
         ProgressBar {
@@ -47,7 +47,7 @@ Rectangle {
 
         Label {
                 id: error
-                color: colors.errorColor
+                color: _colors.errorColor
                 anchors.fill: slider
                 opacity: showError ? 1.0 : 0.0
         }
