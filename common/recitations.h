@@ -26,7 +26,7 @@
 class Settings;
 class DataProvider;
 class Recitation;
-class QMediaPlayer;
+class MediaPlayer;
 class AudioPolicy;
 class MediaPlaylist;
 
@@ -104,7 +104,7 @@ private:
 
   QMap<int, Recitation *> m_installed;
 
-  QMediaPlayer *m_player;
+  MediaPlayer *m_player;
   MediaPlaylist *m_playlist;
   Recitation *m_recitation;
   int m_current;

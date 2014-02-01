@@ -39,9 +39,6 @@
 #include "fsmonitor.h"
 #include "search.h"
 #include "recitations.h"
-#ifndef SAILFISH
-#include "gstzipsrc.h"
-#endif
 #include "colors.h"
 #include "toolbarlayout.h"
 #include "phoneflipcontrol.h"
@@ -59,6 +56,7 @@
 #include <QtQuick>
 #include <QQmlError>
 #endif
+#include <gst/gst.h>
 
 #define FONT_FILE                  ":/SimplifiedNaskh.ttf"
 
@@ -79,10 +77,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   QFontDatabase::addApplicationFont(FONT_FILE);
 
-#ifndef SAILFISH
-  gst_init(0, 0);
-  gst_zip_src_register();
-#endif
+  gst_init(&argc, &argv);
 
   bool dev = false;
   for (int x = 0; x < argc; x++) {

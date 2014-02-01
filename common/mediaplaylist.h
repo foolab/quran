@@ -18,13 +18,13 @@
 #ifndef MEDIA_PLAYLIST_H
 #define MEDIA_PLAYLIST_H
 
-#include <QMediaPlaylist>
+#include <QObject>
 
-class Settings;
 class DataProvider;
 class Recitation;
+class Media;
 
-class MediaPlaylist : public QMediaPlaylist {
+class MediaPlaylist : public QObject {
   Q_OBJECT
 
 public:
@@ -35,7 +35,7 @@ public:
     PlayPart,
   };
 
-  MediaPlaylist(Settings *settings, DataProvider *data, QObject *parent = 0);
+  MediaPlaylist(DataProvider *data, QObject *parent = 0);
   ~MediaPlaylist();
 
   void setRecitation(Recitation *recitation);
@@ -51,8 +51,16 @@ public:
   int chapter();
   int part();
 
+  QList<Media *> media();
+
+signals:
+  void cleared();
+  void mediaAdded(Media *media);
+
 private:
-  Settings *m_settings;
+  void clear();
+  void addMedia(Media *media);
+
   DataProvider *m_data;
   Recitation *m_recitation;
 
@@ -61,6 +69,8 @@ private:
   int m_chapter;
   int m_page;
   int m_part;
+
+  QList<Media *> m_media;
 };
 
 #endif /* MEDIA_PLAYLIST_H */

@@ -23,6 +23,7 @@
 #ifndef SAILFISH
 #include "quazipfile.h"
 #endif
+#include "media.h"
 
 #define SIMPLE_INFO_FILE               "info.ini"
 #define ZEKR_INFO_FILE                 "recitation.properties"
@@ -73,10 +74,10 @@ public:
     return new RecitationSimple(name, id, dir);
   }
 
-  QUrl mediaUrl(int chapter, int verse) {
+  Media *mediaUrl(int chapter, int verse) {
     QString mp3 = QString("%1/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
 
-    return QUrl::fromLocalFile(mp3);
+    return new Media(chapter, verse, QUrl::fromLocalFile(mp3));
   }
 
 protected:
@@ -108,15 +109,15 @@ public:
     return new RecitationOnline(id, dir, url);
   }
 
-  QUrl mediaUrl(int chapter, int verse) {
+  Media *mediaUrl(int chapter, int verse) {
     QString mp3 = QString("%1/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
     if (QFile::exists(mp3)) {
-      return QUrl::fromLocalFile(mp3);
+      return new Media(chapter, verse, QUrl::fromLocalFile(mp3));
     }
 
     QUrl url(QString("%1/%2%3.mp3").arg(m_url.toString()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0')));
 
-    return url;
+    return new Media(chapter, verse, url);
   }
 
 protected:
@@ -160,10 +161,10 @@ public:
     return new RecitationZekr(name, id, QDir(dir).filePath(subdir));
   }
 
-  QUrl mediaUrl(int chapter, int verse) {
+  Media *mediaUrl(int chapter, int verse) {
     QString mp3 = QString("%1/%2/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
 
-    return QUrl::fromLocalFile(mp3);
+    return new Media(chapter, verse, QUrl::fromLocalFile(mp3));
   }
 
   static bool info(QIODevice& file, QString& name, QString& subdir) {
@@ -238,10 +239,10 @@ public:
     return new RecitationZekrZip(name, id, zip);
   }
 
-  QUrl mediaUrl(int chapter, int verse) {
+  Media *mediaUrl(int chapter, int verse) {
     QString mp3 = QString("%1/%2/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
 
-    return QUrl(mp3);
+    return new Media(chapter, verse, QUrl(mp3));
   }
 
 private:

@@ -6,7 +6,7 @@ QT += declarative
 
 CONFIG += link_pkgconfig meegotouch debug
 
-PKGCONFIG += qmsystem2 qdeclarative-boostable sqlite3
+PKGCONFIG += qmsystem2 qdeclarative-boostable sqlite3 libresourceqt1
 
 SOURCES += fsmonitor.cpp audiopolicy.cpp windowcontroller.cpp
 

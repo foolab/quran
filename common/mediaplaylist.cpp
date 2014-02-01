@@ -19,9 +19,10 @@
 #include "recitation.h"
 #include <QDebug>
 #include "dataprovider.h"
+#include "media.h"
 
-MediaPlaylist::MediaPlaylist(Settings *settings, DataProvider *data, QObject *parent)
-  : QMediaPlaylist(parent), m_settings(settings), m_data(data), m_recitation(0),
+MediaPlaylist::MediaPlaylist(DataProvider *data, QObject *parent)
+  : QObject(parent), m_data(data), m_recitation(0),
     m_chapter(0), m_page(0), m_part(0) {
 
 }
@@ -137,4 +138,22 @@ void MediaPlaylist::playPart(int part) {
       addMedia(m_recitation->mediaUrl(frag.sura() + 1, x + 1));
     }
   }
+}
+
+void MediaPlaylist::clear() {
+  emit cleared();
+
+  qDeleteAll(m_media);
+
+  m_media.clear();
+}
+
+void MediaPlaylist::addMedia(Media *media) {
+  m_media << media;
+
+  emit mediaAdded(media);
+}
+
+QList<Media *> MediaPlaylist::media() {
+  return m_media;
 }

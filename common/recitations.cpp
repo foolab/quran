@@ -19,7 +19,8 @@
 #include "recitation.h"
 #include <QDebug>
 #include "settings.h"
-#include <QMediaPlayer>
+#include "mediaplayer.h"
+#include "media.h"
 #include "audiopolicy.h"
 #include "mediaplaylist.h"
 
@@ -48,6 +49,8 @@ Recitations::~Recitations() {
   if (m_player) {
     m_player->stop();
   }
+
+  m_policy->release();
 
   delete m_playlist;
   m_playlist = 0;
@@ -156,10 +159,10 @@ bool Recitations::load(int id) {
   }
 
   if (!m_player) {
-    m_player = new QMediaPlayer(this);
+    m_player = new MediaPlayer(this);
 
-    m_playlist = new MediaPlaylist(m_settings, m_data, this);
-    QMediaPlaylist *list = m_player->playlist();
+    m_playlist = new MediaPlaylist(m_data, this);
+    MediaPlaylist *list = m_player->playlist();
     if (list) {
       list->deleteLater();
     }
@@ -169,11 +172,11 @@ bool Recitations::load(int id) {
 
   stop();
 
-  QObject::connect(m_player, SIGNAL(error(QMediaPlayer::Error)),
+  QObject::connect(m_player, SIGNAL(error()),
 		   this, SLOT(playerError()));
-  QObject::connect(m_player, SIGNAL(stateChanged(QMediaPlayer::State)),
+  QObject::connect(m_player, SIGNAL(stateChanged()),
 		   this, SLOT(playerStateChanged()));
-  QObject::connect(m_player, SIGNAL(mediaChanged(const QMediaContent&)),
+  QObject::connect(m_player, SIGNAL(mediaChanged()),
 		   this, SLOT(playerMediaChanged()));
 
   m_recitation = m_installed[id];
@@ -218,38 +221,32 @@ void Recitations::unload() {
   m_player = 0;
 
   m_recitation = 0;
+
+  m_policy->release();
 }
 
 bool Recitations::isPlaying() const {
-  return m_player ? m_player->state() != QMediaPlayer::StoppedState : false;
+  return m_player ? m_player->isPlaying() : false;
 }
 
 void Recitations::playerStateChanged() {
   emit playingChanged();
 
-  if (m_player->state() != QMediaPlayer::PlayingState) {
+  if (!m_player->isPlaying()) {
     stop();
   }
 }
 
 void Recitations::playerError() {
-  m_play = false;
-  m_player->stop();
-  emit error(m_player->errorString());
-
-  setChapter(-1);
-  setVerse(-1);
+  stop();
+  emit error(tr("Failed to play audio"));
 }
 
 void Recitations::playerMediaChanged() {
-  QString id = QFileInfo(m_player->media().canonicalUrl().toString()).fileName();
+  Media *media = m_player->media();
 
-  if (id.isEmpty()) {
-    return;
-  }
-
-  int chapter = id.left(3).toInt() - 1;
-  int verse = id.mid(3, 3).toInt() - 1;
+  int chapter = media->chapter() - 1;
+  int verse = media->verse() - 1;
 
   switch (m_playlist->mode()) {
   case MediaPlaylist::PlayVerse:
@@ -294,7 +291,7 @@ void Recitations::playerMediaChanged() {
     if (verse == 0 && chapter == 0) {
       if (m_playlist->part() == 0) {
 	// We have 2 basmalas in the first part
-	if (m_playlist->currentIndex() == 0) {
+	if (m_playlist->media().indexOf(media) == 0) {
 	  // First sura.
 	  // Nothing.
 	}
@@ -335,6 +332,8 @@ void Recitations::stop() {
   }
 
   m_player->stop();
+
+  m_policy->release();
 
   setChapter(-1);
   setVerse(-1);

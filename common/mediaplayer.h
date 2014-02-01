@@ -15,34 +15,48 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RECITATION_H
-#define RECITATION_H
+#ifndef MEDIA_PLAYER_H
+#define MEDIA_PLAYER_H
 
-#include <QString>
+#include <QObject>
+#include <gst/gst.h>
 
+class MediaPlaylist;
 class Media;
 
-class Recitation {
+class MediaPlayer : public QObject {
+  Q_OBJECT
+
 public:
-  static Recitation *create(const QString& id, const QString& dir);
+  MediaPlayer(QObject *parent = 0);
+  ~MediaPlayer();
 
-  virtual ~Recitation();
+  void play();
+  void stop();
 
-  QString id() const;
-  QString name() const;
-  QString dir() const;
+  MediaPlaylist *playlist();
+  void setPlaylist(MediaPlaylist *playlist);
 
-  bool isValid();
+  Media *media();
 
-  virtual Media *mediaUrl(int chapter, int verse) = 0;
+  bool isPlaying();
 
-protected:
-  Recitation(const QString& name, const QString& id, const QString& dir);
+signals:
+  void error();
+  void stateChanged();
+  void mediaChanged();
+
+private slots:
+  void listCleared();
 
 private:
-  const QString m_name;
-  const QString m_id;
-  const QString m_dir;
+  void setNextIndex();
+  static void queue_next_uri(GstElement* elem, MediaPlayer *that);
+  static gboolean bus_handler(GstBus *bus, GstMessage *message, MediaPlayer *that);
+
+  GstElement *m_bin;
+  MediaPlaylist *m_list;
+  int m_index;
 };
 
-#endif /* RECITATION_H */
+#endif /* MEDIA_PLAYER_H */

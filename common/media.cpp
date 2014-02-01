@@ -15,34 +15,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef RECITATION_H
-#define RECITATION_H
+#include "media.h"
 
-#include <QString>
+Media::Media(int chapter, int verse, const QUrl& url) :
+  m_chapter(chapter),
+  m_verse(verse),
+  m_url(url) {
 
-class Media;
+}
 
-class Recitation {
-public:
-  static Recitation *create(const QString& id, const QString& dir);
+int Media::chapter() {
+  return m_chapter;
+}
 
-  virtual ~Recitation();
+int Media::verse() {
+  return m_verse;
+}
 
-  QString id() const;
-  QString name() const;
-  QString dir() const;
+QUrl Media::url() {
+  return m_url;
+}
 
-  bool isValid();
-
-  virtual Media *mediaUrl(int chapter, int verse) = 0;
-
-protected:
-  Recitation(const QString& name, const QString& id, const QString& dir);
-
-private:
-  const QString m_name;
-  const QString m_id;
-  const QString m_dir;
-};
-
-#endif /* RECITATION_H */
