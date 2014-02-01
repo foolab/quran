@@ -24,15 +24,23 @@ Media::Media(int chapter, int verse, const QUrl& url) :
 
 }
 
-int Media::chapter() {
+Media::~Media() {
+
+}
+
+int Media::chapter() const {
   return m_chapter;
 }
 
-int Media::verse() {
+int Media::verse() const {
   return m_verse;
 }
 
-QUrl Media::url() {
+QUrl Media::url() const {
   return m_url;
+}
+
+bool Media::operator==(const Media& other) {
+  return m_url == other.m_url && m_chapter == other.m_chapter && m_verse == other.m_verse;
 }
 

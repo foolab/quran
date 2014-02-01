@@ -39,7 +39,6 @@ MediaPlayer::MediaPlayer(QObject *parent) :
 
   g_object_set(m_bin, "flags", flags, "uri", "appsrc://", NULL);
 
-  g_signal_connect(m_bin, "about-to-finish", G_CALLBACK(queue_next_uri), this);
   g_signal_connect(m_bin, "source-setup", G_CALLBACK(source_setup), this);
 }
 
@@ -117,16 +116,25 @@ void MediaPlayer::setNextIndex() {
 
   Media *m = media();
   if (!m) {
+    stop();
     return;
   }
 
+  gst_element_set_state(m_bin, GST_STATE_PLAYING);
+
   QByteArray data = m_list->recitation()->data(m);
+  if (data.isEmpty()) {
+    emit error();
+    stop();
+  }
 
   GstBuffer *buffer = gst_buffer_new_and_alloc(data.size());
   memcpy(GST_BUFFER_DATA(buffer), data.constData(), data.size());
 
   g_signal_emit_by_name(m_src, "push-buffer", buffer, NULL);
   gst_buffer_unref(buffer);
+
+  g_signal_emit_by_name(m_src, "end-of-stream", NULL);
 
   emit mediaChanged();
 }
@@ -136,60 +144,30 @@ void MediaPlayer::listCleared() {
   m_index = -1;
 }
 
-void MediaPlayer::queue_next_uri(GstElement* elem, MediaPlayer *that) {
-  Q_UNUSED(elem);
-
-  that->setNextIndex();
-}
-
 gboolean MediaPlayer::bus_handler(GstBus *bus, GstMessage *message, MediaPlayer *that) {
   Q_UNUSED(bus);
   Q_UNUSED(that);
 
   switch (GST_MESSAGE_TYPE(message)) {
   case GST_MESSAGE_ERROR: {
+    that->stop();
+    emit that->error();
     GError *err = NULL;
     gchar *debug;
 
     gst_message_parse_error(message, &err, &debug);
-    qDebug() << "Error" << err->message << ":" << debug;
-    g_error_free(err);
-    g_free(debug);
-  }
-    break;
-
-  case GST_MESSAGE_WARNING: {
-    GError *err = NULL;
-    gchar *debug;
-
-    gst_message_parse_warning(message, &err, &debug);
-    qDebug() << "Warning" << err->message << ":" << debug;
-
-    g_error_free(err);
-    g_free(debug);
-  }
-    break;
-
-  case GST_MESSAGE_INFO: {
-    GError *err = NULL;
-    gchar *debug;
-
-    gst_message_parse_info(message, &err, &debug);
-
-    qDebug() << "Info" << err->message << ":" << debug;
-
+    qWarning() << "Error" << err->message << ":" << debug;
     g_error_free(err);
     g_free(debug);
   }
     break;
 
   case GST_MESSAGE_EOS:
-    qDebug() << "EOS";
-    that->stop();
+    gst_element_set_state(that->m_bin, GST_STATE_READY);
+    gst_element_set_state(that->m_bin, GST_STATE_PLAYING);
     break;
 
   default:
-    qDebug() << GST_MESSAGE_TYPE_NAME(message);
     break;
   }
 

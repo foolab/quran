@@ -51,7 +51,6 @@ private slots:
 
 private:
   void setNextIndex();
-  static void queue_next_uri(GstElement* elem, MediaPlayer *that);
   static gboolean bus_handler(GstBus *bus, GstMessage *message, MediaPlayer *that);
   static void source_setup(GstElement *bin, GstElement *src, MediaPlayer *that);
 

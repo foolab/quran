@@ -23,10 +23,13 @@
 class Media {
 public:
   Media(int chapter, int verse, const QUrl& url);
-  int chapter();
-  int verse();
+  virtual ~Media();
 
-  QUrl url();
+  int chapter() const;
+  int verse() const;
+  QUrl url() const;
+
+  bool operator==(const Media& other);
 
 private:
   int m_chapter;
