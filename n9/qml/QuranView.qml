@@ -170,7 +170,7 @@ Flickable {
                                         }
 
                                         height = undefined;
-                                        text = quranData.basmala();
+                                        text = quranData.basmala
                                 }
 
                                 Component.onCompleted: {

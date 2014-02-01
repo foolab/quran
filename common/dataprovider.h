@@ -66,7 +66,7 @@ public:
 
   Sura sura(int index) const;
 
-  Q_INVOKABLE QString basmala() const;
+  QString basmala() const;
 
   QString prefix() const;
 

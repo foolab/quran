@@ -65,7 +65,7 @@ Page {
                                 Component.onCompleted: populate();
 
                                 function populate() {
-                                        text = quranData.text(0, 0) + " (" + formatter.number(1) + ")"
+                                        text = quranData.basmala + " (" + formatter.number(1) + ")"
                                 }
 
                                 Connections {
