@@ -54,6 +54,22 @@ Recitation::Recitation(const QString& name, const QString& id, const QString& di
 
 }
 
+QByteArray Recitation::data(Media *media) {
+  QFile f(media->url().toLocalFile());
+
+  if (!f.open(QFile::ReadOnly)) {
+    qWarning() << "Failed to open file" << f.fileName() << f.errorString();
+    return QByteArray();
+  }
+
+  QByteArray data = f.readAll();
+  if (f.error() != QFile::NoError) {
+    qWarning() << "Failed to read file" << f.fileName() << f.errorString();
+  }
+
+  return data;
+}
+
 class RecitationSimple : public Recitation {
 public:
   static RecitationSimple *create(const QString& id, const QString& dir) {

@@ -19,11 +19,14 @@
 #include "mediaplaylist.h"
 #include "media.h"
 #include <QDebug>
+#include "recitation.h"
 
 MediaPlayer::MediaPlayer(QObject *parent) :
   QObject(parent),
   m_list(0),
-  m_index(-1) {
+  m_index(-1),
+  m_playing(false),
+  m_src(0) {
 
   m_bin = gst_element_factory_make("playbin2", NULL);
 
@@ -34,9 +37,10 @@ MediaPlayer::MediaPlayer(QObject *parent) :
   int flags = 0x00000002 // audio
     | 0x00000020; // native audio
 
-  g_object_set(m_bin, "flags", flags, NULL);
+  g_object_set(m_bin, "flags", flags, "uri", "appsrc://", NULL);
 
   g_signal_connect(m_bin, "about-to-finish", G_CALLBACK(queue_next_uri), this);
+  g_signal_connect(m_bin, "source-setup", G_CALLBACK(source_setup), this);
 }
 
 MediaPlayer::~MediaPlayer() {
@@ -48,21 +52,23 @@ void MediaPlayer::play() {
     return;
   }
 
-  setNextIndex();
+  if (m_playing) {
+    return;
+  }
 
+  m_playing = true;
   gst_element_set_state(m_bin, GST_STATE_PLAYING);
-  isPlaying();
 
   emit stateChanged();
 }
 
 void MediaPlayer::stop() {
-  if (!isPlaying()) {
+  if (!m_playing) {
     return;
   }
 
   gst_element_set_state(m_bin, GST_STATE_NULL);
-  isPlaying();
+  m_playing = false;
 
   emit stateChanged();
 }
@@ -103,26 +109,24 @@ Media *MediaPlayer::media() {
 }
 
 bool MediaPlayer::isPlaying() {
-  GstState state;
-  GstStateChangeReturn err = gst_element_get_state(m_bin, &state, 0, GST_CLOCK_TIME_NONE);
-
-  if (err == GST_STATE_CHANGE_FAILURE || state != GST_STATE_PLAYING) {
-    return false;
-  }
-
-  return true;
+  return m_playing;
 }
 
 void MediaPlayer::setNextIndex() {
   ++m_index;
+
   Media *m = media();
   if (!m) {
     return;
   }
 
-  g_object_set (m_bin, "uri", m->url().toString().toLocal8Bit().constData(), NULL);
+  QByteArray data = m_list->recitation()->data(m);
 
-  qDebug() << "playing url" << m->url();
+  GstBuffer *buffer = gst_buffer_new_and_alloc(data.size());
+  memcpy(GST_BUFFER_DATA(buffer), data.constData(), data.size());
+
+  g_signal_emit_by_name(m_src, "push-buffer", buffer, NULL);
+  gst_buffer_unref(buffer);
 
   emit mediaChanged();
 }
@@ -185,8 +189,16 @@ gboolean MediaPlayer::bus_handler(GstBus *bus, GstMessage *message, MediaPlayer 
     break;
 
   default:
+    qDebug() << GST_MESSAGE_TYPE_NAME(message);
     break;
   }
 
   return TRUE;
+}
+
+void MediaPlayer::source_setup(GstElement *bin, GstElement *src, MediaPlayer *that) {
+  Q_UNUSED(bin);
+
+  that->m_src = src;
+  that->setNextIndex();
 }

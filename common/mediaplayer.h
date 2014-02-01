@@ -53,10 +53,13 @@ private:
   void setNextIndex();
   static void queue_next_uri(GstElement* elem, MediaPlayer *that);
   static gboolean bus_handler(GstBus *bus, GstMessage *message, MediaPlayer *that);
+  static void source_setup(GstElement *bin, GstElement *src, MediaPlayer *that);
 
   GstElement *m_bin;
   MediaPlaylist *m_list;
   int m_index;
+  bool m_playing;
+  GstElement *m_src;
 };
 
 #endif /* MEDIA_PLAYER_H */

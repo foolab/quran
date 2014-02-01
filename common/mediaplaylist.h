@@ -53,6 +53,8 @@ public:
 
   QList<Media *> media();
 
+  Recitation *recitation();
+
 signals:
   void cleared();
   void mediaAdded(Media *media);

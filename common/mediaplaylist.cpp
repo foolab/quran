@@ -157,3 +157,7 @@ void MediaPlaylist::addMedia(Media *media) {
 QList<Media *> MediaPlaylist::media() {
   return m_media;
 }
+
+Recitation *MediaPlaylist::recitation() {
+  return m_recitation;
+}
