@@ -120,8 +120,6 @@ void MediaPlayer::setNextIndex() {
     return;
   }
 
-  gst_element_set_state(m_bin, GST_STATE_PLAYING);
-
   QByteArray data = m_list->recitation()->data(m);
   if (data.isEmpty()) {
     emit error();
