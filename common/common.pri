@@ -1,15 +1,10 @@
 TEMPLATE = app
 
-!sailfish {
 include(../quazip/quazip/quazip.pri)
-PKGCONFIG += gstreamer-base-0.10
-SOURCES += gstzipsrc.cpp
-HEADERS += gstzipsrc.h
-}
-
 QT += network
 
 CONFIG += mobility link_pkgconfig
+PKGCONFIG += gstreamer-0.10
 
 MOBILITY = multimedia sensors
 

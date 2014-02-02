@@ -20,9 +20,7 @@
 #include <QDir>
 #include <QSettings>
 #include <QDebug>
-#ifndef SAILFISH
 #include "quazipfile.h"
-#endif
 #include "media.h"
 
 #define SIMPLE_INFO_FILE               "info.ini"
@@ -230,7 +228,6 @@ private:
   }
 };
 
-#ifndef SAILFISH
 class RecitationZekrZip : public Recitation {
 public:
   static RecitationZekrZip *create(const QString& id, const QString& dir) {
@@ -238,21 +235,28 @@ public:
       return 0;
     }
 
-    QuaZipFile z(dir, ZEKR_INFO_FILE);
+    QuaZip *zip = new QuaZip(dir);
+    if (!zip->open(QuaZip::mdUnzip)) {
+      delete zip;
+      return 0;
+    }
 
-    if (!z.open(QIODevice::ReadOnly)) {
+    zip->setCurrentFile(ZEKR_INFO_FILE);
+
+    QuaZipFile file(zip);
+    if (!file.open(QIODevice::ReadOnly)) {
+      delete zip;
       return 0;
     }
 
     QString name, subdir;
 
-    if (!RecitationZekr::info(z, name, subdir)) {
+    if (!RecitationZekr::info(file, name, subdir)) {
+      delete zip;
       return 0;
     }
 
-    QString zip = QString("zip:%1//%2").arg(dir).arg(subdir);
-
-    return new RecitationZekrZip(name, id, zip);
+    return new RecitationZekrZip(name, id, QFileInfo(dir).baseName(), zip);
   }
 
   Media *mediaUrl(int chapter, int verse) {
@@ -261,12 +265,38 @@ public:
     return new Media(chapter, verse, QUrl(mp3));
   }
 
-private:
-  RecitationZekrZip(const QString& name, const QString& id, const QString& dir)
-    : Recitation(name, id, dir) {
+  QByteArray data(Media *media) {
+    QString mp3 = QString("%1/%2/%2%3.mp3").arg(dir()).arg(media->chapter(), 3, 10, QChar('0')).arg(media->verse(), 3, 10, QChar('0'));
+
+    m_zip->setCurrentFile(mp3);
+    QuaZipFile file(m_zip);
+    if (!file.open(QIODevice::ReadOnly)) {
+      qWarning() << "Failed to open file" << mp3;
+      return QByteArray();
+    }
+
+    QByteArray data = file.readAll();
+    if (data.isEmpty()) {
+      qWarning() << "Failed to read file" << mp3;
+    }
+
+    return data;
   }
+
+private:
+  RecitationZekrZip(const QString& name, const QString& id, const QString& dir, QuaZip *zip)
+    : Recitation(name, id, dir),
+      m_zip(zip) {
+
+  }
+
+  ~RecitationZekrZip() {
+    delete m_zip;
+    m_zip = 0;
+  }
+
+  QuaZip *m_zip;
 };
-#endif
 
 Recitation *Recitation::create(const QString& id, const QString& dir) {
   Recitation *r = RecitationSimple::create(id, dir);
@@ -275,11 +305,9 @@ Recitation *Recitation::create(const QString& id, const QString& dir) {
     r = RecitationZekr::create(id, dir);
   }
 
-#ifndef SAILFISH
   if (!r) {
     r = RecitationZekrZip::create(id, dir);
   }
-#endif
 
   if (!r) {
     return 0;
