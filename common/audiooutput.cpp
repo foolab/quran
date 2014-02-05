@@ -154,5 +154,7 @@ void AudioOutput::playNext() {
 
   delete b;
 
-  QMetaObject::invokeMethod(this, "playNext", Qt::QueuedConnection);
+  if (!m_buffers.isEmpty()) {
+    QMetaObject::invokeMethod(this, "playNext", Qt::QueuedConnection);
+  }
 }
