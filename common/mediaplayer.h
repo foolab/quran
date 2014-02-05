@@ -19,6 +19,7 @@
 #define MEDIA_PLAYER_H
 
 #include <QObject>
+#include <QPointer>
 
 class MediaPlaylist;
 class Media;
@@ -34,7 +35,6 @@ public:
   ~MediaPlayer();
 
   void play();
-  void stop();
 
   bool isPlaying() const;
 
@@ -44,6 +44,9 @@ public:
   Media *media();
 
   bool isPlaying();
+
+public slots:
+  void stop();
 
 signals:
   void error();
@@ -60,8 +63,8 @@ private:
 
   QThread *m_decoderThread;
   QThread *m_audioThread;
-  MediaDecoder *m_decoder;
-  AudioOutput *m_audio;
+  QPointer<MediaDecoder> m_decoder;
+  QPointer<AudioOutput> m_audio;
 };
 
 #endif /* MEDIA_PLAYER_H */

@@ -89,15 +89,24 @@ void MediaPlayer::stop() {
     return;
   }
 
-  m_decoder->finish();
-  m_audio->finish();
+  if (m_decoder) {
+    m_decoder->finish();
+  }
 
-  // TODO:
-  //  m_decoderThread->wait();
-  //  m_audioThread->wait();
+  if (m_audio) {
+    m_audio->finish();
+  }
 
-  m_decoder = 0;
-  m_audio = 0;
+  m_decoderThread->quit();
+  m_audioThread->quit();
+
+  if (m_audio) {
+    m_audio->deleteLater();
+  }
+
+  if (m_decoder) {
+    m_decoder->deleteLater();
+  }
 
   m_playing = false;
 
