@@ -88,6 +88,10 @@ void AudioOutput::play(AudioBuffer *buffer) {
 
 void AudioOutput::playNext() {
   if (m_buffers.isEmpty()) {
+    if (m_simple) {
+      pa_simple_drain (m_simple, NULL);
+    }
+
     emit finished();
     return;
   }
