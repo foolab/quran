@@ -36,7 +36,7 @@ public:
 
   virtual Media *mediaUrl(int chapter, int verse) = 0;
 
-  virtual QByteArray data(Media *media);
+  virtual QByteArray data(const Media *media);
 
 protected:
   Recitation(const QString& name, const QString& id, const QString& dir);

@@ -21,9 +21,10 @@
 #include "dataprovider.h"
 #include "media.h"
 
-MediaPlaylist::MediaPlaylist(DataProvider *data, QObject *parent)
-  : QObject(parent), m_data(data), m_recitation(0),
-    m_chapter(0), m_page(0), m_part(0) {
+MediaPlaylist::MediaPlaylist(DataProvider *data, Recitation *recitation, QObject *parent)
+  : QObject(parent),
+    m_data(data),
+    m_recitation(recitation) {
 
 }
 
@@ -31,24 +32,8 @@ MediaPlaylist::~MediaPlaylist() {
 
 }
 
-void MediaPlaylist::setRecitation(Recitation *recitation) {
-  m_recitation = recitation;
-}
-
 MediaPlaylist::PlayMode MediaPlaylist::mode() {
   return m_mode;
-}
-
-int MediaPlaylist::page() {
-  return m_page;
-}
-
-int MediaPlaylist::chapter() {
-  return m_chapter;
-}
-
-int MediaPlaylist::part() {
-  return m_part;
 }
 
 void MediaPlaylist::playPage(int page) {
@@ -59,7 +44,6 @@ void MediaPlaylist::playPage(int page) {
   clear();
 
   m_mode = PlayPage;
-  m_page = page;
 
   Page p = m_data->pageFromIndex(page);
   QList<Fragment> frags = p.fragments();
@@ -87,7 +71,6 @@ void MediaPlaylist::playChapter(int chapter) {
   clear();
 
   m_mode = PlayChapter;
-  m_chapter = chapter;
 
   Sura s = m_data->sura(chapter);
 
@@ -119,8 +102,6 @@ void MediaPlaylist::playPart(int part) {
 
   clear();
 
-  m_part = part;
-
   m_mode = PlayPart;
 
   QList<Fragment> frags = m_data->fragmentsForPart(part);
@@ -144,7 +125,6 @@ void MediaPlaylist::clear() {
   emit cleared();
 
   qDeleteAll(m_media);
-
   m_media.clear();
 }
 
@@ -154,10 +134,10 @@ void MediaPlaylist::addMedia(Media *media) {
   emit mediaAdded(media);
 }
 
-QList<Media *> MediaPlaylist::media() {
-  return m_media;
-}
-
 Recitation *MediaPlaylist::recitation() {
   return m_recitation;
+}
+
+const QList<Media *> MediaPlaylist::media() const {
+  return m_media;
 }

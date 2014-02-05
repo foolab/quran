@@ -52,7 +52,7 @@ Recitation::Recitation(const QString& name, const QString& id, const QString& di
 
 }
 
-QByteArray Recitation::data(Media *media) {
+QByteArray Recitation::data(const Media *media) {
   QFile f(media->url().toLocalFile());
 
   if (!f.open(QFile::ReadOnly)) {
@@ -265,7 +265,7 @@ public:
     return new Media(chapter, verse, QUrl(mp3));
   }
 
-  QByteArray data(Media *media) {
+  QByteArray data(const Media *media) {
     QString mp3 = QString("%1/%2/%2%3.mp3").arg(dir()).arg(media->chapter(), 3, 10, QChar('0')).arg(media->verse(), 3, 10, QChar('0'));
 
     m_zip->setCurrentFile(mp3);

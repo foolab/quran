@@ -89,11 +89,8 @@ signals:
 
 private slots:
   void playerStateChanged();
-  void policyAcquired();
-  void policyLost();
-  void policyDenied();
   void playerError();
-  void playerMediaChanged();
+  void playerPositionChanged(int chapter, int verse);
 
 private:
   void setChapter(int chapter);
@@ -105,15 +102,13 @@ private:
   QMap<int, Recitation *> m_installed;
 
   MediaPlayer *m_player;
-  MediaPlaylist *m_playlist;
   Recitation *m_recitation;
   int m_current;
 
-  AudioPolicy *m_policy;
-  bool m_play;
-
   int m_chapter;
   int m_verse;
+
+  int m_playingId;
 };
 
 #endif /* RECITATIONS_H */

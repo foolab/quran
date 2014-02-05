@@ -21,7 +21,6 @@
 #include "settings.h"
 #include "mediaplayer.h"
 #include "media.h"
-#include "audiopolicy.h"
 #include "mediaplaylist.h"
 
 Recitations::Recitations(QObject *parent)
@@ -29,17 +28,12 @@ Recitations::Recitations(QObject *parent)
     m_settings(0),
     m_data(0),
     m_player(0),
-    m_playlist(0),
     m_recitation(0),
     m_current(0),
-    m_policy(new AudioPolicy(this)),
-    m_play(false),
     m_chapter(-1),
-    m_verse(-1){
+    m_verse(-1),
+    m_playingId(-1) {
 
-  QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
-  QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
-  QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
 }
 
 Recitations::~Recitations() {
@@ -49,11 +43,6 @@ Recitations::~Recitations() {
   if (m_player) {
     m_player->stop();
   }
-
-  m_policy->release();
-
-  delete m_playlist;
-  m_playlist = 0;
 
   delete m_player;
   m_player = 0;
@@ -158,34 +147,28 @@ bool Recitations::load(int id) {
     return false;
   }
 
+  stop();
+
+  m_recitation = m_installed[id];
+
+  m_current = id;
+
+  m_settings->setDefaultRecitation(m_recitation->id());
+
   if (!m_player) {
     m_player = new MediaPlayer(this);
-
-    m_playlist = new MediaPlaylist(m_data, this);
-    MediaPlaylist *list = m_player->playlist();
-    if (list) {
-      list->deleteLater();
-    }
-
-    m_player->setPlaylist(m_playlist);
   }
 
-  stop();
+  MediaPlaylist *list = new MediaPlaylist(m_data, m_recitation, this);
+  m_player->setPlaylist(list);
 
   QObject::connect(m_player, SIGNAL(error()),
 		   this, SLOT(playerError()));
   QObject::connect(m_player, SIGNAL(stateChanged()),
 		   this, SLOT(playerStateChanged()));
-  QObject::connect(m_player, SIGNAL(mediaChanged()),
-		   this, SLOT(playerMediaChanged()));
 
-  m_recitation = m_installed[id];
-
-  m_playlist->setRecitation(m_recitation);
-
-  m_current = id;
-
-  m_settings->setDefaultRecitation(m_recitation->id());
+  QObject::connect(m_player, SIGNAL(positionChanged(int, int)),
+		   this, SLOT(playerPositionChanged(int, int)));
 
   emit currentChanged();
 
@@ -210,19 +193,14 @@ bool Recitations::loadDefault() {
 }
 
 void Recitations::unload() {
+  stop();
+
   if (m_player) {
-    m_player->stop();
+    delete m_player;
+    m_player = 0;
   }
 
-  delete m_playlist;
-  m_playlist = 0;
-
-  delete m_player;
-  m_player = 0;
-
   m_recitation = 0;
-
-  m_policy->release();
 }
 
 bool Recitations::isPlaying() const {
@@ -242,13 +220,11 @@ void Recitations::playerError() {
   emit error(tr("Failed to play audio"));
 }
 
-void Recitations::playerMediaChanged() {
-  Media *media = m_player->media();
+void Recitations::playerPositionChanged(int chapter, int verse) {
+  --chapter;
+  --verse;
 
-  int chapter = media->chapter() - 1;
-  int verse = media->verse() - 1;
-
-  switch (m_playlist->mode()) {
+  switch (m_player->playlist()->mode()) {
   case MediaPlaylist::PlayVerse:
     emit positionChanged(chapter, verse);
     setChapter(chapter);
@@ -258,7 +234,7 @@ void Recitations::playerMediaChanged() {
   case MediaPlaylist::PlayPage:
     // We are playing a basmala that is not on the first page.
     // Just unset the position.
-    if (chapter == 0 && verse == 0 && m_playlist->page() != 0) {
+    if (chapter == 0 && verse == 0 && m_playingId != 0) {
       setChapter(-1);
       setVerse(-1);
 
@@ -273,7 +249,7 @@ void Recitations::playerMediaChanged() {
     break;
 
   case MediaPlaylist::PlayChapter:
-    if (verse == 0 && chapter == 0 && m_playlist->chapter() != 0) {
+    if (verse == 0 && chapter == 0 && m_playingId != 0) {
       setChapter(-1);
       setVerse(-1);
 
@@ -286,12 +262,13 @@ void Recitations::playerMediaChanged() {
     setVerse(verse);
 
     break;
-
+    /*
+      // TODO:
   case MediaPlaylist::PlayPart:
     if (verse == 0 && chapter == 0) {
       if (m_playlist->part() == 0) {
 	// We have 2 basmalas in the first part
-	if (m_playlist->media().indexOf(media) == 0) {
+	if (m_playlist->first() == media) {
 	  // First sura.
 	  // Nothing.
 	}
@@ -315,25 +292,14 @@ void Recitations::playerMediaChanged() {
     setVerse(verse);
 
     break;
-  }
-}
-
-void Recitations::policyAcquired() {
-  if (m_player && m_play) {
-    m_player->play();
+    */
   }
 }
 
 void Recitations::stop() {
-  m_play = false;
-
-  if (!m_player || !m_recitation) {
-    return;
+  if (m_player) {
+    m_player->stop();
   }
-
-  m_player->stop();
-
-  m_policy->release();
 
   setChapter(-1);
   setVerse(-1);
@@ -344,11 +310,12 @@ void Recitations::play(int chapter, int verse) {
     return;
   }
 
-  m_player->stop();
-  m_playlist->playVerse(chapter, verse);
+  stop();
 
-  m_play = true;
-  m_policy->acquire();
+  m_playingId = -1;
+
+  m_player->playlist()->playVerse(chapter, verse);
+  m_player->play();
 }
 
 void Recitations::playPage(int number) {
@@ -356,11 +323,12 @@ void Recitations::playPage(int number) {
     return;
   }
 
-  m_player->stop();
-  m_playlist->playPage(number);
+  stop();
 
-  m_play = true;
-  m_policy->acquire();
+  m_playingId = number;
+
+  m_player->playlist()->playPage(number);
+  m_player->play();
 }
 
 void Recitations::playChapter(int chapter) {
@@ -368,11 +336,12 @@ void Recitations::playChapter(int chapter) {
     return;
   }
 
-  m_player->stop();
-  m_playlist->playChapter(chapter);
+  stop();
 
-  m_play = true;
-  m_policy->acquire();
+  m_playingId = chapter;
+
+  m_player->playlist()->playChapter(chapter);
+  m_player->play();
 }
 
 void Recitations::playPart(int part) {
@@ -380,22 +349,8 @@ void Recitations::playPart(int part) {
     return;
   }
 
-  m_player->stop();
-  m_playlist->playPart(part);
+  stop();
 
-  m_play = true;
-  m_policy->acquire();
-}
-
-void Recitations::policyDenied() {
-  policyLost();
-  emit error(tr("Audio in use by another application"));
-}
-
-void Recitations::policyLost() {
-  m_play = false;
-
-  if (m_player) {
-    m_player->stop();
-  }
+  m_player->playlist()->playPart(part);
+  m_player->play();
 }

@@ -15,55 +15,49 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MEDIA_PLAYLIST_H
-#define MEDIA_PLAYLIST_H
+#ifndef MEDIA_DECODER_H
+#define MEDIA_DECODER_H
+
+#define __STDC_CONSTANT_MACROS
 
 #include <QObject>
+#include <QMutex>
 
-class DataProvider;
-class Recitation;
+extern "C" {
+#include <libavformat/avformat.h>
+};
+
+class MediaPlaylist;
 class Media;
-class Recitation;
+class AudioBuffer;
 
-class MediaPlaylist : public QObject {
+class MediaDecoder : public QObject {
   Q_OBJECT
 
 public:
-  enum PlayMode {
-    PlayPage,
-    PlayChapter,
-    PlayVerse,
-    PlayPart,
-  };
+  MediaDecoder(MediaPlaylist *list, QObject *parent = 0);
+  ~MediaDecoder();
 
-  MediaPlaylist(DataProvider *data, Recitation *recitation, QObject *parent = 0);
-  ~MediaPlaylist();
-
-  void playPage(int page);
-  void playChapter(int chapter);
-  void playVerse(int chapter, int verse);
-  void playPart(int part);
-
-  PlayMode mode();
-
-  Recitation *recitation();
-
-  const QList<Media *> media() const;
+  void finish();
 
 signals:
-  void cleared();
-  void mediaAdded(Media *media);
+  void finished();
+  void error();
+  void play(AudioBuffer *buffer);
+
+private slots:
+  void process();
 
 private:
-  void clear();
-  void addMedia(Media *media);
+  void cleanup(AVFormatContext *ctx);
+  bool finishRequested();
+  bool decode(AVFormatContext *ctx, const Media *media);
+  bool decode(AVCodecContext *ctx, AVPacket *pkt, const Media *media);
+  AVFormatContext *context(const QByteArray& data);
 
-  DataProvider *m_data;
-  Recitation *m_recitation;
-
-  PlayMode m_mode;
-
-  QList<Media *> m_media;
+  MediaPlaylist *m_list;
+  QMutex m_mutex;
+  bool m_finish;
 };
 
-#endif /* MEDIA_PLAYLIST_H */
+#endif /* MEDIA_DECODER_H */

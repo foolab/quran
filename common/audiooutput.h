@@ -15,53 +15,60 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MEDIA_PLAYER_H
-#define MEDIA_PLAYER_H
+#ifndef AUDIO_OUTPUT_H
+#define AUDIO_OUTPUT_H
 
 #include <QObject>
+#include <QMutex>
+#include <pulse/simple.h>
 
-class MediaPlaylist;
-class Media;
-class QThread;
-class MediaDecoder;
-class AudioOutput;
+class AudioPolicy;
 
-class MediaPlayer : public QObject {
+class AudioBuffer {
+public:
+  unsigned long rate;
+  unsigned short channels;
+  QByteArray data;
+  int chapter;
+  int verse;
+};
+
+class AudioOutput : public QObject {
   Q_OBJECT
 
 public:
-  MediaPlayer(QObject *parent = 0);
-  ~MediaPlayer();
+  AudioOutput(QObject *parent = 0);
+  ~AudioOutput();
 
-  void play();
-  void stop();
+  void finish();
 
-  bool isPlaying() const;
-
-  MediaPlaylist *playlist();
-  void setPlaylist(MediaPlaylist *playlist);
-
-  Media *media();
-
-  bool isPlaying();
+public slots:
+  void play(AudioBuffer *buffer);
 
 signals:
+  void finished();
   void error();
-  void stateChanged();
   void positionChanged(int chapter, int verse);
 
 private slots:
-  void listCleared();
+  void process();
+  void policyAcquired();
+  void policyLost();
+  void policyDenied();
+  void playNext();
 
 private:
-  MediaPlaylist *m_list;
-  int m_index;
-  bool m_playing;
+  AudioPolicy *m_policy;
+  QMutex m_mutex;
+  bool m_finish;
+  bool m_acquired;
+  QList<AudioBuffer *> m_buffers;
 
-  QThread *m_decoderThread;
-  QThread *m_audioThread;
-  MediaDecoder *m_decoder;
-  AudioOutput *m_audio;
+  pa_sample_spec m_spec;
+  pa_simple *m_simple;
+
+  int m_chapter;
+  int m_verse;
 };
 
-#endif /* MEDIA_PLAYER_H */
+#endif /* AUDIO_OUTPUT_H */

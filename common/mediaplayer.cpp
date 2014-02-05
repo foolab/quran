@@ -20,26 +20,21 @@
 #include "media.h"
 #include <QDebug>
 #include "recitation.h"
+#include <QThread>
+#include "mediadecoder.h"
+#include "audiooutput.h"
+#include "dbusconnectioneventloop.h"
 
 MediaPlayer::MediaPlayer(QObject *parent) :
   QObject(parent),
   m_list(0),
   m_index(-1),
   m_playing(false),
-  m_src(0) {
+  m_decoderThread(new QThread(this)),
+  m_audioThread(new QThread(this)),
+  m_decoder(0),
+  m_audio(0) {
 
-  m_bin = gst_element_factory_make("playbin2", NULL);
-
-  GstBus *bus = gst_element_get_bus(m_bin);
-  gst_bus_add_watch(bus, (GstBusFunc)bus_handler, this);
-  gst_object_unref(bus);
-
-  int flags = 0x00000002 // audio
-    | 0x00000020; // native audio
-
-  g_object_set(m_bin, "flags", flags, "uri", "appsrc://", NULL);
-
-  g_signal_connect(m_bin, "source-setup", G_CALLBACK(source_setup), this);
 }
 
 MediaPlayer::~MediaPlayer() {
@@ -55,8 +50,31 @@ void MediaPlayer::play() {
     return;
   }
 
+  m_decoder = new MediaDecoder(m_list);
+  m_decoder->moveToThread(m_decoderThread);
+  QObject::connect(m_decoder, SIGNAL(error()), this, SIGNAL(error()));
+  QObject::connect(m_decoder, SIGNAL(error()), m_decoderThread, SLOT(quit()));
+  QObject::connect(m_decoder, SIGNAL(finished()), m_decoderThread, SLOT(quit()));
+  QObject::connect(m_decoderThread, SIGNAL(started()), m_decoder, SLOT(process()));
+
+  m_audio = new AudioOutput;
+  m_audio->moveToThread(m_audioThread);
+  QObject::connect(m_audio, SIGNAL(error()), this, SIGNAL(error()));
+  QObject::connect(m_audio, SIGNAL(error()), m_audioThread, SLOT(quit()));
+  QObject::connect(m_audio, SIGNAL(finished()), m_audioThread, SLOT(quit()));
+  QObject::connect(m_audioThread, SIGNAL(started()), m_audio, SLOT(process()));
+
+  QObject::connect(m_decoder, SIGNAL(play(AudioBuffer *)), m_audio, SLOT(play(AudioBuffer *)));
+
+  QObject::connect(m_audio, SIGNAL(positionChanged(int, int)), this, SIGNAL(positionChanged(int, int)));
+
+  DBUSConnectionEventLoop& loop = DBUSConnectionEventLoop::getInstance();
+  loop.moveToThread(m_audioThread);
+
   m_playing = true;
-  gst_element_set_state(m_bin, GST_STATE_PLAYING);
+
+  m_decoderThread->start();
+  m_audioThread->start();
 
   emit stateChanged();
 }
@@ -66,7 +84,16 @@ void MediaPlayer::stop() {
     return;
   }
 
-  gst_element_set_state(m_bin, GST_STATE_NULL);
+  m_decoder->finish();
+  m_audio->finish();
+
+  // TODO:
+  //  m_decoderThread->wait();
+  //  m_audioThread->wait();
+
+  m_decoder = 0;
+  m_audio = 0;
+
   m_playing = false;
 
   emit stateChanged();
@@ -78,7 +105,7 @@ MediaPlaylist *MediaPlayer::playlist() {
 
 void MediaPlayer::setPlaylist(MediaPlaylist *playlist) {
   if (m_list) {
-    QObject::disconnect(m_list, SIGNAL(cleared()), this, SLOT(listCleared()));
+    delete m_list;
   }
 
   m_list = playlist;
@@ -99,82 +126,18 @@ Media *MediaPlayer::media() {
     return 0;
   }
 
-  QList<Media *> allMedia = m_list->media();
-  if (m_index >= allMedia.size()) {
+  if (m_index >= m_list->media().size()) {
     return 0;
   }
 
-  return allMedia.at(m_index);
+  return m_list->media().at(m_index);
 }
 
 bool MediaPlayer::isPlaying() {
   return m_playing;
 }
 
-void MediaPlayer::setNextIndex() {
-  ++m_index;
-
-  Media *m = media();
-  if (!m) {
-    stop();
-    return;
-  }
-
-  QByteArray data = m_list->recitation()->data(m);
-  if (data.isEmpty()) {
-    emit error();
-    stop();
-  }
-
-  GstBuffer *buffer = gst_buffer_new_and_alloc(data.size());
-  memcpy(GST_BUFFER_DATA(buffer), data.constData(), data.size());
-
-  g_signal_emit_by_name(m_src, "push-buffer", buffer, NULL);
-  gst_buffer_unref(buffer);
-
-  g_signal_emit_by_name(m_src, "end-of-stream", NULL);
-
-  emit mediaChanged();
-}
-
 void MediaPlayer::listCleared() {
   stop();
   m_index = -1;
-}
-
-gboolean MediaPlayer::bus_handler(GstBus *bus, GstMessage *message, MediaPlayer *that) {
-  Q_UNUSED(bus);
-  Q_UNUSED(that);
-
-  switch (GST_MESSAGE_TYPE(message)) {
-  case GST_MESSAGE_ERROR: {
-    that->stop();
-    emit that->error();
-    GError *err = NULL;
-    gchar *debug;
-
-    gst_message_parse_error(message, &err, &debug);
-    qWarning() << "Error" << err->message << ":" << debug;
-    g_error_free(err);
-    g_free(debug);
-  }
-    break;
-
-  case GST_MESSAGE_EOS:
-    gst_element_set_state(that->m_bin, GST_STATE_READY);
-    gst_element_set_state(that->m_bin, GST_STATE_PLAYING);
-    break;
-
-  default:
-    break;
-  }
-
-  return TRUE;
-}
-
-void MediaPlayer::source_setup(GstElement *bin, GstElement *src, MediaPlayer *that) {
-  Q_UNUSED(bin);
-
-  that->m_src = src;
-  that->setNextIndex();
 }

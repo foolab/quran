@@ -15,3 +15,11 @@ HEADERS += fsmonitor.h audiopolicy.h windowcontroller.h
 DEFINES += DATA_DIR=\\\"/opt/n9-quran/\\\"
 
 RESOURCES += qml.qrc
+
+LIBS += -Wl,--whole-archive \
+        -Llibav/libavformat/ -lavformat \
+        -Llibav/libavcodec/ -lavcodec \
+        -Llibav/libavutil/ -lavutil \
+        -Llibav/libavfilter/ -lavfilter \
+        -Llibav/libavresample/ -lavresample \
+        -Wl,--no-whole-archive

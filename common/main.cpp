@@ -56,7 +56,13 @@
 #include <QtQuick>
 #include <QQmlError>
 #endif
-#include <gst/gst.h>
+
+#define __STDC_CONSTANT_MACROS
+
+extern "C" {
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+};
 
 #define FONT_FILE                  ":/SimplifiedNaskh.ttf"
 
@@ -77,7 +83,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   QFontDatabase::addApplicationFont(FONT_FILE);
 
-  gst_init(&argc, &argv);
+  avcodec_register_all();
+  av_register_all();
 
   bool dev = false;
   for (int x = 0; x < argc; x++) {

@@ -11,7 +11,7 @@ public:
   AudioPolicy(QObject *parent = 0);
   ~AudioPolicy();
 
-  void acquire();
+  bool acquire();
   void release();
 
 signals:

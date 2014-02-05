@@ -24,8 +24,8 @@ AudioPolicy::~AudioPolicy() {
 
 }
 
-void AudioPolicy::acquire() {
-  m_set->acquire();
+bool AudioPolicy::acquire() {
+  return m_set->acquire();
 }
 
 void AudioPolicy::release() {
