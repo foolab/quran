@@ -72,6 +72,8 @@ void MediaDecoder::process() {
     cleanup(ctx);
   }
 
+  AudioBuffer *b = new AudioBuffer;
+  emit play(b); // Signal EOS!
   emit finished();
 }
 
@@ -141,7 +143,7 @@ bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt, const Media *media
       int data_size = av_samples_get_buffer_size(NULL, ctx->channels,
 						 frame->nb_samples,
 						 ctx->sample_fmt, 1);
-      AudioBuffer *b = new AudioBuffer;;
+      AudioBuffer *b = new AudioBuffer;
       b->index = media->index();
       b->rate = frame->sample_rate;
       b->channels = ctx->channels;

@@ -88,6 +88,14 @@ void AudioOutput::play(AudioBuffer *buffer) {
 
 void AudioOutput::playNext() {
   if (m_buffers.isEmpty()) {
+    return;
+  }
+
+  AudioBuffer *b = m_buffers.takeAt(0);
+
+  if (b->data.isEmpty()) {
+    delete b;
+
     if (m_simple) {
       pa_simple_drain (m_simple, NULL);
     }
@@ -95,8 +103,6 @@ void AudioOutput::playNext() {
     emit finished();
     return;
   }
-
-  AudioBuffer *b = m_buffers.takeAt(0);
 
   pa_sample_spec ss;
   ss.format = PA_SAMPLE_S16NE;
