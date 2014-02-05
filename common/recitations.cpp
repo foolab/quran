@@ -167,8 +167,8 @@ bool Recitations::load(int id) {
   QObject::connect(m_player, SIGNAL(stateChanged()),
 		   this, SLOT(playerStateChanged()));
 
-  QObject::connect(m_player, SIGNAL(positionChanged(int, int)),
-		   this, SLOT(playerPositionChanged(int, int)));
+  QObject::connect(m_player, SIGNAL(positionChanged(int, int, int)),
+		   this, SLOT(playerPositionChanged(int, int, int)));
 
   emit currentChanged();
 
@@ -220,7 +220,7 @@ void Recitations::playerError() {
   emit error(tr("Failed to play audio"));
 }
 
-void Recitations::playerPositionChanged(int chapter, int verse) {
+void Recitations::playerPositionChanged(int chapter, int verse, int index) {
   --chapter;
   --verse;
 
@@ -262,13 +262,12 @@ void Recitations::playerPositionChanged(int chapter, int verse) {
     setVerse(verse);
 
     break;
-    /*
-      // TODO:
+
   case MediaPlaylist::PlayPart:
     if (verse == 0 && chapter == 0) {
-      if (m_playlist->part() == 0) {
+      if (m_playingId == 0) {
 	// We have 2 basmalas in the first part
-	if (m_playlist->first() == media) {
+	if (index == 0) {
 	  // First sura.
 	  // Nothing.
 	}
@@ -292,7 +291,6 @@ void Recitations::playerPositionChanged(int chapter, int verse) {
     setVerse(verse);
 
     break;
-    */
   }
 }
 
@@ -350,6 +348,8 @@ void Recitations::playPart(int part) {
   }
 
   stop();
+
+  m_playingId = part;
 
   m_player->playlist()->playPart(part);
   m_player->play();

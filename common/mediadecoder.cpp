@@ -142,6 +142,7 @@ bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt, const Media *media
 						 frame->nb_samples,
 						 ctx->sample_fmt, 1);
       AudioBuffer *b = new AudioBuffer;;
+      b->index = media->index();
       b->rate = frame->sample_rate;
       b->channels = ctx->channels;
       b->data = QByteArray(reinterpret_cast<char *>(frame->data[0]), data_size);

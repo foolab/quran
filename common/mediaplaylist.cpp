@@ -48,17 +48,19 @@ void MediaPlaylist::playPage(int page) {
   Page p = m_data->pageFromIndex(page);
   QList<Fragment> frags = p.fragments();
 
+  int index = 0;
+
   foreach (const Fragment& f, frags) {
     if (f.start() == 0) {
       Sura s = m_data->sura(f.sura());
 
       if (s.hasBasmala()) {
-	addMedia(m_recitation->mediaUrl(1, 1));
+	addMedia(m_recitation->mediaUrl(1, 1, index++));
       }
     }
 
     for (int x = f.start(); x < f.start() + f.size(); x++) {
-      addMedia(m_recitation->mediaUrl(f.sura() + 1, x + 1));
+      addMedia(m_recitation->mediaUrl(f.sura() + 1, x + 1, index++));
     }
   }
 }
@@ -74,12 +76,14 @@ void MediaPlaylist::playChapter(int chapter) {
 
   Sura s = m_data->sura(chapter);
 
+  int index = 0;
+
   if (s.hasBasmala()) {
-    addMedia(m_recitation->mediaUrl(1, 1));
+    addMedia(m_recitation->mediaUrl(1, 1, index++));
   }
 
   for (int x = 0; x < s.size(); x++) {
-    addMedia(m_recitation->mediaUrl(chapter + 1, x + 1));
+    addMedia(m_recitation->mediaUrl(chapter + 1, x + 1, index++));
   }
 }
 
@@ -92,7 +96,7 @@ void MediaPlaylist::playVerse(int chapter, int verse) {
 
   m_mode = PlayVerse;
 
-  addMedia(m_recitation->mediaUrl(chapter + 1, verse + 1));
+  addMedia(m_recitation->mediaUrl(chapter + 1, verse + 1, 0));
 }
 
 void MediaPlaylist::playPart(int part) {
@@ -106,17 +110,19 @@ void MediaPlaylist::playPart(int part) {
 
   QList<Fragment> frags = m_data->fragmentsForPart(part);
 
+  int index = 0;
+
   foreach (const Fragment& frag, frags) {
     if (frag.start() == 0) {
       Sura s = m_data->sura(frag.sura());
 
       if (s.hasBasmala()) {
-	addMedia(m_recitation->mediaUrl(1, 1));
+	addMedia(m_recitation->mediaUrl(1, 1, index++));
       }
     }
 
     for (int x = frag.start(); x < frag.start() + frag.size(); x++) {
-      addMedia(m_recitation->mediaUrl(frag.sura() + 1, x + 1));
+      addMedia(m_recitation->mediaUrl(frag.sura() + 1, x + 1, index++));
     }
   }
 }

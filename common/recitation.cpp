@@ -88,10 +88,10 @@ public:
     return new RecitationSimple(name, id, dir);
   }
 
-  Media *mediaUrl(int chapter, int verse) {
+  Media *mediaUrl(int chapter, int verse, int index) {
     QString mp3 = QString("%1/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
 
-    return new Media(chapter, verse, QUrl::fromLocalFile(mp3));
+    return new Media(chapter, verse, index, QUrl::fromLocalFile(mp3));
   }
 
 protected:
@@ -123,15 +123,15 @@ public:
     return new RecitationOnline(id, dir, url);
   }
 
-  Media *mediaUrl(int chapter, int verse) {
+  Media *mediaUrl(int chapter, int verse, int index) {
     QString mp3 = QString("%1/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
     if (QFile::exists(mp3)) {
-      return new Media(chapter, verse, QUrl::fromLocalFile(mp3));
+      return new Media(chapter, verse, index, QUrl::fromLocalFile(mp3));
     }
 
     QUrl url(QString("%1/%2%3.mp3").arg(m_url.toString()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0')));
 
-    return new Media(chapter, verse, url);
+    return new Media(chapter, verse, index, url);
   }
 
 protected:
@@ -175,10 +175,10 @@ public:
     return new RecitationZekr(name, id, QDir(dir).filePath(subdir));
   }
 
-  Media *mediaUrl(int chapter, int verse) {
+  Media *mediaUrl(int chapter, int verse, int index) {
     QString mp3 = QString("%1/%2/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
 
-    return new Media(chapter, verse, QUrl::fromLocalFile(mp3));
+    return new Media(chapter, verse, index, QUrl::fromLocalFile(mp3));
   }
 
   static bool info(QIODevice& file, QString& name, QString& subdir) {
@@ -259,10 +259,10 @@ public:
     return new RecitationZekrZip(name, id, QFileInfo(dir).baseName(), zip);
   }
 
-  Media *mediaUrl(int chapter, int verse) {
+  Media *mediaUrl(int chapter, int verse, int index) {
     QString mp3 = QString("%1/%2/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
 
-    return new Media(chapter, verse, QUrl(mp3));
+    return new Media(chapter, verse, index, QUrl(mp3));
   }
 
   QByteArray data(const Media *media) {

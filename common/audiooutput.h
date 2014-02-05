@@ -31,6 +31,7 @@ public:
   QByteArray data;
   int chapter;
   int verse;
+  int index;
 };
 
 class AudioOutput : public QObject {
@@ -48,7 +49,7 @@ public slots:
 signals:
   void finished();
   void error();
-  void positionChanged(int chapter, int verse);
+  void positionChanged(int chapter, int verse, int index);
 
 private slots:
   void process();
@@ -67,8 +68,7 @@ private:
   pa_sample_spec m_spec;
   pa_simple *m_simple;
 
-  int m_chapter;
-  int m_verse;
+  int m_index;
 };
 
 #endif /* AUDIO_OUTPUT_H */

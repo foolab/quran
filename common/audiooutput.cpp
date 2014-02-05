@@ -24,8 +24,7 @@ AudioOutput::AudioOutput(QObject *parent) :
   m_policy(0),
   m_finish(false),
   m_simple(0),
-  m_chapter(-1),
-  m_verse(-1) {
+  m_index(-1) {
 
   m_spec.format = PA_SAMPLE_S16NE;
   m_spec.channels = 0;
@@ -137,11 +136,10 @@ void AudioOutput::playNext() {
   pa_simple_write(m_simple, b->data.constData(),
 		       b->data.size(), NULL);
 
-  if (b->verse != m_verse || b->chapter != m_chapter) {
-    m_verse = b->verse;
-    m_chapter = b->chapter;
+  if (b->index != m_index) {
+    m_index = b->index;
 
-    emit positionChanged(m_chapter, m_verse);
+    emit positionChanged(b->chapter, b->verse, b->index);
   }
 
   delete b;

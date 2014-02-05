@@ -17,9 +17,10 @@
 
 #include "media.h"
 
-Media::Media(int chapter, int verse, const QUrl& url) :
+Media::Media(int chapter, int verse, int index, const QUrl& url) :
   m_chapter(chapter),
   m_verse(verse),
+  m_index(index),
   m_url(url) {
 
 }
@@ -36,11 +37,17 @@ int Media::verse() const {
   return m_verse;
 }
 
+int Media::index() const {
+  return m_index;
+}
+
 QUrl Media::url() const {
   return m_url;
 }
 
 bool Media::operator==(const Media& other) {
-  return m_url == other.m_url && m_chapter == other.m_chapter && m_verse == other.m_verse;
+  return m_index == other.m_index &&
+    m_chapter == other.m_chapter &&
+    m_verse == other.m_verse &&
+    m_url == other.m_url;
 }
-

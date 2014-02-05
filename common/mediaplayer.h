@@ -48,7 +48,7 @@ public:
 signals:
   void error();
   void stateChanged();
-  void positionChanged(int chapter, int verse);
+  void positionChanged(int chapter, int verse, int index);
 
 private slots:
   void listCleared();
