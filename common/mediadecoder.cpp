@@ -167,7 +167,21 @@ bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt, const Media *media
 }
 
 void MediaDecoder::cleanup(AVFormatContext *ctx) {
-  // TODO:
+  AVIOContext *io = ctx->pb;
+  unsigned char *buffer = io->buffer;
+  QBuffer *b = reinterpret_cast<QBuffer *>(io->opaque);
+
+  if (b) {
+    delete b;
+  }
+
+  if (buffer) {
+    av_free(buffer);
+  }
+
+  av_free(io);
+
+  av_free(ctx);
 }
 
 void MediaDecoder::finish() {
@@ -222,6 +236,7 @@ AVFormatContext *MediaDecoder::context(const QByteArray& data) {
   ctx = avformat_alloc_context();
   ctx->pb = io;
   ctx->probesize = 4096;
+  ctx->flags |= AVFMT_FLAG_CUSTOM_IO;
 
   err = avformat_open_input(&ctx, "", NULL, NULL);
   if (err != 0) {
