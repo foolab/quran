@@ -69,6 +69,10 @@ void MediaPlayer::play() {
   QObject::connect(m_audio, SIGNAL(positionChanged(int, int, int)),
 		   this, SIGNAL(positionChanged(int, int, int)));
 
+  QObject::connect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
+  QObject::connect(m_audio, SIGNAL(error()), this, SLOT(stop()));
+  QObject::connect(m_decoder, SIGNAL(error()), this, SLOT(stop()));
+
   DBUSConnectionEventLoop& loop = DBUSConnectionEventLoop::getInstance();
   loop.moveToThread(m_audioThread);
 
