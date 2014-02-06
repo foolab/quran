@@ -10,7 +10,7 @@ PKGCONFIG += libpulse-simple
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/ ../libav/
 
-DEFINES += VERSION=\\\"0.5.3\\\"
+DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.5.3\\\"
 
 SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quranviewmodel.cpp \
            position.cpp aboutdata.cpp toolbarlayout.cpp \

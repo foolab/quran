@@ -18,8 +18,6 @@
 #ifndef MEDIA_DECODER_H
 #define MEDIA_DECODER_H
 
-#define __STDC_CONSTANT_MACROS
-
 #include <QObject>
 #include <QMutex>
 

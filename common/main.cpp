@@ -57,8 +57,6 @@
 #include <QQmlError>
 #endif
 
-#define __STDC_CONSTANT_MACROS
-
 extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
