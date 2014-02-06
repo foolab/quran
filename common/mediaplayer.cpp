@@ -103,8 +103,15 @@ void MediaPlayer::stop() {
     m_audio->finish();
   }
 
-  m_decoderThread->quit();
-  m_audioThread->quit();
+  while (m_decoderThread->isRunning()) {
+    m_decoderThread->quit();
+    m_decoderThread->wait(10);
+  }
+
+  while(m_audioThread->isRunning()) {
+    m_audioThread->quit();
+    m_audioThread->wait(10);
+  }
 
   if (m_audio) {
     m_audio->deleteLater();
