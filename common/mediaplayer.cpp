@@ -23,7 +23,7 @@
 #include <QThread>
 #include "mediadecoder.h"
 #include "audiooutput.h"
-#include "dbusconnectioneventloop.h"
+#include "audiopolicy.h"
 
 MediaPlayer::MediaPlayer(QObject *parent) :
   QObject(parent),
@@ -33,8 +33,12 @@ MediaPlayer::MediaPlayer(QObject *parent) :
   m_decoderThread(new QThread(this)),
   m_audioThread(new QThread(this)),
   m_decoder(0),
-  m_audio(0) {
+  m_audio(0),
+  m_policy(new AudioPolicy(this)) {
 
+  QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
+  QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
+  QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
 }
 
 MediaPlayer::~MediaPlayer() {
@@ -47,6 +51,11 @@ void MediaPlayer::play() {
   }
 
   if (m_playing) {
+    return;
+  }
+
+  if (!m_policy->acquire()) {
+    emit error();
     return;
   }
 
@@ -72,9 +81,6 @@ void MediaPlayer::play() {
   QObject::connect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
   QObject::connect(m_audio, SIGNAL(error()), this, SLOT(stop()));
   QObject::connect(m_decoder, SIGNAL(error()), this, SLOT(stop()));
-
-  DBUSConnectionEventLoop& loop = DBUSConnectionEventLoop::getInstance();
-  loop.moveToThread(m_audioThread);
 
   m_playing = true;
 
@@ -154,4 +160,24 @@ bool MediaPlayer::isPlaying() {
 void MediaPlayer::listCleared() {
   stop();
   m_index = -1;
+}
+
+void MediaPlayer::policyAcquired() {
+  if (m_playing) {
+    m_audio->policyAcquired();
+  }
+}
+
+void MediaPlayer::policyDenied() {
+  if (m_playing) {
+    stop();
+    emit error();
+  }
+}
+
+void MediaPlayer::policyLost() {
+  if (m_playing) {
+    stop();
+    emit error();
+  }
 }

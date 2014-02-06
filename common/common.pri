@@ -5,7 +5,7 @@ QT += network
 
 CONFIG += mobility link_pkgconfig
 MOBILITY = sensors
-PKGCONFIG += libpulse-simple libdbus-qeventloop1
+PKGCONFIG += libpulse-simple
 
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/ ../libav/

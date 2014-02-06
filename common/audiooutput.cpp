@@ -16,13 +16,13 @@
  */
 
 #include "audiooutput.h"
-#include "audiopolicy.h"
 #include <pulse/error.h>
+#include <QDebug>
 
 AudioOutput::AudioOutput(QObject *parent) :
   QObject(parent),
-  m_policy(0),
   m_finish(false),
+  m_acquired(false),
   m_simple(0),
   m_index(-1) {
 
@@ -33,7 +33,8 @@ AudioOutput::AudioOutput(QObject *parent) :
 
 AudioOutput::~AudioOutput() {
   qDeleteAll(m_buffers);
-  releasePolicy();
+
+  releaseAll();
 }
 
 void AudioOutput::finish() {
@@ -44,39 +45,14 @@ void AudioOutput::finish() {
   QMetaObject::invokeMethod(this, "playNext", Qt::QueuedConnection);
 }
 
-void AudioOutput::process() {
-  m_acquired = false;
-
-  m_policy = new AudioPolicy(this);
-
-  QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
-  QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
-  QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
-
-  QObject::connect(this, SIGNAL(error()), this, SLOT(releasePolicy()));
-  QObject::connect(this, SIGNAL(finished()), this, SLOT(releasePolicy()));
-
-  if (!m_policy->acquire()) {
-    emit error();
-  }
-}
-
 void AudioOutput::policyAcquired() {
   m_acquired = true;
-
-  if (!m_buffers.isEmpty()) {
-    QMetaObject::invokeMethod(this, "playNext", Qt::QueuedConnection);
-  }
+  QMetaObject::invokeMethod(this, "playNext", Qt::QueuedConnection);
 }
 
-void AudioOutput::policyDenied() {
-  m_acquired = false;
-  emit error();
-}
-
-void AudioOutput::policyLost() {
-  m_acquired = false;
-  emit error();
+void AudioOutput::process() {
+  QObject::connect(this, SIGNAL(error()), this, SLOT(releaseAll()));
+  QObject::connect(this, SIGNAL(finished()), this, SLOT(releaseAll()));
 }
 
 bool AudioOutput::finishRequested() {
@@ -85,14 +61,12 @@ bool AudioOutput::finishRequested() {
   return m_finish;
 }
 
-void AudioOutput::releasePolicy() {
+void AudioOutput::releaseAll() {
   if (m_simple) {
     pa_simple_flush (m_simple, NULL);
     pa_simple_free(m_simple);
     m_simple = 0;
   }
-
-  m_policy->release();
 }
 
 void AudioOutput::play(AudioBuffer *buffer) {
@@ -110,7 +84,7 @@ void AudioOutput::play(AudioBuffer *buffer) {
 
 void AudioOutput::playNext() {
   if (finishRequested()) {
-    releasePolicy();
+    releaseAll();
     return;
   }
 

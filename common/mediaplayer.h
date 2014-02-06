@@ -26,6 +26,7 @@ class Media;
 class QThread;
 class MediaDecoder;
 class AudioOutput;
+class AudioPolicy;
 
 class MediaPlayer : public QObject {
   Q_OBJECT
@@ -55,6 +56,9 @@ signals:
 
 private slots:
   void listCleared();
+  void policyAcquired();
+  void policyLost();
+  void policyDenied();
 
 private:
   MediaPlaylist *m_list;
@@ -65,6 +69,8 @@ private:
   QThread *m_audioThread;
   QPointer<MediaDecoder> m_decoder;
   QPointer<AudioOutput> m_audio;
+
+  AudioPolicy *m_policy;
 };
 
 #endif /* MEDIA_PLAYER_H */

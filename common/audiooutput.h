@@ -22,8 +22,6 @@
 #include <QMutex>
 #include <pulse/simple.h>
 
-class AudioPolicy;
-
 class AudioBuffer {
 public:
   unsigned long rate;
@@ -42,6 +40,7 @@ public:
   ~AudioOutput();
 
   void finish();
+  void policyAcquired();
 
 public slots:
   void play(AudioBuffer *buffer);
@@ -53,16 +52,12 @@ signals:
 
 private slots:
   void process();
-  void policyAcquired();
-  void policyLost();
-  void policyDenied();
   void playNext();
-  void releasePolicy();
+  void releaseAll();
 
 private:
   bool finishRequested();
 
-  AudioPolicy *m_policy;
   QMutex m_mutex;
   bool m_finish;
   bool m_acquired;
