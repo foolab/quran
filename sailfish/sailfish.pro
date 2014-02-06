@@ -1,12 +1,14 @@
+include(../common/common.pri)
+
 VPATH += . ../data/ ../common/
 
 TARGET = harbour-quran
 
 QT += qml quick
 
-CONFIG += link_pkgconfig meegotouch debug sailfish
+CONFIG += link_pkgconfig meegotouch sailfish
 
-PKGCONFIG += qdeclarative5-boostable sqlite3 Qt5Multimedia Qt5Sensors
+PKGCONFIG += qdeclarative5-boostable sqlite3 Qt5Sensors audioresource-qt
 
 SOURCES += fsmonitor.cpp audiopolicy.cpp
 
@@ -16,6 +18,12 @@ DEFINES += DATA_DIR=\\\"/opt/n9-quran/\\\"
 DEFINES += SAILFISH=1
 LIBS += -lz
 
-include(../common/common.pri)
-
 RESOURCES += qml.qrc
+
+LIBS += -Wl,--whole-archive \
+        -Llibav/libavformat/ -lavformat \
+        -Llibav/libavcodec/ -lavcodec \
+        -Llibav/libavutil/ -lavutil \
+        -Llibav/libavfilter/ -lavfilter \
+        -Llibav/libavresample/ -lavresample \
+        -Wl,--no-whole-archive
