@@ -33,17 +33,15 @@ AudioOutput::AudioOutput(QObject *parent) :
 
 AudioOutput::~AudioOutput() {
   qDeleteAll(m_buffers);
-
-  if (m_simple) {
-    pa_simple_drain (m_simple, NULL);
-    pa_simple_free(m_simple);
-  }
+  releasePolicy();
 }
 
 void AudioOutput::finish() {
   m_mutex.lock();
   m_finish = true;
   m_mutex.unlock();
+
+  QMetaObject::invokeMethod(this, "playNext", Qt::QueuedConnection);
 }
 
 void AudioOutput::process() {
@@ -54,6 +52,9 @@ void AudioOutput::process() {
   QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
   QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
   QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
+
+  QObject::connect(this, SIGNAL(error()), this, SLOT(releasePolicy()));
+  QObject::connect(this, SIGNAL(finished()), this, SLOT(releasePolicy()));
 
   if (!m_policy->acquire()) {
     emit error();
@@ -78,8 +79,29 @@ void AudioOutput::policyLost() {
   emit error();
 }
 
+bool AudioOutput::finishRequested() {
+  QMutexLocker locker(&m_mutex);
+
+  return m_finish;
+}
+
+void AudioOutput::releasePolicy() {
+  if (m_simple) {
+    pa_simple_flush (m_simple, NULL);
+    pa_simple_free(m_simple);
+    m_simple = 0;
+  }
+
+  m_policy->release();
+}
+
 void AudioOutput::play(AudioBuffer *buffer) {
   m_buffers << buffer;
+
+  if (finishRequested()) {
+    emit finished();
+    return;
+  }
 
   if (m_acquired) {
     QMetaObject::invokeMethod(this, "playNext", Qt::QueuedConnection);
@@ -87,6 +109,11 @@ void AudioOutput::play(AudioBuffer *buffer) {
 }
 
 void AudioOutput::playNext() {
+  if (finishRequested()) {
+    releasePolicy();
+    return;
+  }
+
   if (m_buffers.isEmpty()) {
     return;
   }

@@ -57,8 +57,11 @@ private slots:
   void policyLost();
   void policyDenied();
   void playNext();
+  void releasePolicy();
 
 private:
+  bool finishRequested();
+
   AudioPolicy *m_policy;
   QMutex m_mutex;
   bool m_finish;
