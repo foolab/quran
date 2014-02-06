@@ -121,6 +121,8 @@ void MediaPlayer::stop() {
     m_decoder->deleteLater();
   }
 
+  m_policy->release();
+
   m_playing = false;
 
   emit stateChanged();
