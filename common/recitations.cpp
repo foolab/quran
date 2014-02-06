@@ -37,12 +37,12 @@ Recitations::Recitations(QObject *parent)
 }
 
 Recitations::~Recitations() {
-  qDeleteAll(m_installed.values());
-  m_installed.clear();
-
   if (m_player) {
     m_player->stop();
   }
+
+  qDeleteAll(m_installed.values());
+  m_installed.clear();
 
   delete m_player;
   m_player = 0;
