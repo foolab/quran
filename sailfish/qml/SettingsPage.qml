@@ -133,6 +133,7 @@ Page {
                                 label: qsTr("Translation")
                                 currentIndex: _settings.translationMode
                                 onCurrentIndexChanged: _settings.translationMode = currentIndex
+                                enabled: _translations.active.length > 1
                        }
 
                         TextSwitch {
