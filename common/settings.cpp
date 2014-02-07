@@ -20,6 +20,9 @@
 #include <QDir>
 #include <QDebug>
 #include <QFontDatabase>
+#ifdef SAILFISH
+#include <QStandardPaths>
+#endif
 
 #define DEFAULT_TEXT_TYPE          0
 #define DEFAULT_FONT_SIZE          36
@@ -53,7 +56,6 @@
 Q_DECLARE_METATYPE(QList<uint>);
 
 #ifdef SAILFISH
-#define USER_DIR "/home/nemo/.local/share/harbour-quran/"
 #define CONF_FILE "harbour-quran.conf"
 #else
 #define USER_DIR "/home/user/MyDocs/.n9-quran/"
@@ -76,9 +78,16 @@ Settings::Settings(QObject *parent) : QObject(parent) {
   qRegisterMetaType<QList<uint> >("QList<uint>");
   qRegisterMetaTypeStreamOperators<QList<uint> >("QList<uint>");
 
+#ifdef SAILFISH
+  m_settings = new QSettings(QString("%1%2harbour-quran%2%3")
+			     .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+			     .arg(QDir::separator()).arg(CONF_FILE),
+			     QSettings::IniFormat);
+#else
   m_settings = new QSettings(QString("%1%2.config%2%3")
 			     .arg(QDir::homePath()).arg(QDir::separator()).arg(CONF_FILE),
 			     QSettings::IniFormat);
+#endif
 }
 
 Settings::~Settings() {
@@ -86,16 +95,22 @@ Settings::~Settings() {
   m_settings = 0;
 }
 
+QString Settings::dataDir() const {
+#ifdef SAILFISH
+  static QString dir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+#else
+  static QString dir = USER_DIR;
+#endif
+
+  return dir;
+}
+
 QString Settings::recitationsDir() const {
-  return USER_DIR "recitations/";
+  return dataDir() + "/recitations/";
 }
 
 QString Settings::translationsDir() const {
-  return USER_DIR "translations/";
-}
-
-QString Settings::dataDir() const {
-  return DATA_DIR "/";
+  return dataDir() + "/translations/";
 }
 
 QString Settings::recitationsSubDir() const {
