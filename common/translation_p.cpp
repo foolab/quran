@@ -215,8 +215,8 @@ void TranslationPrivate::replyDownloadProgress(qint64 bytesReceived, qint64 byte
 
   if (bytesTotal == -1) {
     // TODO: hack!
-    // 5 MB!
-    bytesTotal = 1024 * 1024 * 5;
+    // 3 MB!
+    bytesTotal = 1024 * 1024 * 3;
   }
 
   int progress = ((bytesReceived * 100)/bytesTotal);
