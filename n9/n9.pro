@@ -23,3 +23,5 @@ LIBS += -Wl,--whole-archive \
         -Llibav/libavfilter/ -lavfilter \
         -Llibav/libavresample/ -lavresample \
         -Wl,--no-whole-archive
+
+INCLUDEPATH += . libav/
