@@ -160,14 +160,6 @@ Page {
                                 subtitle: _translations.installedCount + qsTr(" installed.");
                        }
 
-/*
-                        SettingsPageEntry {
-                                // TODO:
-                                title: qsTr("Application language");
-                                subtitle: "TODO";
-                        }
-*/
-
                         SettingsPageEntry {
                                 id: nightMode
                                 entries: [
