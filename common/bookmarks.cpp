@@ -59,10 +59,6 @@ bool Bookmarks::isBookmarked(uint bookmark) const {
   return m_bookmarks.indexOf(bookmark) != -1;
 }
 
-bool Bookmarks::isBookmarked(int sura, int aya) const {
-  return isBookmarked(serialize(sura, aya));
-}
-
 void Bookmarks::add(uint bookmark) {
   if (m_bookmarks.indexOf(bookmark) == -1) {
     m_bookmarks << bookmark;

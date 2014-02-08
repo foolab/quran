@@ -1,5 +1,6 @@
 // -*- qml -*-
 import QtQuick 1.0
+import Quran 1.0
 
 Row {
         id: contextMenu
@@ -44,25 +45,15 @@ Row {
                 id: button
                 anchors.verticalCenter: parent.verticalCenter
 
-                Connections {
-                        target: _bookmarks
-                        onBookmarkAdded: button.resetIcon();
-                        onBookmarkRemoved: button.resetIcon();
-                        onCleared: button.resetIcon();
+                BookmarkItem {
+                        id: checker
+                        bookmarks: _bookmarks
+                        bookmark: _bookmarks.serialize(contextMenu.chapter, contextMenu.verse)
                 }
 
-                icon: _bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? theme.favoritesRemove : theme.favoritesAdd
+                icon: checker.isBookmarked ? theme.favoritesRemove : theme.favoritesAdd
 
-                function resetIcon() {
-                        if (_bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse)) {
-                                icon = theme.favoritesRemove;
-                        }
-                        else {
-                                icon = theme.favoritesAdd;
-                        }
-                }
-
-                onClicked: { _bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? _bookmarks.remove(contextMenu.chapter, contextMenu.verse) : _bookmarks.add(contextMenu.chapter, contextMenu.verse); }
+                onClicked: checker.toggle()
         }
 
         ToolButton {

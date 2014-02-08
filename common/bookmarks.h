@@ -38,9 +38,7 @@ public:
 
   Q_INVOKABLE static uint serialize(int sura, int aya);
 
-  Q_INVOKABLE bool isBookmarked(uint bookmark) const;
-
-  Q_INVOKABLE bool isBookmarked(int sura, int aya) const;
+  bool isBookmarked(uint bookmark) const;
 
   QList<uint> bookmarks() const;
 
