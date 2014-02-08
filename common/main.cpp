@@ -57,6 +57,7 @@
 #include <QQmlError>
 #endif
 #include "translationmodels.h"
+#include "bookmarksmodel.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -117,6 +118,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<ActiveTranslationsModel>("Quran", 1, 0, "ActiveTranslationsModel");
   qmlRegisterType<TranslationCategoriesModel>("Quran", 1, 0, "TranslationCategoriesModel");
   qmlRegisterType<TranslationCollection>("Quran", 1, 0, "TranslationCollection");
+  qmlRegisterType<BookmarksModel>("Quran", 1, 0, "BookmarksModel");
 
 #ifndef SAILFISH
   MApplicationWindow *view = new MApplicationWindow;

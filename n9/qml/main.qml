@@ -131,33 +131,6 @@ PageStackWindow {
         }
 
         InfoBanner {
-                id: favoriteAdded
-                text: qsTr("Favorite added");
-
-                Component.onCompleted: {
-                        _bookmarks.bookmarkAdded.connect(show);
-                }
-        }
-
-        InfoBanner {
-                id: favoriteRemoved
-                text: qsTr("Favorite removed");
-
-                Component.onCompleted: {
-                        _bookmarks.bookmarkRemoved.connect(show);
-                }
-        }
-
-        InfoBanner {
-                id: favoritesCleared
-                text: qsTr("Favorites cleared");
-
-                Component.onCompleted: {
-                        _bookmarks.cleared.connect(show);
-                }
-        }
-
-        InfoBanner {
                 id: textError
                 text: qsTr("Failed to load the text");
         }

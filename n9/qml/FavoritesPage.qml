@@ -1,5 +1,6 @@
 // -*- qml -*-
 import QtQuick 1.0
+import Quran 1.0
 
 Page {
         id: favoritesPage
@@ -37,14 +38,6 @@ Page {
                 }
         }
 
-        Component.onCompleted: {
-            _bookmarks.bookmarkRemoved.connect(view.model.bookmarkRemoved);
-        }
-
-        Component.onDestruction: {
-            _bookmarks.bookmarkRemoved.disconnect(view.model.bookmarkRemoved);
-        }
-
         Component {
                 id: sectionDelegate
                 Rectangle {
@@ -75,7 +68,6 @@ Page {
                         anchors.right: parent.right
                         height: Math.max(rm.height, ayaText.height)
                         color: _colors.backgroundColor
-//                        color: index % 2 ? Qt.lighter(_settings.highlightColor, 1.2) : Qt.lighter(_settings.highlightColor, 1.3)
 
                         ToolButton {
                                 id: rm
@@ -85,7 +77,7 @@ Page {
                                 anchors.bottom: parent.bottom
                                 anchors.right: parent.right
                                 onClicked: {
-                                        rmDialog.message = _data.text(sura, aya);
+                                        rmDialog.message = _data.text(chapter, verse);
                                         rmDialog.open();
                                         rmDialog.accepted.connect(accepted);
                                         rmDialog.rejected.connect(rejected);
@@ -114,12 +106,12 @@ Page {
                                 anchors.right: rm.left
                                 font.pointSize: 18
                                 font.family: _settings.fontFamily
-                                text: _data.text(sura, aya);
+                                text: _data.text(chapter, verse);
                                 elide: Text.ElideRight
                                 textAlignment: Text.AlignRight
 
                                 onClicked: {
-                                        pagePosition.setPosition(sura, aya);
+                                        pagePosition.setPosition(chapter, verse);
                                         pageStack.pop();
                                 }
                         }
@@ -129,7 +121,10 @@ Page {
         ListView {
                 id: view
                 clip: true
-                model: FavoritesModel {}
+                model: BookmarksModel {
+                        bookmarks: _bookmarks
+                }
+
                 anchors.top: title.bottom
                 anchors.left: parent.left
                 anchors.leftMargin: 16
@@ -137,7 +132,7 @@ Page {
                 anchors.rightMargin: 16
                 anchors.bottom: toolBar.top
 
-                section.property: "sura"
+                section.property: "chapter"
                 section.criteria: ViewSection.FullString
                 section.delegate: sectionDelegate
                 delegate: favoritesPageDelegate

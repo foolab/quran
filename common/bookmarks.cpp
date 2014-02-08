@@ -69,23 +69,9 @@ void Bookmarks::add(uint bookmark) {
     qSort(m_bookmarks);
     m_settings->setBookmarks(m_bookmarks);
 
-    int index = m_bookmarks.indexOf(bookmark);
-    emit bookmarkAdded(bookmark, index);
+    emit bookmarkAdded(bookmark);
 
     if (m_bookmarks.size() == 1) {
-      emit emptyChanged();
-    }
-  }
-}
-
-void Bookmarks::removeByIndex(int index) {
-  if (index < m_bookmarks.size()) {
-    uint bookmark = m_bookmarks[index];
-    m_bookmarks.removeAt(index);
-    m_settings->setBookmarks(m_bookmarks);
-    emit bookmarkRemoved(bookmark, index);
-
-    if (m_bookmarks.size() == 0) {
       emit emptyChanged();
     }
   }
@@ -97,7 +83,7 @@ void Bookmarks::remove(uint bookmark) {
   if (index != -1) {
     m_bookmarks.removeAt(index);
     m_settings->setBookmarks(m_bookmarks);
-    emit bookmarkRemoved(bookmark, index);
+    emit bookmarkRemoved(bookmark);
 
     if (m_bookmarks.size() == 0) {
       emit emptyChanged();
@@ -113,14 +99,8 @@ void Bookmarks::remove(int sura, int aya) {
   remove(serialize(sura, aya));
 }
 
-QVariantList Bookmarks::bookmarks() const {
-  QVariantList list;
-
-  for (int x = 0; x < m_bookmarks.size(); x++) {
-    list << m_bookmarks[x];
-  }
-
-  return list;
+QList<uint> Bookmarks::bookmarks() const {
+  return m_bookmarks;
 }
 
 void Bookmarks::clear() {

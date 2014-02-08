@@ -42,7 +42,7 @@ public:
 
   Q_INVOKABLE bool isBookmarked(int sura, int aya) const;
 
-  Q_INVOKABLE QVariantList bookmarks() const;
+  QList<uint> bookmarks() const;
 
   Q_INVOKABLE int sura(uint bookmark);
   Q_INVOKABLE int aya(uint bookmark);
@@ -54,12 +54,11 @@ public slots:
   void remove(uint bookmark);
   void add(int sura, int aya);
   void remove(int sura, int aya);
-  void removeByIndex(int index);
   void clear();
 
 signals:
-  void bookmarkAdded(uint bookmark, int index);
-  void bookmarkRemoved(uint bookmark, int index);
+  void bookmarkAdded(uint bookmark);
+  void bookmarkRemoved(uint bookmark);
   void cleared();
   void emptyChanged();
   void settingsChanged();
