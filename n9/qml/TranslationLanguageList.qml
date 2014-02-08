@@ -27,7 +27,7 @@ TranslationsPage {
                                 anchors.fill: parent
                                 onClicked: {
                                         pageStack.push("TranslationsAddPage");
-                                        pageStack.currentPage.cid = modelData;
+                                        pageStack.currentPage.cid = translationId;
                                 }
                         }
 
@@ -35,7 +35,7 @@ TranslationsPage {
                                 id: label
                                 x: 16
                                 font.pointSize: 24
-                                text: _translations.categoryName(modelData)
+                                text: name
                                 color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
                                 anchors.verticalCenter: parent.verticalCenter
                         }
@@ -51,7 +51,10 @@ TranslationsPage {
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
-                model: _translations.categories
+                model: TranslationCategoriesModel {
+                        translations: _translations
+                }
+
                 delegate: delegate
         }
 

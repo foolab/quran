@@ -212,7 +212,7 @@ PageStackWindow {
 
         Connections {
                 target: _translations
-                onInstalled: {
+                onAdded: {
                         translations.text = qsTr("Installed ") + _translations.translationName(id);
                         translations.show();
                 }

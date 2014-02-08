@@ -56,6 +56,7 @@
 #include <QtQuick>
 #include <QQmlError>
 #endif
+#include "translationmodels.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -108,8 +109,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 #ifndef SAILFISH
   qmlRegisterType<WindowController>("Quran", 1, 0, "WindowController");
 #endif
+#ifdef SAILFISH
   qmlRegisterType<ToolBarLayout>("Quran", 1, 0, "ToolBarLayout");
+#endif
   qmlRegisterType<PhoneFlipControl>("Quran", 1, 0, "PhoneFlipControl");
+  qmlRegisterType<InstalledTranslationsModel>("Quran", 1, 0, "InstalledTranslationsModel");
+  qmlRegisterType<ActiveTranslationsModel>("Quran", 1, 0, "ActiveTranslationsModel");
+  qmlRegisterType<TranslationCategoriesModel>("Quran", 1, 0, "TranslationCategoriesModel");
+  qmlRegisterType<TranslationCollection>("Quran", 1, 0, "TranslationCollection");
 
 #ifndef SAILFISH
   MApplicationWindow *view = new MApplicationWindow;

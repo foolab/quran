@@ -14,6 +14,9 @@ Rectangle {
 
         signal clicked
 
+        property alias textColor: label.color
+        property alias pressed: mouse.pressed
+
         color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
 
         width: slider.width + 20 + installed.width + 10

@@ -19,10 +19,9 @@ TranslationsPage {
 
                 TranslationLabel {
                         id: label
-                        tid: modelData
                         width: view.width
                         showCategory: true
-
+                        tid: translationId
                         onClicked: {
                                 if (status == Translation.Downloading) {
                                         askForStop(tid);
@@ -47,7 +46,10 @@ TranslationsPage {
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
-                model: _translations.active
+                model: ActiveTranslationsModel {
+                        translations: _translations
+                }
+
                 delegate: translationsDelegate
         }
 

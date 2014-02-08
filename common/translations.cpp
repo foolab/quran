@@ -167,9 +167,9 @@ void Translations::refresh() {
     }
   }
 
-  emit installedChanged();
-
+  emit refreshed();
   emit activeChanged();
+  emit installedCountChanged();
 }
 
 TranslationPrivate *Translations::registerTranslation(Translation *t) {
@@ -201,7 +201,7 @@ void Translations::unregisterTranslation(Translation *t) {
   }
 }
 
-QVariantList Translations::categories() const {
+QList<int> Translations::categories() const {
   QList<int> res;
 
   for (int x = 0; x < TRANSLATIONS_LEN; x++) {
@@ -213,14 +213,14 @@ QVariantList Translations::categories() const {
 
   qSort(res);
 
-  return listToVariantList(res);
+  return res;
 }
 
 QString Translations::categoryName(int category) {
   return QLocale::languageToString(static_cast<QLocale::Language>(category));
 }
 
-QVariantList Translations::translations(int category) {
+QList<int> Translations::translations(int category) {
   QList<int> res;
 
   for (int x = 0; x < TRANSLATIONS_LEN; x++) {
@@ -229,7 +229,7 @@ QVariantList Translations::translations(int category) {
     }
   }
 
-  return listToVariantList(res);
+  return res;
 }
 
 QString Translations::translationName(int translation) {
@@ -240,12 +240,12 @@ QString Translations::categoryNameForTranslation(int translation) {
   return categoryName(Ts[translation].language);
 }
 
-QVariantList Translations::installed() const {
-  return listToVariantList(m_installed);
+QList<int> Translations::installed() const {
+  return m_installed;
 }
 
-QVariantList Translations::active() const {
-  QVariantList res = listToVariantList(m_installed);
+QList<int> Translations::active() const {
+  QList<int> res = m_installed;
 
   res += downloads();
 
@@ -285,7 +285,7 @@ void Translations::stopDownloads() {
   }
 }
 
-QVariantList Translations::downloads() const {
+QList<int> Translations::downloads() const {
   QList<int> res;
 
   foreach (const TranslationPrivate *p, m_info) {
@@ -296,10 +296,10 @@ QVariantList Translations::downloads() const {
 
   qSort(res);
 
-  return listToVariantList(res);
+  return res;
 }
 
-QVariantList Translations::error() const {
+QList<int> Translations::error() const {
   QList<int> res;
 
   foreach (const TranslationPrivate *p, m_info) {
@@ -310,7 +310,7 @@ QVariantList Translations::error() const {
 
   qSort(res);
 
-  return listToVariantList(res);
+  return res;
 }
 
 void Translations::removeTranslation(int tid) {
@@ -358,15 +358,14 @@ void Translations::statusChanged(int tid, Translation::Status oldStatus,
 
   if (oldStatus == Translation::None && newStatus == Translation::Downloading) {
     // User initiated a download
-    emit downloadsChanged();
     emit activeChanged();
   }
   else if (oldStatus == Translation::Installed && newStatus == Translation::None) {
     // User removed a translation
     m_installed.takeAt(m_installed.indexOf(p->tid()));
-    emit installedChanged();
     emit activeChanged();
     emit removed(tid);
+    emit installedCountChanged();
   }
   else if (oldStatus == Translation::Error && newStatus == Translation::Downloading) {
     // User restarted a failed download.
@@ -374,29 +373,23 @@ void Translations::statusChanged(int tid, Translation::Status oldStatus,
   }
   else if (oldStatus == Translation::Downloading && newStatus == Translation::None) {
     // User stopped a download
-    emit downloadsChanged();
     emit activeChanged();
     emit removed(tid);
   }
   else if (oldStatus == Translation::Downloading && newStatus == Translation::Installed) {
     // Translation installed.
     m_installed.append(p->tid());
-    emit installedChanged();
     emit activeChanged();
-    emit installed(tid);
+    emit added(tid);
+    emit installedCountChanged();
   }
   else if (oldStatus == Translation::Downloading && newStatus == Translation::Error) {
     // Error!
     emit failed(tid);
+    emit activeChanged();
   }
 }
 
-QVariantList Translations::listToVariantList(const QList<int>& list) const {
-  QVariantList ret;
-
-  foreach (int x, list) {
-    ret << x;
-  }
-
-  return ret;
+int Translations::installedCount() const {
+  return m_installed.size();
 }

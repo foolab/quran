@@ -157,7 +157,7 @@ Page {
                                 id: translations
                                 title: qsTr("Manage translations")
                                 onClicked: pageStack.push("TranslationsListPage");
-                                subtitle: _translations.installed.length + qsTr(" installed.");
+                                subtitle: _translations.installedCount + qsTr(" installed.");
                        }
 
 /*

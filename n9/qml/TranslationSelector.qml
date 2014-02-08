@@ -1,50 +1,25 @@
 // -*- qml -*-
 import QtQuick 1.0
+import Quran 1.0
 
 SelectionDialog {
         id: dialog
 
-        model: ListModel {
-                id: model
+        model: InstalledTranslationsModel {
+                translations: _translations
+        }
 
-                function currentChanged() {
-                        var len = _translations.installed.length;
-
-                        for (var x = 0; x < len; x++) {
-                                if (_translations.current == get(x).tid) {
-                                        selectedIndex = x;
-                                        return;
-                                }
-                        }
-                }
-
-                function populate() {
-                        clear();
-
-                        var len = _translations.installed.length;
-
-                        for (var x = 0; x < len; x++) {
-                                var tid = _translations.installed[x];
-                                var name = _translations.translationName(tid);
-                                append({"tid": tid, "name": name});
-                        }
-
-                        currentChanged();
+        delegate: TranslationLabel {
+                width: dialog.width
+                tid: translationId
+                property bool selected: tid == _translations.current
+                color: pressed ? _colors.pressedColor : selected ? _colors.selectionBackgroundColor : _colors.backgroundColor
+                textColor: pressed ? _colors.pressedTextColor : selected ? _colors.selectionTextColor : _colors.textColor
+                onClicked: {
+                        translationsManager.changeTranslation(translationId);
+                        dialog.accept();
                 }
         }
 
         titleText: qsTr("Choose translation");
-
-        Connections {
-                target: _translations
-                onInstalledChanged: model.populate();
-                onCurrentChanged: model.currentChanged();
-        }
-
-        Component.onCompleted: model.populate();
-
-        onAccepted: {
-                var tid = model.get(selectedIndex).tid;
-                translationsManager.changeTranslation(tid);
-        }
 }

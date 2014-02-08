@@ -5,7 +5,7 @@ import Quran 1.0
 TranslationsPage {
         id: translationsAddPage
 
-        property int cid: 0
+        property int cid: -1
 
         tools: toolBar
 
@@ -14,7 +14,6 @@ TranslationsPage {
                 width: parent.width
                 anchors.top: parent.top
                 text: _translations.categoryName(parent.cid)
-                // TODO: proper alignment
         }
 
         Component {
@@ -22,7 +21,7 @@ TranslationsPage {
 
                 TranslationLabel {
                         id: label
-                        tid: modelData
+                        tid: translationId
                         width: view.width
 
                         onClicked: {
@@ -50,7 +49,11 @@ TranslationsPage {
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
-                model: _translations.translations(parent.cid)
+                model: TranslationCollection {
+                        translations: _translations
+                        language: translationsAddPage.cid
+                }
+
                 delegate: delegate
         }
 

@@ -32,11 +32,7 @@ class DataProvider;
 class Translations : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(QVariantList installed READ installed NOTIFY installedChanged);
-  Q_PROPERTY(QVariantList downloads READ downloads NOTIFY downloadsChanged);
-  Q_PROPERTY(QVariantList categories READ categories NOTIFY categoriesChanged);
-  Q_PROPERTY(QVariantList active READ active NOTIFY activeChanged);
-
+  Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
   Q_PROPERTY(int current READ current NOTIFY currentChanged);
   Q_PROPERTY(Settings *settings READ settings WRITE setSettings NOTIFY settingsChanged);
   Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
@@ -46,16 +42,14 @@ public:
   Translations(QObject *parent = 0);
   ~Translations();
 
-  QVariantList installed() const;
-  QVariantList downloads() const;
-  QVariantList categories() const;
-  QVariantList active() const;
-  QVariantList error() const;
+  QList<int> installed() const;
+  QList<int> active() const;
+  QList<int> categories() const;
 
   int current() const;
 
   Q_INVOKABLE QString categoryName(int category);
-  Q_INVOKABLE QVariantList translations(int category);
+  QList<int> translations(int category);
   Q_INVOKABLE QString translationName(int translation);
 
   Q_INVOKABLE QString categoryNameForTranslation(int translation);
@@ -82,6 +76,8 @@ public:
   DataProvider *data() const;
   void setData(DataProvider *data);
 
+  int installedCount() const;
+
 public slots:
   void refresh();
   void startDownload(int tid);
@@ -91,15 +87,14 @@ public slots:
   void stopDownloads();
 
 signals:
-  void downloadsChanged();
-  void categoriesChanged();
-  void activeChanged();
-  void installedChanged();
   void currentChanged();
 
-  void installed(int id);
+  void refreshed();
+  void activeChanged();
+  void added(int id);
   void failed(int id);
   void removed(int id);
+  void installedCountChanged();
 
   void settingsChanged();
   void downloaderChanged();
@@ -108,10 +103,11 @@ signals:
 private:
   TranslationPrivate *info(int tid);
   int tid(const QString& id);
+  QList<int> downloads() const;
+  QList<int> error() const;
 
   void setCurrent(int tid);
 
-  QVariantList listToVariantList(const QList<int>& list) const;
   Downloader *m_downloader;
 
   Settings *m_settings;
