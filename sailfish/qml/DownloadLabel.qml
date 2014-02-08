@@ -8,15 +8,14 @@ BackgroundItem {
         property alias showInstalled: installed.visible
         property alias showProgress: slider.visible
         property alias text: label.text
-        property alias progress: slider.value
-
+        property int progress
+        onProgressChanged: slider.value = progress / 100.0
         property Component menuComponent
         property Item menu
         property Item visualParent
 
         width: parent.width
-        property real itemHeight: showProgress ? Theme.itemSizeMedium : Theme.itemSizeSmall
-        height: menu && menu.parent == downloadLabel ? menu.height + itemHeight : itemHeight
+        height: menu && menu.parent == downloadLabel ? menu.height + Theme.itemSizeLarge : Theme.itemSizeLarge
 
         onPressAndHold: {
                 if (menuComponent && !menu) {
@@ -31,7 +30,7 @@ BackgroundItem {
         GlassItem {
                 id: installed
                 visible: showInstalled
-                y: (Theme.itemSizeLarge - height) / 2
+                anchors.verticalCenter: label.verticalCenter
                 anchors.right: parent.right
         }
 
@@ -45,25 +44,17 @@ BackgroundItem {
                         leftMargin: 10
                 }
 
-                // TODO:
-                height: itemHeight
+                height: Theme.itemSizeLarge
                 wrapMode: Text.WordWrap
                 color: Theme.primaryColor
                 truncationMode: TruncationMode.Fade
+                verticalAlignment: Text.AlignVCenter
         }
 
-        ProgressBar {
-                // TODO: not positioned correctly
+        ProgressCircle {
                 id: slider
                 visible: showProgress
-                minimumValue: 0
-                maximumValue: 100
-                anchors {
-                        top: label.bottom
-                        right: installed.left
-                        rightMargin: 10
-                        left: parent.left
-                        leftMargin: 10
-                }
+                anchors.centerIn: installed
+                onValueChanged: console.log(value)
         }
 }
