@@ -18,7 +18,7 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            index.cpp search.cpp recitations.cpp recitation.cpp mediaplaylist.cpp \
            main.cpp themeimageprovider.cpp phoneflipcontrol.cpp colors.cpp mediaplayer.cpp \
            media.cpp audiooutput.cpp mediadecoder.cpp translationmodels.cpp bookmarksmodel.cpp \
-           bookmarkitem.cpp
+           bookmarkitem.cpp quranviewmodel2.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h quranviewmodel.h \
            position.h aboutdata.h trans-meta.h recite-meta.h toolbarlayout.h \
@@ -26,7 +26,7 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h qu
            index.h search.h recitations.h recitation.h mediaplaylist.h \
            themeimageprovider.h phoneflipcontrol.h colors.h mediaplayer.h \
            media.h audiooutput.h mediadecoder.h translationmodels.h bookmarksmodel.h \
-           bookmarkitem.h
+           bookmarkitem.h quranviewmodel2.h
 
 target.path = /usr/bin/
 

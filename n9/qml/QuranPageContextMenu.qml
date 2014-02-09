@@ -5,8 +5,8 @@ import Quran 1.0
 Row {
         id: contextMenu
 
-        property int chapter: -1
-        property int verse: -1
+        property int _chapter: -1
+        property int _verse: -1
         visible: false
 
         anchors.horizontalCenter: parent.horizontalCenter
@@ -48,7 +48,7 @@ Row {
                 BookmarkItem {
                         id: checker
                         bookmarks: _bookmarks
-                        bookmark: _bookmarks.serialize(contextMenu.chapter, contextMenu.verse)
+                        bookmark: _bookmarks.serialize(contextMenu._chapter, contextMenu._verse)
                 }
 
                 icon: checker.isBookmarked ? theme.favoritesRemove : theme.favoritesAdd
@@ -66,7 +66,7 @@ Row {
                 anchors.verticalCenter: parent.verticalCenter
                 icon: theme.playVerse
                 enabled: _settings.recitationMode != 0 && _fsmon.available
-                onClicked: _recitations.play(contextMenu.chapter, contextMenu.verse);
+                onClicked: _recitations.play(contextMenu._chapter, contextMenu._verse);
         }
 
         ToolButton {
@@ -80,7 +80,7 @@ Row {
                 id: playChapter
                 icon: theme.playChapter
                 enabled: _settings.recitationMode != 0 && _fsmon.available
-                onClicked: _recitations.playChapter(contextMenu.chapter);
+                onClicked: _recitations.playChapter(contextMenu._chapter);
         }
 
         ToolButton {

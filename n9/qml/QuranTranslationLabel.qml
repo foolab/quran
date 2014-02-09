@@ -6,13 +6,10 @@ Column {
         width: parent.width
         property bool shown: false
 
-        visible: col.chapter != -1 && col.verse != -1 && translationsManager.enabled && (_settings.translationMode == 1 || col.shown && _settings.translationMode == 2)
+        visible: col._chapter != -1 && col._verse != -1 && translationsManager.enabled && (_settings.translationMode == 1 || col.shown && _settings.translationMode == 2)
 
-        property int verse: -1
-        property int chapter: -1
-
-        onChapterChanged: translation.resetText();
-        onVerseChanged: translation.resetText();
+        property int _verse: -1
+        property int _chapter: -1
 
         PropertyAnimation {
                 id: showAnimation
@@ -68,8 +65,8 @@ Column {
                 }
 
                 function resetText() {
-                        if (col.chapter != -1 && col.verse != -1) {
-                                translation.text = _data.secondaryText(col.chapter, col.verse);
+                        if (col._chapter != -1 && col._verse != -1) {
+                                translation.text = _data.secondaryText(col._chapter, col._verse);
                         }
                 }
 

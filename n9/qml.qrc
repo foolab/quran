@@ -40,7 +40,6 @@
     <file alias="qml/QuranPageContextMenu.qml">qml/QuranPageContextMenu.qml</file>
     <file alias="qml/QuranPage.qml">qml/QuranPage.qml</file>
     <file alias="qml/QuranTranslationLabel.qml">qml/QuranTranslationLabel.qml</file>
-    <file alias="qml/QuranVerseLabel.qml">qml/QuranVerseLabel.qml</file>
     <file alias="qml/QuranView.qml">qml/QuranView.qml</file>
     <file alias="qml/RecitationAddPage.qml">qml/RecitationAddPage.qml</file>
     <file alias="qml/RecitationSelector.qml">qml/RecitationSelector.qml</file>
@@ -63,5 +62,7 @@
     <file alias="qml/TranslationsPage.qml">qml/TranslationsPage.qml</file>
     <file alias="qml/VerseSelectionDialog.qml">qml/VerseSelectionDialog.qml</file>
     <file alias="qml/QuranView.js">qml/QuranView.js</file>
+    <file alias="qml/ChapterDelegate.qml">qml/ChapterDelegate.qml</file>
+    <file alias="qml/VerseDelegate.qml">qml/VerseDelegate.qml</file>
   </qresource>
 </RCC>
