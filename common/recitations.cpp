@@ -208,11 +208,11 @@ bool Recitations::isPlaying() const {
 }
 
 void Recitations::playerStateChanged() {
-  emit playingChanged();
-
   if (!m_player->isPlaying()) {
     stop();
   }
+
+  emit playingChanged();
 }
 
 void Recitations::playerError() {
