@@ -61,7 +61,6 @@
     <file alias="qml/TranslationsManager.qml">qml/TranslationsManager.qml</file>
     <file alias="qml/TranslationsPage.qml">qml/TranslationsPage.qml</file>
     <file alias="qml/VerseSelectionDialog.qml">qml/VerseSelectionDialog.qml</file>
-    <file alias="qml/QuranView.js">qml/QuranView.js</file>
     <file alias="qml/ChapterDelegate.qml">qml/ChapterDelegate.qml</file>
     <file alias="qml/VerseDelegate.qml">qml/VerseDelegate.qml</file>
   </qresource>
