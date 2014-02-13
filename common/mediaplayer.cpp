@@ -35,6 +35,8 @@ MediaPlayer::MediaPlayer(QObject *parent) :
   QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
   QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
   QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
+
+  QObject::connect(this, SIGNAL(error()), this, SLOT(stop()), Qt::QueuedConnection);
 }
 
 MediaPlayer::~MediaPlayer() {
@@ -57,10 +59,9 @@ void MediaPlayer::play() {
 
   m_decoder = new MediaDecoder(m_list);
 
-  QObject::connect(this, SIGNAL(error()), this, SLOT(stop()));
   QObject::connect(m_decoder, SIGNAL(error()), this, SIGNAL(error()));
   QObject::connect(m_decoder, SIGNAL(audioError()), this, SIGNAL(error()));
-  QObject::connect(m_decoder, SIGNAL(audioFinished()), SLOT(stop()));
+  QObject::connect(m_decoder, SIGNAL(audioFinished()), this, SLOT(stop()), Qt::QueuedConnection);
 
   QObject::connect(m_decoder, SIGNAL(positionChanged(int, int)),
 		   this, SIGNAL(positionChanged(int, int)));
@@ -80,7 +81,7 @@ void MediaPlayer::stop() {
   m_decoder = 0;
 
   decoder->stop();
-  decoder->deleteLater();
+  delete decoder;
   decoder = 0;
 
   m_policy->release();
