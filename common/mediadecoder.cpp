@@ -128,6 +128,12 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media *media) {
 
   avcodec_close(codec_ctx);
 
+  if (b.data.isEmpty()) {
+    // I can only think of one valid scenario which is every single input packed has been invalid!
+    // Let's just fail here :/
+    return false;
+  }
+
   m_audio->queue(b);
 
   return true;
@@ -148,7 +154,8 @@ bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt, AudioBuffer& buffe
     len = avcodec_decode_audio4(ctx, frame, &got_frame, pkt);
     if (len < 0) {
       avcodec_free_frame(&frame);
-      return false;
+      // We will skip the packet but just return true so we don't signal an error
+      return true;
     }
 
     if (got_frame) {
@@ -257,7 +264,7 @@ AVFormatContext *MediaDecoder::context(const QByteArray& data) {
   ctx->probesize = 4096;
   ctx->flags |= AVFMT_FLAG_CUSTOM_IO;
 
-  err = avformat_open_input(&ctx, "", NULL, NULL);
+  err = avformat_open_input(&ctx, "foo.mp3", NULL, NULL);
   if (err != 0) {
     goto error_and_out;
   }
