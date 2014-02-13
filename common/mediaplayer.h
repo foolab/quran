@@ -19,13 +19,10 @@
 #define MEDIA_PLAYER_H
 
 #include <QObject>
-#include <QPointer>
 
 class MediaPlaylist;
 class Media;
-class QThread;
 class MediaDecoder;
-class AudioOutput;
 class AudioPolicy;
 
 class MediaPlayer : public QObject {
@@ -52,7 +49,7 @@ public slots:
 signals:
   void error();
   void stateChanged();
-  void positionChanged(int chapter, int verse, int index);
+  void positionChanged(int chapter, int verse);
 
 private slots:
   void listCleared();
@@ -63,13 +60,8 @@ private slots:
 private:
   MediaPlaylist *m_list;
   int m_index;
-  bool m_playing;
 
-  QThread *m_decoderThread;
-  QThread *m_audioThread;
-  QPointer<MediaDecoder> m_decoder;
-  QPointer<AudioOutput> m_audio;
-
+  MediaDecoder* m_decoder;
   AudioPolicy *m_policy;
 };
 

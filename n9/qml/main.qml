@@ -2,6 +2,9 @@
 import QtQuick 1.0
 import Quran 1.0
 
+// TODO:
+// recite a page until its end and recitation will not work again
+
 PageStackWindow {
         id: root
         width: _controller.width

@@ -167,8 +167,8 @@ bool Recitations::load(int id) {
   QObject::connect(m_player, SIGNAL(stateChanged()),
 		   this, SLOT(playerStateChanged()));
 
-  QObject::connect(m_player, SIGNAL(positionChanged(int, int, int)),
-		   this, SLOT(playerPositionChanged(int, int, int)));
+  QObject::connect(m_player, SIGNAL(positionChanged(int, int)),
+		   this, SLOT(playerPositionChanged(int, int)));
 
   emit currentChanged();
 
@@ -220,78 +220,10 @@ void Recitations::playerError() {
   emit error(tr("Failed to play audio"));
 }
 
-void Recitations::playerPositionChanged(int chapter, int verse, int index) {
-  --chapter;
-  --verse;
-
-  switch (m_player->playlist()->mode()) {
-  case MediaPlaylist::PlayVerse:
-    emit positionChanged(chapter, verse);
-    setChapter(chapter);
-    setVerse(verse);
-    break;
-
-  case MediaPlaylist::PlayPage:
-    // We are playing a basmala that is not on the first page.
-    // Just unset the position.
-    if (chapter == 0 && verse == 0 && m_playingId != 0) {
-      setChapter(-1);
-      setVerse(-1);
-
-      break;
-    }
-
-    emit positionChanged(chapter, verse);
-
-    setChapter(chapter);
-    setVerse(verse);
-
-    break;
-
-  case MediaPlaylist::PlayChapter:
-    if (verse == 0 && chapter == 0 && m_playingId != 0) {
-      setChapter(-1);
-      setVerse(-1);
-
-      break;
-    }
-
-    emit positionChanged(chapter, verse);
-
-    setChapter(chapter);
-    setVerse(verse);
-
-    break;
-
-  case MediaPlaylist::PlayPart:
-    if (verse == 0 && chapter == 0) {
-      if (m_playingId == 0) {
-	// We have 2 basmalas in the first part
-	if (index == 0) {
-	  // First sura.
-	  // Nothing.
-	}
-	else {
-	  setChapter(-1);
-	  setVerse(-1);
-	  break;
-	}
-      }
-      else {
-	// Any other part. Don't set a position
-	setChapter(-1);
-	setVerse(-1);
-	break;
-      }
-    }
-
-    emit positionChanged(chapter, verse);
-
-    setChapter(chapter);
-    setVerse(verse);
-
-    break;
-  }
+void Recitations::playerPositionChanged(int chapter, int verse) {
+  setChapter(chapter);
+  setVerse(verse);
+  emit positionChanged(chapter, verse);
 }
 
 void Recitations::stop() {

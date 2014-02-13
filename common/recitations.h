@@ -90,7 +90,7 @@ signals:
 private slots:
   void playerStateChanged();
   void playerError();
-  void playerPositionChanged(int chapter, int verse, int index);
+  void playerPositionChanged(int chapter, int verse);
 
 private:
   void setChapter(int chapter);

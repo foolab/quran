@@ -15,52 +15,47 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MEDIA_DECODER_H
-#define MEDIA_DECODER_H
+#ifndef PULSE_H
+#define PULSE_H
 
 #include <QObject>
+#include <QMutex>
+#include <pulse/pulseaudio.h>
+#include "audiooutput.h"
 
-extern "C" {
-#include <libavformat/avformat.h>
-};
-
-class MediaPlaylist;
-class Media;
-class AudioOutput;
-class AudioBuffer;
-
-class MediaDecoder : public QObject {
+class Pulse : public QObject {
   Q_OBJECT
 
 public:
-  MediaDecoder(MediaPlaylist *list, QObject *parent = 0);
-  ~MediaDecoder();
+  Pulse(QObject *parent = 0);
+  ~Pulse();
 
-  void start();
+  bool connect();
+  bool play(AudioBuffer& buffer);
   void stop();
 
-  void policyAcquired();
-
 signals:
-  void finished();
   void error();
-  void audioFinished();
-  void audioError();
-  void positionChanged(int chapter, int verse);
+  void finished();
+  void positionChanged(int index);
 
 private slots:
-  void process();
-  void audioPositionChanged(int index);
+  void drainAndFinish();
 
 private:
-  void cleanup(AVFormatContext *ctx);
-  bool decode(AVFormatContext *ctx, const Media *media);
-  bool decode(AVCodecContext *ctx, AVPacket *pkt, AudioBuffer& buffer);
-  AVFormatContext *context(const QByteArray& data);
+  static void contextStateCallback(pa_context *ctx, Pulse *pulse);
+  static void streamStateCallback(pa_stream *stream, Pulse *pulse);
+  static void streamWriteCallback(pa_stream *stream, size_t length, Pulse *pulse);
+  static void successCallback(pa_stream *stream, int success, Pulse *pulse);
 
-  MediaPlaylist *m_list;
-  AudioOutput *m_audio;
-  QList<Media *> m_media;
+  void writeData();
+
+  QMutex m_mutex;
+  QList<AudioBuffer> m_buffers;
+
+  pa_threaded_mainloop *m_loop;
+  pa_context *m_ctx;
+  pa_stream *m_stream;
 };
 
-#endif /* MEDIA_DECODER_H */
+#endif /* PULSE_H */

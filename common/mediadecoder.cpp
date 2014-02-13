@@ -32,49 +32,60 @@ extern "C" {
 MediaDecoder::MediaDecoder(MediaPlaylist *list, QObject *parent) :
   QObject(parent),
   m_list(list),
-  m_finish(false) {
+  m_audio(new AudioOutput(this)) {
 
+  QObject::connect(m_audio, SIGNAL(finished()), this, SIGNAL(audioFinished()));
+  QObject::connect(m_audio, SIGNAL(error()), this, SIGNAL(audioError()));
+  QObject::connect(m_audio, SIGNAL(positionChanged(int)),
+		   this, SLOT(audioPositionChanged(int)));
 }
 
 MediaDecoder::~MediaDecoder() {
 
 }
 
+void MediaDecoder::start() {
+  m_media = m_list->media();
+
+  QMetaObject::invokeMethod(this, "process", Qt::QueuedConnection);
+}
+
 void MediaDecoder::process() {
-  const QList<Media *> media = m_list->media();
-
-  for (int x = 0; x < media.size(); x++) {
-    const Media *m = media[x];
-    QByteArray data = m_list->recitation()->data(m);
-    if (data.isEmpty()) {
-      emit error();
-      return;
-    }
-
-    AVFormatContext *ctx = context(data);
-    if (!ctx) {
-      emit error();
-      return;
-    }
-
-    if (!decode(ctx, m)) {
-      cleanup(ctx);
-
-      if (!finishRequested()) {
-	emit error();
-      } else {
-	emit finished();
-      }
-
-      return;
-    }
-
-    cleanup(ctx);
+  if (m_media.isEmpty()) {
+    return;
   }
 
-  AudioBuffer *b = new AudioBuffer;
-  emit play(b); // Signal EOS!
-  emit finished();
+  // If we have a media then we decode it.
+  Media *media = m_media.takeFirst();
+  QByteArray data = m_list->recitation()->data(media);
+
+  if (data.isEmpty()) {
+    emit error();
+    return;
+  }
+
+  AVFormatContext *ctx = context(data);
+  if (!ctx) {
+    emit error();
+    return;
+  }
+
+  if (!decode(ctx, media)) {
+    cleanup(ctx);
+    emit error();
+    return;
+  }
+
+  cleanup(ctx);
+
+  if (m_media.isEmpty()) {
+    // Signal EOS!
+    m_audio->queue(AudioBuffer());
+    emit finished();
+  }
+  else {
+    QMetaObject::invokeMethod(this, "process", Qt::QueuedConnection);
+  }
 }
 
 bool MediaDecoder::decode(AVFormatContext *ctx, const Media *media) {
@@ -102,13 +113,12 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media *media) {
   pkt.data = buffer;
   pkt.size = buffer_size;
 
-  while (av_read_frame(ctx, &pkt) >= 0) {
-    if (!decode(codec_ctx, &pkt, media)) {
-      avcodec_close(codec_ctx);
-      return false;
-    }
+  AudioBuffer b;
+  b.media = media;
 
-    if (finishRequested()) {
+  while (av_read_frame(ctx, &pkt) >= 0) {
+    if (!decode(codec_ctx, &pkt, b)) {
+      avcodec_close(codec_ctx);
       return false;
     }
 
@@ -118,10 +128,12 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media *media) {
 
   avcodec_close(codec_ctx);
 
+  m_audio->queue(b);
+
   return true;
 }
 
-bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt, const Media *media) {
+bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt, AudioBuffer& buffer) {
   AVFrame *frame = avcodec_alloc_frame();
   if (!frame) {
     return false;
@@ -143,28 +155,27 @@ bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt, const Media *media
       int data_size = av_samples_get_buffer_size(NULL, ctx->channels,
 						 frame->nb_samples,
 						 ctx->sample_fmt, 1);
-      AudioBuffer *b = new AudioBuffer;
-      b->index = media->index();
-      b->rate = frame->sample_rate;
-      b->channels = ctx->channels;
-      b->data = QByteArray(reinterpret_cast<char *>(frame->data[0]), data_size);
-      b->chapter = media->chapter();
-      b->verse = media->verse();
-      emit play(b);
+      if ((buffer.rate > 0 && buffer.rate != frame->sample_rate) ||
+	  (buffer.channels > 0 && buffer.channels != ctx->channels)) {
+	avcodec_free_frame(&frame);
+	return false;
+      }
+
+      buffer.rate = frame->sample_rate;
+      buffer.channels = ctx->channels;
+      buffer.data += QByteArray(reinterpret_cast<char *>(frame->data[0]), data_size);
     }
 
     pkt->size -= len;
     pkt->data += len;
 
-    if (finishRequested()) {
-      return false;
-    }
-
     if (pkt->size == 0) {
+      avcodec_free_frame(&frame);
       return true;
     }
   }
 
+  avcodec_free_frame(&frame);
   return true;
 }
 
@@ -186,10 +197,16 @@ void MediaDecoder::cleanup(AVFormatContext *ctx) {
   av_free(ctx);
 }
 
-void MediaDecoder::finish() {
-  m_mutex.lock();
-  m_finish = true;
-  m_mutex.unlock();
+void MediaDecoder::stop() {
+  if (!m_media.isEmpty()) {
+    // We have media which means that finished() has not been emitted
+    // If we don't have media then we either stopped decoding and emitted finished()
+    // already or we have no media which is impossible to happen.
+    m_media.clear();
+    emit finished();
+  }
+
+  m_audio->stop();
 }
 
 int read_qbuffer(void *opaque, uint8_t *buf, int buf_size) {
@@ -281,8 +298,13 @@ AVFormatContext *MediaDecoder::context(const QByteArray& data) {
   return 0;
 }
 
-bool MediaDecoder::finishRequested() {
-  QMutexLocker locker(&m_mutex);
+void MediaDecoder::policyAcquired() {
+  m_audio->start();
+}
 
-  return m_finish;
+void MediaDecoder::audioPositionChanged(int index) {
+  int chapter, verse;
+  if (m_list->signalMedia(index, chapter, verse)) {
+    emit positionChanged(chapter, verse);
+  }
 }

@@ -29,11 +29,7 @@ MediaPlayer::MediaPlayer(QObject *parent) :
   QObject(parent),
   m_list(0),
   m_index(-1),
-  m_playing(false),
-  m_decoderThread(new QThread(this)),
-  m_audioThread(new QThread(this)),
   m_decoder(0),
-  m_audio(0),
   m_policy(new AudioPolicy(this)) {
 
   QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
@@ -50,7 +46,7 @@ void MediaPlayer::play() {
     return;
   }
 
-  if (m_playing) {
+  if (m_decoder) {
     return;
   }
 
@@ -60,70 +56,34 @@ void MediaPlayer::play() {
   }
 
   m_decoder = new MediaDecoder(m_list);
-  m_decoder->moveToThread(m_decoderThread);
+
+  QObject::connect(this, SIGNAL(error()), this, SLOT(stop()));
   QObject::connect(m_decoder, SIGNAL(error()), this, SIGNAL(error()));
-  QObject::connect(m_decoder, SIGNAL(error()), m_decoderThread, SLOT(quit()));
-  QObject::connect(m_decoder, SIGNAL(finished()), m_decoderThread, SLOT(quit()));
-  QObject::connect(m_decoderThread, SIGNAL(started()), m_decoder, SLOT(process()));
+  QObject::connect(m_decoder, SIGNAL(audioError()), this, SIGNAL(error()));
+  QObject::connect(m_decoder, SIGNAL(audioFinished()), SLOT(stop()));
 
-  m_audio = new AudioOutput;
-  m_audio->moveToThread(m_audioThread);
-  QObject::connect(m_audio, SIGNAL(error()), this, SIGNAL(error()));
-  QObject::connect(m_audio, SIGNAL(error()), m_audioThread, SLOT(quit()));
-  QObject::connect(m_audio, SIGNAL(finished()), m_audioThread, SLOT(quit()));
-  QObject::connect(m_audioThread, SIGNAL(started()), m_audio, SLOT(process()));
+  QObject::connect(m_decoder, SIGNAL(positionChanged(int, int)),
+		   this, SIGNAL(positionChanged(int, int)));
 
-  QObject::connect(m_decoder, SIGNAL(play(AudioBuffer *)), m_audio, SLOT(play(AudioBuffer *)));
-
-  QObject::connect(m_audio, SIGNAL(positionChanged(int, int, int)),
-		   this, SIGNAL(positionChanged(int, int, int)));
-
-  QObject::connect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
-  QObject::connect(m_audio, SIGNAL(error()), this, SLOT(stop()));
-  QObject::connect(m_decoder, SIGNAL(error()), this, SLOT(stop()));
-
-  m_playing = true;
-
-  m_decoderThread->start();
-  m_audioThread->start();
+  m_decoder->start();
 
   emit stateChanged();
 }
 
 void MediaPlayer::stop() {
-  if (!m_playing) {
+  if (!m_decoder) {
     return;
   }
 
-  if (m_decoder) {
-    m_decoder->finish();
-  }
+  // We need to break the loop.
+  MediaDecoder *decoder = m_decoder;
+  m_decoder = 0;
 
-  if (m_audio) {
-    m_audio->finish();
-  }
-
-  while (m_decoderThread->isRunning()) {
-    m_decoderThread->quit();
-    m_decoderThread->wait(10);
-  }
-
-  while(m_audioThread->isRunning()) {
-    m_audioThread->quit();
-    m_audioThread->wait(10);
-  }
-
-  if (m_audio) {
-    m_audio->deleteLater();
-  }
-
-  if (m_decoder) {
-    m_decoder->deleteLater();
-  }
+  decoder->stop();
+  decoder->deleteLater();
+  decoder = 0;
 
   m_policy->release();
-
-  m_playing = false;
 
   emit stateChanged();
 }
@@ -163,7 +123,7 @@ Media *MediaPlayer::media() {
 }
 
 bool MediaPlayer::isPlaying() {
-  return m_playing;
+  return m_decoder != 0;
 }
 
 void MediaPlayer::listCleared() {
@@ -172,20 +132,20 @@ void MediaPlayer::listCleared() {
 }
 
 void MediaPlayer::policyAcquired() {
-  if (m_playing) {
-    m_audio->policyAcquired();
+  if (m_decoder) {
+    m_decoder->policyAcquired();
   }
 }
 
 void MediaPlayer::policyDenied() {
-  if (m_playing) {
+  if (m_decoder) {
     stop();
     emit error();
   }
 }
 
 void MediaPlayer::policyLost() {
-  if (m_playing) {
+  if (m_decoder) {
     stop();
     emit error();
   }

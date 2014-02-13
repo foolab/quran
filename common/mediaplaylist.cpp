@@ -24,7 +24,8 @@
 MediaPlaylist::MediaPlaylist(DataProvider *data, Recitation *recitation, QObject *parent)
   : QObject(parent),
     m_data(data),
-    m_recitation(recitation) {
+    m_recitation(recitation),
+    m_playingId(-1) {
 
 }
 
@@ -44,6 +45,7 @@ void MediaPlaylist::playPage(int page) {
   clear();
 
   m_mode = PlayPage;
+  m_playingId = page;
 
   Page p = m_data->pageFromIndex(page);
   QList<Fragment> frags = p.fragments();
@@ -73,6 +75,7 @@ void MediaPlaylist::playChapter(int chapter) {
   clear();
 
   m_mode = PlayChapter;
+  m_playingId = chapter;
 
   Sura s = m_data->sura(chapter);
 
@@ -95,6 +98,7 @@ void MediaPlaylist::playVerse(int chapter, int verse) {
   clear();
 
   m_mode = PlayVerse;
+  m_playingId = -1;
 
   addMedia(m_recitation->mediaUrl(chapter + 1, verse + 1, 0));
 }
@@ -107,6 +111,7 @@ void MediaPlaylist::playPart(int part) {
   clear();
 
   m_mode = PlayPart;
+  m_playingId = part;
 
   QList<Fragment> frags = m_data->fragmentsForPart(part);
 
@@ -146,4 +151,47 @@ Recitation *MediaPlaylist::recitation() {
 
 const QList<Media *> MediaPlaylist::media() const {
   return m_media;
+}
+
+bool MediaPlaylist::signalMedia(int index, int& chapter, int& verse) const {
+  const Media *media = m_media[index];
+
+  chapter = media->chapter() - 1;
+  verse = media->verse() - 1;
+
+  switch (m_mode) {
+  case MediaPlaylist::PlayVerse:
+    return true;
+
+  case MediaPlaylist::PlayPage:
+  case MediaPlaylist::PlayChapter:
+    if (chapter == 0 && verse == 0 && m_playingId != 0) {
+      // We are playing a basmala that is not on the first page or first chapter.
+      // Just unset the position.
+      return false;
+    }
+
+    return true;
+
+  case MediaPlaylist::PlayPart:
+    if (verse == 0 && chapter == 0) {
+      // We are reciting a basmala
+      if (m_playingId == 0) {
+	// We have 2 basmalas in the first part
+	if (m_media.first() == media) {
+	  // First sura has a basmala
+	  return true;
+	}
+	else {
+	  return false;
+	}
+      }
+      else {
+	// Any other part. Don't set a position
+	return false;
+      }
+    }
+
+    return true;
+  }
 }

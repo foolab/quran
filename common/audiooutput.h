@@ -19,17 +19,17 @@
 #define AUDIO_OUTPUT_H
 
 #include <QObject>
-#include <QMutex>
-#include <pulse/simple.h>
+
+class Media;
+class Pulse;
 
 class AudioBuffer {
 public:
-  unsigned long rate;
+ AudioBuffer() : rate(0), channels(0), media(0) {}
+  int rate;
   unsigned short channels;
   QByteArray data;
-  int chapter;
-  int verse;
-  int index;
+  const Media *media;
 };
 
 class AudioOutput : public QObject {
@@ -39,34 +39,21 @@ public:
   AudioOutput(QObject *parent = 0);
   ~AudioOutput();
 
-  void finish();
-  void policyAcquired();
+  void start();
+  void stop();
 
-public slots:
-  void play(AudioBuffer *buffer);
+  void queue(AudioBuffer buffer);
 
 signals:
   void finished();
   void error();
-  void positionChanged(int chapter, int verse, int index);
-
-private slots:
-  void process();
-  void playNext();
-  void releaseAll();
+  void positionChanged(int index);
 
 private:
-  bool finishRequested();
+  QList<AudioBuffer> m_buffers;
 
-  QMutex m_mutex;
-  bool m_finish;
-  bool m_acquired;
-  QList<AudioBuffer *> m_buffers;
-
-  pa_sample_spec m_spec;
-  pa_simple *m_simple;
-
-  int m_index;
+  const Media *m_media;
+  Pulse *m_pulse;
 };
 
 #endif /* AUDIO_OUTPUT_H */

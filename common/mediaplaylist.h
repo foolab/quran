@@ -50,6 +50,8 @@ public:
 
   const QList<Media *> media() const;
 
+  bool signalMedia(int index, int& chapter, int& verse) const;
+
 signals:
   void cleared();
   void mediaAdded(Media *media);
@@ -64,6 +66,8 @@ private:
   PlayMode m_mode;
 
   QList<Media *> m_media;
+
+  int m_playingId;
 };
 
 #endif /* MEDIA_PLAYLIST_H */
