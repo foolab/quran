@@ -30,8 +30,6 @@ public:
   int index() const;
   QUrl url() const;
 
-  bool operator==(const Media& other);
-
 private:
   int m_chapter;
   int m_verse;

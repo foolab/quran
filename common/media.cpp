@@ -44,10 +44,3 @@ int Media::index() const {
 QUrl Media::url() const {
   return m_url;
 }
-
-bool Media::operator==(const Media& other) {
-  return m_index == other.m_index &&
-    m_chapter == other.m_chapter &&
-    m_verse == other.m_verse &&
-    m_url == other.m_url;
-}
