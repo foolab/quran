@@ -64,33 +64,35 @@ void MediaPlayer::start(MediaPlaylist *list) {
   QObject::connect(m_decoder, SIGNAL(positionChanged(int, int)),
 		   this, SIGNAL(positionChanged(int, int)));
 
+  m_list->start();
+
   m_decoder->start();
 
   emit stateChanged();
 }
 
 void MediaPlayer::stop() {
-  if (!m_decoder) {
-    return;
+  // We need to break the loop.
+  if (m_decoder) {
+    MediaDecoder *decoder = m_decoder;
+    m_decoder = 0;
+
+    decoder->stop();
+    delete decoder;
+    decoder = 0;
   }
 
-  // We need to break the loop.
-  MediaDecoder *decoder = m_decoder;
-  m_decoder = 0;
-
-  decoder->stop();
-  delete decoder;
-  decoder = 0;
-
-  m_policy->release();
+  if (m_policy) {
+    m_policy->release();
+  }
 
   if (m_list) {
     m_list->stop();
     delete m_list;
     m_list = 0;
-  }
 
-  emit stateChanged();
+    emit stateChanged();
+  }
 }
 
 bool MediaPlayer::isPlaying() const {
