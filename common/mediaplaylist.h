@@ -24,27 +24,23 @@ class DataProvider;
 class Recitation;
 class Media;
 class Recitation;
+class Downloader;
 
 class MediaPlaylist : public QObject {
   Q_OBJECT
 
 public:
-  enum PlayMode {
-    PlayPage,
-    PlayChapter,
-    PlayVerse,
-    PlayPart,
-  };
+  static MediaPlaylist *partList(DataProvider *data, Recitation *recitation,
+				 Downloader *downloader, int part, QObject *parent = 0);
+  static MediaPlaylist *pageList(DataProvider *data, Recitation *recitation,
+				 Downloader *downloader, int page, QObject *parent = 0);
+  static MediaPlaylist *verseList(DataProvider *data, Recitation *recitation,
+				  Downloader *downloader, int chapter, int verse,
+				  QObject *parent = 0);
+  static MediaPlaylist *chapterList(DataProvider *data, Recitation *recitation,
+				    Downloader *downloader, int chapter, QObject *parent = 0);
 
-  MediaPlaylist(DataProvider *data, Recitation *recitation, QObject *parent = 0);
   ~MediaPlaylist();
-
-  void playPage(int page);
-  void playChapter(int chapter);
-  void playVerse(int chapter, int verse);
-  void playPart(int part);
-
-  PlayMode mode();
 
   Recitation *recitation();
 
@@ -52,16 +48,32 @@ public:
 
   bool signalMedia(int index, int& chapter, int& verse) const;
 
+  void start();
+  void stop();
+
 signals:
-  void cleared();
-  void mediaAdded(Media *media);
+  void mediaAvailable(Media *media);
+  void done();
 
 private:
-  void clear();
-  void addMedia(Media *media);
+  MediaPlaylist(DataProvider *data, Recitation *recitation,
+		Downloader *downloader, QObject *parent = 0);
+
+  void playPage(int page);
+  void playChapter(int chapter);
+  void playVerse(int chapter, int verse);
+  void playPart(int part);
+
+  enum PlayMode {
+    PlayPage,
+    PlayChapter,
+    PlayVerse,
+    PlayPart,
+  };
 
   DataProvider *m_data;
   Recitation *m_recitation;
+  Downloader *m_downloader;
 
   PlayMode m_mode;
 

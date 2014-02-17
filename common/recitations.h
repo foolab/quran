@@ -29,6 +29,7 @@ class Recitation;
 class MediaPlayer;
 class AudioPolicy;
 class MediaPlaylist;
+class Downloader;
 
 class Recitations : public QObject {
   Q_OBJECT
@@ -40,6 +41,7 @@ class Recitations : public QObject {
   Q_PROPERTY(int verse READ verse NOTIFY verseChanged);
   Q_PROPERTY(Settings *settings READ settings WRITE setSettings NOTIFY settingsChanged);
   Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
+  Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
 
 public:
   Recitations(QObject *parent = 0);
@@ -65,11 +67,14 @@ public:
   DataProvider *data() const;
   void setData(DataProvider *data);
 
+  Downloader *downloader() const;
+  void setDownloader(Downloader *downloader);
+
 public slots:
   void refresh();
   void play(int chapter, int verse);
   void unload();
-  void playPage(int number);
+  void playPage(int page);
   void playChapter(int chapter);
   void playPart(int part);
   void stop();
@@ -103,6 +108,8 @@ private:
 
   MediaPlayer *m_player;
   Recitation *m_recitation;
+  Downloader *m_downloader;
+
   int m_current;
 
   int m_chapter;

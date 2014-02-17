@@ -32,16 +32,9 @@ public:
   MediaPlayer(QObject *parent = 0);
   ~MediaPlayer();
 
-  void play();
+  void start(MediaPlaylist *list);
 
   bool isPlaying() const;
-
-  MediaPlaylist *playlist();
-  void setPlaylist(MediaPlaylist *playlist);
-
-  Media *media();
-
-  bool isPlaying();
 
 public slots:
   void stop();
@@ -52,15 +45,12 @@ signals:
   void positionChanged(int chapter, int verse);
 
 private slots:
-  void listCleared();
   void policyAcquired();
   void policyLost();
   void policyDenied();
 
 private:
   MediaPlaylist *m_list;
-  int m_index;
-
   MediaDecoder* m_decoder;
   AudioPolicy *m_policy;
 };

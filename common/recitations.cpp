@@ -29,10 +29,10 @@ Recitations::Recitations(QObject *parent)
     m_data(0),
     m_player(0),
     m_recitation(0),
+    m_downloader(0),
     m_current(0),
     m_chapter(-1),
-    m_verse(-1),
-    m_playingId(-1) {
+    m_verse(-1) {
 
 }
 
@@ -44,8 +44,10 @@ Recitations::~Recitations() {
   qDeleteAll(m_installed.values());
   m_installed.clear();
 
-  delete m_player;
-  m_player = 0;
+  if (m_player) {
+    delete m_player;
+    m_player = 0;
+  }
 
   m_recitation = 0;
 }
@@ -70,6 +72,19 @@ void Recitations::setData(DataProvider *data) {
 
     m_data = data;
     emit dataChanged();
+  }
+}
+
+
+Downloader *Recitations::downloader() const {
+  return m_downloader;
+}
+
+void Recitations::setDownloader(Downloader *downloader) {
+  if (m_downloader != downloader) {
+
+    m_downloader = downloader;
+    emit downloaderChanged();
   }
 }
 
@@ -159,9 +174,6 @@ bool Recitations::load(int id) {
     m_player = new MediaPlayer(this);
   }
 
-  MediaPlaylist *list = new MediaPlaylist(m_data, m_recitation, this);
-  m_player->setPlaylist(list);
-
   QObject::connect(m_player, SIGNAL(error()),
 		   this, SLOT(playerError()));
   QObject::connect(m_player, SIGNAL(stateChanged()),
@@ -242,23 +254,18 @@ void Recitations::play(int chapter, int verse) {
 
   stop();
 
-  m_playingId = -1;
-
-  m_player->playlist()->playVerse(chapter, verse);
-  m_player->play();
+  m_player->start(MediaPlaylist::verseList(m_data, m_recitation, m_downloader,
+					   chapter, verse, m_player));
 }
 
-void Recitations::playPage(int number) {
+void Recitations::playPage(int page) {
   if (!m_player || !m_recitation) {
     return;
   }
 
   stop();
 
-  m_playingId = number;
-
-  m_player->playlist()->playPage(number);
-  m_player->play();
+  m_player->start(MediaPlaylist::pageList(m_data, m_recitation, m_downloader, page, m_player));
 }
 
 void Recitations::playChapter(int chapter) {
@@ -268,10 +275,8 @@ void Recitations::playChapter(int chapter) {
 
   stop();
 
-  m_playingId = chapter;
-
-  m_player->playlist()->playChapter(chapter);
-  m_player->play();
+  m_player->start(MediaPlaylist::chapterList(m_data, m_recitation, m_downloader,
+					     chapter, m_player));
 }
 
 void Recitations::playPart(int part) {
@@ -281,8 +286,5 @@ void Recitations::playPart(int part) {
 
   stop();
 
-  m_playingId = part;
-
-  m_player->playlist()->playPart(part);
-  m_player->play();
+  m_player->start(MediaPlaylist::partList(m_data, m_recitation, m_downloader, part, m_player));
 }

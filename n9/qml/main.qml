@@ -63,6 +63,7 @@ PageStackWindow {
                 id: _recitations
                 settings: _settings
                 data: _data
+                downloader: _downloader
         }
 
         WindowController {

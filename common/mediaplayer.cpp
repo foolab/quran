@@ -28,7 +28,6 @@
 MediaPlayer::MediaPlayer(QObject *parent) :
   QObject(parent),
   m_list(0),
-  m_index(-1),
   m_decoder(0),
   m_policy(new AudioPolicy(this)) {
 
@@ -43,10 +42,9 @@ MediaPlayer::~MediaPlayer() {
   stop();
 }
 
-void MediaPlayer::play() {
-  if (!m_list) {
-    return;
-  }
+void MediaPlayer::start(MediaPlaylist *list) {
+  m_list = list;
+  m_list->start();
 
   if (m_decoder) {
     return;
@@ -86,50 +84,17 @@ void MediaPlayer::stop() {
 
   m_policy->release();
 
+  if (m_list) {
+    m_list->stop();
+    delete m_list;
+    m_list = 0;
+  }
+
   emit stateChanged();
 }
 
-MediaPlaylist *MediaPlayer::playlist() {
-  return m_list;
-}
-
-void MediaPlayer::setPlaylist(MediaPlaylist *playlist) {
-  if (m_list) {
-    delete m_list;
-  }
-
-  m_list = playlist;
-
-  if (m_list) {
-    QObject::connect(m_list, SIGNAL(cleared()), this, SLOT(listCleared()));
-  }
-
-  m_index = -1;
-}
-
-Media *MediaPlayer::media() {
-  if (m_index == -1) {
-    return 0;
-  }
-
-  if (!m_list) {
-    return 0;
-  }
-
-  if (m_index >= m_list->media().size()) {
-    return 0;
-  }
-
-  return m_list->media().at(m_index);
-}
-
-bool MediaPlayer::isPlaying() {
-  return m_decoder != 0;
-}
-
-void MediaPlayer::listCleared() {
-  stop();
-  m_index = -1;
+bool MediaPlayer::isPlaying() const {
+  return m_list != 0;
 }
 
 void MediaPlayer::policyAcquired() {

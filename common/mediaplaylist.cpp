@@ -21,28 +21,24 @@
 #include "dataprovider.h"
 #include "media.h"
 
-MediaPlaylist::MediaPlaylist(DataProvider *data, Recitation *recitation, QObject *parent)
+MediaPlaylist::MediaPlaylist(DataProvider *data, Recitation *recitation,
+			     Downloader *downloader, QObject *parent)
   : QObject(parent),
     m_data(data),
     m_recitation(recitation),
+    m_downloader(downloader),
     m_playingId(-1) {
 
 }
 
 MediaPlaylist::~MediaPlaylist() {
-
-}
-
-MediaPlaylist::PlayMode MediaPlaylist::mode() {
-  return m_mode;
+  qDeleteAll(m_media);
 }
 
 void MediaPlaylist::playPage(int page) {
   if (!m_recitation) {
     return;
   }
-
-  clear();
 
   m_mode = PlayPage;
   m_playingId = page;
@@ -57,12 +53,12 @@ void MediaPlaylist::playPage(int page) {
       Sura s = m_data->sura(f.sura());
 
       if (s.hasBasmala()) {
-	addMedia(m_recitation->mediaUrl(1, 1, index++));
+	m_media << m_recitation->mediaUrl(1, 1, index++);
       }
     }
 
     for (int x = f.start(); x < f.start() + f.size(); x++) {
-      addMedia(m_recitation->mediaUrl(f.sura() + 1, x + 1, index++));
+      m_media << m_recitation->mediaUrl(f.sura() + 1, x + 1, index++);
     }
   }
 }
@@ -72,8 +68,6 @@ void MediaPlaylist::playChapter(int chapter) {
     return;
   }
 
-  clear();
-
   m_mode = PlayChapter;
   m_playingId = chapter;
 
@@ -82,11 +76,11 @@ void MediaPlaylist::playChapter(int chapter) {
   int index = 0;
 
   if (s.hasBasmala()) {
-    addMedia(m_recitation->mediaUrl(1, 1, index++));
+    m_media << m_recitation->mediaUrl(1, 1, index++);
   }
 
   for (int x = 0; x < s.size(); x++) {
-    addMedia(m_recitation->mediaUrl(chapter + 1, x + 1, index++));
+    m_media << m_recitation->mediaUrl(chapter + 1, x + 1, index++);
   }
 }
 
@@ -95,20 +89,16 @@ void MediaPlaylist::playVerse(int chapter, int verse) {
     return;
   }
 
-  clear();
-
   m_mode = PlayVerse;
   m_playingId = -1;
 
-  addMedia(m_recitation->mediaUrl(chapter + 1, verse + 1, 0));
+  m_media << m_recitation->mediaUrl(chapter + 1, verse + 1, 0);
 }
 
 void MediaPlaylist::playPart(int part) {
   if (!m_recitation) {
     return;
   }
-
-  clear();
 
   m_mode = PlayPart;
   m_playingId = part;
@@ -122,27 +112,14 @@ void MediaPlaylist::playPart(int part) {
       Sura s = m_data->sura(frag.sura());
 
       if (s.hasBasmala()) {
-	addMedia(m_recitation->mediaUrl(1, 1, index++));
+	m_media << m_recitation->mediaUrl(1, 1, index++);
       }
     }
 
     for (int x = frag.start(); x < frag.start() + frag.size(); x++) {
-      addMedia(m_recitation->mediaUrl(frag.sura() + 1, x + 1, index++));
+      m_media << m_recitation->mediaUrl(frag.sura() + 1, x + 1, index++);
     }
   }
-}
-
-void MediaPlaylist::clear() {
-  emit cleared();
-
-  qDeleteAll(m_media);
-  m_media.clear();
-}
-
-void MediaPlaylist::addMedia(Media *media) {
-  m_media << media;
-
-  emit mediaAdded(media);
 }
 
 Recitation *MediaPlaylist::recitation() {
@@ -194,4 +171,57 @@ bool MediaPlaylist::signalMedia(int index, int& chapter, int& verse) const {
 
     return true;
   }
+}
+
+void MediaPlaylist::start() {
+  foreach (Media *media, m_media) {
+    emit mediaAvailable(media);
+  }
+
+  emit done();
+}
+
+void MediaPlaylist::stop() {
+  // Nothing for now
+}
+
+MediaPlaylist *MediaPlaylist::partList(DataProvider *data, Recitation *recitation,
+				       Downloader *downloader, int part, QObject *parent) {
+
+  MediaPlaylist *list = new MediaPlaylist(data, recitation, downloader, parent);
+
+  list->playPart(part);
+
+  return list;
+}
+
+MediaPlaylist *MediaPlaylist::pageList(DataProvider *data, Recitation *recitation,
+				       Downloader *downloader, int page, QObject *parent) {
+
+  MediaPlaylist *list = new MediaPlaylist(data, recitation, downloader, parent);
+
+  list->playPage(page);
+
+  return list;
+}
+
+MediaPlaylist *MediaPlaylist::verseList(DataProvider *data, Recitation *recitation,
+					Downloader *downloader,
+					int chapter, int verse, QObject *parent) {
+
+  MediaPlaylist *list = new MediaPlaylist(data, recitation, downloader, parent);
+
+  list->playVerse(chapter, verse);
+
+  return list;
+}
+
+MediaPlaylist *MediaPlaylist::chapterList(DataProvider *data, Recitation *recitation,
+					  Downloader *downloader, int chapter, QObject *parent) {
+
+  MediaPlaylist *list = new MediaPlaylist(data, recitation, downloader, parent);
+
+  list->playChapter(chapter);
+
+  return list;
 }
