@@ -34,6 +34,7 @@
 #define DEFAULT_FLIP_TO_STOP_RECITATION       true
 #define DEFAULT_NIGHT_MODE         false
 #define DEFAULT_THEME              "blue"
+#define DEFAULT_ONLINE_RECITATIONS true
 
 #define FONT_FAMILY                "Simplified Naskh"
 #ifdef SAILFISH
@@ -337,6 +338,17 @@ QString Settings::theme() {
   return m_settings->value("General/theme", DEFAULT_THEME).toString();
 }
 
+void Settings::setOnlineRecitationsEnabled(bool enabled) {
+  if (areOnlineRecitationsEnabled() != enabled) {
+    m_settings->setValue("General/onlineRecitations", enabled);
+    emit onlineRecitationsChanged();
+  }
+}
+
+bool Settings::areOnlineRecitationsEnabled() const {
+  return m_settings->value("General/onlineRecitations", DEFAULT_ONLINE_RECITATIONS).toBool();
+}
+
 void Settings::reset() {
   setFullScreen(DEFAULT_FULL_SCREEN);
   setOrientation(DEFAULT_ORIENTATION);
@@ -349,4 +361,5 @@ void Settings::reset() {
   setFlipToStopRecitation(DEFAULT_FLIP_TO_STOP_RECITATION);
   setNightModeEnabled(DEFAULT_NIGHT_MODE);
   setTheme(DEFAULT_THEME);
+  setOnlineRecitationsEnabled(DEFAULT_ONLINE_RECITATIONS);
 }

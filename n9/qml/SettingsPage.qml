@@ -198,6 +198,18 @@ Page {
                        }
 
                         SettingsPageEntry {
+                                entries: [
+                                QtObject {property string name: qsTr("Disabled") },
+                                QtObject {property string name: qsTr("Enabled") }
+                                ]
+
+                                title: qsTr("Online recitations")
+                                subtitle: entries[_settings.onlineRecitations ? 1 : 0].name;
+                                selectedIndex: _settings.onlineRecitations
+                                onAccepted: _settings.onlineRecitations = (selectedIndex != 0);
+                       }
+
+                        SettingsPageEntry {
                                 id: recitationsEntry
                                 title: qsTr("Show recitations")
                                 onClicked: pageStack.push("RecitationsListPage");
