@@ -71,6 +71,8 @@ void AudioOutput::play(const QList<AudioBuffer>& buffers) {
 }
 
 void AudioOutput::play(const AudioBuffer& buffer) {
+  // TODO: limit the size of m_buffers
+
   QMutexLocker locker(&m_mutex);
   m_buffers << buffer;
   m_cond.wakeOne();
