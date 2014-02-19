@@ -177,8 +177,6 @@ void MediaPlaylist::start() {
   foreach (Media *media, m_media) {
     emit mediaAvailable(media);
   }
-
-  emit done();
 }
 
 void MediaPlaylist::stop() {

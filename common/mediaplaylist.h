@@ -53,7 +53,6 @@ public:
 
 signals:
   void mediaAvailable(Media *media);
-  void done();
 
 private:
   MediaPlaylist(DataProvider *data, Recitation *recitation,
