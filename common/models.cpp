@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "translationmodels.h"
+#include "models.h"
 #include "translations.h"
 #include <QDebug>
 

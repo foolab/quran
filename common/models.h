@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRANSLATION_MODELS_H
-#define TRANSLATION_MODELS_H
+#ifndef MODELS_H
+#define MODELS_H
 
 #include <QAbstractListModel>
 
@@ -122,4 +122,4 @@ private:
   int m_language;
 };
 
-#endif /* TRANSLATION_MODELS_H */
+#endif /* MODELS_H */

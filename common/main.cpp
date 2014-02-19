@@ -56,7 +56,7 @@
 #include <QtQuick>
 #include <QQmlError>
 #endif
-#include "translationmodels.h"
+#include "models.h"
 #include "bookmarksmodel.h"
 #include "bookmarkitem.h"
 #include "quranviewmodel2.h"
