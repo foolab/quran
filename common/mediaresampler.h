@@ -15,48 +15,33 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MEDIA_PLAYER_H
-#define MEDIA_PLAYER_H
+#ifndef MEDIA_RESAMPLER_H
+#define MEDIA_RESAMPLER_H
 
 #include <QObject>
 
-class MediaPlaylist;
-class Media;
-class MediaDecoder;
-class AudioPolicy;
-class AudioOutput;
+extern "C" {
+#include <libavcodec/avcodec.h>
+#include <libavresample/avresample.h>
+};
 
-class MediaPlayer : public QObject {
+class MediaResampler : public QObject {
   Q_OBJECT
 
 public:
-  MediaPlayer(QObject *parent = 0);
-  ~MediaPlayer();
+  static MediaResampler *create(AVCodecContext *ctx, QObject *parent = 0);
 
-  void start(MediaPlaylist *list);
+  ~MediaResampler();
 
-  bool isPlaying() const;
-
-public slots:
-  void stop();
-
-signals:
-  void error();
-  void stateChanged();
-  void positionChanged(int chapter, int verse);
-
-private slots:
-  void policyAcquired();
-  void policyLost();
-  void policyDenied();
-  void mediaAvailable(Media *media);
-  void audioPositionChanged(int index);
+  bool resample(AVFrame *frame, QByteArray& output);
 
 private:
-  MediaPlaylist *m_list;
-  MediaDecoder* m_decoder;
-  AudioPolicy *m_policy;
-  AudioOutput *m_audio;
+  MediaResampler(QObject *parent = 0);
+  bool init(AVCodecContext *ctx);
+
+  AVAudioResampleContext *m_ctx;
+
+  bool m_bypass;
 };
 
-#endif /* MEDIA_PLAYER_H */
+#endif /* MEDIA_RESAMPLER_H */

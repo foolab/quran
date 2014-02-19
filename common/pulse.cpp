@@ -20,11 +20,13 @@
 #include <QDebug>
 #include "media.h"
 
-Pulse::Pulse(QObject *parent) :
+Pulse::Pulse(AudioOutput *parent) :
   QObject(parent),
+  m_audio(parent),
   m_loop(0),
   m_ctx(0),
-  m_stream(0) {
+  m_stream(0),
+  m_stop(false)  {
 
   m_loop = pa_threaded_mainloop_new();
 }
@@ -63,8 +65,6 @@ void Pulse::stop() {
   }
 
   pa_threaded_mainloop_stop(m_loop);
-
-  m_buffers.clear();
 }
 
 bool Pulse::connect() {
@@ -129,7 +129,7 @@ bool Pulse::connect() {
 
   pa_threaded_mainloop_unlock(m_loop);
 
-  return true;
+  return createStream();
 }
 
 void Pulse::contextStateCallback(pa_context *ctx, Pulse *pulse) {
@@ -158,28 +158,11 @@ void Pulse::successCallback(pa_stream *stream, int success, Pulse *pulse) {
   pa_threaded_mainloop_signal(pulse->m_loop, 0);
 }
 
-bool Pulse::play(AudioBuffer& buffer) {
-  m_mutex.lock();
-  m_buffers << buffer;
-  m_mutex.unlock();
-
-  if (!m_ctx) {
-    return false;
-  }
-
-  if (m_stream) {
-    const pa_sample_spec *ss = pa_stream_get_sample_spec(m_stream);
-    if (ss->channels != buffer.channels || ss->rate != buffer.rate) {
-      return false;
-    }
-
-    return true;
-  }
-
+bool Pulse::createStream() {
   pa_sample_spec ss;
   ss.format = PA_SAMPLE_S16NE;
-  ss.channels = buffer.channels;
-  ss.rate = buffer.rate;
+  ss.channels = 1;
+  ss.rate = 22050;
   m_stream = pa_stream_new(m_ctx, "Quran", &ss, NULL);
 
   if (!m_stream) {
@@ -229,19 +212,18 @@ bool Pulse::play(AudioBuffer& buffer) {
 
 void Pulse::writeData() {
   // Called from another thread
-  m_mutex.lock();
-  if (m_buffers.isEmpty()) {
-    // TODO:
-    m_mutex.unlock();
+  if (m_stop) {
     return;
   }
 
-  AudioBuffer buffer = m_buffers.takeFirst();
-  m_mutex.unlock();
+  AudioBuffer buffer = m_audio->buffer();
 
-  if (buffer.data.isEmpty()) {
-    // We are done.
-    // Drain:
+  if (buffer.state == AudioBuffer::Eos) {
+    QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
+    m_stop = true;
+    return;
+  }
+  else if (m_stop) {
     QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
     return;
   }

@@ -23,15 +23,16 @@
 #include <pulse/pulseaudio.h>
 #include "audiooutput.h"
 
+class AudioOutput;
+
 class Pulse : public QObject {
   Q_OBJECT
 
 public:
-  Pulse(QObject *parent = 0);
+  Pulse(AudioOutput *parent = 0);
   ~Pulse();
 
   bool connect();
-  bool play(AudioBuffer& buffer);
   void stop();
 
 signals:
@@ -48,14 +49,15 @@ private:
   static void streamWriteCallback(pa_stream *stream, size_t length, Pulse *pulse);
   static void successCallback(pa_stream *stream, int success, Pulse *pulse);
 
+  bool createStream();
+
   void writeData();
 
-  QMutex m_mutex;
-  QList<AudioBuffer> m_buffers;
-
+  AudioOutput *m_audio;
   pa_threaded_mainloop *m_loop;
   pa_context *m_ctx;
   pa_stream *m_stream;
+  bool m_stop;
 };
 
 #endif /* PULSE_H */

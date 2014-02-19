@@ -20,9 +20,11 @@
 
 #include <QUrl>
 
+class Recitation;
+
 class Media {
 public:
-  Media(int chapter, int verse, int index, const QUrl& url);
+  Media(Recitation *recitation, int chapter, int verse, int index, const QUrl& url);
   virtual ~Media();
 
   int chapter() const;
@@ -30,7 +32,10 @@ public:
   int index() const;
   QUrl url() const;
 
+  QByteArray data() const;
+
 private:
+  Recitation *m_recitation;
   int m_chapter;
   int m_verse;
   int m_index;

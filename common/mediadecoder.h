@@ -18,48 +18,52 @@
 #ifndef MEDIA_DECODER_H
 #define MEDIA_DECODER_H
 
-#include <QObject>
+#include <QThread>
+#include <QMutex>
+#include <QWaitCondition>
 
 extern "C" {
 #include <libavformat/avformat.h>
 };
 
-class MediaPlaylist;
 class Media;
 class AudioOutput;
 class AudioBuffer;
+class MediaResampler;
 
-class MediaDecoder : public QObject {
+class MediaDecoder : public QThread {
   Q_OBJECT
 
 public:
-  MediaDecoder(MediaPlaylist *list, QObject *parent = 0);
+  MediaDecoder(QObject *parent = 0);
   ~MediaDecoder();
 
-  void start();
   void stop();
 
-  void policyAcquired();
+  void addMedia(Media *media);
 
-signals:
-  void finished();
-  void error();
-  void audioFinished();
-  void audioError();
-  void positionChanged(int chapter, int verse);
+  void setOutput(AudioOutput *audio);
 
-private slots:
-  void process();
-  void audioPositionChanged(int index);
+protected:
+  void run();
 
 private:
   void cleanup(AVFormatContext *ctx);
   bool decode(AVFormatContext *ctx, const Media *media);
-  bool decode(AVCodecContext *ctx, AVPacket *pkt, AudioBuffer& buffer);
+  bool decode(AVCodecContext *ctx, AVPacket *pkt, AudioBuffer& buffer, MediaResampler *resampler);
   AVFormatContext *context(const QByteArray& data);
 
-  MediaPlaylist *m_list;
+  bool stopRequested();
+  Media *media();
+  void play(const AudioBuffer& buffer);
+
   AudioOutput *m_audio;
+  QMutex m_audioMutex;
+  QList<AudioBuffer> m_buffers;
+
+  bool m_stop;
+  QMutex m_mutex;
+  QWaitCondition m_cond;
   QList<Media *> m_media;
 };
 

@@ -91,7 +91,7 @@ public:
   Media *mediaUrl(int chapter, int verse, int index) {
     QString mp3 = QString("%1/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
 
-    return new Media(chapter, verse, index, QUrl::fromLocalFile(mp3));
+    return new Media(this, chapter, verse, index, QUrl::fromLocalFile(mp3));
   }
 
 protected:
@@ -126,12 +126,12 @@ public:
   Media *mediaUrl(int chapter, int verse, int index) {
     QString mp3 = QString("%1/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
     if (QFile::exists(mp3)) {
-      return new Media(chapter, verse, index, QUrl::fromLocalFile(mp3));
+      return new Media(this, chapter, verse, index, QUrl::fromLocalFile(mp3));
     }
 
     QUrl url(QString("%1/%2%3.mp3").arg(m_url.toString()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0')));
 
-    return new Media(chapter, verse, index, url);
+    return new Media(this, chapter, verse, index, url);
   }
 
 protected:
@@ -178,7 +178,7 @@ public:
   Media *mediaUrl(int chapter, int verse, int index) {
     QString mp3 = QString("%1/%2/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
 
-    return new Media(chapter, verse, index, QUrl::fromLocalFile(mp3));
+    return new Media(this, chapter, verse, index, QUrl::fromLocalFile(mp3));
   }
 
   static bool info(QIODevice& file, QString& name, QString& subdir) {
@@ -262,7 +262,7 @@ public:
   Media *mediaUrl(int chapter, int verse, int index) {
     QString mp3 = QString("%1/%2/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
 
-    return new Media(chapter, verse, index, QUrl(mp3));
+    return new Media(this, chapter, verse, index, QUrl(mp3));
   }
 
   QByteArray data(const Media *media) {

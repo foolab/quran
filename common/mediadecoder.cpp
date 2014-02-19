@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QBuffer>
 #include "audiooutput.h"
+#include "mediaresampler.h"
 
 extern "C" {
 #include <libavformat/avio.h>
@@ -29,67 +30,63 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 };
 
-MediaDecoder::MediaDecoder(MediaPlaylist *list, QObject *parent) :
-  QObject(parent),
-  m_list(list),
-  m_audio(new AudioOutput(this)) {
+MediaDecoder::MediaDecoder(QObject *parent) :
+  QThread(parent),
+  m_audio(0),
+  m_stop(false) {
 
-  QObject::connect(m_audio, SIGNAL(finished()), this, SIGNAL(audioFinished()));
-  QObject::connect(m_audio, SIGNAL(error()), this, SIGNAL(audioError()));
-  QObject::connect(m_audio, SIGNAL(positionChanged(int)),
-		   this, SLOT(audioPositionChanged(int)));
 }
 
 MediaDecoder::~MediaDecoder() {
 
 }
 
-void MediaDecoder::start() {
-  m_media = m_list->media();
+void MediaDecoder::run() {
+  while (true) {
+    if (stopRequested()) {
+      return;
+    }
 
-  QMetaObject::invokeMethod(this, "process", Qt::QueuedConnection);
-}
+    Media *media = MediaDecoder::media();
+    if (!media) {
+      // We are done.
+      return;
+    }
 
-void MediaDecoder::process() {
-  if (m_media.isEmpty()) {
-    return;
-  }
+    QByteArray data = media->data();
 
-  // If we have a media then we decode it.
-  Media *media = m_media.takeFirst();
-  QByteArray data = m_list->recitation()->data(media);
+    if (data.isEmpty()) {
+      play(AudioBuffer(AudioBuffer::Error));
+      return;
+    }
 
-  if (data.isEmpty()) {
-    emit error();
-    return;
-  }
+    AVFormatContext *ctx = context(data);
+    if (!ctx) {
+      play(AudioBuffer(AudioBuffer::Error));
+      return;
+    }
 
-  AVFormatContext *ctx = context(data);
-  if (!ctx) {
-    emit error();
-    return;
-  }
+    if (!decode(ctx, media)) {
+      cleanup(ctx);
+      play(AudioBuffer(AudioBuffer::Error));
+      return;
+    }
 
-  if (!decode(ctx, media)) {
     cleanup(ctx);
-    emit error();
-    return;
-  }
 
-  cleanup(ctx);
+    if (m_media.isEmpty()) {
+      // Signal EOS!
+      play(AudioBuffer(AudioBuffer::Eos));
+    }
 
-  if (m_media.isEmpty()) {
-    // Signal EOS!
-    m_audio->queue(AudioBuffer());
-    emit finished();
-  }
-  else {
-    QMetaObject::invokeMethod(this, "process", Qt::QueuedConnection);
+    if (stopRequested()) {
+      return;
+    }
   }
 }
 
 bool MediaDecoder::decode(AVFormatContext *ctx, const Media *media) {
-  AVCodecContext* codec_ctx = ctx->streams[0]->codec;
+  AVCodecContext *codec_ctx = ctx->streams[0]->codec;
   codec_ctx->request_sample_fmt = AV_SAMPLE_FMT_S16;
 
   AVCodec* codec = avcodec_find_decoder(codec_ctx->codec_id);
@@ -106,6 +103,13 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media *media) {
     return false;
   }
 
+  QScopedPointer<MediaResampler> resampler(MediaResampler::create(codec_ctx));
+  if (!resampler) {
+    play(AudioBuffer(AudioBuffer::Error));
+    avcodec_close(codec_ctx);
+    return false;
+  }
+
   AVPacket pkt;
   av_init_packet(&pkt);
   int buffer_size = AVCODEC_MAX_AUDIO_FRAME_SIZE + FF_INPUT_BUFFER_PADDING_SIZE;
@@ -113,11 +117,11 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media *media) {
   pkt.data = buffer;
   pkt.size = buffer_size;
 
-  AudioBuffer b;
+  AudioBuffer b(AudioBuffer::Normal);
   b.media = media;
 
   while (av_read_frame(ctx, &pkt) >= 0) {
-    if (!decode(codec_ctx, &pkt, b)) {
+    if (!decode(codec_ctx, &pkt, b, resampler.data())) {
       avcodec_close(codec_ctx);
       return false;
     }
@@ -134,12 +138,13 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media *media) {
     return false;
   }
 
-  m_audio->queue(b);
+  play(b);
 
   return true;
 }
 
-bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt, AudioBuffer& buffer) {
+bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt,
+			  AudioBuffer& buffer, MediaResampler *resampler) {
   AVFrame *frame = avcodec_alloc_frame();
   if (!frame) {
     return false;
@@ -162,15 +167,14 @@ bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt, AudioBuffer& buffe
       int data_size = av_samples_get_buffer_size(NULL, ctx->channels,
 						 frame->nb_samples,
 						 ctx->sample_fmt, 1);
-      if ((buffer.rate > 0 && buffer.rate != frame->sample_rate) ||
-	  (buffer.channels > 0 && buffer.channels != ctx->channels)) {
+
+      QByteArray data;
+      if (!resampler->resample(frame, data)) {
 	avcodec_free_frame(&frame);
 	return false;
       }
 
-      buffer.rate = frame->sample_rate;
-      buffer.channels = ctx->channels;
-      buffer.data += QByteArray(reinterpret_cast<char *>(frame->data[0]), data_size);
+      buffer.data.append(data);
     }
 
     pkt->size -= len;
@@ -205,15 +209,9 @@ void MediaDecoder::cleanup(AVFormatContext *ctx) {
 }
 
 void MediaDecoder::stop() {
-  if (!m_media.isEmpty()) {
-    // We have media which means that finished() has not been emitted
-    // If we don't have media then we either stopped decoding and emitted finished()
-    // already or we have no media which is impossible to happen.
-    m_media.clear();
-    emit finished();
-  }
-
-  m_audio->stop();
+  QMutexLocker locker(&m_mutex);
+  m_stop = true;
+  m_cond.wakeOne();
 }
 
 int read_qbuffer(void *opaque, uint8_t *buf, int buf_size) {
@@ -305,13 +303,45 @@ AVFormatContext *MediaDecoder::context(const QByteArray& data) {
   return 0;
 }
 
-void MediaDecoder::policyAcquired() {
-  m_audio->start();
+void MediaDecoder::addMedia(Media *media) {
+  QMutexLocker locker(&m_mutex);
+
+  m_media << media;
+  m_cond.wakeOne();
 }
 
-void MediaDecoder::audioPositionChanged(int index) {
-  int chapter, verse;
-  if (m_list->signalMedia(index, chapter, verse)) {
-    emit positionChanged(chapter, verse);
+Media *MediaDecoder::media() {
+  QMutexLocker locker(&m_mutex);
+
+  if (m_media.isEmpty()) {
+    m_cond.wait(&m_mutex);
+  }
+
+  if (!m_media.isEmpty()) {
+    return m_media.takeFirst();
+  }
+
+  return 0;
+}
+
+bool MediaDecoder::stopRequested() {
+  QMutexLocker locker(&m_mutex);
+  return m_stop;
+}
+
+void MediaDecoder::setOutput(AudioOutput *audio) {
+  QMutexLocker locker(&m_audioMutex);
+  m_audio = audio;
+  m_audio->play(m_buffers);
+  m_buffers.clear();
+}
+
+void MediaDecoder::play(const AudioBuffer& buffer) {
+  QMutexLocker locker(&m_audioMutex);
+  if (m_audio) {
+    m_audio->play(buffer);
+  }
+  else {
+    m_buffers << buffer;
   }
 }

@@ -29,13 +29,14 @@ MediaPlayer::MediaPlayer(QObject *parent) :
   QObject(parent),
   m_list(0),
   m_decoder(0),
-  m_policy(new AudioPolicy(this)) {
+  m_policy(new AudioPolicy(this)),
+  m_audio(0) {
 
   QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
   QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
   QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
 
-  QObject::connect(this, SIGNAL(error()), this, SLOT(stop()), Qt::QueuedConnection);
+  QObject::connect(this, SIGNAL(error()), this, SLOT(stop()));
 }
 
 MediaPlayer::~MediaPlayer() {
@@ -44,25 +45,16 @@ MediaPlayer::~MediaPlayer() {
 
 void MediaPlayer::start(MediaPlaylist *list) {
   m_list = list;
-  m_list->start();
-
-  if (m_decoder) {
-    return;
-  }
 
   if (!m_policy->acquire()) {
     emit error();
     return;
   }
 
+  QObject::connect(m_list, SIGNAL(mediaAvailable(Media *)),
+		   this, SLOT(mediaAvailable(Media *)));
+
   m_decoder = new MediaDecoder(m_list);
-
-  QObject::connect(m_decoder, SIGNAL(error()), this, SIGNAL(error()));
-  QObject::connect(m_decoder, SIGNAL(audioError()), this, SIGNAL(error()));
-  QObject::connect(m_decoder, SIGNAL(audioFinished()), this, SLOT(stop()), Qt::QueuedConnection);
-
-  QObject::connect(m_decoder, SIGNAL(positionChanged(int, int)),
-		   this, SIGNAL(positionChanged(int, int)));
 
   m_list->start();
 
@@ -72,14 +64,20 @@ void MediaPlayer::start(MediaPlaylist *list) {
 }
 
 void MediaPlayer::stop() {
-  // We need to break the loop.
-  if (m_decoder) {
-    MediaDecoder *decoder = m_decoder;
-    m_decoder = 0;
+  if (m_audio) {
+    m_audio->stop();
+    delete m_audio;
+    m_audio = 0;
+  }
 
-    decoder->stop();
-    delete decoder;
-    decoder = 0;
+  if (m_decoder) {
+    m_decoder->stop();
+    while (m_decoder->isRunning()) {
+      m_decoder->wait(20);
+    }
+
+    delete m_decoder;
+    m_decoder = 0;
   }
 
   if (m_policy) {
@@ -100,8 +98,16 @@ bool MediaPlayer::isPlaying() const {
 }
 
 void MediaPlayer::policyAcquired() {
-  if (m_decoder) {
-    m_decoder->policyAcquired();
+  m_audio = new AudioOutput(this);
+  QObject::connect(m_audio, SIGNAL(positionChanged(int)),
+		   this, SLOT(audioPositionChanged(int)));
+
+  QObject::connect(m_audio, SIGNAL(error()), this, SIGNAL(error()));
+  QObject::connect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
+
+  m_decoder->setOutput(m_audio);
+  if (!m_audio->start()) {
+    emit error();
   }
 }
 
@@ -116,5 +122,16 @@ void MediaPlayer::policyLost() {
   if (m_decoder) {
     stop();
     emit error();
+  }
+}
+
+void MediaPlayer::mediaAvailable(Media *media) {
+  m_decoder->addMedia(media);
+}
+
+void MediaPlayer::audioPositionChanged(int index) {
+  int chapter, verse;
+  if (m_list->signalMedia(index, chapter, verse)) {
+    emit positionChanged(chapter, verse);
   }
 }

@@ -21,7 +21,6 @@
 
 AudioOutput::AudioOutput(QObject *parent) :
   QObject(parent),
-  m_media(0),
   m_pulse(0) {
 
 }
@@ -32,45 +31,73 @@ AudioOutput::~AudioOutput() {
   delete m_pulse;
 }
 
-void AudioOutput::queue(AudioBuffer buffer) {
-  if (m_pulse) {
-    m_pulse->play(buffer);
-  }
-  else {
-    m_buffers << buffer;
-  }
-}
-
 void AudioOutput::stop() {
-  m_buffers.clear();
-
   if (m_pulse) {
+    m_mutex.lock();
+    m_buffers.clear();
+    m_buffers << AudioBuffer(AudioBuffer::Eos);
+    m_cond.wakeOne();
+    m_mutex.unlock();
     m_pulse->stop();
+    delete m_pulse;
+    m_pulse = 0;
   }
-
-  emit finished();
 }
 
-void AudioOutput::start() {
+bool AudioOutput::start() {
   if (!m_pulse) {
     m_pulse = new Pulse(this);
+    QObject::connect(m_pulse, SIGNAL(positionChanged(int)),
+		     this, SLOT(pulsePositionChanged(int)), Qt::QueuedConnection);
 
     QObject::connect(m_pulse, SIGNAL(finished()), this, SIGNAL(finished()));
-    QObject::connect(m_pulse, SIGNAL(positionChanged(int)),
-		     this, SIGNAL(positionChanged(int)));
+    QObject::connect(m_pulse, SIGNAL(error()), this, SIGNAL(error()));
 
     if (!m_pulse->connect()) {
       delete m_pulse;
       m_pulse = 0;
 
-      emit error();
-      return;
+      return false;
     }
+  }
 
-    foreach (AudioBuffer buffer, m_buffers) {
-      m_pulse->play(buffer);
-    }
+  return true;
+}
 
-    m_buffers.clear();
+void AudioOutput::play(const QList<AudioBuffer>& buffers) {
+  QMutexLocker locker(&m_mutex);
+  m_buffers = buffers;
+  m_cond.wakeOne();
+}
+
+void AudioOutput::play(const AudioBuffer& buffer) {
+  QMutexLocker locker(&m_mutex);
+  m_buffers << buffer;
+  m_cond.wakeOne();
+}
+
+AudioBuffer AudioOutput::buffer() {
+  QMutexLocker locker(&m_mutex);
+  if (m_buffers.isEmpty()) {
+    m_cond.wait(&m_mutex);
+  }
+
+  if (m_buffers.isEmpty()) {
+    return AudioBuffer(AudioBuffer::Eos);
+  }
+
+  AudioBuffer b = m_buffers.takeFirst();
+
+  if (b.state == AudioBuffer::Error) {
+    emit error();
+    return AudioBuffer(AudioBuffer::Eos);
+  }
+
+  return b;
+}
+
+void AudioOutput::pulsePositionChanged(int index) {
+  if (m_pulse) {
+    emit positionChanged(index);
   }
 }

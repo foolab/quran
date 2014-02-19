@@ -19,17 +19,26 @@
 #define AUDIO_OUTPUT_H
 
 #include <QObject>
+#include <QMutex>
+#include <QWaitCondition>
 
 class Media;
 class Pulse;
 
 class AudioBuffer {
 public:
- AudioBuffer() : rate(0), channels(0), media(0) {}
-  int rate;
-  unsigned short channels;
+  typedef enum {
+    Normal,
+    Eos,
+    Error,
+  } State;
+
+ AudioBuffer(const State& s) : media(0), state(s) {}
+
   QByteArray data;
   const Media *media;
+
+  State state;
 };
 
 class AudioOutput : public QObject {
@@ -39,20 +48,27 @@ public:
   AudioOutput(QObject *parent = 0);
   ~AudioOutput();
 
-  void start();
+  bool start();
   void stop();
 
-  void queue(AudioBuffer buffer);
+  void play(const QList<AudioBuffer>& buffers);
+  void play(const AudioBuffer& buffer);
+
+  AudioBuffer buffer();
 
 signals:
   void finished();
   void error();
   void positionChanged(int index);
 
+private slots:
+  void pulsePositionChanged(int index);
+
 private:
+  QMutex m_mutex;
+  QWaitCondition m_cond;
   QList<AudioBuffer> m_buffers;
 
-  const Media *m_media;
   Pulse *m_pulse;
 };
 

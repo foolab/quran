@@ -16,8 +16,10 @@
  */
 
 #include "media.h"
+#include "recitation.h"
 
-Media::Media(int chapter, int verse, int index, const QUrl& url) :
+Media::Media(  Recitation *recitation, int chapter, int verse, int index, const QUrl& url) :
+  m_recitation(recitation),
   m_chapter(chapter),
   m_verse(verse),
   m_index(index),
@@ -43,4 +45,9 @@ int Media::index() const {
 
 QUrl Media::url() const {
   return m_url;
+}
+
+QByteArray Media::data() const {
+  // Note that this can be called from a different thread
+  return m_recitation->data(this);
 }
