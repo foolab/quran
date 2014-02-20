@@ -21,8 +21,7 @@
 
 TranslationModel::TranslationModel(QObject *parent) :
   QAbstractListModel(parent),
-  m_translations(0),
-  m_categories(false) {
+  m_translations(0) {
 
   QHash<int, QByteArray> roles;
   roles[IdRole] = "translationId";
@@ -49,8 +48,7 @@ QVariant TranslationModel::data(const QModelIndex& index, int role) const {
       return m_ids[index.row()];
     }
     else if (role == NameRole) {
-      return m_categories ? m_translations->categoryName(m_ids[index.row()]) :
-	m_translations->translationName(m_ids[index.row()]);
+      return m_translations->translationName(m_ids[index.row()]);
     }
   }
 
@@ -110,6 +108,10 @@ void TranslationModel::setIds(const QList<int>& ids) {
   }
 }
 
+QList<int> TranslationModel::ids() const {
+  return m_ids;
+}
+
 InstalledTranslationsModel::InstalledTranslationsModel(QObject *parent) :
   TranslationModel(parent) {
 
@@ -153,11 +155,20 @@ void ActiveTranslationsModel::activeChanged() {
 TranslationCategoriesModel::TranslationCategoriesModel(QObject *parent) :
   TranslationModel(parent) {
 
-  m_categories = true;
 }
 
 TranslationCategoriesModel::~TranslationCategoriesModel() {
 
+}
+
+QVariant TranslationCategoriesModel::data(const QModelIndex& index, int role) const {
+  QList<int> ids = TranslationModel::ids();
+
+  if (role == NameRole && index.row() < ids.size()) {
+    return m_translations->categoryName(ids[index.row()]);
+  }
+
+  return TranslationModel::data(index, role);
 }
 
 void TranslationCategoriesModel::translationsUpdated() {

@@ -52,13 +52,11 @@ protected:
   virtual void translationsUpdated() = 0;
 
   void setIds(const QList<int>& ids);
+  QList<int> ids() const;
 
   Translations *m_translations;
-  bool m_categories;
 
 private:
-  void clear();
-
   QList<int> m_ids;
 };
 
@@ -96,6 +94,8 @@ class TranslationCategoriesModel : public TranslationModel {
 public:
   TranslationCategoriesModel(QObject *parent = 0);
   ~TranslationCategoriesModel();
+
+  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
 protected:
   void translationsUpdated();
