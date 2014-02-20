@@ -1,5 +1,6 @@
 // -*- qml -*-
 import QtQuick 1.0
+import Quran 1.0
 
 Page {
 	    id: recitationsListPage
@@ -23,7 +24,7 @@ Page {
 
                         Label {
                                 id: label
-                                text: _recitations.recitationName(modelData);
+                                text: name
                                 width: parent.width
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
@@ -45,7 +46,10 @@ Page {
                 anchors.leftMargin: 16
                 anchors.right: parent.right
                 anchors.rightMargin: 16
-                model: _recitations.installed
+                model: RecitationModel {
+                        recitations: _recitations
+                }
+
                 delegate: recitationssDelegate
         }
 

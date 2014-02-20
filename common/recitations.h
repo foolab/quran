@@ -49,7 +49,7 @@ public:
 
   QList<int> installed() const;
 
-  Q_INVOKABLE QString recitationName(int id);
+  QString recitationName(int id);
 
   Q_INVOKABLE bool load(int id);
   Q_INVOKABLE bool loadDefault();
