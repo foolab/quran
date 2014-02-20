@@ -1,3 +1,3 @@
-for i in  `wget  "http://zekr.org/resources.html" -q -O - | grep online.properties | cut -d \" -f 2 | sed -e 's/^/http:\/\/zekr.org\//'`; do f=`basename  $i` ; rm $f && wget -c $i -q -O $f && echo "orig_url=$i" >> $f; done
+for i in  `wget  "http://zekr.org/resources.html" -q -O - | grep online.properties | cut -d \" -f 2 | sed -e 's/^/http:\/\/zekr.org\//'`; do f=`basename  $i` ; rm -f $f && wget -c $i -q -O $f && echo "orig_url=$i" >> $f; done
 
 run python gen.py *.properties > recite.ini
