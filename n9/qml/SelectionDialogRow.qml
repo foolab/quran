@@ -6,15 +6,17 @@ Rectangle {
         width: view.width
         height: label.height * 2
         property alias pressed: mouse.pressed
-        color: mouse.pressed ? _colors.pressedColor : index == dialog.selectedIndex ? _colors.selectionBackgroundColor : _colors.backgroundColor
+        color: mouse.pressed ? _colors.pressedColor : selected ? _colors.selectionBackgroundColor : _colors.backgroundColor
         property alias textHorizontalAlignment: label.horizontalAlignment
+        property bool selected: index == dialog.selectedIndex
+        signal clicked()
 
         Label {
                 id: label
                 width: parent.width - 20
                 text: name
                 anchors.verticalCenter: parent.verticalCenter
-                color: mouse.pressed ? _colors.pressedTextColor : index == dialog.selectedIndex ? _colors.selectionTextColor : _colors.textColor
+                color: mouse.pressed ? _colors.pressedTextColor : rect.selected ? _colors.selectionTextColor : _colors.textColor
                 x: 10
         }
 
@@ -24,6 +26,7 @@ Rectangle {
                 onClicked: {
                         __hack = true;
                         selectedIndex = index;
+                        rect.clicked()
                         __hack = false;
                         accept();
                 }
