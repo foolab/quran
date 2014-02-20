@@ -34,6 +34,7 @@ Page {
 
                 MenuLayout {
                         MenuItem { text: qsTr("Reset settings"); onClicked: { menu.close(); resetDialog.open(); } }
+                        MenuItem { text: qsTr("Manage translations"); onClicked: { menu.close(); pageStack.push("TranslationsListPage"); } }
                 }
         }
 
@@ -151,13 +152,6 @@ Page {
                                 subtitle: entries[_settings.translationMode].name;
                                 selectedIndex: _settings.translationMode
                                 onAccepted: _settings.translationMode = selectedIndex;
-                       }
-
-                        SettingsPageEntry {
-                                id: translations
-                                title: qsTr("Manage translations")
-                                onClicked: pageStack.push("TranslationsListPage");
-                                subtitle: _translations.installedCount + qsTr(" installed.");
                        }
 
                         SettingsPageEntry {
