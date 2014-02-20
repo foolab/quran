@@ -17,6 +17,7 @@
 
 #include "models.h"
 #include "translations.h"
+#include "recitations.h"
 #include <QDebug>
 
 TranslationModel::TranslationModel(QObject *parent) :
@@ -203,4 +204,109 @@ void TranslationCollection::translationsUpdated() {
   if (m_translations && m_language != -1) {
     setIds(m_translations->translations(m_language));
   }
+}
+
+RecitationModel::RecitationModel(QObject *parent) :
+  QAbstractListModel(parent),
+  m_recitations(0) {
+
+  QHash<int, QByteArray> roles;
+  roles[IdRole] = "recitationId";
+  roles[NameRole] = "name";
+
+  setRoleNames(roles);
+}
+
+RecitationModel::~RecitationModel() {
+
+}
+
+int RecitationModel::rowCount(const QModelIndex& parent) const {
+  if (!parent.isValid()) {
+    return m_ids.size();
+  }
+
+  return 0;
+}
+
+QVariant RecitationModel::data(const QModelIndex& index, int role) const {
+  if ((role == NameRole || role == IdRole) && index.row() < m_ids.size()) {
+    if (role == IdRole) {
+      return m_ids[index.row()];
+    }
+    else if (role == NameRole) {
+      return m_recitations->recitationName(m_ids[index.row()]);
+    }
+  }
+
+  return QVariant();
+
+}
+
+Recitations *RecitationModel::recitations() const {
+  return m_recitations;
+}
+
+void RecitationModel::setRecitations(Recitations *recitations) {
+  if (m_recitations != recitations) {
+
+    m_recitations = recitations;
+
+    emit recitationsChanged();
+
+    recitationsUpdated();
+  }
+}
+
+void RecitationModel::addId(int id) {
+  if (m_ids.indexOf(id) != -1) {
+    qCritical() << "id already known" << id;
+    return;
+  }
+
+  beginInsertRows(QModelIndex(), m_ids.size(), m_ids.size());
+  m_ids << id;
+  endInsertRows();
+}
+
+void RecitationModel::removeId(int id) {
+  int index = m_ids.indexOf(id);
+  if (index == -1) {
+    qCritical() << "unknown id" << id;
+    return;
+  }
+
+  beginRemoveRows(QModelIndex(), index, index);
+  m_ids.removeAt(index);
+  endRemoveRows();
+}
+
+void RecitationModel::setIds(const QList<int>& ids) {
+  if (!m_ids.isEmpty()) {
+    beginRemoveRows(QModelIndex(), 0, m_ids.size() - 1);
+    m_ids.clear();
+    endRemoveRows();
+  }
+
+  if (!ids.isEmpty()) {
+    beginInsertRows(QModelIndex(), 0, ids.size() - 1);
+    m_ids = ids;
+    endInsertRows();
+  }
+}
+
+QList<int> RecitationModel::ids() const {
+  return m_ids;
+}
+
+void RecitationModel::recitationsUpdated() {
+  QObject::connect(m_recitations, SIGNAL(added(int)), this, SLOT(addId(int)));
+  QObject::connect(m_recitations, SIGNAL(removed(int)), this, SLOT(removeId(int)));
+  QObject::connect(m_recitations, SIGNAL(refreshed()), this, SLOT(refresh()));
+
+  refresh();
+}
+
+void RecitationModel::refresh() {
+  setIds(m_recitations->installed());
 }

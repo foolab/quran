@@ -21,6 +21,7 @@
 #include <QAbstractListModel>
 
 class Translations;
+class Recitations;
 
 class TranslationModel : public QAbstractListModel {
   Q_OBJECT
@@ -120,6 +121,46 @@ protected:
 
 private:
   int m_language;
+};
+
+
+class RecitationModel : public QAbstractListModel {
+  Q_OBJECT
+  Q_PROPERTY(Recitations *recitations READ recitations WRITE setRecitations NOTIFY recitationsChanged);
+
+public:
+  enum Roles {
+    IdRole = Qt::UserRole + 1,
+    NameRole,
+  };
+
+  RecitationModel(QObject *parent = 0);
+  virtual ~RecitationModel();
+
+  int rowCount(const QModelIndex& parent = QModelIndex()) const;
+  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+
+  Recitations *recitations() const;
+  void setRecitations(Recitations *recitations);
+
+signals:
+  void recitationsChanged();
+
+protected slots:
+  void addId(int id);
+  void removeId(int id);
+  void refresh();
+
+protected:
+  void recitationsUpdated();
+
+  void setIds(const QList<int>& ids);
+  QList<int> ids() const;
+
+  Recitations *m_recitations;
+
+private:
+  QList<int> m_ids;
 };
 
 #endif /* MODELS_H */

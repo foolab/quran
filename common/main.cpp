@@ -120,6 +120,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<ActiveTranslationsModel>("Quran", 1, 0, "ActiveTranslationsModel");
   qmlRegisterType<TranslationCategoriesModel>("Quran", 1, 0, "TranslationCategoriesModel");
   qmlRegisterType<TranslationCollection>("Quran", 1, 0, "TranslationCollection");
+  qmlRegisterType<RecitationModel>("Quran", 1, 0, "RecitationModel");
   qmlRegisterType<BookmarksModel>("Quran", 1, 0, "BookmarksModel");
   qmlRegisterType<BookmarkItem>("Quran", 1, 0, "BookmarkItem");
   qmlRegisterType<QuranViewModel2>("Quran", 1, 0, "QuranViewModel2");

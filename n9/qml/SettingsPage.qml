@@ -207,7 +207,7 @@ Page {
                                 id: recitationsEntry
                                 title: qsTr("Show recitations")
                                 onClicked: pageStack.push("RecitationsListPage");
-                                subtitle: _recitations.installed.length + qsTr(" installed.");
+                                subtitle: qsTr("%1 installed.").arg(_recitations.installedCount);
                         }
 
                         SettingsPageEntry {

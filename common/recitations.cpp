@@ -114,15 +114,8 @@ int Recitations::current() const {
   return m_current;
 }
 
-QVariantList Recitations::installed() const {
-  QList<int> list = m_installed.keys();
-
-  QVariantList ret;
-  foreach (int r, list) {
-    ret << r;
-  }
-
-  return ret;
+QList<int> Recitations::installed() const {
+  return m_installed.keys();
 }
 
 void Recitations::refresh() {
@@ -145,8 +138,8 @@ void Recitations::refresh() {
     }
   }
 
-
-  emit installedChanged();
+  emit refreshed();
+  emit installedCountChanged();
 }
 
 QString Recitations::recitationName(int id) {
@@ -287,4 +280,8 @@ void Recitations::playPart(int part) {
   stop();
 
   m_player->start(MediaPlaylist::partList(m_data, m_recitation, m_downloader, part, m_player));
+}
+
+int Recitations::installedCount() const {
+  return m_installed.size();
 }

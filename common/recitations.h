@@ -34,7 +34,7 @@ class Downloader;
 class Recitations : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(QVariantList installed READ installed NOTIFY installedChanged);
+  Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
   Q_PROPERTY(int current READ current NOTIFY currentChanged);
   Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY playingChanged);
   Q_PROPERTY(int chapter READ chapter NOTIFY chapterChanged);
@@ -47,7 +47,7 @@ public:
   Recitations(QObject *parent = 0);
   ~Recitations();
 
-  QVariantList installed() const;
+  QList<int> installed() const;
 
   Q_INVOKABLE QString recitationName(int id);
 
@@ -70,6 +70,8 @@ public:
   Downloader *downloader() const;
   void setDownloader(Downloader *downloader);
 
+  int installedCount() const;
+
 public slots:
   void refresh();
   void play(int chapter, int verse);
@@ -80,13 +82,16 @@ public slots:
   void stop();
 
 signals:
-  void installedChanged();
   void currentChanged();
   void playingChanged();
   void error(const QString& msg);
   void positionChanged(int chapter, int verse);
   void verseChanged();
   void chapterChanged();
+  void installedCountChanged();
+  void added(int id);
+  void removed(int id);
+  void refreshed();
 
   void settingsChanged();
   void downloaderChanged();
