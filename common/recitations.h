@@ -109,7 +109,7 @@ private:
   Settings *m_settings;
   DataProvider *m_data;
 
-  QMap<int, Recitation *> m_installed;
+  QList<Recitation *> m_installed;
 
   MediaPlayer *m_player;
   Recitation *m_recitation;

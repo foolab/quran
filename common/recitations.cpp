@@ -41,7 +41,7 @@ Recitations::~Recitations() {
     m_player->stop();
   }
 
-  qDeleteAll(m_installed.values());
+  qDeleteAll(m_installed);
   m_installed.clear();
 
   if (m_player) {
@@ -115,26 +115,30 @@ int Recitations::current() const {
 }
 
 QList<int> Recitations::installed() const {
-  return m_installed.keys();
+  QList<int> all;
+
+  for (int x = 0; x < m_installed.size(); x++) {
+    all << x;
+  }
+
+  return all;
 }
 
 void Recitations::refresh() {
   QDir dir(m_settings->recitationsDir());
   dir.mkpath(".");
 
-  qDeleteAll(m_installed.values());
+  qDeleteAll(m_installed);
   m_installed.clear();
 
   QStringList entries(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
 
   entries += dir.entryList(QStringList() << "*.zip", QDir::Files | QDir::NoDotAndDotDot);
 
-  int x = 0;
-
   foreach (const QString& entry, entries) {
     Recitation *r = Recitation::create(entry, dir.filePath(entry));
     if (r) {
-      m_installed.insert(x++, r);
+      m_installed << r;
     }
   }
 
@@ -143,15 +147,11 @@ void Recitations::refresh() {
 }
 
 QString Recitations::recitationName(int id) {
-  if (m_installed.contains(id)) {
-    return m_installed[id]->name();
-  }
-
-  return QString();
+  return id >= m_installed.size() ? QString() : m_installed[id]->name();
 }
 
 bool Recitations::load(int id) {
-  if (m_installed.isEmpty() || m_installed.keys().indexOf(id) == -1) {
+  if (id >= m_installed.size()) {
     return false;
   }
 
@@ -186,15 +186,14 @@ bool Recitations::loadDefault() {
   }
 
   QString id = m_settings->defaultRecitation();
-  QList<int> keys = m_installed.keys();
 
-  foreach (int val, keys) {
-    if (m_installed[val]->id() == id) {
-      return load(val);
+  for (int x = 0; x < m_installed.size(); x++) {
+    if (m_installed[x]->id() == id) {
+      return load(x);
     }
   }
 
-  return load(keys[0]);
+  return load(0);
 }
 
 void Recitations::unload() {
