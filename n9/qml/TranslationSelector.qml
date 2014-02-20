@@ -9,16 +9,9 @@ SelectionDialog {
                 translations: _translations
         }
 
-        delegate: TranslationLabel {
-                width: dialog.width
-                tid: translationId
-                property bool selected: tid == _translations.current
-                color: pressed ? _colors.pressedColor : selected ? _colors.selectionBackgroundColor : _colors.backgroundColor
-                textColor: pressed ? _colors.pressedTextColor : selected ? _colors.selectionTextColor : _colors.textColor
-                onClicked: {
-                        translationsManager.changeTranslation(translationId);
-                        dialog.accept();
-                }
+        delegate: SelectionDialogRow {
+                selected: translationId == _translations.current
+                onClicked: translationsManager.changeTranslation(translationId);
         }
 
         titleText: qsTr("Choose translation");
