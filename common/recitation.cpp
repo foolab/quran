@@ -310,7 +310,7 @@ Recitation *Recitation::create(const QString& id, const QString& dir) {
   }
 
   if (!r) {
-    return 0;
+    r = RecitationOnline::create(id, dir);
   }
 
   if (r->isValid()) {
