@@ -35,6 +35,12 @@ Page {
                 MenuLayout {
                         MenuItem { text: qsTr("Reset settings"); onClicked: { menu.close(); resetDialog.open(); } }
                         MenuItem { text: qsTr("Manage translations"); onClicked: { menu.close(); pageStack.push("TranslationsListPage"); } }
+
+
+                        MenuItem { text: qsTr("Manage recitations"); onClicked: { menu.close(); pageStack.push("RecitationsListPage"); } }
+
+
+
                 }
         }
 
@@ -202,13 +208,6 @@ Page {
                                 selectedIndex: _settings.onlineRecitations
                                 onAccepted: _settings.onlineRecitations = (selectedIndex != 0);
                        }
-
-                        SettingsPageEntry {
-                                id: recitationsEntry
-                                title: qsTr("Show recitations")
-                                onClicked: pageStack.push("RecitationsListPage");
-                                subtitle: qsTr("%1 installed.").arg(_recitations.installedCount);
-                        }
 
                         SettingsPageEntry {
                                 id: flipToStopRecitation
