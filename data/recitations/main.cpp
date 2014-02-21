@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
     s.beginGroup(group);
     QString id = group;
     QString reciter = s.value("reciter").toString();
-    QString translated_recitor = s.value("reciterArabic").toString();
+    QString translated_recitor = QString::fromUtf8(s.value("reciterArabic").toByteArray());
     QString quality = s.value("quality").toString();
     QString url = s.value("downloadUrl").toString();
     QString language = s.value("language").toString();
