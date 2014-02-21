@@ -21,10 +21,13 @@
 #include <QString>
 
 class Media;
+class QUrl;
 
 class Recitation {
 public:
   static Recitation *create(const QString& id, const QString& dir);
+  static Recitation *createOnline(const QString& name, const QString& id,
+				  const QString& dir, const QUrl& url);
 
   virtual ~Recitation();
 
@@ -37,6 +40,11 @@ public:
   virtual Media *mediaUrl(int chapter, int verse, int index) = 0;
 
   virtual QByteArray data(const Media *media);
+
+  virtual bool install();
+  virtual bool enable();
+  virtual bool disable();
+  virtual bool isOnline();
 
 protected:
   Recitation(const QString& name, const QString& id, const QString& dir);

@@ -31,6 +31,22 @@ Recitation::~Recitation() {
 
 }
 
+bool Recitation::install() {
+  return false;
+}
+
+bool Recitation::enable() {
+  return false;
+}
+
+bool Recitation::disable() {
+  return false;
+}
+
+bool Recitation::isOnline() {
+  return false;
+}
+
 QString Recitation::id() const {
   return m_id;
 }
@@ -114,13 +130,15 @@ public:
     }
 
     QSettings s(path, QSettings::IniFormat);
-    QUrl url = s.value("url/url").toUrl();
+    QUrl url = s.value("info/url").toUrl();
+    QString name = s.value("info/name").toString();
+    bool enabled = s.value("info/enabled", false).toBool();
 
-    if (url.isEmpty() || !url.isValid()) {
+    if (name.isEmpty() || url.isEmpty() || !url.isValid() || !enabled) {
       return 0;
     }
 
-    return new RecitationOnline(id, dir, url);
+    return new RecitationOnline(name, id, dir, url);
   }
 
   Media *mediaUrl(int chapter, int verse, int index) {
@@ -134,9 +152,66 @@ public:
     return new Media(this, chapter, verse, index, url);
   }
 
+  bool install() {
+    QDir d(dir());
+    QString path = d.filePath(ONLINE_INFO_FILE);
+
+    QSettings s(path, QSettings::IniFormat);
+    s.setValue("info/url", m_url);
+    s.setValue("info/name", name());
+    s.setValue("info/enabled", true);
+
+    s.sync();
+
+    if (s.status() == QSettings::NoError) {
+      return true;
+    }
+
+    QFile::remove(path);
+
+    return false;
+  }
+
+  bool enable() {
+    QDir d(dir());
+    QString path = d.filePath(ONLINE_INFO_FILE);
+
+    QSettings s(path, QSettings::IniFormat);
+    s.setValue("info/enabled", true);
+
+    s.sync();
+
+    if (s.status() == QSettings::NoError) {
+      return true;
+    }
+
+    return false;
+  }
+
+  bool disable() {
+    QDir d(dir());
+    QString path = d.filePath(ONLINE_INFO_FILE);
+
+    QSettings s(path, QSettings::IniFormat);
+    s.setValue("info/enabled", false);
+
+    s.sync();
+
+    if (s.status() == QSettings::NoError) {
+      return true;
+    }
+
+    return false;
+  }
+
+  bool isOnline() {
+    return true;
+  }
+
 protected:
-  RecitationOnline(const QString& name, const QString& dir, const QUrl& url) :
-    Recitation(name, name, dir) {
+  friend class Recitation;
+  RecitationOnline(const QString& name, const QString& id, const QString& dir, const QUrl& url) :
+    Recitation(name, id, dir) {
     m_url = url;
   }
 
@@ -313,10 +388,19 @@ Recitation *Recitation::create(const QString& id, const QString& dir) {
     r = RecitationOnline::create(id, dir);
   }
 
+  if (!r) {
+    return 0;
+  }
+
   if (r->isValid()) {
     return r;
   }
 
   delete r;
   return 0;
+}
+
+Recitation *Recitation::createOnline(const QString& name, const QString& id,
+				     const QString& dir, const QUrl& url) {
+  return new RecitationOnline(name, id, dir, url);
 }

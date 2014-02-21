@@ -182,6 +182,10 @@ PageStackWindow {
                 id: playerError
         }
 
+        InfoBanner {
+                id: banner
+        }
+
         Connections {
                 target: _recitations
                 onError: { playerError.text = msg; playerError.show(); }

@@ -18,6 +18,7 @@
 #include "models.h"
 #include "translations.h"
 #include "recitations.h"
+#include "recitation.h"
 #include <QDebug>
 
 TranslationModel::TranslationModel(QObject *parent) :
@@ -213,6 +214,7 @@ RecitationModel::RecitationModel(QObject *parent) :
   QHash<int, QByteArray> roles;
   roles[IdRole] = "recitationId";
   roles[NameRole] = "name";
+  roles[OnlineRole] = "isOnline";
 
   setRoleNames(roles);
 }
@@ -230,17 +232,19 @@ int RecitationModel::rowCount(const QModelIndex& parent) const {
 }
 
 QVariant RecitationModel::data(const QModelIndex& index, int role) const {
-  if ((role == NameRole || role == IdRole) && index.row() < m_ids.size()) {
-    if (role == IdRole) {
+  if (index.row() < m_ids.size()) {
+    switch (role) {
+    case IdRole:
       return m_ids[index.row()];
-    }
-    else if (role == NameRole) {
-      return m_recitations->recitationName(m_ids[index.row()]);
+    case NameRole:
+      return m_recitations->recitation(m_ids[index.row()])->name();
+    case OnlineRole:
+      return m_recitations->recitation(m_ids[index.row()])->isOnline();
     }
   }
 
-  return QVariant();
 
+  return QVariant();
 }
 
 Recitations *RecitationModel::recitations() const {
@@ -309,4 +313,110 @@ void RecitationModel::recitationsUpdated() {
 
 void RecitationModel::refresh() {
   setIds(m_recitations->installed());
+}
+
+InstallableRecitationsModel::InstallableRecitationsModel(QObject *parent) :
+  QAbstractListModel(parent),
+  m_recitations(0) {
+
+  QHash<int, QByteArray> roles;
+  roles[IdRole] = "recitationId";
+  roles[NameRole] = "name";
+  roles[QualityRole] = "quality";
+
+  setRoleNames(roles);
+}
+
+InstallableRecitationsModel::~InstallableRecitationsModel() {
+
+}
+
+int InstallableRecitationsModel::rowCount(const QModelIndex& parent) const {
+  if (!parent.isValid()) {
+    return m_ids.size();
+  }
+
+  return 0;
+}
+
+QVariant InstallableRecitationsModel::data(const QModelIndex& index, int role) const {
+  if (index.row() < m_ids.size()) {
+    switch (role) {
+    case IdRole:
+      return m_ids[index.row()];
+    case NameRole:
+      return m_recitations->installableName(m_ids[index.row()]);
+    case QualityRole:
+      return m_recitations->installableQuality(m_ids[index.row()]);
+    }
+  }
+
+  return QVariant();
+}
+
+Recitations *InstallableRecitationsModel::recitations() const {
+  return m_recitations;
+}
+
+void InstallableRecitationsModel::setRecitations(Recitations *recitations) {
+  if (m_recitations != recitations) {
+
+    m_recitations = recitations;
+
+    emit recitationsChanged();
+
+    recitationsUpdated();
+  }
+}
+
+void InstallableRecitationsModel::addId(int id) {
+  if (m_ids.indexOf(id) != -1) {
+    qCritical() << "id already known" << id;
+    return;
+  }
+
+  beginInsertRows(QModelIndex(), m_ids.size(), m_ids.size());
+  m_ids << id;
+  endInsertRows();
+}
+
+void InstallableRecitationsModel::removeId(int id) {
+  int index = m_ids.indexOf(id);
+  if (index == -1) {
+    qCritical() << "unknown id" << id;
+    return;
+  }
+
+  beginRemoveRows(QModelIndex(), index, index);
+  m_ids.removeAt(index);
+  endRemoveRows();
+}
+
+void InstallableRecitationsModel::setIds(const QList<int>& ids) {
+  if (!m_ids.isEmpty()) {
+    beginRemoveRows(QModelIndex(), 0, m_ids.size() - 1);
+    m_ids.clear();
+    endRemoveRows();
+  }
+
+  if (!ids.isEmpty()) {
+    beginInsertRows(QModelIndex(), 0, ids.size() - 1);
+    m_ids = ids;
+    endInsertRows();
+  }
+}
+
+QList<int> InstallableRecitationsModel::ids() const {
+  return m_ids;
+}
+
+void InstallableRecitationsModel::recitationsUpdated() {
+  QObject::connect(m_recitations, SIGNAL(installableAdded(int)), this, SLOT(addId(int)));
+  QObject::connect(m_recitations, SIGNAL(installableRemoved(int)), this, SLOT(removeId(int)));
+
+  refresh();
+}
+
+void InstallableRecitationsModel::refresh() {
+  setIds(m_recitations->installable());
 }

@@ -33,6 +33,19 @@ Page {
                         MouseArea {
                                 id: mouse
                                 anchors.fill: parent
+                                onClicked: {
+                                        if (!isOnline) {
+                                                return;
+                                        }
+
+                                        if (!_recitations.disableInstallable(recitationId)) {
+                                                banner.text = qsTr("Failed to disable recitation");
+                                                banner.show();
+                                        } else {
+                                                banner.text = qsTr("Recitation disabled");
+                                                banner.show();
+                                        }
+                                }
                         }
                 }
         }

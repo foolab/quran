@@ -22,6 +22,7 @@
 #include "mediaplayer.h"
 #include "media.h"
 #include "mediaplaylist.h"
+#include "recite-meta.h"
 
 Recitations::Recitations(QObject *parent)
   : QObject(parent),
@@ -146,8 +147,8 @@ void Recitations::refresh() {
   emit installedCountChanged();
 }
 
-QString Recitations::recitationName(int id) {
-  return id >= m_installed.size() ? QString() : m_installed[id]->name();
+Recitation *Recitations::recitation(int id) {
+  return id >= m_installed.size() ? 0 : m_installed[id];
 }
 
 bool Recitations::load(int id) {
@@ -283,4 +284,85 @@ void Recitations::playPart(int part) {
 
 int Recitations::installedCount() const {
   return m_installed.size();
+}
+
+QList<int> Recitations::installable() {
+  QStringList installed;
+  QList<int> ids;
+
+  foreach (Recitation *r, m_installed) {
+    installed << r->id();
+  }
+
+  // Now add the online recitations too:
+  for (int x = 0; x < RECITATIONS_LEN; x++) {
+    QString id = QString::fromUtf8(Rs[x].id);
+    if (installed.indexOf(id) != -1) {
+      continue;
+    }
+
+    ids << x;
+  }
+
+  return ids;
+}
+
+QString Recitations::installableName(int id) {
+  return QString::fromUtf8(Rs[id].name);
+}
+
+QString Recitations::installableQuality(int id) {
+  return QString::fromUtf8(Rs[id].quality);
+}
+
+bool Recitations::enableInstallable(int rid) {
+  QString name = QString::fromUtf8(Rs[rid].name);
+  QString id = QString::fromUtf8(Rs[rid].id);
+  QUrl url = QUrl(QString::fromUtf8(Rs[rid].url));
+  QString dir = QString("%1%2%3").arg(m_settings->recitationsDir()).arg(QDir::separator()).arg(id);
+
+  QDir d(dir);
+
+  if (!d.mkpath(".")) {
+    return false;
+  }
+
+  Recitation *r = Recitation::createOnline(name, id, dir, url);
+  if (!r->install()) {
+    delete r;
+    return false;
+  }
+
+  m_installed << r;
+
+  emit added(m_installed.size() - 1);
+  emit installableRemoved(rid);
+
+  return true;
+}
+
+bool Recitations::disableInstallable(int rid) {
+  Recitation *r = m_installed[rid];
+  if (r == m_recitation) {
+    return false;
+  }
+
+  if (!r->disable()) {
+    return false;
+  }
+
+  m_installed.takeAt(rid);
+
+  emit removed(rid);
+
+  for (int x = 0; x < RECITATIONS_LEN; x++) {
+    QString id = QString::fromUtf8(Rs[x].id);
+    if (id == r->id()) {
+      emit installableAdded(x);
+    }
+  }
+
+  delete r;
+
+  return true;
 }

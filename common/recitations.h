@@ -49,7 +49,7 @@ public:
 
   QList<int> installed() const;
 
-  QString recitationName(int id);
+  Recitation *recitation(int id);
 
   Q_INVOKABLE bool load(int id);
   Q_INVOKABLE bool loadDefault();
@@ -72,6 +72,13 @@ public:
 
   int installedCount() const;
 
+  QList<int> installable();
+  QString installableName(int id);
+  QString installableQuality(int id);
+
+  Q_INVOKABLE bool enableInstallable(int rid);
+  Q_INVOKABLE bool disableInstallable(int rid);
+
 public slots:
   void refresh();
   void play(int chapter, int verse);
@@ -92,6 +99,9 @@ signals:
   void added(int id);
   void removed(int id);
   void refreshed();
+
+  void installableAdded(int id);
+  void installableRemoved(int id);
 
   void settingsChanged();
   void downloaderChanged();
