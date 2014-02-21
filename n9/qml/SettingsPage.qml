@@ -35,8 +35,6 @@ Page {
                 MenuLayout {
                         MenuItem { text: qsTr("Reset settings"); onClicked: { menu.close(); resetDialog.open(); } }
                         MenuItem { text: qsTr("Manage translations"); onClicked: { menu.close(); pageStack.push("TranslationsListPage"); } }
-
-
                         MenuItem { text: qsTr("Manage recitations"); onClicked: { menu.close(); pageStack.push("RecitationsListPage"); } }
 
 
@@ -158,7 +156,7 @@ Page {
                                 subtitle: entries[_settings.translationMode].name;
                                 selectedIndex: _settings.translationMode
                                 onAccepted: _settings.translationMode = selectedIndex;
-                       }
+                        }
 
                         SettingsPageEntry {
                                 id: nightMode
@@ -195,7 +193,7 @@ Page {
                                 subtitle: entries[_settings.recitationMode].name;
                                 selectedIndex: _settings.recitationMode
                                 onAccepted: _settings.recitationMode = selectedIndex;
-                       }
+                        }
 
                         SettingsPageEntry {
                                 entries: [
@@ -207,7 +205,7 @@ Page {
                                 subtitle: entries[_settings.onlineRecitations ? 1 : 0].name;
                                 selectedIndex: _settings.onlineRecitations
                                 onAccepted: _settings.onlineRecitations = (selectedIndex != 0);
-                       }
+                        }
 
                         SettingsPageEntry {
                                 id: flipToStopRecitation

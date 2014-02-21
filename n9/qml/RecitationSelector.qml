@@ -10,7 +10,7 @@ SelectionDialog {
         }
 
         delegate: SelectionDialogRow {
-                selected: recitationId == _recitations.current;
+                selected: recitationId == _recitations.current
                 onClicked: recitationsManager.changeRecitation(recitationId);
         }
 
