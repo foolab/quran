@@ -20,6 +20,8 @@
 
 #include <QNetworkAccessManager>
 
+class QUrl;
+
 class Downloader : public QNetworkAccessManager {
   Q_OBJECT
 
@@ -28,6 +30,7 @@ public:
   ~Downloader();
 
   QNetworkReply *get(const QString& url);
+  QNetworkReply *get(const QUrl& url);
 };
 
 #endif /* DOWNLOADER_H */

@@ -19,12 +19,14 @@
 #define MEDIA_PLAYLIST_H
 
 #include <QObject>
+#include <QQueue>
 
 class DataProvider;
 class Recitation;
 class Media;
 class Recitation;
 class Downloader;
+class QNetworkReply;
 
 class MediaPlaylist : public QObject {
   Q_OBJECT
@@ -54,6 +56,9 @@ public:
 signals:
   void mediaAvailable(Media *media);
 
+private slots:
+  void replyFinished();
+
 private:
   MediaPlaylist(DataProvider *data, Recitation *recitation,
 		Downloader *downloader, QObject *parent = 0);
@@ -62,6 +67,10 @@ private:
   void playChapter(int chapter);
   void playVerse(int chapter, int verse);
   void playPart(int part);
+
+  void addMedia(Media *media);
+
+  void download();
 
   enum PlayMode {
     PlayPage,
@@ -77,8 +86,11 @@ private:
   PlayMode m_mode;
 
   QList<Media *> m_media;
+  QQueue<Media *> m_queue;
 
   int m_playingId;
+
+  QNetworkReply *m_reply;
 };
 
 #endif /* MEDIA_PLAYLIST_H */

@@ -28,5 +28,9 @@ Downloader::~Downloader() {
 }
 
 QNetworkReply *Downloader::get(const QString& url) {
-  return QNetworkAccessManager::get(QNetworkRequest(QUrl::fromEncoded(url.toUtf8())));
+  return get(QUrl::fromEncoded(url.toUtf8()));
+}
+
+QNetworkReply *Downloader::get(const QUrl& url) {
+  return QNetworkAccessManager::get(QNetworkRequest(url));
 }

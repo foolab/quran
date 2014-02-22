@@ -84,6 +84,13 @@ QByteArray Recitation::data(const Media *media) {
   return data;
 }
 
+bool Recitation::setData(const Media *media, const QByteArray& data) {
+  Q_UNUSED(media);
+  Q_UNUSED(data);
+
+  return false;
+}
+
 class RecitationSimple : public Recitation {
 public:
   static RecitationSimple *create(const QString& id, const QString& dir) {
@@ -142,14 +149,31 @@ public:
   }
 
   Media *mediaUrl(int chapter, int verse, int index) {
-    QString mp3 = QString("%1/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
-    if (QFile::exists(mp3)) {
-      return new Media(this, chapter, verse, index, QUrl::fromLocalFile(mp3));
-    }
-
+    QString mp3 = QString("%1/%2/%2%3.mp3").arg(dir()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0'));
     QUrl url(QString("%1/%2%3.mp3").arg(m_url.toString()).arg(chapter, 3, 10, QChar('0')).arg(verse, 3, 10, QChar('0')));
 
-    return new Media(this, chapter, verse, index, url);
+    return new Media(this, chapter, verse, index, QUrl::fromLocalFile(mp3), url);
+  }
+
+  bool setData(const Media *media, const QByteArray& data) {
+    QString mp3 = media->url().toLocalFile();
+    if (!QFileInfo(mp3).dir().mkpath(".")) {
+      return false;
+    }
+
+    QFile f(mp3);
+    if (!f.open(QFile::WriteOnly)) {
+      return false;
+    }
+
+    if (!f.write(data)) {
+      f.remove();
+      return false;
+    }
+
+    f.close();
+
+    return true;
   }
 
   bool install() {
