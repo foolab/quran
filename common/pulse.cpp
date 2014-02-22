@@ -26,7 +26,8 @@ Pulse::Pulse(AudioOutput *parent) :
   m_loop(0),
   m_ctx(0),
   m_stream(0),
-  m_stop(false)  {
+  m_stop(false),
+  m_started(false) {
 
   m_loop = pa_threaded_mainloop_new();
 }
@@ -170,7 +171,6 @@ bool Pulse::createStream() {
   }
 
   pa_stream_set_state_callback(m_stream, (pa_stream_notify_cb_t)streamStateCallback, this);
-  pa_stream_set_write_callback(m_stream, (pa_stream_request_cb_t)streamWriteCallback, this);
   pa_threaded_mainloop_lock(m_loop);
   if (pa_stream_connect_playback(m_stream, NULL, NULL, PA_STREAM_NOFLAGS, NULL, NULL) < 0) {
     qDebug() << pa_context_errno(m_ctx);
@@ -211,7 +211,7 @@ bool Pulse::createStream() {
 }
 
 void Pulse::writeData() {
-  // Called from another thread
+  // Can be called from the GUI thread or a pulseaudio thread.
   if (m_stop) {
     return;
   }
@@ -271,4 +271,14 @@ void Pulse::drainAndFinish() {
   pa_threaded_mainloop_unlock(m_loop);
 
   emit finished();
+}
+
+void Pulse::start() {
+  if (!m_started) {
+    pa_stream_set_write_callback(m_stream, (pa_stream_request_cb_t)streamWriteCallback, this);
+
+    writeData();
+
+    m_started = true;
+  }
 }

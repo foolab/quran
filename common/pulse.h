@@ -35,6 +35,8 @@ public:
   bool connect();
   void stop();
 
+  void start();
+
 signals:
   void error();
   void finished();
@@ -58,6 +60,7 @@ private:
   pa_context *m_ctx;
   pa_stream *m_stream;
   bool m_stop;
+  bool m_started;
 };
 
 #endif /* PULSE_H */

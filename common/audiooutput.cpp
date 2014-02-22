@@ -65,16 +65,24 @@ bool AudioOutput::start() {
 }
 
 void AudioOutput::play(const QList<AudioBuffer>& buffers) {
-  QMutexLocker locker(&m_mutex);
+  m_mutex.lock();
   m_buffers = buffers;
-  m_cond.wakeOne();
+  m_mutex.unlock();
+
+  if (!m_buffers.isEmpty()) {
+    m_pulse->start();
+    m_cond.wakeOne();
+  }
 }
 
 void AudioOutput::play(const AudioBuffer& buffer) {
   // TODO: limit the size of m_buffers
 
-  QMutexLocker locker(&m_mutex);
+  m_mutex.lock();
   m_buffers << buffer;
+  m_mutex.unlock();
+
+  m_pulse->start();
   m_cond.wakeOne();
 }
 
