@@ -105,10 +105,12 @@ void MediaPlayer::policyAcquired() {
   QObject::connect(m_audio, SIGNAL(error()), this, SIGNAL(error()));
   QObject::connect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
 
-  m_decoder->setOutput(m_audio);
   if (!m_audio->start()) {
     emit error();
+    return;
   }
+
+  m_decoder->setOutput(m_audio);
 }
 
 void MediaPlayer::policyDenied() {
