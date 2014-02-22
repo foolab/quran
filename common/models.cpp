@@ -243,7 +243,6 @@ QVariant RecitationModel::data(const QModelIndex& index, int role) const {
     }
   }
 
-
   return QVariant();
 }
 
@@ -262,8 +261,8 @@ void RecitationModel::setRecitations(Recitations *recitations) {
   }
 }
 
-void RecitationModel::addId(int id) {
-  if (m_ids.indexOf(id) != -1) {
+void RecitationModel::addId(const QString& id) {
+  if (m_ids.contains(id)) {
     qCritical() << "id already known" << id;
     return;
   }
@@ -273,7 +272,7 @@ void RecitationModel::addId(int id) {
   endInsertRows();
 }
 
-void RecitationModel::removeId(int id) {
+void RecitationModel::removeId(const QString& id) {
   int index = m_ids.indexOf(id);
   if (index == -1) {
     qCritical() << "unknown id" << id;
@@ -285,7 +284,7 @@ void RecitationModel::removeId(int id) {
   endRemoveRows();
 }
 
-void RecitationModel::setIds(const QList<int>& ids) {
+void RecitationModel::setIds(const QStringList& ids) {
   if (!m_ids.isEmpty()) {
     beginRemoveRows(QModelIndex(), 0, m_ids.size() - 1);
     m_ids.clear();
@@ -299,13 +298,11 @@ void RecitationModel::setIds(const QList<int>& ids) {
   }
 }
 
-QList<int> RecitationModel::ids() const {
-  return m_ids;
-}
-
 void RecitationModel::recitationsUpdated() {
-  QObject::connect(m_recitations, SIGNAL(added(int)), this, SLOT(addId(int)));
-  QObject::connect(m_recitations, SIGNAL(removed(int)), this, SLOT(removeId(int)));
+  QObject::connect(m_recitations, SIGNAL(added(const QString&)),
+		   this, SLOT(addId(const QString&)));
+  QObject::connect(m_recitations, SIGNAL(removed(const QString&)),
+		   this, SLOT(removeId(const QString&)));
   QObject::connect(m_recitations, SIGNAL(refreshed()), this, SLOT(refresh()));
 
   refresh();
@@ -340,6 +337,10 @@ int InstallableRecitationsModel::rowCount(const QModelIndex& parent) const {
 }
 
 QVariant InstallableRecitationsModel::data(const QModelIndex& index, int role) const {
+  if (index.row() >= rowCount()) {
+    return QVariant();
+  }
+
   if (index.row() < m_ids.size()) {
     switch (role) {
     case IdRole:
@@ -369,8 +370,8 @@ void InstallableRecitationsModel::setRecitations(Recitations *recitations) {
   }
 }
 
-void InstallableRecitationsModel::addId(int id) {
-  if (m_ids.indexOf(id) != -1) {
+void InstallableRecitationsModel::addId(const QString& id) {
+  if (m_ids.contains(id)) {
     qCritical() << "id already known" << id;
     return;
   }
@@ -380,7 +381,7 @@ void InstallableRecitationsModel::addId(int id) {
   endInsertRows();
 }
 
-void InstallableRecitationsModel::removeId(int id) {
+void InstallableRecitationsModel::removeId(const QString& id) {
   int index = m_ids.indexOf(id);
   if (index == -1) {
     qCritical() << "unknown id" << id;
@@ -392,7 +393,7 @@ void InstallableRecitationsModel::removeId(int id) {
   endRemoveRows();
 }
 
-void InstallableRecitationsModel::setIds(const QList<int>& ids) {
+void InstallableRecitationsModel::setIds(const QStringList& ids) {
   if (!m_ids.isEmpty()) {
     beginRemoveRows(QModelIndex(), 0, m_ids.size() - 1);
     m_ids.clear();
@@ -406,13 +407,11 @@ void InstallableRecitationsModel::setIds(const QList<int>& ids) {
   }
 }
 
-QList<int> InstallableRecitationsModel::ids() const {
-  return m_ids;
-}
-
 void InstallableRecitationsModel::recitationsUpdated() {
-  QObject::connect(m_recitations, SIGNAL(installableAdded(int)), this, SLOT(addId(int)));
-  QObject::connect(m_recitations, SIGNAL(installableRemoved(int)), this, SLOT(removeId(int)));
+  QObject::connect(m_recitations, SIGNAL(installableAdded(const QString&)),
+		   this, SLOT(addId(const QString&)));
+  QObject::connect(m_recitations, SIGNAL(installableRemoved(const QString&)),
+		   this, SLOT(removeId(const QString&)));
 
   refresh();
 }

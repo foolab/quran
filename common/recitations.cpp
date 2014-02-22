@@ -31,7 +31,6 @@ Recitations::Recitations(QObject *parent)
     m_player(0),
     m_recitation(0),
     m_downloader(0),
-    m_current(0),
     m_chapter(-1),
     m_verse(-1) {
 
@@ -76,7 +75,6 @@ void Recitations::setData(DataProvider *data) {
   }
 }
 
-
 Downloader *Recitations::downloader() const {
   return m_downloader;
 }
@@ -111,18 +109,12 @@ void Recitations::setVerse(int verse) {
   }
 }
 
-int Recitations::current() const {
+QString Recitations::current() const {
   return m_current;
 }
 
-QList<int> Recitations::installed() const {
-  QList<int> all;
-
-  for (int x = 0; x < m_installed.size(); x++) {
-    all << x;
-  }
-
-  return all;
+QStringList Recitations::installed() const {
+  return m_installed.keys();
 }
 
 void Recitations::refresh() {
@@ -138,8 +130,11 @@ void Recitations::refresh() {
 
   foreach (const QString& entry, entries) {
     Recitation *r = Recitation::create(entry, dir.filePath(entry));
-    if (r) {
-      m_installed << r;
+    if (r && !m_installed.contains(r->id())) {
+      m_installed.insert(r->id(), r);
+    }
+    else if (r) {
+      delete r;
     }
   }
 
@@ -147,22 +142,24 @@ void Recitations::refresh() {
   emit installedCountChanged();
 }
 
-Recitation *Recitations::recitation(int id) {
-  return id >= m_installed.size() ? 0 : m_installed[id];
+Recitation *Recitations::recitation(const QString& id) {
+  return m_installed.contains(id) ? m_installed[id] : 0;
 }
 
-bool Recitations::load(int id) {
-  if (id >= m_installed.size()) {
+bool Recitations::load(const QString& id) {
+  Recitation *r = recitation(id);
+
+  if (!r) {
     return false;
   }
 
   stop();
 
-  m_recitation = m_installed[id];
+  m_recitation = r;
 
   m_current = id;
 
-  m_settings->setDefaultRecitation(m_recitation->id());
+  m_settings->setDefaultRecitation(id);
 
   if (!m_player) {
     m_player = new MediaPlayer(this);
@@ -186,15 +183,7 @@ bool Recitations::loadDefault() {
     return false;
   }
 
-  QString id = m_settings->defaultRecitation();
-
-  for (int x = 0; x < m_installed.size(); x++) {
-    if (m_installed[x]->id() == id) {
-      return load(x);
-    }
-  }
-
-  return load(0);
+  return load(m_settings->defaultRecitation());
 }
 
 void Recitations::unload() {
@@ -286,9 +275,20 @@ int Recitations::installedCount() const {
   return m_installed.size();
 }
 
-QList<int> Recitations::installable() {
+int Recitations::recetationId(const QString& rid) {
+  for (int x = 0; x < RECITATIONS_LEN; x++) {
+    QString id = QString::fromUtf8(Rs[x].id);
+    if (id == rid) {
+      return x;
+    }
+  }
+
+  return -1;
+}
+
+QStringList Recitations::installable() {
   QStringList installed;
-  QList<int> ids;
+  QStringList ids;
 
   foreach (Recitation *r, m_installed) {
     installed << r->id();
@@ -301,25 +301,45 @@ QList<int> Recitations::installable() {
       continue;
     }
 
-    ids << x;
+    ids << id;
   }
 
   return ids;
 }
 
-QString Recitations::installableName(int id) {
-  return QString::fromUtf8(Rs[id].name);
+QString Recitations::installableName(const QString& rid) {
+  int x = recetationId(rid);
+  if (x == -1) {
+    return QString();
+  }
+
+  return QString::fromUtf8(Rs[x].translated_name);
 }
 
-QString Recitations::installableQuality(int id) {
-  return QString::fromUtf8(Rs[id].quality);
+QString Recitations::installableQuality(const QString& rid) {
+  int x = recetationId(rid);
+  if (x == -1) {
+    return QString();
+  }
+
+  return QString::fromUtf8(Rs[x].quality);
 }
 
-bool Recitations::enableInstallable(int rid) {
-  QString name = QString::fromUtf8(Rs[rid].name);
-  QString id = QString::fromUtf8(Rs[rid].id);
-  QUrl url = QUrl(QString::fromUtf8(Rs[rid].url));
-  QString dir = QString("%1%2%3").arg(m_settings->recitationsDir()).arg(QDir::separator()).arg(id);
+bool Recitations::enableInstallable(const QString& rid) {
+  if (m_installed.contains(rid)) {
+    return false;
+  }
+
+  int id = recetationId(rid);
+  if (id == -1) {
+    return false;
+  }
+
+  QString name = QString("%1 (%2)")
+    .arg(QString::fromUtf8(Rs[id].translated_name)).arg(QString::fromUtf8(Rs[id].quality));
+  QUrl url = QUrl(QString::fromUtf8(Rs[id].url));
+  QString dir = QString("%1%2%3")
+    .arg(m_settings->recitationsDir()).arg(QDir::separator()).arg(rid);
 
   QDir d(dir);
 
@@ -327,21 +347,31 @@ bool Recitations::enableInstallable(int rid) {
     return false;
   }
 
-  Recitation *r = Recitation::createOnline(name, id, dir, url);
+  Recitation *r = Recitation::createOnline(name, rid, dir, url);
   if (!r->install()) {
     delete r;
     return false;
   }
 
-  m_installed << r;
+  m_installed.insert(r->id(), r);
 
-  emit added(m_installed.size() - 1);
+  emit added(rid);
+
   emit installableRemoved(rid);
 
   return true;
 }
 
-bool Recitations::disableInstallable(int rid) {
+bool Recitations::disableInstallable(const QString& rid) {
+  if (!m_installed.contains(rid)) {
+    return false;
+  }
+
+  int id = recetationId(rid);
+  if (id == -1) {
+    return false;
+  }
+
   Recitation *r = m_installed[rid];
   if (r == m_recitation) {
     return false;
@@ -351,16 +381,11 @@ bool Recitations::disableInstallable(int rid) {
     return false;
   }
 
-  m_installed.takeAt(rid);
+  m_installed.take(rid);
 
   emit removed(rid);
 
-  for (int x = 0; x < RECITATIONS_LEN; x++) {
-    QString id = QString::fromUtf8(Rs[x].id);
-    if (id == r->id()) {
-      emit installableAdded(x);
-    }
-  }
+  emit installableAdded(rid);
 
   delete r;
 

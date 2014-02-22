@@ -19,6 +19,7 @@
 #define MODELS_H
 
 #include <QAbstractListModel>
+#include <QStringList>
 
 class Translations;
 class Recitations;
@@ -123,7 +124,6 @@ private:
   int m_language;
 };
 
-
 class RecitationModel : public QAbstractListModel {
   Q_OBJECT
   Q_PROPERTY(Recitations *recitations READ recitations WRITE setRecitations NOTIFY recitationsChanged);
@@ -148,26 +148,24 @@ signals:
   void recitationsChanged();
 
 protected slots:
-  void addId(int id);
-  void removeId(int id);
+  void addId(const QString& id);
+  void removeId(const QString& id);
   void refresh();
 
 protected:
   void recitationsUpdated();
 
-  void setIds(const QList<int>& ids);
-  QList<int> ids() const;
+  void setIds(const QStringList& ids);
 
   Recitations *m_recitations;
 
 private:
-  QList<int> m_ids;
+  QStringList m_ids;
 };
 
 class InstallableRecitationsModel : public QAbstractListModel {
   Q_OBJECT
   Q_PROPERTY(Recitations *recitations READ recitations WRITE setRecitations NOTIFY recitationsChanged);
-  Q_ENUMS(Type);
 
 public:
   enum Roles {
@@ -189,20 +187,19 @@ signals:
   void recitationsChanged();
 
 protected slots:
-  void addId(int id);
-  void removeId(int id);
+  void addId(const QString& id);
+  void removeId(const QString& id);
   void refresh();
 
 protected:
   void recitationsUpdated();
 
-  void setIds(const QList<int>& ids);
-  QList<int> ids() const;
+  void setIds(const QStringList& ids);
 
   Recitations *m_recitations;
 
 private:
-  QList<int> m_ids;
+  QStringList m_ids;
 };
 
 #endif /* MODELS_H */

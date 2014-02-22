@@ -35,7 +35,7 @@ class Recitations : public QObject {
   Q_OBJECT
 
   Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
-  Q_PROPERTY(int current READ current NOTIFY currentChanged);
+  Q_PROPERTY(QString current READ current NOTIFY currentChanged);
   Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY playingChanged);
   Q_PROPERTY(int chapter READ chapter NOTIFY chapterChanged);
   Q_PROPERTY(int verse READ verse NOTIFY verseChanged);
@@ -47,14 +47,14 @@ public:
   Recitations(QObject *parent = 0);
   ~Recitations();
 
-  QList<int> installed() const;
+  QStringList installed() const;
 
-  Recitation *recitation(int id);
+  Recitation *recitation(const QString& id);
 
-  Q_INVOKABLE bool load(int id);
+  Q_INVOKABLE bool load(const QString& id);
   Q_INVOKABLE bool loadDefault();
 
-  int current() const;
+  QString current() const;
 
   bool isPlaying() const;
 
@@ -72,12 +72,12 @@ public:
 
   int installedCount() const;
 
-  QList<int> installable();
-  QString installableName(int id);
-  QString installableQuality(int id);
+  QStringList installable();
+  QString installableName(const QString& rid);
+  QString installableQuality(const QString& rid);
 
-  Q_INVOKABLE bool enableInstallable(int rid);
-  Q_INVOKABLE bool disableInstallable(int rid);
+  Q_INVOKABLE bool enableInstallable(const QString& rid);
+  Q_INVOKABLE bool disableInstallable(const QString& rid);
 
 public slots:
   void refresh();
@@ -96,12 +96,12 @@ signals:
   void verseChanged();
   void chapterChanged();
   void installedCountChanged();
-  void added(int id);
-  void removed(int id);
+  void added(const QString& id);
+  void removed(const QString& id);
   void refreshed();
 
-  void installableAdded(int id);
-  void installableRemoved(int id);
+  void installableAdded(const QString& id);
+  void installableRemoved(const QString& id);
 
   void settingsChanged();
   void downloaderChanged();
@@ -115,17 +115,18 @@ private slots:
 private:
   void setChapter(int chapter);
   void setVerse(int verse);
+  int recetationId(const QString& rid);
 
   Settings *m_settings;
   DataProvider *m_data;
 
-  QList<Recitation *> m_installed;
+  QHash<QString, Recitation *> m_installed;
 
   MediaPlayer *m_player;
   Recitation *m_recitation;
   Downloader *m_downloader;
 
-  int m_current;
+  QString m_current;
 
   int m_chapter;
   int m_verse;
