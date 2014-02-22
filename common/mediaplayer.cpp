@@ -51,8 +51,8 @@ void MediaPlayer::start(MediaPlaylist *list) {
     return;
   }
 
-  QObject::connect(m_list, SIGNAL(mediaAvailable(Media *)),
-		   this, SLOT(mediaAvailable(Media *)));
+  QObject::connect(m_list, SIGNAL(mediaAvailable(const Media&)),
+		   this, SLOT(mediaAvailable(const Media&)));
 
   m_decoder = new MediaDecoder(m_list);
 
@@ -125,7 +125,7 @@ void MediaPlayer::policyLost() {
   }
 }
 
-void MediaPlayer::mediaAvailable(Media *media) {
+void MediaPlayer::mediaAvailable(const Media& media) {
   m_decoder->addMedia(media);
 }
 

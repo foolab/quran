@@ -46,7 +46,7 @@ public:
 
   Recitation *recitation();
 
-  const QList<Media *> media() const;
+  const QList<Media> media() const;
 
   bool signalMedia(int index, int& chapter, int& verse) const;
 
@@ -54,7 +54,7 @@ public:
   void stop();
 
 signals:
-  void mediaAvailable(Media *media);
+  void mediaAvailable(const Media& media);
 
 private slots:
   void replyFinished();
@@ -68,7 +68,7 @@ private:
   void playVerse(int chapter, int verse);
   void playPart(int part);
 
-  void addMedia(Media *media);
+  void addMedia(const Media& media);
 
   void download();
 
@@ -85,8 +85,8 @@ private:
 
   PlayMode m_mode;
 
-  QList<Media *> m_media;
-  QQueue<Media *> m_queue;
+  QList<Media> m_media;
+  QQueue<Media> m_queue;
 
   int m_playingId;
 

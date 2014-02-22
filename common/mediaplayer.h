@@ -49,7 +49,7 @@ private slots:
   void policyAcquired();
   void policyLost();
   void policyDenied();
-  void mediaAvailable(Media *media);
+  void mediaAvailable(const Media& media);
   void audioPositionChanged(int index);
 
 private:

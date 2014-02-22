@@ -43,17 +43,14 @@ MediaDecoder::~MediaDecoder() {
 
 void MediaDecoder::run() {
   while (true) {
-    if (stopRequested()) {
-      return;
-    }
-
-    Media *media = MediaDecoder::media();
-    if (!media) {
+    Media media = MediaDecoder::media();
+    if (media.index() == -1) {
       // We are done.
+      play(AudioBuffer(AudioBuffer::Eos));
       return;
     }
 
-    QByteArray data = media->data();
+    QByteArray data = media.data();
 
     if (data.isEmpty()) {
       play(AudioBuffer(AudioBuffer::Error));
@@ -66,22 +63,13 @@ void MediaDecoder::run() {
       return;
     }
 
-    if (!decode(ctx, media)) {
+    if (!decode(ctx, &media)) {
       cleanup(ctx);
       play(AudioBuffer(AudioBuffer::Error));
       return;
     }
 
     cleanup(ctx);
-
-    if (m_media.isEmpty()) {
-      // Signal EOS!
-      play(AudioBuffer(AudioBuffer::Eos));
-    }
-
-    if (stopRequested()) {
-      return;
-    }
   }
 }
 
@@ -303,15 +291,19 @@ AVFormatContext *MediaDecoder::context(const QByteArray& data) {
   return 0;
 }
 
-void MediaDecoder::addMedia(Media *media) {
+void MediaDecoder::addMedia(const Media& media) {
   QMutexLocker locker(&m_mutex);
 
   m_media << media;
   m_cond.wakeOne();
 }
 
-Media *MediaDecoder::media() {
+Media MediaDecoder::media() {
   QMutexLocker locker(&m_mutex);
+
+  if (m_stop) {
+    return Media();
+  }
 
   if (m_media.isEmpty()) {
     m_cond.wait(&m_mutex);
@@ -321,7 +313,7 @@ Media *MediaDecoder::media() {
     return m_media.takeFirst();
   }
 
-  return 0;
+  return Media();
 }
 
 bool MediaDecoder::stopRequested() {

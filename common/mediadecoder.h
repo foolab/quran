@@ -40,7 +40,7 @@ public:
 
   void stop();
 
-  void addMedia(Media *media);
+  void addMedia(const Media& media);
 
   void setOutput(AudioOutput *audio);
 
@@ -54,7 +54,7 @@ private:
   AVFormatContext *context(const QByteArray& data);
 
   bool stopRequested();
-  Media *media();
+  Media media();
   void play(const AudioBuffer& buffer);
 
   AudioOutput *m_audio;
@@ -64,7 +64,7 @@ private:
   bool m_stop;
   QMutex m_mutex;
   QWaitCondition m_cond;
-  QList<Media *> m_media;
+  QList<Media> m_media;
 };
 
 #endif /* MEDIA_DECODER_H */

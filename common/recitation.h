@@ -37,10 +37,10 @@ public:
 
   bool isValid();
 
-  virtual Media *mediaUrl(int chapter, int verse, int index) = 0;
+  virtual Media mediaUrl(int chapter, int verse, int index) = 0;
 
-  virtual QByteArray data(const Media *media);
-  virtual bool setData(const Media *media, const QByteArray& data);
+  virtual QByteArray data(const Media& media);
+  virtual bool setData(const Media& media, const QByteArray& data);
 
   virtual bool install();
   virtual bool enable();

@@ -35,7 +35,7 @@ MediaPlaylist::MediaPlaylist(DataProvider *data, Recitation *recitation,
 }
 
 MediaPlaylist::~MediaPlaylist() {
-  qDeleteAll(m_media);
+  m_media.clear();
 }
 
 void MediaPlaylist::playPage(int page) {
@@ -129,15 +129,15 @@ Recitation *MediaPlaylist::recitation() {
   return m_recitation;
 }
 
-const QList<Media *> MediaPlaylist::media() const {
+const QList<Media> MediaPlaylist::media() const {
   return m_media;
 }
 
 bool MediaPlaylist::signalMedia(int index, int& chapter, int& verse) const {
-  const Media *media = m_media[index];
+  const Media& media = m_media[index];
 
-  chapter = media->chapter() - 1;
-  verse = media->verse() - 1;
+  chapter = media.chapter() - 1;
+  verse = media.verse() - 1;
 
   switch (m_mode) {
   case MediaPlaylist::PlayVerse:
@@ -158,7 +158,7 @@ bool MediaPlaylist::signalMedia(int index, int& chapter, int& verse) const {
       // We are reciting a basmala
       if (m_playingId == 0) {
 	// We have 2 basmalas in the first part
-	if (m_media.first() == media) {
+	if (m_media.first().index() == media.index()) {
 	  // First sura has a basmala
 	  return true;
 	}
@@ -181,9 +181,11 @@ void MediaPlaylist::start() {
     download();
   }
   else {
-    foreach (Media *media, m_media) {
+    foreach (const Media& media, m_media) {
       emit mediaAvailable(media);
     }
+
+    emit mediaAvailable(Media());
   }
 }
 
@@ -195,7 +197,7 @@ void MediaPlaylist::stop() {
   }
 }
 
-void MediaPlaylist::addMedia(Media *media) {
+void MediaPlaylist::addMedia(const Media& media) {
   m_media << media;
   m_queue.enqueue(media);
 }
@@ -243,18 +245,20 @@ MediaPlaylist *MediaPlaylist::chapterList(DataProvider *data, Recitation *recita
 
 void MediaPlaylist::download() {
   if (m_queue.isEmpty()) {
+    emit mediaAvailable(Media());
     return;
   }
 
-  Media *m = m_queue.head();
-  QByteArray data = m->data();
+  const Media& m = m_queue.head();
+  QByteArray data = m.data();
   if (!data.isEmpty()) {
     m_queue.dequeue();
     emit mediaAvailable(m);
+    emit mediaAvailable(Media());
     return;
   }
 
-  m_reply = m_downloader->get(m->alternateUrl());
+  m_reply = m_downloader->get(m.alternateUrl());
 
   QObject::connect(m_reply, SIGNAL(sslErrors(const QList<QSslError>&)), m_reply,
 		   SLOT(ignoreSslErrors()));
@@ -268,12 +272,14 @@ void MediaPlaylist::replyFinished() {
     m_queue.clear();
     m_reply->deleteLater();
     m_reply = 0;
+    emit mediaAvailable(Media());
     return;
   }
 
-  Media *media = m_queue.dequeue();
-  if (!media->setData(data)) {
+  const Media& media = m_queue.dequeue();
+  if (!media.setData(data)) {
     m_queue.clear();
+    emit mediaAvailable(Media());
     return;
   }
 

@@ -24,6 +24,7 @@ class Recitation;
 
 class Media {
 public:
+  Media();
   Media(Recitation *recitation, int chapter, int verse, int index,
 	const QUrl& url, const QUrl& alternateUrl = QUrl());
   virtual ~Media();
