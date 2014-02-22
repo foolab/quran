@@ -254,7 +254,7 @@ void MediaPlaylist::download() {
   if (!data.isEmpty()) {
     m_queue.dequeue();
     emit mediaAvailable(m);
-    emit mediaAvailable(Media());
+    download();
     return;
   }
 
