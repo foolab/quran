@@ -64,12 +64,6 @@ void MediaPlayer::start(MediaPlaylist *list) {
 }
 
 void MediaPlayer::stop() {
-  if (m_audio) {
-    m_audio->stop();
-    delete m_audio;
-    m_audio = 0;
-  }
-
   if (m_decoder) {
     m_decoder->stop();
     while (m_decoder->isRunning()) {
@@ -78,6 +72,12 @@ void MediaPlayer::stop() {
 
     delete m_decoder;
     m_decoder = 0;
+  }
+
+  if (m_audio) {
+    m_audio->stop();
+    delete m_audio;
+    m_audio = 0;
   }
 
   if (m_policy) {
