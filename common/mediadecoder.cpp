@@ -309,6 +309,10 @@ Media MediaDecoder::media() {
     m_cond.wait(&m_mutex);
   }
 
+  if (m_stop) {
+    return Media();
+  }
+
   if (!m_media.isEmpty()) {
     return m_media.takeFirst();
   }
