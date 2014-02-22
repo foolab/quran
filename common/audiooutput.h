@@ -21,8 +21,8 @@
 #include <QObject>
 #include <QMutex>
 #include <QWaitCondition>
+#include "media.h"
 
-class Media;
 class Pulse;
 
 class AudioBuffer {
@@ -33,10 +33,10 @@ public:
     Error,
   } State;
 
- AudioBuffer(const State& s) : media(0), state(s) {}
+ AudioBuffer(const State& s) : state(s) {}
 
   QByteArray data;
-  const Media *media;
+  Media media;
 
   State state;
 };

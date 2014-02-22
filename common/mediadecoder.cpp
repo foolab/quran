@@ -63,7 +63,7 @@ void MediaDecoder::run() {
       return;
     }
 
-    if (!decode(ctx, &media)) {
+    if (!decode(ctx, media)) {
       cleanup(ctx);
       play(AudioBuffer(AudioBuffer::Error));
       return;
@@ -73,7 +73,7 @@ void MediaDecoder::run() {
   }
 }
 
-bool MediaDecoder::decode(AVFormatContext *ctx, const Media *media) {
+bool MediaDecoder::decode(AVFormatContext *ctx, const Media& media) {
   AVCodecContext *codec_ctx = ctx->streams[0]->codec;
   codec_ctx->request_sample_fmt = AV_SAMPLE_FMT_S16;
 

@@ -228,7 +228,7 @@ void Pulse::writeData() {
     return;
   }
 
-  emit positionChanged(buffer.media->index());
+  emit positionChanged(buffer.media.index());
 
   while (!buffer.data.isEmpty()) {
     void *data;
