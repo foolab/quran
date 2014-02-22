@@ -58,9 +58,10 @@ int main(int argc, char *argv[]) {
     QString reciter = s.value("reciter").toString();
     QString translated_recitor = QString::fromUtf8(s.value("reciterArabic").toByteArray());
     QString quality = s.value("quality").toString();
-    QString url = s.value("downloadUrl").toString();
+    QString url = s.value("audioUrl").toString();
     QString language = s.value("language").toString();
     QLocale locale(language);
+    url = url.left(url.lastIndexOf('/') + 1);
 
     if (id.isEmpty() || reciter.isEmpty() || language.isEmpty() || url.isEmpty() || translated_recitor.isEmpty() || quality.isEmpty()) {
       qFatal("Missing meta data");
