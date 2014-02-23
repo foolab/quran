@@ -14,15 +14,6 @@ Page {
                 text: qsTr("Enable online recitations")
         }
 
-        Label {
-                anchors.centerIn: parent
-                text: qsTr("Online recitations is disabled from settings.")
-                width: parent.width
-                font.pixelSize: 26
-                horizontalAlignment: Text.AlignHCenter
-                visible: !_settings.onlineRecitations
-        }
-
         ListView {
                 id: view
                 visible: _settings.onlineRecitations
