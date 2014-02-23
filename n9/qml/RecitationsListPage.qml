@@ -17,34 +17,21 @@ Page {
         Component {
                 id: recitationssDelegate
 
-                Rectangle {
-                        width: view.width
-                        height: label.height * 2
-                        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
+                DownloadLabel {
+                        showProgress: false
+                        showInstalled: isOnline
+                        text: name
+                        onClicked: {
+                                if (!isOnline) {
+                                        return;
+                                }
 
-                        Label {
-                                id: label
-                                text: name
-                                width: parent.width
-                                anchors.verticalCenter: parent.verticalCenter
-                                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
-                        }
-
-                        MouseArea {
-                                id: mouse
-                                anchors.fill: parent
-                                onClicked: {
-                                        if (!isOnline) {
-                                                return;
-                                        }
-
-                                        if (!_recitations.disableInstallable(recitationId)) {
-                                                banner.text = qsTr("Failed to disable recitation");
-                                                banner.show();
-                                        } else {
-                                                banner.text = qsTr("Recitation disabled");
-                                                banner.show();
-                                        }
+                                if (!_recitations.disableInstallable(recitationId)) {
+                                        banner.text = qsTr("Failed to disable recitation");
+                                        banner.show();
+                                } else {
+                                        banner.text = qsTr("Recitation disabled");
+                                        banner.show();
                                 }
                         }
                 }

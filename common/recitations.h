@@ -75,6 +75,7 @@ public:
   QStringList installable();
   QString installableName(const QString& rid);
   QString installableQuality(const QString& rid);
+  bool installableIsInstalled(const QString& rid);
 
   Q_INVOKABLE bool enableInstallable(const QString& rid);
   Q_INVOKABLE bool disableInstallable(const QString& rid);
@@ -99,9 +100,6 @@ signals:
   void added(const QString& id);
   void removed(const QString& id);
   void refreshed();
-
-  void installableAdded(const QString& id);
-  void installableRemoved(const QString& id);
 
   void settingsChanged();
   void downloaderChanged();

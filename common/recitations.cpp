@@ -287,20 +287,11 @@ int Recitations::recetationId(const QString& rid) {
 }
 
 QStringList Recitations::installable() {
-  QStringList installed;
   QStringList ids;
-
-  foreach (Recitation *r, m_installed) {
-    installed << r->id();
-  }
 
   // Now add the online recitations too:
   for (int x = 0; x < RECITATIONS_LEN; x++) {
     QString id = QString::fromUtf8(Rs[x].id);
-    if (installed.indexOf(id) != -1) {
-      continue;
-    }
-
     ids << id;
   }
 
@@ -327,7 +318,7 @@ QString Recitations::installableQuality(const QString& rid) {
 
 bool Recitations::enableInstallable(const QString& rid) {
   if (m_installed.contains(rid)) {
-    return false;
+    return true;
   }
 
   int id = recetationId(rid);
@@ -357,8 +348,6 @@ bool Recitations::enableInstallable(const QString& rid) {
 
   emit added(rid);
 
-  emit installableRemoved(rid);
-
   return true;
 }
 
@@ -385,9 +374,11 @@ bool Recitations::disableInstallable(const QString& rid) {
 
   emit removed(rid);
 
-  emit installableAdded(rid);
-
   delete r;
 
   return true;
+}
+
+bool Recitations::installableIsInstalled(const QString& rid) {
+  return m_installed.contains(rid);
 }

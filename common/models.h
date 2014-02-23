@@ -172,6 +172,7 @@ public:
     IdRole = Qt::UserRole + 1,
     NameRole,
     QualityRole,
+    InstalledRole,
   };
 
   InstallableRecitationsModel(QObject *parent = 0);

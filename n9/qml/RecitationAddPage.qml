@@ -33,32 +33,29 @@ Page {
                 delegate: recitationssDelegate
         }
 
+        function toggleRecitation(rid, installed) {
+                if (installed) {
+                        if (!_recitations.disableInstallable(rid)) {
+                                banner.text = qsTr("Failed to disable recitation");
+                                banner.show();
+                        }
+                }
+                else {
+                        if (!_recitations.enableInstallable(rid)) {
+                                banner.text = qsTr("Failed to enable recitation");
+                                banner.show();
+                        }
+                }
+        }
+
         Component {
                 id: recitationssDelegate
 
-                Rectangle {
-                        width: view.width
-                        height: label.height * 2
-                        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
-
-                        Label {
-                                id: label
-                                text: qsTr("%1 (%2)").arg(name).arg(quality)
-                                width: parent.width
-                                anchors.verticalCenter: parent.verticalCenter
-                                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
-                        }
-
-                        MouseArea {
-                                id: mouse
-                                anchors.fill: parent
-                                onClicked: {
-                                        if (!_recitations.enableInstallable(recitationId)) {
-                                                banner.text = qsTr("Failed to enable recitation");
-                                                banner.show();
-                                        }
-                                }
-                        }
+                DownloadLabel {
+                        showProgress: false
+                        showInstalled: installed
+                        text: qsTr("%1 (%2)").arg(name).arg(quality)
+                        onClicked: toggleRecitation(recitationId, installed);
                 }
         }
 

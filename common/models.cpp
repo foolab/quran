@@ -320,6 +320,7 @@ InstallableRecitationsModel::InstallableRecitationsModel(QObject *parent) :
   roles[IdRole] = "recitationId";
   roles[NameRole] = "name";
   roles[QualityRole] = "quality";
+  roles[InstalledRole] = "installed";
 
   setRoleNames(roles);
 }
@@ -349,6 +350,8 @@ QVariant InstallableRecitationsModel::data(const QModelIndex& index, int role) c
       return m_recitations->installableName(m_ids[index.row()]);
     case QualityRole:
       return m_recitations->installableQuality(m_ids[index.row()]);
+    case InstalledRole:
+      return m_recitations->installableIsInstalled(m_ids[index.row()]);
     }
   }
 
@@ -371,14 +374,14 @@ void InstallableRecitationsModel::setRecitations(Recitations *recitations) {
 }
 
 void InstallableRecitationsModel::addId(const QString& id) {
-  if (m_ids.contains(id)) {
+  int index = m_ids.indexOf(id);
+  if (index == -1) {
     qCritical() << "id already known" << id;
     return;
   }
 
-  beginInsertRows(QModelIndex(), m_ids.size(), m_ids.size());
-  m_ids << id;
-  endInsertRows();
+  QModelIndex idx = QAbstractListModel::index(index, 0, QModelIndex());
+  emit dataChanged(idx, idx);
 }
 
 void InstallableRecitationsModel::removeId(const QString& id) {
@@ -388,9 +391,8 @@ void InstallableRecitationsModel::removeId(const QString& id) {
     return;
   }
 
-  beginRemoveRows(QModelIndex(), index, index);
-  m_ids.removeAt(index);
-  endRemoveRows();
+  QModelIndex idx = QAbstractListModel::index(index, 0, QModelIndex());
+  emit dataChanged(idx, idx);
 }
 
 void InstallableRecitationsModel::setIds(const QStringList& ids) {
@@ -408,9 +410,9 @@ void InstallableRecitationsModel::setIds(const QStringList& ids) {
 }
 
 void InstallableRecitationsModel::recitationsUpdated() {
-  QObject::connect(m_recitations, SIGNAL(installableAdded(const QString&)),
+  QObject::connect(m_recitations, SIGNAL(added(const QString&)),
 		   this, SLOT(addId(const QString&)));
-  QObject::connect(m_recitations, SIGNAL(installableRemoved(const QString&)),
+  QObject::connect(m_recitations, SIGNAL(removed(const QString&)),
 		   this, SLOT(removeId(const QString&)));
 
   refresh();
