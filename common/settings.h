@@ -53,8 +53,6 @@ class Settings : public QObject {
   Q_PROPERTY(bool flipToStopRecitation READ flipToStopRecitation WRITE setFlipToStopRecitation NOTIFY flipToStopRecitationChanged);
 
   Q_PROPERTY(bool nightMode READ isNightModeEnabled WRITE setNightModeEnabled NOTIFY nightModeChanged);
-  Q_PROPERTY(bool onlineRecitations READ areOnlineRecitationsEnabled WRITE setOnlineRecitationsEnabled NOTIFY onlineRecitationsChanged);
-
   Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged);
   Q_PROPERTY(QString recitationsDir READ recitationsDir CONSTANT);
   Q_PROPERTY(QString translationsDir READ translationsDir CONSTANT);
@@ -123,9 +121,6 @@ public:
   void setTheme(const QString& theme);
   QString theme();
 
-  void setOnlineRecitationsEnabled(bool enabled);
-  bool areOnlineRecitationsEnabled() const;
-
   QString recitationsDir() const;
   QString translationsDir() const;
   QString recitationsSubDir() const;
@@ -156,7 +151,6 @@ signals:
   void flipToStopRecitationChanged();
   void nightModeChanged();
   void themeChanged();
-  void onlineRecitationsChanged();
 
 private:
   QString dataDir() const;
