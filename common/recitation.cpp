@@ -27,6 +27,8 @@
 #define ZEKR_INFO_FILE                 "recitation.properties"
 #define ONLINE_INFO_FILE               "data.ini"
 
+#define BACKUP_SUFFIX                  "~"
+
 Recitation::~Recitation() {
 
 }
@@ -161,7 +163,7 @@ public:
       return false;
     }
 
-    QFile f(mp3);
+    QFile f(mp3 + BACKUP_SUFFIX);
     if (!f.open(QFile::WriteOnly)) {
       return false;
     }
@@ -173,7 +175,7 @@ public:
 
     f.close();
 
-    return true;
+    return QFile::rename(mp3 + BACKUP_SUFFIX, mp3);
   }
 
   bool install() {
