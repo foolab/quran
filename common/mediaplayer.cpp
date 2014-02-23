@@ -29,12 +29,8 @@ MediaPlayer::MediaPlayer(QObject *parent) :
   QObject(parent),
   m_list(0),
   m_decoder(0),
-  m_policy(new AudioPolicy(this)),
+  m_policy(0),
   m_audio(0) {
-
-  QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
-  QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
-  QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
 
   QObject::connect(this, SIGNAL(error()), this, SLOT(stop()));
 }
@@ -45,6 +41,11 @@ MediaPlayer::~MediaPlayer() {
 
 void MediaPlayer::start(MediaPlaylist *list) {
   m_list = list;
+
+  m_policy = new AudioPolicy(this);
+  QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
+  QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
+  QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
 
   if (!m_policy->acquire()) {
     emit error();
@@ -80,16 +81,22 @@ void MediaPlayer::stop() {
     m_audio = 0;
   }
 
-  if (m_policy) {
-    m_policy->release();
-  }
-
   if (m_list) {
     m_list->stop();
     delete m_list;
     m_list = 0;
 
     emit stateChanged();
+  }
+
+  if (m_policy) {
+    QObject::disconnect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
+    QObject::disconnect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
+    QObject::disconnect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
+
+    m_policy->release();
+    m_policy->deleteLater();
+    m_policy = 0;
   }
 }
 
@@ -115,14 +122,12 @@ void MediaPlayer::policyAcquired() {
 
 void MediaPlayer::policyDenied() {
   if (m_decoder) {
-    stop();
     emit error();
   }
 }
 
 void MediaPlayer::policyLost() {
   if (m_decoder) {
-    stop();
     emit error();
   }
 }
