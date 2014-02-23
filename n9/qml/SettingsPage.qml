@@ -33,12 +33,9 @@ Page {
                 id: menu
 
                 MenuLayout {
-                        MenuItem { text: qsTr("Reset settings"); onClicked: { menu.close(); resetDialog.open(); } }
                         MenuItem { text: qsTr("Manage translations"); onClicked: { menu.close(); pageStack.push("TranslationsListPage"); } }
                         MenuItem { text: qsTr("Manage recitations"); onClicked: { menu.close(); pageStack.push("RecitationsListPage"); } }
-
-
-
+                        MenuItem { text: qsTr("Reset settings"); onClicked: { menu.close(); resetDialog.open(); } }
                 }
         }
 
