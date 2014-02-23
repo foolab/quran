@@ -24,10 +24,12 @@ class Recitation;
 
 class Media {
 public:
-  Media();
   Media(Recitation *recitation, int chapter, int verse, int index,
 	const QUrl& url, const QUrl& alternateUrl = QUrl());
   virtual ~Media();
+
+  static Media error();
+  static Media eos();
 
   int chapter() const;
   int verse() const;
@@ -36,6 +38,9 @@ public:
   QUrl alternateUrl() const;
   QByteArray data() const;
   bool setData(const QByteArray& data) const;
+
+  bool isError();
+  bool isEos();
 
 private:
   Recitation *m_recitation;

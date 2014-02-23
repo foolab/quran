@@ -185,7 +185,7 @@ void MediaPlaylist::start() {
       emit mediaAvailable(media);
     }
 
-    emit mediaAvailable(Media());
+    emit mediaAvailable(Media::eos());
   }
 }
 
@@ -247,7 +247,7 @@ MediaPlaylist *MediaPlaylist::chapterList(DataProvider *data, Recitation *recita
 
 void MediaPlaylist::download() {
   if (m_queue.isEmpty()) {
-    emit mediaAvailable(Media());
+    emit mediaAvailable(Media::eos());
     return;
   }
 
@@ -275,14 +275,14 @@ void MediaPlaylist::replyFinished() {
     m_queue.clear();
     m_reply->deleteLater();
     m_reply = 0;
-    emit mediaAvailable(Media());
+    emit mediaAvailable(Media::error());
     return;
   }
 
   const Media& media = m_queue.dequeue();
   if (!media.setData(data)) {
     m_queue.clear();
-    emit mediaAvailable(Media());
+    emit mediaAvailable(Media::error());
     return;
   }
 

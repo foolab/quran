@@ -44,28 +44,31 @@ MediaDecoder::~MediaDecoder() {
 void MediaDecoder::run() {
   while (true) {
     Media media = MediaDecoder::media();
-    if (media.index() == -1) {
+    if (media.isEos()) {
       // We are done.
-      play(AudioBuffer(AudioBuffer::Eos));
+      play(AudioBuffer(Media::eos()));
       return;
+    }
+    else if (media.isError()) {
+      play(AudioBuffer(Media::error()));
     }
 
     QByteArray data = media.data();
 
     if (data.isEmpty()) {
-      play(AudioBuffer(AudioBuffer::Error));
+      play(AudioBuffer(Media::error()));
       return;
     }
 
     AVFormatContext *ctx = context(data);
     if (!ctx) {
-      play(AudioBuffer(AudioBuffer::Error));
+      play(AudioBuffer(Media::error()));
       return;
     }
 
     if (!decode(ctx, media)) {
       cleanup(ctx);
-      play(AudioBuffer(AudioBuffer::Error));
+      play(AudioBuffer(Media::error()));
       return;
     }
 
@@ -93,7 +96,7 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media& media) {
 
   QScopedPointer<MediaResampler> resampler(MediaResampler::create(codec_ctx));
   if (!resampler) {
-    play(AudioBuffer(AudioBuffer::Error));
+    play(AudioBuffer(Media::error()));
     avcodec_close(codec_ctx);
     return false;
   }
@@ -105,8 +108,7 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media& media) {
   pkt.data = buffer;
   pkt.size = buffer_size;
 
-  AudioBuffer b(AudioBuffer::Normal);
-  b.media = media;
+  AudioBuffer b(media);
 
   while (av_read_frame(ctx, &pkt) >= 0) {
     if (!decode(codec_ctx, &pkt, b, resampler.data())) {
@@ -303,7 +305,7 @@ Media MediaDecoder::media() {
   QMutexLocker locker(&m_mutex);
 
   if (m_stop) {
-    return Media();
+    return Media::eos();
   }
 
   if (m_media.isEmpty()) {
@@ -311,14 +313,14 @@ Media MediaDecoder::media() {
   }
 
   if (m_stop) {
-    return Media();
+    return Media::eos();
   }
 
   if (!m_media.isEmpty()) {
     return m_media.takeFirst();
   }
 
-  return Media();
+  return Media::eos();
 }
 
 bool MediaDecoder::stopRequested() {

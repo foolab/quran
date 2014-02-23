@@ -27,18 +27,10 @@ class Pulse;
 
 class AudioBuffer {
 public:
-  typedef enum {
-    Normal,
-    Eos,
-    Error,
-  } State;
-
- AudioBuffer(const State& s) : state(s) {}
+ AudioBuffer(const Media& m) : media(m) {}
 
   QByteArray data;
   Media media;
-
-  State state;
 };
 
 class AudioOutput : public QObject {

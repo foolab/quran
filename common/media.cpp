@@ -29,16 +29,24 @@ Media::Media(Recitation *recitation, int chapter, int verse, int index,
 
 }
 
-Media::Media() :
-  m_recitation(0),
-  m_chapter(-1),
-  m_verse(-1),
-  m_index(-1) {
+Media::~Media() {
 
 }
 
-Media::~Media() {
+Media Media::error() {
+  return Media(0, 0, 0, -2, QUrl(), QUrl());
+}
 
+Media Media::eos() {
+  return Media(0, 0, 0, -1, QUrl(), QUrl());
+}
+
+bool Media::isError() {
+  return m_index == -2;
+}
+
+bool Media::isEos() {
+  return m_index == -1;
 }
 
 int Media::chapter() const {

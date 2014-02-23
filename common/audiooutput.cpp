@@ -35,7 +35,7 @@ void AudioOutput::stop() {
   if (m_pulse) {
     m_mutex.lock();
     m_buffers.clear();
-    m_buffers << AudioBuffer(AudioBuffer::Eos);
+    m_buffers << AudioBuffer(Media::eos());
     m_cond.wakeOne();
     m_mutex.unlock();
     m_pulse->stop();
@@ -93,14 +93,14 @@ AudioBuffer AudioOutput::buffer() {
   }
 
   if (m_buffers.isEmpty()) {
-    return AudioBuffer(AudioBuffer::Eos);
+    return AudioBuffer(Media::eos());
   }
 
   AudioBuffer b = m_buffers.takeFirst();
 
-  if (b.state == AudioBuffer::Error) {
+  if (b.media.isError()) {
     emit error();
-    return AudioBuffer(AudioBuffer::Eos);
+    return AudioBuffer(Media::eos());
   }
 
   return b;

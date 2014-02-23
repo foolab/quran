@@ -218,7 +218,7 @@ void Pulse::writeData() {
 
   AudioBuffer buffer = m_audio->buffer();
 
-  if (buffer.state == AudioBuffer::Eos) {
+  if (buffer.media.isEos()) {
     QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
     m_stop = true;
     return;
