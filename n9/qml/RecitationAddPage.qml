@@ -16,7 +16,6 @@ Page {
 
         ListView {
                 id: view
-                visible: _settings.onlineRecitations
                 clip: true
                 anchors.top: title.bottom
                 anchors.topMargin: 16
