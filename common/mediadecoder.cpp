@@ -155,6 +155,7 @@ bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt,
       int data_size = av_samples_get_buffer_size(NULL, ctx->channels,
 						 frame->nb_samples,
 						 ctx->sample_fmt, 1);
+      Q_UNUSED(data_size);
 
       QByteArray data;
       if (!resampler->resample(frame, data)) {
