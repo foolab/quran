@@ -251,7 +251,8 @@ void MediaPlaylist::download() {
     return;
   }
 
-  const Media& m = m_queue.head();
+  // NOTE: We can not use a reference here. otherwise the signal argument will contain garbage.
+  const Media m = m_queue.head();
   QByteArray data = m.data();
   if (!data.isEmpty()) {
     m_queue.dequeue();
