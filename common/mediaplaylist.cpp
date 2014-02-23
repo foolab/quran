@@ -193,8 +193,10 @@ void MediaPlaylist::stop() {
   if (m_reply) {
     delete m_reply;
     m_reply = 0;
-    m_queue.clear();
   }
+
+  m_queue.clear();
+  m_media.clear();
 }
 
 void MediaPlaylist::addMedia(const Media& media) {
