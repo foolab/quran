@@ -174,6 +174,9 @@ bool MediaPlaylist::signalMedia(int index, int& chapter, int& verse) const {
 
     return true;
   }
+
+  // Silence g++
+  return false;
 }
 
 void MediaPlaylist::start() {
