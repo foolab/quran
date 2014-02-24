@@ -18,6 +18,10 @@ QString encode(const QString& in) {
   return out;
 }
 
+QString read(QSettings& s, const char *value) {
+  return QString::fromUtf8(s.value(value).toByteArray());
+}
+
 int main(int argc, char *argv[]) {
   if (argc != 2) {
     qCritical() << "Invalid arguments!";
@@ -55,12 +59,12 @@ int main(int argc, char *argv[]) {
   foreach (const QString& group, groups) {
     s.beginGroup(group);
 
-    QString id = s.value("id").toString();
-    QString name = QString::fromUtf8(s.value("localizedName").toByteArray());
-    QString language = s.value("language").toString();
-    QString file = s.value("file").toString();
-    int rtl = s.value("rtl").toString() == "rtl" ? 1 : 0;
-    QLocale locale(s.value("language").toString());
+    QString id = read(s, "id");
+    QString name = read(s, "localizedName");
+    QString language = read(s, "language");
+    QString file = read(s, "file");
+    int rtl = read(s, "rtl") == "rtl" ? 1 : 0;
+    QLocale locale(read(s, "language"));
 
     if (id.isEmpty() || name.isEmpty() || language.isEmpty() || file.isEmpty()) {
       qFatal("Missing meta data");

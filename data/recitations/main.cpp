@@ -18,6 +18,10 @@ QString encode(const QString& in) {
   return out;
 }
 
+QString read(QSettings& s, const char *value) {
+  return QString::fromUtf8(s.value(value).toByteArray());
+}
+
 int main(int argc, char *argv[]) {
   if (argc != 2) {
     qCritical() << "Invalid arguments!";
@@ -55,11 +59,11 @@ int main(int argc, char *argv[]) {
   foreach (const QString& group, groups) {
     s.beginGroup(group);
     QString id = group;
-    QString reciter = s.value("reciter").toString();
-    QString translated_recitor = QString::fromUtf8(s.value("reciterArabic").toByteArray());
-    QString quality = s.value("quality").toString();
-    QString url = s.value("audioUrl").toString();
-    QString language = s.value("language").toString();
+    QString reciter = read(s, "reciter");
+    QString translated_recitor = read(s, "reciterArabic");
+    QString quality = read(s, "quality");
+    QString url = read(s, "audioUrl");
+    QString language = read(s, "language");
     QLocale locale(language);
     url = url.left(url.lastIndexOf('/') + 1);
 
