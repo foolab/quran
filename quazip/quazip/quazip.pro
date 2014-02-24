@@ -1,29 +1,13 @@
 TEMPLATE = lib
 CONFIG += qt warn_on
 QT -= gui
-DEPENDPATH += .
-INCLUDEPATH += .
+!win32:VERSION = 1.0.0
 
 DEFINES += QUAZIP_BUILD
 CONFIG(staticlib): DEFINES += QUAZIP_STATIC
 
 # Input
-HEADERS += \
-    crypt.h\
-    ioapi.h\
-    JlCompress.h\
-    quaadler32.h\
-    quachecksum32.h\
-    quacrc32.h\
-    quazip.h\
-    quazipfile.h\
-    quazipfileinfo.h\
-    quazipnewinfo.h\
-    quazip_global.h\
-    unzip.h\
-    zip.h\
-
-SOURCES += *.c *.cpp
+include(quazip.pri)
 
 unix:!symbian {
     headers.path=$$PREFIX/include/quazip
@@ -34,7 +18,6 @@ unix:!symbian {
 	OBJECTS_DIR=.obj
 	MOC_DIR=.moc
 	
-	LIBS += -lz
 }
 
 win32 {
@@ -42,10 +25,8 @@ win32 {
     headers.files=$$HEADERS
     target.path=$$PREFIX/lib
     INSTALLS += headers target
-
-    *-g++*: LIBS += -lz.dll
-    *-msvc*: LIBS += -lzlibwapi
-    *-msvc*: QMAKE_LFLAGS += /IMPLIB:$$DESTDIR\\quazip.lib
+    # workaround for qdatetime.h macro bug
+    DEFINES += NOMINMAX
 }
 
 

@@ -1,19 +1,20 @@
 /*
-Copyright (C) 2005-2011 Sergey A. Tachenov
+Copyright (C) 2005-2014 Sergey A. Tachenov
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation; either version 2 of the License, or (at
-your option) any later version.
+This file is part of QuaZIP.
 
-This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
-General Public License for more details.
+QuaZIP is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+QuaZIP is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with this program; if not, write to the Free Software Foundation,
-Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+along with QuaZIP.  If not, see <http://www.gnu.org/licenses/>.
 
 See COPYING file for the full LGPL text.
 
@@ -25,40 +26,78 @@ quazip/(un)zip.h files for details, basically it's zlib license.
 
 using namespace std;
 
+/// The implementation class for QuaZip.
+/**
+\internal
+
+This class contains all the private stuff for the QuaZipFile class, thus
+allowing to preserve binary compatibility between releases, the
+technique known as the Pimpl (private implementation) idiom.
+*/
 class QuaZipFilePrivate {
   friend class QuaZipFile;
   private:
+    /// The pointer to the associated QuaZipFile instance.
     QuaZipFile *q;
+    /// The QuaZip object to work with.
     QuaZip *zip;
+    /// The file name.
     QString fileName;
+    /// Case sensitivity mode.
     QuaZip::CaseSensitivity caseSensitivity;
+    /// Whether this file is opened in the raw mode.
     bool raw;
+    /// Write position to keep track of.
+    /**
+      QIODevice::pos() is broken for non-seekable devices, so we need
+      our own position.
+      */
     qint64 writePos;
-    // these two are for writing raw files
-    ulong uncompressedSize;
+    /// Uncompressed size to write along with a raw file.
+    quint64 uncompressedSize;
+    /// CRC to write along with a raw file.
     quint32 crc;
+    /// Whether \ref zip points to an internal QuaZip instance.
+    /**
+      This is true if the archive was opened by name, rather than by
+      supplying an existing QuaZip instance.
+      */
     bool internal;
+    /// The last error.
     int zipError;
+    /// Resets \ref zipError.
     inline void resetZipError() const {setZipError(UNZ_OK);}
-    // const, but sets zipError!
+    /// Sets the zip error.
+    /**
+      This function is marked as const although it changes one field.
+      This allows to call it from const functions that don't change
+      anything by themselves.
+      */
     void setZipError(int zipError) const;
+    /// The constructor for the corresponding QuaZipFile constructor.
     inline QuaZipFilePrivate(QuaZipFile *q):
       q(q), zip(NULL), internal(true), zipError(UNZ_OK) {}
+    /// The constructor for the corresponding QuaZipFile constructor.
     inline QuaZipFilePrivate(QuaZipFile *q, const QString &zipName):
       q(q), internal(true), zipError(UNZ_OK)
       {
         zip=new QuaZip(zipName);
       }
+    /// The constructor for the corresponding QuaZipFile constructor.
     inline QuaZipFilePrivate(QuaZipFile *q, const QString &zipName, const QString &fileName,
         QuaZip::CaseSensitivity cs):
       q(q), internal(true), zipError(UNZ_OK)
       {
         zip=new QuaZip(zipName);
         this->fileName=fileName;
+        if (this->fileName.startsWith('/'))
+            this->fileName = this->fileName.mid(1);
         this->caseSensitivity=cs;
       }
+    /// The constructor for the QuaZipFile constructor accepting a file name.
     inline QuaZipFilePrivate(QuaZipFile *q, QuaZip *zip):
       q(q), zip(zip), internal(false), zipError(UNZ_OK) {}
+    /// The destructor.
     inline ~QuaZipFilePrivate()
     {
       if (internal)
@@ -106,6 +145,11 @@ QuaZipFile::~QuaZipFile()
 QString QuaZipFile::getZipName() const
 {
   return p->zip==NULL ? QString() : p->zip->getZipName();
+}
+
+QuaZip *QuaZipFile::getZip() const
+{
+    return p->internal ? NULL : p->zip;
 }
 
 QString QuaZipFile::getActualFileName()const
@@ -159,6 +203,8 @@ void QuaZipFile::setFileName(const QString& fileName, QuaZip::CaseSensitivity cs
     return;
   }
   p->fileName=fileName;
+  if (p->fileName.startsWith('/'))
+      p->fileName = p->fileName.mid(1);
   p->caseSensitivity=cs;
 }
 
@@ -169,7 +215,7 @@ void QuaZipFilePrivate::setZipError(int zipError) const
   if(zipError==UNZ_OK)
     q->setErrorString(QString());
   else
-    q->setErrorString(q->tr("ZIP/UNZIP API error %1").arg(zipError));
+    q->setErrorString(QuaZipFile::tr("ZIP/UNZIP API error %1").arg(zipError));
 }
 
 bool QuaZipFile::open(OpenMode mode)
@@ -260,16 +306,18 @@ bool QuaZipFile::open(OpenMode mode, const QuaZipNewInfo& info,
     info_z.dosDate = 0;
     info_z.internal_fa=(uLong)info.internalAttr;
     info_z.external_fa=(uLong)info.externalAttr;
-    if (!p->zip->isDataDescriptorWritingEnabled())
+    if (p->zip->isDataDescriptorWritingEnabled())
+        zipSetFlags(p->zip->getZipFile(), ZIP_WRITE_DATA_DESCRIPTOR);
+    else
         zipClearFlags(p->zip->getZipFile(), ZIP_WRITE_DATA_DESCRIPTOR);
-    p->setZipError(zipOpenNewFileInZip3(p->zip->getZipFile(),
+    p->setZipError(zipOpenNewFileInZip3_64(p->zip->getZipFile(),
           p->zip->getFileNameCodec()->fromUnicode(info.name).constData(), &info_z,
           info.extraLocal.constData(), info.extraLocal.length(),
           info.extraGlobal.constData(), info.extraGlobal.length(),
           p->zip->getCommentCodec()->fromUnicode(info.comment).constData(),
           method, level, (int)raw,
           windowBits, memLevel, strategy,
-          password, (uLong)crc));
+          password, (uLong)crc, p->zip->isZip64Enabled()));
     if(p->zipError==UNZ_OK) {
       p->writePos=0;
       setOpenMode(mode);
@@ -342,10 +390,10 @@ qint64 QuaZipFile::size()const
 
 qint64 QuaZipFile::csize()const
 {
-  unz_file_info info_z;
+  unz_file_info64 info_z;
   p->setZipError(UNZ_OK);
   if(p->zip==NULL||p->zip->getMode()!=QuaZip::mdUnzip) return -1;
-  p->setZipError(unzGetCurrentFileInfo(p->zip->getUnzFile(), &info_z, NULL, 0, NULL, 0, NULL, 0));
+  p->setZipError(unzGetCurrentFileInfo64(p->zip->getUnzFile(), &info_z, NULL, 0, NULL, 0, NULL, 0));
   if(p->zipError!=UNZ_OK)
     return -1;
   return info_z.compressed_size;
@@ -353,10 +401,10 @@ qint64 QuaZipFile::csize()const
 
 qint64 QuaZipFile::usize()const
 {
-  unz_file_info info_z;
+  unz_file_info64 info_z;
   p->setZipError(UNZ_OK);
   if(p->zip==NULL||p->zip->getMode()!=QuaZip::mdUnzip) return -1;
-  p->setZipError(unzGetCurrentFileInfo(p->zip->getUnzFile(), &info_z, NULL, 0, NULL, 0, NULL, 0));
+  p->setZipError(unzGetCurrentFileInfo64(p->zip->getUnzFile(), &info_z, NULL, 0, NULL, 0, NULL, 0));
   if(p->zipError!=UNZ_OK)
     return -1;
   return info_z.uncompressed_size;
@@ -364,10 +412,21 @@ qint64 QuaZipFile::usize()const
 
 bool QuaZipFile::getFileInfo(QuaZipFileInfo *info)
 {
-  if(p->zip==NULL||p->zip->getMode()!=QuaZip::mdUnzip) return false;
-  p->zip->getCurrentFileInfo(info);
-  p->setZipError(p->zip->getZipError());
-  return p->zipError==UNZ_OK;
+    QuaZipFileInfo64 info64;
+    if (getFileInfo(&info64)) {
+        info64.toQuaZipFileInfo(*info);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool QuaZipFile::getFileInfo(QuaZipFileInfo64 *info)
+{
+    if(p->zip==NULL||p->zip->getMode()!=QuaZip::mdUnzip) return false;
+    p->zip->getCurrentFileInfo(info);
+    p->setZipError(p->zip->getZipError());
+    return p->zipError==UNZ_OK;
 }
 
 void QuaZipFile::close()
@@ -381,7 +440,7 @@ void QuaZipFile::close()
   if(openMode()&ReadOnly)
     p->setZipError(unzCloseCurrentFile(p->zip->getUnzFile()));
   else if(openMode()&WriteOnly)
-    if(isRaw()) p->setZipError(zipCloseFileInZipRaw(p->zip->getZipFile(), p->uncompressedSize, p->crc));
+    if(isRaw()) p->setZipError(zipCloseFileInZipRaw64(p->zip->getZipFile(), p->uncompressedSize, p->crc));
     else p->setZipError(zipCloseFileInZip(p->zip->getZipFile()));
   else {
     qWarning("Wrong open mode: %d", (int)openMode());
@@ -399,7 +458,10 @@ qint64 QuaZipFile::readData(char *data, qint64 maxSize)
 {
   p->setZipError(UNZ_OK);
   qint64 bytesRead=unzReadCurrentFile(p->zip->getUnzFile(), data, (unsigned)maxSize);
-  if(bytesRead<0) p->setZipError((int)bytesRead);
+  if (bytesRead < 0) {
+    p->setZipError((int) bytesRead);
+    return -1;
+  }
   return bytesRead;
 }
 
