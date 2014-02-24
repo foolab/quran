@@ -8,7 +8,7 @@ MOBILITY = sensors
 PKGCONFIG += libpulse
 
 DEPENDPATH += . ../data/ ../common/
-INCLUDEPATH += . ../data/ ../common/ ../libav/
+INCLUDEPATH += . ../data/ ../common/ ../libav/ ../sqlite/
 
 DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.5.3\\\"
 

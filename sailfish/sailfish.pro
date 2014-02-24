@@ -27,4 +27,5 @@ LIBS += -Wl,-rpath=/usr/share/harbour-quran/lib/ \
         -Llibav/libavcodec/ -lavcodec \
         -Llibav/libavutil/ -lavutil \
         -Llibav/libavfilter/ -lavfilter \
-        -Llibav/libavresample/ -lavresample
+        -Llibav/libavresample/ -lavresample \
+        -Lsqlite/ -lsqlite3

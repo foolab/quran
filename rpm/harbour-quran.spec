@@ -35,6 +35,8 @@ popd
 
 pushd sailfish
 ../build-libav.sh --prefix=%{_datadir}/harbour-quran/ --enable-shared --disable-static
+../build_sqlite.sh --prefix=%{_datadir}/harbour-quran/
+
 %qmake5
 
 make %{?jobs:-j%jobs}
@@ -43,6 +45,10 @@ make %{?jobs:-j%jobs}
 rm -rf %{buildroot}
 
 pushd sailfish/libav
+%make_install
+popd
+
+pushd sailfish/sqlite
 %make_install
 popd
 
@@ -56,8 +62,11 @@ cp %SOURCE1 %{buildroot}/%{_datadir}/icons/hicolor/86x86/apps/
 cp %SOURCE2 %{buildroot}/%{_datadir}/applications/
 
 rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/*.so
+rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/*.la
 rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/pkgconfig/
 rm -rf %{buildroot}/%{_datadir}/harbour-quran/include/
+rm -rf %{buildroot}/%{_datadir}/harbour-quran/share/
+rm -rf %{buildroot}/%{_datadir}/harbour-quran/bin/
 
 desktop-file-install --delete-original                   \
   --dir %{buildroot}%{_datadir}/applications             \
