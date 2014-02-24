@@ -173,13 +173,6 @@ Page {
                                 subtitle: _recitations.installed.length + qsTr(" installed.");
                         }
 
-                        SettingsPageEntry {
-                                id: applicationTheme
-                                title: qsTr("Theme")
-                                subtitle: _settings.theme
-                                onClicked: pageStack.push("ThemeListPage");
-                                visible: _theme.themes().length > 1
-                        }
 */
                 }
         }
