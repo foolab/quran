@@ -47,6 +47,10 @@ popd
 %qmake5_install
 cp harbour-quran.png %{_datadir}/icons/hicolor/86x86/apps/
 
+rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/*.so
+rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/pkgconfig/
+rm -rf %{buildroot}/%{_datadir}/harbour-quran/include/
+
 desktop-file-install --delete-original                   \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
