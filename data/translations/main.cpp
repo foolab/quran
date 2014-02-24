@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
   QCoreApplication app(argc, argv);
 
   QSettings s(argv[1], QSettings::IniFormat);
+  s.setIniCodec("UTF-8");
 
   QStringList groups = s.childGroups();
 
