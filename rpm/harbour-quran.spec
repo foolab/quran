@@ -8,6 +8,8 @@ URL:        https://gitorious.org/quran/
 Source0:    %{name}-%{version}.tar.bz2
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
+BuildRequires:  pkgconfig(Qt5Sensors)
+BuildRequires:  pkgconfig(audioresource-qt)
 BuildRequires:  pkgconfig(qdeclarative5-boostable)
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(sqlite3)
@@ -34,6 +36,7 @@ make %{?jobs:-j%jobs}
 rm -rf %{buildroot}
 
 %qmake5_install
+cp harbour-quran.png %{_datadir}/icons/hicolor/86x86/apps/
 
 desktop-file-install --delete-original                   \
   --dir %{buildroot}%{_datadir}/applications             \
@@ -43,4 +46,4 @@ desktop-file-install --delete-original                   \
 %defattr(-,root,root,-)
 %{_bindir}/harbour-quran
 %{_datadir}/applications/harbour-quran.desktop
-%{_datadir}/themes/jolla-ambient/meegotouch/icons/*
+%{_datadir}/icons/hicolor/86x86/apps/harbour-quran.png
