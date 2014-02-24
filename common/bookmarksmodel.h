@@ -53,6 +53,12 @@ private slots:
 private:
   void setIds(const QList<uint>& ids);
 
+#ifdef SAILFISH
+  QHash<int, QByteArray> roleNames() const;
+  void setRoleNames(const QHash<int, QByteArray>& roles);
+  QHash<int, QByteArray> m_roles;
+#endif
+
   Bookmarks *m_bookmarks;
   QList<uint> m_ids;
 };

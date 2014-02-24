@@ -71,6 +71,12 @@ private:
     QuranViewModel2::Type m_type;
   };
 
+#ifdef SAILFISH
+  QHash<int, QByteArray> roleNames() const;
+  void setRoleNames(const QHash<int, QByteArray>& roles);
+  QHash<int, QByteArray> m_roles;
+#endif
+
   int m_page;
   DataProvider *m_data;
 

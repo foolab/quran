@@ -59,6 +59,12 @@ protected:
   Translations *m_translations;
 
 private:
+#ifdef SAILFISH
+  QHash<int, QByteArray> roleNames() const;
+  void setRoleNames(const QHash<int, QByteArray>& roles);
+  QHash<int, QByteArray> m_roles;
+#endif
+
   QList<int> m_ids;
 };
 
@@ -160,6 +166,12 @@ protected:
   Recitations *m_recitations;
 
 private:
+#ifdef SAILFISH
+  QHash<int, QByteArray> roleNames() const;
+  void setRoleNames(const QHash<int, QByteArray>& roles);
+  QHash<int, QByteArray> m_roles;
+#endif
+
   QStringList m_ids;
 };
 
@@ -200,6 +212,12 @@ protected:
   Recitations *m_recitations;
 
 private:
+#ifdef SAILFISH
+  QHash<int, QByteArray> roleNames() const;
+  void setRoleNames(const QHash<int, QByteArray>& roles);
+  QHash<int, QByteArray> m_roles;
+#endif
+
   QStringList m_ids;
 };
 

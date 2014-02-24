@@ -139,3 +139,13 @@ int QuranViewModel2::findIndex(int chapter, int verse) {
 
   return -1;
 }
+
+#ifdef SAILFISH
+QHash<int, QByteArray> QuranViewModel2::roleNames() const {
+  return m_roles;
+}
+
+void QuranViewModel2::setRoleNames(const QHash<int, QByteArray>& roles) {
+  m_roles = roles;
+}
+#endif

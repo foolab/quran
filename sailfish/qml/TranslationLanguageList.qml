@@ -10,13 +10,13 @@ Page {
                 BackgroundItem {
                         width: view.width
                         height: Theme.itemSizeSmall
-                        onClicked: pageStack.push(Qt.resolvedUrl("TranslationsAddPage.qml"), {cid: modelData})
+                        onClicked: pageStack.push(Qt.resolvedUrl("TranslationsAddPage.qml"), {cid: translationId})
                         Label {
                                 id: label
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 anchors.leftMargin: 16
-                                text: _translations.categoryName(modelData)
+                                text: name
                                 color: Theme.primaryColor
                                 anchors.verticalCenter: parent.verticalCenter
                         }
@@ -26,7 +26,9 @@ Page {
         SilicaListView {
                 id: view
                 anchors.fill: parent
-                model: _translations.categories
+                model: TranslationCategoriesModel {
+                        translations: _translations
+                }
                 delegate: language
                 header: PageHeader {
                         width: parent.width

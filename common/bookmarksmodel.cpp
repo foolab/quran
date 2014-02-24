@@ -126,3 +126,13 @@ void BookmarksModel::setIds(const QList<uint>& ids) {
     endInsertRows();
   }
 }
+
+#ifdef SAILFISH
+QHash<int, QByteArray> BookmarksModel::roleNames() const {
+  return m_roles;
+}
+
+void BookmarksModel::setRoleNames(const QHash<int, QByteArray>& roles) {
+  m_roles = roles;
+}
+#endif

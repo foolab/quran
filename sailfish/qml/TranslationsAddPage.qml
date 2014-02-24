@@ -13,7 +13,7 @@ Page {
 
                 TranslationLabel {
                         id: label
-                        tid: modelData
+                        tid: translationId
                         width: view.width
                         visualParent: view
                 }
@@ -22,11 +22,15 @@ Page {
         SilicaListView {
                 id: view
                 anchors.fill: parent
-                model: _translations.translations(parent.cid)
+                model: TranslationCollection {
+                        translations: _translations
+                        language: translationsAddPage.cid
+                }
+
                 delegate: delegate
                 header: PageHeader {
                         width: parent.width
-                        title: _translations.categoryName(cid)
+                        title: _translations.categoryName(translationsAddPage.cid)
                 }
         }
 }

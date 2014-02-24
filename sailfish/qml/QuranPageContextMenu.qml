@@ -1,6 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Quran 1.0
 
 Row {
         id: contextMenu
@@ -44,32 +45,16 @@ Row {
         ToolButton {
                 id: button
                 anchors.verticalCenter: parent.verticalCenter
-
-                Connections {
-                        target: _bookmarks
-                        onBookmarkAdded: button.resetIcon();
-                        onBookmarkRemoved: button.resetIcon();
-                        onCleared: button.resetIcon();
+                BookmarkItem {
+                        id: checker
+                        bookmarks: _bookmarks
+                        bookmark: _bookmarks.serialize(contextMenu.chapter, contextMenu.verse)
                 }
 
-                image: _bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse) ? theme.favoritesRemove : theme.favoritesAdd
+                // TODO: adding or removing a bookmark does not change this until we restart
+                image: checker.isBookmarked ? theme.favoritesRemove : theme.favoritesAdd
 
-                function resetIcon() {
-                        if (_bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse)) {
-                                image = theme.favoritesRemove;
-                        }
-                        else {
-                                image = theme.favoritesAdd;
-                        }
-                }
-
-                onClicked: {
-                        if (_bookmarks.isBookmarked(contextMenu.chapter, contextMenu.verse)) {
-                                _bookmarks.remove(contextMenu.chapter, contextMenu.verse)
-                        } else {
-                                _bookmarks.add(contextMenu.chapter, contextMenu.verse)
-                        }
-                }
+                onClicked: checker.toggle()
         }
 
         ToolButton {

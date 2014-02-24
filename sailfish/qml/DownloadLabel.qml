@@ -55,6 +55,5 @@ BackgroundItem {
                 id: slider
                 visible: showProgress
                 anchors.centerIn: installed
-                onValueChanged: console.log(value)
         }
 }

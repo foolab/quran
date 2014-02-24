@@ -1,6 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Quran 1.0
 
 Page {
         id: favoritesPage
@@ -16,14 +17,6 @@ Page {
                         view.model.clear()
                         pageStack.pop()
                 }
-        }
-
-        Component.onCompleted: {
-            _bookmarks.bookmarkRemoved.connect(view.model.bookmarkRemoved);
-        }
-
-        Component.onDestruction: {
-            _bookmarks.bookmarkRemoved.disconnect(view.model.bookmarkRemoved);
         }
 
         Component {
@@ -70,7 +63,7 @@ Page {
                         }
 
                         onClicked: {
-                                pagePosition.setPosition(sura, aya)
+                                pagePosition.setPosition(chapter, verse)
                                 pageStack.pop()
                         }
 
@@ -85,7 +78,7 @@ Page {
                                 }
 
                                 font.family: _settings.fontFamily
-                                text: qsTr("(%1) %2").arg(_formatter.number(aya + 1)).arg(_data.text(sura, aya))
+                                text: qsTr("(%1) %2").arg(_formatter.number(verse + 1)).arg(_data.text(chapter, verse))
                                 wrapMode: Text.WordWrap
                                 horizontalAlignment: Text.AlignRight
                                 color: Theme.primaryColor
@@ -97,14 +90,18 @@ Page {
 
         SilicaListView {
                 id: view
-                model: FavoritesModel {}
                 anchors.fill: parent
+
+                model: BookmarksModel {
+                        bookmarks: _bookmarks
+                }
+
                 header: PageHeader {
                         width: parent.width
                         title: qsTr("Favorites")
                 }
 
-                section.property: "sura"
+                section.property: "chapter"
                 section.criteria: ViewSection.FullString
                 section.delegate: sectionDelegate
                 delegate: favoritesPageDelegate

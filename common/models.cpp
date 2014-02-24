@@ -114,6 +114,16 @@ QList<int> TranslationModel::ids() const {
   return m_ids;
 }
 
+#ifdef SAILFISH
+QHash<int, QByteArray> TranslationModel::roleNames() const {
+  return m_roles;
+}
+
+void TranslationModel::setRoleNames(const QHash<int, QByteArray>& roles) {
+  m_roles = roles;
+}
+#endif
+
 InstalledTranslationsModel::InstalledTranslationsModel(QObject *parent) :
   TranslationModel(parent) {
 
@@ -312,6 +322,16 @@ void RecitationModel::refresh() {
   setIds(m_recitations->installed());
 }
 
+#ifdef SAILFISH
+QHash<int, QByteArray> RecitationModel::roleNames() const {
+  return m_roles;
+}
+
+void RecitationModel::setRoleNames(const QHash<int, QByteArray>& roles) {
+  m_roles = roles;
+}
+#endif
+
 InstallableRecitationsModel::InstallableRecitationsModel(QObject *parent) :
   QAbstractListModel(parent),
   m_recitations(0) {
@@ -421,3 +441,13 @@ void InstallableRecitationsModel::recitationsUpdated() {
 void InstallableRecitationsModel::refresh() {
   setIds(m_recitations->installable());
 }
+
+#ifdef SAILFISH
+QHash<int, QByteArray> InstallableRecitationsModel::roleNames() const {
+  return m_roles;
+}
+
+void InstallableRecitationsModel::setRoleNames(const QHash<int, QByteArray>& roles) {
+  m_roles = roles;
+}
+#endif

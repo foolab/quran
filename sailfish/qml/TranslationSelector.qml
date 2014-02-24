@@ -1,15 +1,10 @@
 // -*- qml -*-
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Quran 1.0
 
 Dialog {
         id: dialog
-
-        Connections {
-                target: _translations
-                onInstalledChanged: model.populate()
-                onCurrentChanged: model.currentChanged()
-        }
 
         DialogHeader {
                 id: header
@@ -19,7 +14,9 @@ Dialog {
 
         SilicaListView {
                 id: view
-                model: _translations.installed
+                model: InstalledTranslationsModel {
+                        translations: _translations
+                }
 
                 anchors {
                         top: header.bottom
@@ -29,7 +26,7 @@ Dialog {
                 }
 
                 delegate: BackgroundItem {
-                        property int tid: _translations.installed[modelData]
+                        property int tid: translationId
                         onClicked: {
                                 translationsManager.changeTranslation(tid)
                                 pageStack.pop()
@@ -48,7 +45,7 @@ Dialog {
                                 anchors.fill: parent
                                 wrapMode: Text.WordWrap
                                 truncationMode: TruncationMode.Fade
-                                text: _translations.translationName(tid)
+                                text: name
                                 color: _translations.current == tid ? Theme.highlightColor : Theme.primaryColor
                         }
                 }

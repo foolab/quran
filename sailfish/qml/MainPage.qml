@@ -69,12 +69,13 @@ QuranPage {
                 anchors.bottom: parent.bottom
 
                 PushUpMenu {
-                        visible: selectTranslation.visible || selectRecitation.visible
+                        // TODO: not working?
+//                        visible: selectTranslation.visible || selectRecitation.visible
 
                         MenuItem {
                                 id: selectTranslation
                                 text: qsTr("Select translation")
-                                visible: _settings.translationMode != 0 && _translations.active.length > 1
+                                visible: _settings.translationMode != 0
                                 onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
                         }
 
