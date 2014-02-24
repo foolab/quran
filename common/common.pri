@@ -1,6 +1,5 @@
 TEMPLATE = app
 
-include(../quazip/quazip/quazip.pri)
 QT += network
 
 CONFIG += mobility link_pkgconfig
@@ -8,7 +7,7 @@ MOBILITY = sensors
 PKGCONFIG += libpulse
 
 DEPENDPATH += . ../data/ ../common/
-INCLUDEPATH += . ../data/ ../common/ ../libav/ ../sqlite/
+INCLUDEPATH += . ../data/ ../common/ ../libav/ ../sqlite/ ../quazip/quazip/
 
 DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.5.3\\\"
 
