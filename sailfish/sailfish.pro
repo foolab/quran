@@ -14,6 +14,8 @@ SOURCES += fsmonitor.cpp audiopolicy.cpp
 
 HEADERS += fsmonitor.h audiopolicy.h
 
+INCLUDEPATH += libav/
+
 DEFINES += DATA_DIR=\\\"/opt/n9-quran/\\\"
 DEFINES += SAILFISH=1
 LIBS += -lz
