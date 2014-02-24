@@ -97,7 +97,7 @@ Settings::~Settings() {
 
 QString Settings::dataDir() const {
 #ifdef SAILFISH
-  static QString dir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+  static QString dir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-quran/";
 #else
   static QString dir = USER_DIR;
 #endif

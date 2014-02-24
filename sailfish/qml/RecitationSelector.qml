@@ -1,50 +1,53 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
+import Quran 1.0
 
-SelectionDialog {
+Dialog {
         id: dialog
 
-        model: ListModel {
-                id: model
-
-                function currentChanged() {
-                        var len = _recitations.installed.length;
-
-                        for (var x = 0; x < len; x++) {
-                                if (_recitations.current == get(x).rid) {
-                                        selectedIndex = x;
-                                        return;
-                                }
-                        }
-                }
-
-                function populate() {
-                        clear();
-
-                        var len = _recitations.installed.length;
-
-                        for (var x = 0; x < len; x++) {
-                                var rid = _recitations.installed[x];
-                                var name = _recitations.recitationName(rid);
-                                append({"rid": rid, "name": name});
-                        }
-
-                        currentChanged();
-                }
+        DialogHeader {
+                id: header
+                title: qsTr("Choose recitation")
+                acceptText: title
         }
 
-        titleText: qsTr("Choose recitation");
+        SilicaListView {
+                id: view
 
-        Connections {
-                target: _recitations
-                onInstalledChanged: model.populate();
-                onCurrentChanged: model.currentChanged();
-        }
+                model: RecitationModel {
+                        recitations: _recitations
+                }
 
-        Component.onCompleted: model.populate();
+                anchors {
+                        top: header.bottom
+                        bottom: parent.bottom
+                        right: parent.right
+                        left: parent.left
+                }
 
-        onAccepted: {
-                var rid = model.get(selectedIndex).rid;
-                recitationsManager.changeRecitation(rid);
+                delegate: BackgroundItem {
+                        onClicked: {
+                                recitationsManager.changeRecitation(recitationId)
+                                pageStack.pop()
+                        }
+
+                        anchors {
+                                left: parent.left
+                                leftMargin: 16
+                                right: parent.right
+                                rightMargin: 16
+                        }
+
+                        height: Theme.itemSizeSmall
+
+                        Label {
+                                anchors.fill: parent
+                                wrapMode: Text.WordWrap
+                                truncationMode: TruncationMode.Fade
+                                text: name
+                                color: _recitations.current == recitationId ? Theme.highlightColor : Theme.primaryColor
+                        }
+                }
         }
 }

@@ -21,6 +21,11 @@ Page {
                         }
 
                         MenuItem {
+                                text: qsTr("Manage recitations")
+                                onClicked: pageStack.push(Qt.resolvedUrl("RecitationsListPage.qml"))
+                        }
+
+                        MenuItem {
                                 text: qsTr("Manage translations")
                                 onClicked: pageStack.push(Qt.resolvedUrl("TranslationsListPage.qml"))
                         }
@@ -164,16 +169,6 @@ Page {
                                 checked: _settings.flipToStopRecitation
                                 onCheckedChanged: _settings.flipToStopRecitation = checked
                         }
-
-/*
-                        SettingsPageEntry {
-                                id: recitationsEntry
-                                title: qsTr("Show recitations")
-                                onClicked: pageStack.push("RecitationsListPage");
-                                subtitle: _recitations.installed.length + qsTr(" installed.");
-                        }
-
-*/
                 }
         }
 }

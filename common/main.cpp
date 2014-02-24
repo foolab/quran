@@ -71,7 +71,7 @@ extern "C" {
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
 #ifdef SAILFISH
   QGuiApplication *app = MDeclarativeCache::qApplication(argc, argv);
-  app->setApplicationName("quran");
+  app->setApplicationName("harbour-quran");
   app->setApplicationDisplayName(QObject::tr("Holy Quran"));
 
   QQuickView *view = MDeclarativeCache::qQuickView();

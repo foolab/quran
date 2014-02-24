@@ -1,61 +1,44 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
+import Quran 1.0
 
 Page {
 	    id: recitationsListPage
 
-        tools: toolBar
-
-        TitleLabel {
-                id: title
-                width: parent.width
-                anchors.top: parent.top
-                text: qsTr("Recitations")
-        }
-
         Component {
                 id: recitationssDelegate
-
-                Rectangle {
-                        width: view.width
-                        height: label.height * 2
-                        color: mouse.pressed ? _colors.pressedColor : _colors.backgroundColor
-
-                        Label {
-                                id: label
-                                text: _recitations.recitationName(modelData);
-                                width: parent.width
-                                anchors.verticalCenter: parent.verticalCenter
-                                color: mouse.pressed ? _colors.pressedTextColor : _colors.textColor
-                        }
-
-                        MouseArea {
-                                id: mouse
-                                anchors.fill: parent
-                        }
+                // TODO: Context menu
+                DownloadLabel {
+                        showInstalled: isOnline
+                        showProgress: false
+                        text: name
                 }
         }
 
-        ListView {
+        SilicaListView {
                 id: view
-                clip: true
-                anchors.top: title.bottom
-                anchors.bottom: toolBar.top
-                anchors.left: parent.left
-                anchors.leftMargin: 16
-                anchors.right: parent.right
-                anchors.rightMargin: 16
-                model: _recitations.installed
-                delegate: recitationssDelegate
-        }
+                anchors.fill: parent
+                model: RecitationModel {
+                        recitations: _recitations
+                }
 
-        // TODO: Refresh button.
-        // TODO: hide list in mass storage mode ?
-        ToolBar {
-                id: toolBar
-                ToolBarLayout {
-                        ToolButton { icon: theme.pageBack; onClicked: pageStack.pop(); }
-                        ToolButton { icon: theme.addRecitation; onClicked: pageStack.push("RecitationAddPage"); }
-		        }
-		}
+                delegate: recitationssDelegate
+
+                header: PageHeader {
+                        width: parent.width
+                        title: qsTr("Recitations")
+                }
+
+                ViewPlaceholder {
+                        text: qsTr("No recitations. Pull down to enable a recitation.")
+                        enabled: view.count == 0
+                }
+                PullDownMenu {
+                        MenuItem {
+                                text: qsTr("Add recitation")
+                                onClicked: pageStack.push(Qt.resolvedUrl("RecitationAddPage.qml"))
+                        }
+                }
+        }
 }

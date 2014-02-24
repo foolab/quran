@@ -83,7 +83,7 @@ QuranPage {
                                 id: selectRecitation
                                 text: qsTr("Select recitation")
                                 visible: _settings.recitationMode != 0 // && _recitations.installed > 1
-                                onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
+                                onClicked: pageStack.push(Qt.resolvedUrl("RecitationSelector.qml"))
                         }
                 }
 
