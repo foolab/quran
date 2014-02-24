@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Quran
+Icon=harbour-quran
+Exec=harbour-quran
+X-Nemo-Application-Type=silica-qt5

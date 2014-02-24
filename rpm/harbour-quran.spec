@@ -6,6 +6,8 @@ Group:      Applications
 License:    GPLv2
 URL:        https://gitorious.org/quran/
 Source0:    %{name}-%{version}.tar.bz2
+Source1:    harbour-quran.png
+Source2:    harbour-quran.desktop
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(Qt5Sensors)
@@ -48,7 +50,10 @@ pushd sailfish
 %qmake5_install
 popd
 
-cp rpm/harbour-quran.png %{_datadir}/icons/hicolor/86x86/apps/
+mkdir -p %{buildroot}/%{_datadir}/icons/hicolor/86x86/apps/
+mkdir -p %{buildroot}/%{_datadir}/applications/
+cp %SOURCE1 %{buildroot}/%{_datadir}/icons/hicolor/86x86/apps/
+cp %SOURCE2 %{buildroot}/%{_datadir}/applications/
 
 rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/*.so
 rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/pkgconfig/
