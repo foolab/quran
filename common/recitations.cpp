@@ -183,7 +183,11 @@ bool Recitations::loadDefault() {
     return false;
   }
 
-  return load(m_settings->defaultRecitation());
+  if (load(m_settings->defaultRecitation())) {
+    return true;
+  }
+
+  return load(m_installed.keys()[0]);
 }
 
 void Recitations::unload() {
