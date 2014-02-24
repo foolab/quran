@@ -37,6 +37,12 @@ pushd sailfish
 ../build-libav.sh --prefix=%{_datadir}/harbour-quran/ --enable-shared --disable-static
 ../build_sqlite.sh --prefix=%{_datadir}/harbour-quran/
 
+mkdir quazip
+pushd quazip
+%qmake5 ../../quazip PREFIX=%{_datadir}/harbour-quran/
+make %{?jobs:-j%jobs}
+popd
+
 %qmake5
 
 make %{?jobs:-j%jobs}

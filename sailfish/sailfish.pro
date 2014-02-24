@@ -18,7 +18,6 @@ INCLUDEPATH += libav/
 
 DEFINES += DATA_DIR=\\\"/opt/n9-quran/\\\"
 DEFINES += SAILFISH=1
-LIBS += -lz
 
 RESOURCES += qml.qrc
 
@@ -28,4 +27,5 @@ LIBS += -Wl,-rpath=/usr/share/harbour-quran/lib/ \
         -Llibav/libavutil/ -lavutil \
         -Llibav/libavfilter/ -lavfilter \
         -Llibav/libavresample/ -lavresample \
-        -Lsqlite/ -lsqlite3
+        -Lsqlite/ -lsqlite3 \
+        -Lquazip/quazip/ -lquazip
