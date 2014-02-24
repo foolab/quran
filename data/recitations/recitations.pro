@@ -3,7 +3,7 @@ TARGET = recitations
 DEPENDPATH += .
 INCLUDEPATH += .
 
-QT = core script
+QT = core
 
 SOURCES += main.cpp
 
