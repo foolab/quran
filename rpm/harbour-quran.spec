@@ -28,6 +28,7 @@ Requires:  mapplauncherd-booster-silica-qt5
 %build
 pushd data
 %qmake5
+make
 popd
 
 pushd sailfish
