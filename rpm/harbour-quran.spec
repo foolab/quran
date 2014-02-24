@@ -10,6 +10,7 @@ BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(qdeclarative5-boostable)
 BuildRequires:  pkgconfig(libpulse)
+BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  desktop-file-utils
 Requires:  sailfishsilica-qt5
 Requires:  mapplauncherd-booster-silica-qt5
