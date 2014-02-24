@@ -22,10 +22,9 @@ LIBS += -lz
 
 RESOURCES += qml.qrc
 
-LIBS += -Wl,--whole-archive \
+LIBS += -Wl,-rpath=/usr/share/harbour-quran/lib/ \
         -Llibav/libavformat/ -lavformat \
         -Llibav/libavcodec/ -lavcodec \
         -Llibav/libavutil/ -lavutil \
         -Llibav/libavfilter/ -lavfilter \
-        -Llibav/libavresample/ -lavresample \
-        -Wl,--no-whole-archive
+        -Llibav/libavresample/ -lavresample
