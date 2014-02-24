@@ -11,6 +11,7 @@ Source2:    harbour-quran.desktop
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(Qt5Sensors)
+BuildRequires:  pkgconfig(Qt5Test)
 BuildRequires:  pkgconfig(audioresource-qt)
 BuildRequires:  pkgconfig(qdeclarative5-boostable)
 BuildRequires:  pkgconfig(libpulse)
