@@ -68,3 +68,4 @@ desktop-file-install --delete-original                   \
 %{_bindir}/harbour-quran
 %{_datadir}/applications/harbour-quran.desktop
 %{_datadir}/icons/hicolor/86x86/apps/harbour-quran.png
+%{_datadir}/harbour-quran/lib/*.so.*
