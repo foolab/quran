@@ -40,12 +40,15 @@ make %{?jobs:-j%jobs}
 %install
 rm -rf %{buildroot}
 
-pushd libav
+pushd sailfish/libav
 %make_install
 popd
 
+pushd sailfish
 %qmake5_install
-cp harbour-quran.png %{_datadir}/icons/hicolor/86x86/apps/
+popd
+
+cp rpm/harbour-quran.png %{_datadir}/icons/hicolor/86x86/apps/
 
 rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/*.so
 rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/pkgconfig/
