@@ -22,6 +22,8 @@ Requires:  mapplauncherd-booster-silica-qt5
 %setup -q
 
 %build
+pushd sailfish
+../build-libav.sh
 %qmake5
 
 make %{?jobs:-j%jobs}

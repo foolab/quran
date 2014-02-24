@@ -80,11 +80,6 @@ ApplicationWindow {
 
         Component.onCompleted: _data.setTextType(_settings.textType)
 
-	    // TODO: duplicate of Page::isPortrait()
-        function isPortrait() {
-                return height > width;
-        }
-
         QtObject {
                 id: pagePosition
 
