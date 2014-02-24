@@ -51,6 +51,7 @@ void MediaDecoder::run() {
     }
     else if (media.isError()) {
       play(AudioBuffer(Media::error()));
+      return;
     }
 
     QByteArray data = media.data();
