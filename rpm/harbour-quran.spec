@@ -1,0 +1,42 @@
+Name:       harbour-quran
+Summary:    Holy Quran reader
+Version:    0.0.0
+Release:    1
+Group:      Applications
+License:    GPLv2
+URL:        https://gitorious.org/quran/
+Source0:    %{name}-%{version}.tar.bz2
+BuildRequires:  pkgconfig(Qt5Qml)
+BuildRequires:  pkgconfig(Qt5Quick)
+BuildRequires:  pkgconfig(qdeclarative5-boostable)
+BuildRequires:  desktop-file-utils
+Requires:  sailfishsilica-qt5
+Requires:  mapplauncherd-booster-silica-qt5
+
+%description
+ A holy Quran reader. Allows reading the holy book
+ and allows adding certain verses to a list of
+ favorites to easily navigate to them later.
+
+%prep
+%setup -q
+
+%build
+%qmake5
+
+make %{?jobs:-j%jobs}
+
+%install
+rm -rf %{buildroot}
+
+%qmake5_install
+
+desktop-file-install --delete-original                   \
+  --dir %{buildroot}%{_datadir}/applications             \
+   %{buildroot}%{_datadir}/applications/*.desktop
+
+%files
+%defattr(-,root,root,-)
+%{_bindir}/harbour-quran
+%{_datadir}/applications/harbour-quran.desktop
+%{_datadir}/themes/jolla-ambient/meegotouch/icons/*
