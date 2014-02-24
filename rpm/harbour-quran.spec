@@ -40,6 +40,10 @@ make %{?jobs:-j%jobs}
 %install
 rm -rf %{buildroot}
 
+pushd libav
+%make_install
+popd
+
 %qmake5_install
 cp harbour-quran.png %{_datadir}/icons/hicolor/86x86/apps/
 
