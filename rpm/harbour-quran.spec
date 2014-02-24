@@ -9,7 +9,6 @@ Source0:    %{name}-%{version}.tar.bz2
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(qdeclarative5-boostable)
-BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  desktop-file-utils
 Requires:  sailfishsilica-qt5
 Requires:  mapplauncherd-booster-silica-qt5
