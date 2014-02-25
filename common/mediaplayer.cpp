@@ -55,7 +55,7 @@ void MediaPlayer::start(MediaPlaylist *list) {
   QObject::connect(m_list, SIGNAL(mediaAvailable(const Media&)),
 		   this, SLOT(mediaAvailable(const Media&)));
 
-  m_decoder = new MediaDecoder(m_list);
+  m_decoder = new MediaDecoder(this);
 
   m_list->start();
 
@@ -71,19 +71,27 @@ void MediaPlayer::stop() {
       m_decoder->wait(20);
     }
 
-    delete m_decoder;
+    m_decoder->deleteLater();
     m_decoder = 0;
   }
 
   if (m_audio) {
     m_audio->stop();
-    delete m_audio;
+    QObject::disconnect(m_audio, SIGNAL(positionChanged(int)),
+			this, SLOT(audioPositionChanged(int)));
+
+    QObject::disconnect(m_audio, SIGNAL(error()), this, SIGNAL(error()));
+    QObject::disconnect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
+
+    m_audio->deleteLater();
     m_audio = 0;
   }
 
   if (m_list) {
     m_list->stop();
-    delete m_list;
+    QObject::disconnect(m_list, SIGNAL(mediaAvailable(const Media&)),
+			this, SLOT(mediaAvailable(const Media&)));
+    m_list->deleteLater();
     m_list = 0;
 
     emit stateChanged();
