@@ -223,6 +223,11 @@ void Pulse::writeData() {
     m_stop = true;
     return;
   }
+  else if (buffer.media.isError()) {
+    QMetaObject::invokeMethod(this, "drainAndError", Qt::QueuedConnection);
+    m_stop = true;
+    return;
+  }
   else if (m_stop) {
     QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
     return;
@@ -250,7 +255,19 @@ void Pulse::writeData() {
   }
 }
 
+void Pulse::drainAndError() {
+  drain();
+
+  emit error();
+}
+
 void Pulse::drainAndFinish() {
+  drain();
+
+  emit finished();
+}
+
+void Pulse::drain() {
   pa_threaded_mainloop_lock(m_loop);
 
   if (!m_stream) {
@@ -270,7 +287,6 @@ void Pulse::drainAndFinish() {
 
   pa_threaded_mainloop_unlock(m_loop);
 
-  emit finished();
 }
 
 void Pulse::start() {

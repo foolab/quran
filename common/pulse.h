@@ -46,6 +46,7 @@ signals:
 
 private slots:
   void drainAndFinish();
+  void drainAndError();
 
 private:
   static void contextStateCallback(pa_context *ctx, Pulse *pulse);
@@ -54,8 +55,8 @@ private:
   static void successCallback(pa_stream *stream, int success, Pulse *pulse);
 
   bool createStream();
-
   void writeData();
+  void drain();
 
   AudioOutput *m_audio;
   pa_threaded_mainloop *m_loop;
