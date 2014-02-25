@@ -121,6 +121,8 @@ void MediaPlayer::policyAcquired() {
   QObject::connect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
 
   if (!m_audio->start()) {
+    delete m_audio;
+    m_audio = 0;
     emit error();
     return;
   }
