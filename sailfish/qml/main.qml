@@ -60,6 +60,7 @@ ApplicationWindow {
                 settings: _settings
                 data: _data
                 downloader: _downloader
+                onError: banner.show(qsTr("Failed to play recitation"))
         }
 
         QuranTheme {
@@ -211,10 +212,6 @@ ApplicationWindow {
 
         InfoBanner {
                 id: translations
-        }
-
-        InfoBanner {
-                id: playerError
         }
 
         Connections {
