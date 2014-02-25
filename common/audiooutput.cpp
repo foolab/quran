@@ -112,11 +112,6 @@ AudioBuffer AudioOutput::buffer() {
   AudioBuffer b = m_buffers.takeFirst();
   m_mutex.unlock();
 
-  if (b.media.isError()) {
-    emit error();
-    return AudioBuffer(Media::eos());
-  }
-
   return b;
 }
 
