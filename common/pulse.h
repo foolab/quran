@@ -37,6 +37,8 @@ public:
 
   void start();
 
+  bool isRunning();
+
 signals:
   void error();
   void finished();

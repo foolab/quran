@@ -282,3 +282,7 @@ void Pulse::start() {
     m_started = true;
   }
 }
+
+bool Pulse::isRunning() {
+  return m_started;
+}

@@ -65,11 +65,19 @@ bool AudioOutput::start() {
 void AudioOutput::play(const QList<AudioBuffer>& buffers) {
   m_mutex.lock();
   m_buffers = buffers;
-  m_mutex.unlock();
 
-  if (!m_buffers.isEmpty()) {
+  if (m_buffers.isEmpty()) {
+    m_mutex.unlock();
+    return;
+  }
+
+  if (!m_pulse->isRunning()) {
+    m_mutex.unlock();
     m_pulse->start();
+  }
+  else {
     m_cond.wakeOne();
+    m_mutex.unlock();
   }
 }
 
@@ -78,23 +86,31 @@ void AudioOutput::play(const AudioBuffer& buffer) {
 
   m_mutex.lock();
   m_buffers << buffer;
-  m_mutex.unlock();
 
-  m_pulse->start();
-  m_cond.wakeOne();
+  if (m_pulse->isRunning()) {
+    m_cond.wakeOne();
+    m_mutex.unlock();
+  }
+  else {
+    m_mutex.unlock();
+    m_pulse->start();
+  }
 }
 
 AudioBuffer AudioOutput::buffer() {
-  QMutexLocker locker(&m_mutex);
+  m_mutex.lock();
+
   if (m_buffers.isEmpty()) {
     m_cond.wait(&m_mutex);
   }
 
   if (m_buffers.isEmpty()) {
+    m_mutex.unlock();
     return AudioBuffer(Media::eos());
   }
 
   AudioBuffer b = m_buffers.takeFirst();
+  m_mutex.unlock();
 
   if (b.media.isError()) {
     emit error();
