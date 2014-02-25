@@ -27,8 +27,6 @@ AudioOutput::AudioOutput(QObject *parent) :
 
 AudioOutput::~AudioOutput() {
   stop();
-
-  delete m_pulse;
 }
 
 void AudioOutput::stop() {
