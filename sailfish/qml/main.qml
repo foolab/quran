@@ -150,7 +150,7 @@ ApplicationWindow {
                         id: label
                         anchors.fill: parent
                         anchors.leftMargin: 20
-                        color: Theme.secondaryColor
+                        color: Theme.primaryColor
                         truncationMode: TruncationMode.Fade
                         verticalAlignment: Text.AlignVCenter
                 }
