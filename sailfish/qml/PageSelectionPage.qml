@@ -2,41 +2,82 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-Page {
-        SilicaGridView {
-                id: view
-                model: _data.pageCount()
-                anchors {
-                        fill: parent
-                        leftMargin: 16
-                        rightMargin: 16
+Dialog {
+        id: dialog
+        property int targetNumber: (hundreds.currentIndex * 100) + (tens.currentIndex * 10) + ones.currentIndex
+        canAccept: targetNumber >= 1 && targetNumber <= 604
+
+        onDone: {
+                if (dialog.result == DialogResult.Accepted) {
+                    _settings.pageNumber = targetNumber - 1
+                }
+        }
+
+        DialogHeader {
+                width: dialog.width
+                title: qsTr("Choose a page")
+        }
+
+        Rectangle {
+                color: Theme.highlightColor
+                width: row.width
+                height: row.height
+                anchors.centerIn: parent
+                opacity: 0.3
+                border.width: 2
+                border.color: Theme.secondaryHighlightColor
+        }
+
+        Row {
+                id: row
+                anchors.centerIn: parent
+                width: Theme.itemSizeLarge * 3
+                height: Theme.itemSizeLarge
+                clip: true
+
+                SilicaListView {
+                        id: hundreds
+                        width: Theme.itemSizeLarge
+                        height: Theme.itemSizeLarge
+                        model: 7
+                        snapMode: ListView.SnapToItem
+                        delegate: viewDelegate
+                        highlightRangeMode: ListView.StrictlyEnforceRange
+                        currentIndex: parseInt((_settings.pageNumber + 1) / 100)
                 }
 
-                Component.onCompleted: positionViewAtIndex(_settings.pageNumber, GridView.Center)
-                cellWidth: view.width / 7
-                cellHeight: cellWidth
-
-                delegate: BackgroundItem {
-                        width: view.cellWidth
-                        height: view.cellHeight
-                        NumberLabel {
-                                anchors.fill: parent
-                                color: index == _settings.pageNumber ? Theme.highlightColor : Theme.primaryColor
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                                number: index
-                                enableSignals: false
-                        }
-
-                        onClicked: {
-                                _settings.pageNumber = index
-                                pageStack.pop()
-                        }
+                SilicaListView {
+                        id: tens
+                        width: Theme.itemSizeLarge
+                        height: Theme.itemSizeLarge
+                        model: 10
+                        snapMode: ListView.SnapToItem
+                        delegate: viewDelegate
+                        highlightRangeMode: ListView.StrictlyEnforceRange
+                        currentIndex: parseInt(((_settings.pageNumber + 1) % 100) / 10)
                 }
 
-                header: PageHeader {
-                        width: view.width
-                        title: qsTr("Choose a page")
+                SilicaListView {
+                        id: ones
+                        width: Theme.itemSizeLarge
+                        height: Theme.itemSizeLarge
+                        model: 10
+                        snapMode: ListView.SnapToItem
+                        delegate: viewDelegate
+                        highlightRangeMode: ListView.StrictlyEnforceRange
+                        currentIndex: parseInt((_settings.pageNumber + 1) % 10)
+                }
+        }
+
+        Component {
+                id: viewDelegate
+
+                NumberLabel {
+                        width: Theme.itemSizeLarge
+                        height: Theme.itemSizeLarge
+
+                        number: modelData - 1
+                        enableSignals: false
                 }
         }
 }
