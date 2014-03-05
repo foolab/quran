@@ -29,10 +29,8 @@
     <file alias="qml/RecitationsListPage.qml">qml/RecitationsListPage.qml</file>
     <file alias="qml/RecitationsManager.qml">qml/RecitationsManager.qml</file>
     <file alias="qml/SearchPage.qml">qml/SearchPage.qml</file>
-    <file alias="qml/SettingsPageEntry.qml">qml/SettingsPageEntry.qml</file>
     <file alias="qml/SettingsPage.qml">qml/SettingsPage.qml</file>
     <file alias="qml/SuraList.qml">qml/SuraList.qml</file>
-    <file alias="qml/ThemeListPage.qml">qml/ThemeListPage.qml</file>
     <file alias="qml/QuranTheme.qml">qml/QuranTheme.qml</file>
     <file alias="qml/TranslationLabel.qml">qml/TranslationLabel.qml</file>
     <file alias="qml/TranslationLanguageList.qml">qml/TranslationLanguageList.qml</file>

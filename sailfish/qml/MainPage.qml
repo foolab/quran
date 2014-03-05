@@ -59,13 +59,6 @@ QuranPage {
                 }
         }
 
-/*
-        RecitationSelector {
-                id: recitationSelector
-        }
-
-*/
-
         SilicaFlickable {
                 id: panel
                 width: parent.width
