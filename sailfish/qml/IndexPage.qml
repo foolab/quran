@@ -4,7 +4,7 @@ import Sailfish.Silica 1.0
 import Quran 1.0
 
 // TODO: use positionViewAtIndex ?
-Page {
+QuranPage {
         id: indexPage
 
         onStatusChanged: {

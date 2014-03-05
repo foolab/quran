@@ -6,6 +6,11 @@ import Sailfish.Silica 1.0
 QuranPage {
         id: quranPage
 
+        Rectangle {
+                anchors.fill: parent
+                color: _colors.backgroundColor
+        }
+
         SilicaListView {
                 id: view
                 anchors {

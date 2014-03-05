@@ -3,10 +3,5 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-        Rectangle {
-                anchors.fill: parent
-                color: _colors.backgroundColor
-        }
-
-        anchors.fill: parent
+        allowedOrientations: _settings.orientation == 1 ? Orientation.Portrait | Orientation.PortraitInverted : _settings.orientation == 2 ? Orientation.Landscape | Orientation.LandscapeInverted : Orientation.All
 }

@@ -3,7 +3,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Quran 1.0
 
-Page {
+QuranPage {
         id: aboutPage
 
         AboutData {

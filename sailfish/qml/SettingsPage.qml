@@ -2,7 +2,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-Page {
+QuranPage {
         id: settingsPage
 
         RemorsePopup { id: remorse }
@@ -112,21 +112,18 @@ Page {
                                 currentIndex: _settings.numberFormat
                                 onCurrentIndexChanged: _settings.numberFormat = currentIndex
                         }
-/*
-                        SettingsPageEntry {
-                                id: orientationEntry
-                                entries: [
-                                QtObject {property string name: qsTr("Automatic") },
-                                QtObject {property string name: qsTr("Portrait") },
-                                QtObject {property string name: qsTr("Landscape") }
-                                ]
 
-                                title: qsTr("Orientation")
-                                subtitle: entries[_settings.orientation].name;
-                                selectedIndex: _settings.orientation
-                                onAccepted: _settings.orientation = selectedIndex;
+                        ComboBox {
+                                menu: ContextMenu {
+                                        MenuItem { text: qsTr("Automatic") }
+                                        MenuItem { text: qsTr("Portrait") }
+                                        MenuItem { text: qsTr("Landscape") }
+                                }
+
+                                label: qsTr("Orientation")
+                                currentIndex: _settings.orientation
+                                onCurrentIndexChanged: _settings.orientation = currentIndex
                         }
-*/
 
                         ComboBox {
                                 menu: ContextMenu {

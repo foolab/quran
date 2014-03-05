@@ -2,7 +2,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-Page {
+QuranPage {
         SilicaListView {
                 id: view
                 model: _data.partCount()
