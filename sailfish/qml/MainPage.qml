@@ -91,13 +91,11 @@ QuranPage {
 
                         ToolButton {
                                 image: theme.next
+                                enabled: _settings.pageNumber < 603
                                 onClicked: {
                                         var newIndex = _settings.pageNumber + 1;
                                         if (_data.hasPage(newIndex)) {
                                                 _settings.pageNumber = newIndex;
-                                        }
-                                        else {
-                                                lastPageReached.show();
                                         }
                                 }
                         }
@@ -113,13 +111,11 @@ QuranPage {
 
                         ToolButton {
                                 image: theme.previous
+                                enabled: _settings.pageNumber > 0
                                 onClicked: {
                                         var newIndex = _settings.pageNumber - 1;
                                         if (_data.hasPage(newIndex)) {
                                                 _settings.pageNumber = newIndex;
-                                        }
-                                        else {
-                                                firstPageReached.show();
                                         }
                                 }
                         }

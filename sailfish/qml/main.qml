@@ -158,34 +158,6 @@ ApplicationWindow {
 
 /*
         InfoBanner {
-                id: favoriteAdded
-                text: qsTr("Favorite added");
-
-                Component.onCompleted: {
-                        _bookmarks.bookmarkAdded.connect(show);
-                }
-        }
-
-        InfoBanner {
-                id: favoriteRemoved
-                text: qsTr("Favorite removed");
-
-                Component.onCompleted: {
-                        _bookmarks.bookmarkRemoved.connect(show);
-                }
-        }
-
-        InfoBanner {
-                id: firstPageReached
-                text: qsTr("This is the first page");
-        }
-
-        InfoBanner {
-                id: lastPageReached
-                text: qsTr("This is the last page");
-        }
-
-        InfoBanner {
                 id: translationError
                 text: qsTr("Failed to load the translation");
         }
