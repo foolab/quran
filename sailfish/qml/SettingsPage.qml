@@ -135,7 +135,7 @@ QuranPage {
                                 label: qsTr("Translation")
                                 currentIndex: _settings.translationMode
                                 onCurrentIndexChanged: _settings.translationMode = currentIndex
-                                enabled: _translations.active.length > 1
+                                enabled: _translations.installedCount > 1
                        }
 
                         TextSwitch {
