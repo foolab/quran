@@ -12,6 +12,7 @@ QuranPage {
                         rightMargin: 16
                 }
 
+// TODO: add back part recitation
                 delegate: BackgroundItem {
                         width: view.width
                         height: Theme.itemSizeMedium
