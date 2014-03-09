@@ -49,37 +49,37 @@ Row {
                         bookmark: _bookmarks.serialize(contextMenu.chapter, contextMenu.verse)
                 }
 
-                icon.source: checker.isBookmarked ? "image://theme/" + theme.favoritesRemove : "image://theme/" + theme.favoritesAdd
+                icon.source: checker.isBookmarked ? "image://icon/" + theme.favoritesRemove : "image://icon/" + theme.favoritesAdd
 
                 onClicked: checker.toggle()
         }
 
         IconButton {
-                icon.source: "image://theme/" + theme.translations
+                icon.source: "image://icon/" + theme.translations
                 visible: _settings.translationMode == 2 && _fsmon.available
                 onClicked: translation.shown = !translation.shown;
         }
 
         IconButton {
-                icon.source: "image://theme/" + theme.playVerse
+                icon.source: "image://icon/" + theme.playVerse
                 visible: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.play(contextMenu.chapter, contextMenu.verse);
         }
 
         IconButton {
-                icon.source: "image://theme/" + theme.playPage
+                icon.source: "image://icon/" + theme.playPage
                 visible: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.playPage(_settings.pageNumber);
         }
 
         IconButton {
-                icon.source: "image://theme/" + theme.playChapter
+                icon.source: "image://icon/" + theme.playChapter
                 visible: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.playChapter(contextMenu.chapter);
         }
 
         IconButton {
-                icon.source: "image://theme/" + theme.stop
+                icon.source: "image://icon/" + theme.stop
                 onClicked: _recitations.stop();
                 visible: _recitations.isPlaying
         }

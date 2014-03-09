@@ -146,7 +146,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   ThemeImageProvider *theme = new ThemeImageProvider(DATA_DIR "/themes/");
 
+#ifdef SAILFISH
+  engine->addImageProvider("icon", theme);
+#else
   engine->addImageProvider("theme", theme);
+#endif
 
   rootContext->setContextProperty("_theme", theme);
 

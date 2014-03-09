@@ -90,7 +90,7 @@ QuranPage {
                         anchors.centerIn: parent
 
                         IconButton {
-                                icon.source: "image://theme/" + theme.next
+                                icon.source: "image://icon/" + theme.next
                                 enabled: _settings.pageNumber < 603
                                 onClicked: {
                                         var newIndex = _settings.pageNumber + 1;
@@ -110,7 +110,7 @@ QuranPage {
                         }
 
                         IconButton {
-                                icon.source: "image://theme/" + theme.previous
+                                icon.source: "image://icon/" + theme.previous
                                 enabled: _settings.pageNumber > 0
                                 onClicked: {
                                         var newIndex = _settings.pageNumber - 1;

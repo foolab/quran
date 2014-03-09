@@ -49,7 +49,7 @@ Column {
                 id: borderTop
                 width: parent.width
                 height: 5
-                source: "image://theme/" + theme.translationBorder
+                source: "image://icon/" + theme.translationBorder
                 visible: col.visible
         }
 
@@ -65,7 +65,7 @@ Column {
 
                 Image {
                         anchors.fill: parent
-                        source: "image://theme/" + theme.translationBackground
+                        source: "image://icon/" + theme.translationBackground
                         z: translation.z - 1
                 }
 
@@ -99,7 +99,7 @@ Column {
                 id: borderBottom
                 width: parent.width
                 height: 5
-                source: "image://theme/" + theme.translationBorder
+                source: "image://icon/" + theme.translationBorder
                 visible: col.visible
         }
 

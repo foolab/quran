@@ -15,6 +15,6 @@ Rectangle {
         // TODO: this creates a dependency non-components stuff
         Image {
                 anchors.fill: parent
-                source: "image://theme/" + theme.toolBarBackground
+                source: "image://icon/" + theme.toolBarBackground
         }
 }

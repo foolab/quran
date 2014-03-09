@@ -107,7 +107,7 @@ SilicaFlickable {
                                 id: chapterBorderTop
                                 width: parent.width
                                 height: 5
-                                source: "image://theme/" + theme.chapterBorder
+                                source: "image://icon/" + theme.chapterBorder
                         }
 
                         Label {
@@ -120,7 +120,7 @@ SilicaFlickable {
                                 text: _data.fullSuraName(_chapter);
                                 Image {
                                         anchors.fill: parent
-                                        source: "image://theme/" + theme.chapterBackground
+                                        source: "image://icon/" + theme.chapterBackground
                                         z: title.z - 1
                                 }
                         }
@@ -136,7 +136,7 @@ SilicaFlickable {
                                 visible: text != ""
                                 Image {
                                         anchors.fill: parent
-                                        source: "image://theme/" + theme.chapterBackground
+                                        source: "image://icon/" + theme.chapterBackground
                                         z: subtitle.z - 1
                                 }
                         }
@@ -145,7 +145,7 @@ SilicaFlickable {
                                 id: chapterBorderBottom
                                 width: parent.width
                                 height: 5
-                                source: "image://theme/" + theme.chapterBorder
+                                source: "image://icon/" + theme.chapterBorder
                         }
                 }
         }
