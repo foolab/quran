@@ -107,10 +107,10 @@ ApplicationWindow {
                 }
 
                 function setPosition(sura, aya) {
-                        pagePosition.sura = sura;
-                        pagePosition.aya = aya;
-                        _settings.pageNumber = _data.pageNumberForSuraAndAya(sura, aya);
-                        changed();
+                        pagePosition.sura = sura
+                        pagePosition.aya = aya
+                        _settings.pageNumber = _data.pageNumberForSuraAndAya(sura, aya)
+                        changed()
                 }
 
 //                onSuraChanged: console.log("Sura " + sura);
