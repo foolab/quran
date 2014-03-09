@@ -82,6 +82,8 @@ desktop-file-install --delete-original                   \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
 
+%define __provides_exclude_from ^%{_datadir}/lib/.*$
+
 %files
 %defattr(-,root,root,-)
 %{_bindir}/harbour-quran
