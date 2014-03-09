@@ -6,6 +6,18 @@ import Quran 1.0
 ApplicationWindow {
         id: root
 
+        cover: Component {
+                CoverBackground {
+                        anchors.fill: parent
+
+                        Image {
+                                anchors.fill: parent
+                                source: "qrc:/logo.png"
+                                fillMode: Image.PreserveAspectFit
+                        }
+                }
+        }
+
         FSMonitor {
                 id: _fsmon
         }
