@@ -59,7 +59,6 @@ QuranPage {
                 }
         }
 
-
         Component {
                 id: searchPageDelegate
 
