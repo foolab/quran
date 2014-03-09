@@ -51,7 +51,7 @@ QuranPage {
                         id: title
                         anchors.right: parent.right
                         anchors.rightMargin: 20
-                        font.family: _settings.fontFamily
+                        font.family: Theme.fontFamily
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                         text: _data.fullSuraName(section)

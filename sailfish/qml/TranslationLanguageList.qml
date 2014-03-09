@@ -19,6 +19,7 @@ QuranPage {
                                 text: name
                                 color: Theme.primaryColor
                                 anchors.verticalCenter: parent.verticalCenter
+                                font.family: Theme.fontFamily
                         }
                 }
         }

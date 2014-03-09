@@ -46,6 +46,7 @@ Dialog {
                                 wrapMode: Text.WordWrap
                                 truncationMode: TruncationMode.Fade
                                 text: name
+                                font.family: Theme.fontFamily
                                 color: _recitations.current == recitationId ? Theme.highlightColor : Theme.primaryColor
                         }
                 }

@@ -27,7 +27,7 @@ BackgroundItem {
                 Label {
                         width: parent.width - number.width
                         text: _data.fullSuraName(root.sura);
-                        font.bold: true
+                        font.family: Theme.fontFamily
                         anchors.right: number.left
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom

@@ -44,6 +44,7 @@ BackgroundItem {
                         leftMargin: 10
                 }
 
+                font.family: Theme.fontFamily
                 height: Theme.itemSizeLarge
                 wrapMode: Text.WordWrap
                 color: Theme.primaryColor

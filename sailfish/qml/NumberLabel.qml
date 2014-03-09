@@ -21,6 +21,7 @@ Label {
         color: _colors.numberLabeltextColor
 
         font.bold: true
+        font.family: Theme.fontFamily
 
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

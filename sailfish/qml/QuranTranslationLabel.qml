@@ -1,5 +1,6 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
 Column {
         id: col
@@ -56,8 +57,9 @@ Column {
                 id: translation
                 visible: col.visible
                 width: parent.width
-                font.family: _settings.translationFontFamily
-                font.pointSize: _settings.translationFontSize
+                font.family: Theme.fontFamily
+                font.pixelSize: _settings.translationFontSize
+                wrapMode: Text.WordWrap
                 color: _colors.verseColor
                 horizontalAlignment: _settings.centerText ? Text.AlignHCenter : undefined
 

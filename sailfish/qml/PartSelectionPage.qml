@@ -24,6 +24,7 @@ QuranPage {
                                 horizontalAlignment: Text.AlignRight
                                 verticalAlignment: Text.AlignVCenter
                                 text: _data.partName(index)
+                                font.family: Theme.fontFamily
                         }
 
                         onClicked: {

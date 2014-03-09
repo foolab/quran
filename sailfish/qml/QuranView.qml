@@ -36,6 +36,7 @@ SilicaFlickable {
                         anchors.rightMargin: 10
                         text: _data.partNameForPage(page)
                         color: _colors.textColor
+                        font.family: Theme.fontFamily
                 }
         }
 

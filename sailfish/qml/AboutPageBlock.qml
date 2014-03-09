@@ -11,6 +11,7 @@ BackgroundItem {
 
         Label {
                 id: titleLabel
+                font.family: Theme.fontFamilyHeading
                 font.bold: true
                 color: Theme.primaryColor
         }
@@ -22,5 +23,6 @@ BackgroundItem {
                 width: parent.width
                 textFormat: Text.RichText
                 color: Theme.primaryColor
+                font.family: Theme.fontFamily
         }
 }

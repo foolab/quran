@@ -161,6 +161,7 @@ ApplicationWindow {
                         color: Theme.primaryColor
                         truncationMode: TruncationMode.Fade
                         verticalAlignment: Text.AlignVCenter
+                        font.family: Theme.fontFamily
                 }
         }
 

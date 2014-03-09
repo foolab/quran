@@ -36,8 +36,8 @@ QuranPage {
                         Label {
                                 text: qsTr("Holy Quran Version %1").arg(_settings.version)
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                font.pixelSize: 36
-                                font.bold: true
+                                font.family: Theme.fontFamilyHeading
+                                font.pixelSize: Theme.fontSizeLarge
                                 width: parent.width
                                 horizontalAlignment: Text.AlignHCenter
                                 color: Theme.primaryColor
@@ -45,6 +45,8 @@ QuranPage {
 
                         Label {
                                 text: _about.copyright
+                                font.family: Theme.fontFamily
+                                font.pixelSize: Theme.fontSizeSmall
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 horizontalAlignment: Text.AlignHCenter
                                 width: parent.width

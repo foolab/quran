@@ -47,6 +47,7 @@ Dialog {
                                 truncationMode: TruncationMode.Fade
                                 text: name
                                 color: _translations.current == tid ? Theme.highlightColor : Theme.primaryColor
+                                font.family: Theme.fontFamily
                         }
                 }
         }

@@ -14,6 +14,7 @@ Grid {
                         // Hack: we need to reverse them
                         Component.onCompleted: text = suras[suras.length - index - 1];
                         color: _colors.textColor
+                        font.family: Theme.fontFamily
                 }
         }
 }

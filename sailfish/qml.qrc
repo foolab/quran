@@ -1,7 +1,5 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource prefix="/">
-    <file alias="qml/InfoBanner.qml">qml/InfoBanner.qml</file>
-    <file alias="qml/Label.qml">qml/Label.qml</file>
     <file alias="qml/MainPage.qml">qml/MainPage.qml</file>
     <file alias="qml/AboutPageBlock.qml">qml/AboutPageBlock.qml</file>
     <file alias="qml/AboutPage.qml">qml/AboutPage.qml</file>
