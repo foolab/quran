@@ -63,6 +63,9 @@ pushd sailfish
 %qmake5_install
 popd
 
+mkdir -p %{buildroot}/%{_datadir}/harbour-quran/data/
+cp data/search.db %{buildroot}/%{_datadir}/harbour-quran/data/
+
 mkdir -p %{buildroot}/%{_datadir}/icons/hicolor/86x86/apps/
 mkdir -p %{buildroot}/%{_datadir}/applications/
 cp %SOURCE1 %{buildroot}/%{_datadir}/icons/hicolor/86x86/apps/
@@ -85,3 +88,4 @@ desktop-file-install --delete-original                   \
 %{_datadir}/applications/harbour-quran.desktop
 %{_datadir}/icons/hicolor/86x86/apps/harbour-quran.png
 %{_datadir}/harbour-quran/lib/*.so.*
+%{_datadir}/harbour-quran/data/search.db
