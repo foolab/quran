@@ -7,7 +7,6 @@
     <file alias="qml/SelectionDialogRow.qml">qml/SelectionDialogRow.qml</file>
     <file alias="qml/TextField.qml">qml/TextField.qml</file>
     <file alias="qml/ToolBar.qml">qml/ToolBar.qml</file>
-    <file alias="qml/ToolButton.qml">qml/ToolButton.qml</file>
     <file alias="qml/AboutPageBlock.qml">qml/AboutPageBlock.qml</file>
     <file alias="qml/AboutPage.qml">qml/AboutPage.qml</file>
     <file alias="qml/DownloadLabel.qml">qml/DownloadLabel.qml</file>

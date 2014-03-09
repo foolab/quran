@@ -89,8 +89,8 @@ QuranPage {
                         id: row
                         anchors.centerIn: parent
 
-                        ToolButton {
-                                image: theme.next
+                        IconButton {
+                                icon.source: "image://theme/" + theme.next
                                 enabled: _settings.pageNumber < 603
                                 onClicked: {
                                         var newIndex = _settings.pageNumber + 1;
@@ -109,8 +109,8 @@ QuranPage {
                                 color: _colors.textColor
                         }
 
-                        ToolButton {
-                                image: theme.previous
+                        IconButton {
+                                icon.source: "image://theme/" + theme.previous
                                 enabled: _settings.pageNumber > 0
                                 onClicked: {
                                         var newIndex = _settings.pageNumber - 1;

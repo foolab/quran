@@ -42,51 +42,44 @@ Row {
                 }
         }
 
-        ToolButton {
-                id: button
-                anchors.verticalCenter: parent.verticalCenter
+        IconButton {
                 BookmarkItem {
                         id: checker
                         bookmarks: _bookmarks
                         bookmark: _bookmarks.serialize(contextMenu.chapter, contextMenu.verse)
                 }
 
-                // TODO: adding or removing a bookmark does not change this until we restart
-                image: checker.isBookmarked ? theme.favoritesRemove : theme.favoritesAdd
+                icon.source: checker.isBookmarked ? "image://theme/" + theme.favoritesRemove : "image://theme/" + theme.favoritesAdd
 
                 onClicked: checker.toggle()
         }
 
-        ToolButton {
-                image: theme.translations
+        IconButton {
+                icon.source: "image://theme/" + theme.translations
                 visible: _settings.translationMode == 2 && _fsmon.available
                 onClicked: translation.shown = !translation.shown;
         }
 
-        ToolButton {
-                anchors.verticalCenter: parent.verticalCenter
-                image: theme.playVerse
+        IconButton {
+                icon.source: "image://theme/" + theme.playVerse
                 visible: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.play(contextMenu.chapter, contextMenu.verse);
         }
 
-        ToolButton {
-                id: playPage
-                image: theme.playPage
+        IconButton {
+                icon.source: "image://theme/" + theme.playPage
                 visible: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.playPage(_settings.pageNumber);
         }
 
-        ToolButton {
-                id: playChapter
-                image: theme.playChapter
+        IconButton {
+                icon.source: "image://theme/" + theme.playChapter
                 visible: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.playChapter(contextMenu.chapter);
         }
 
-        ToolButton {
-                id: stop
-                image: theme.stop
+        IconButton {
+                icon.source: "image://theme/" + theme.stop
                 onClicked: _recitations.stop();
                 visible: _recitations.isPlaying
         }
