@@ -32,10 +32,6 @@ ApplicationWindow {
                 format: _settings.numberFormat
         }
 
-        Search {
-                id: _search
-        }
-
         Colors {
                 id: _colors
                 theme: _settings.theme

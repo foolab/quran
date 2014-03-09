@@ -55,7 +55,6 @@ QVariant TranslationModel::data(const QModelIndex& index, int role) const {
   }
 
   return QVariant();
-
 }
 
 Translations *TranslationModel::translations() const {

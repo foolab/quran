@@ -44,7 +44,7 @@ Search::~Search() {
 }
 
 void Search::disable() {
-  if (!d_ptr->db) {
+  if (d_ptr->db) {
     sqlite3_close(d_ptr->db);
     d_ptr->db = 0;
   }

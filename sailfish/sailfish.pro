@@ -16,7 +16,7 @@ HEADERS += fsmonitor.h audiopolicy.h
 
 INCLUDEPATH += libav/
 
-DEFINES += DATA_DIR=\\\"/opt/n9-quran/\\\"
+DEFINES += DATA_DIR=\\\"/usr/share/harbour-quran/\\\"
 DEFINES += SAILFISH=1
 
 RESOURCES += qml.qrc

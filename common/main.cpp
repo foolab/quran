@@ -60,6 +60,7 @@
 #include "bookmarksmodel.h"
 #include "bookmarkitem.h"
 #include "quranviewmodel2.h"
+#include "searchmodel.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -106,6 +107,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<Recitations>("Quran", 1, 0, "Recitations");
   qmlRegisterType<FSMonitor>("Quran", 1, 0, "FSMonitor");
   qmlRegisterType<Search>("Quran", 1, 0, "Search");
+  qmlRegisterType<SearchModel>("Quran", 1, 0, "SearchModel");
   qmlRegisterType<Colors>("Quran", 1, 0, "Colors");
   qmlRegisterType<Translation>("Quran", 1, 0, "Translation");
   qmlRegisterType<QuranViewModel>("Quran", 1, 0, "QuranViewModel");
