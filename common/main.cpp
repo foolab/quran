@@ -66,8 +66,10 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 };
+#include <fontconfig/fontconfig.h>
 
-#define FONT_FILE                  ":/SimplifiedNaskh.ttf"
+#define FONTS_DIR         DATA_DIR"/fonts/"
+#define FONTS_CONF        FONTS_DIR"/fonts.conf"
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
 #ifdef SAILFISH
@@ -84,7 +86,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   MApplication *app = new MApplication(argc, argv);
 #endif
 
-  QFontDatabase::addApplicationFont(FONT_FILE);
+  FcConfig *conf = FcConfigGetCurrent();
+  FcConfigParseAndLoad(conf,  reinterpret_cast<const FcChar8 *>(FONTS_CONF), 1);
+  if (!FcConfigAppFontAddDir(NULL, reinterpret_cast<const FcChar8 *>(FONTS_DIR))) {
+    qCritical() << "Failed to set fonts directory";
+    return 1;
+  }
+  FcConfigSetCurrent(conf);
 
   avcodec_register_all();
   av_register_all();

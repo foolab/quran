@@ -4,7 +4,7 @@ QT += network
 
 CONFIG += mobility link_pkgconfig
 MOBILITY = sensors
-PKGCONFIG += libpulse
+PKGCONFIG += libpulse fontconfig
 
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/ ../libav/ ../sqlite/ ../quazip/quazip/

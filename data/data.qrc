@@ -4,6 +4,5 @@
     <file alias="text/quran-simple-enhanced.idx">quran-simple-enhanced.idx</file>
     <file alias="text/quran-uthmani.xml">text/quran-uthmani.xml</file>
     <file alias="text/quran-simple-enhanced.xml">text/quran-simple-enhanced.xml</file>
-    <file>SimplifiedNaskh.ttf</file>
 </qresource>
 </RCC>
