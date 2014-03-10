@@ -16,6 +16,7 @@ BuildRequires:  pkgconfig(audioresource-qt)
 BuildRequires:  pkgconfig(qdeclarative5-boostable)
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  desktop-file-utils
 Requires:  sailfishsilica-qt5
 Requires:  mapplauncherd-booster-silica-qt5
@@ -66,6 +67,11 @@ popd
 mkdir -p %{buildroot}/%{_datadir}/harbour-quran/data/
 cp data/search.db %{buildroot}/%{_datadir}/harbour-quran/data/
 
+mkdir -p %{buildroot}/%{_datadir}/harbour-quran/fonts/
+cp -a data/SimplifiedNaskh.ttf %{buildroot}/%{_datadir}/harbour-quran/fonts/
+cp -a data/amiri-regular.ttf %{buildroot}/%{_datadir}/harbour-quran/fonts/
+cp -a data/fonts.conf %{buildroot}/%{_datadir}/harbour-quran/fonts/
+
 mkdir -p %{buildroot}/%{_datadir}/icons/hicolor/86x86/apps/
 mkdir -p %{buildroot}/%{_datadir}/applications/
 cp %SOURCE1 %{buildroot}/%{_datadir}/icons/hicolor/86x86/apps/
@@ -91,3 +97,6 @@ desktop-file-install --delete-original                   \
 %{_datadir}/icons/hicolor/86x86/apps/harbour-quran.png
 %{_datadir}/harbour-quran/lib/*.so.*
 %{_datadir}/harbour-quran/data/search.db
+%{_datadir}/harbour-quran/fonts/SimplifiedNaskh.ttf
+%{_datadir}/harbour-quran/fonts/amiri-regular.ttf
+%{_datadir}/harbour-quran/fonts/fonts.conf
