@@ -56,6 +56,7 @@
 #include <QtQuick>
 #include <QQmlError>
 #endif
+#include <QFontDatabase>
 #include "models.h"
 #include "bookmarksmodel.h"
 #include "bookmarkitem.h"
@@ -86,12 +87,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   MApplication *app = new MApplication(argc, argv);
 #endif
 
+  QFontDatabase::addApplicationFont(FONTS_DIR"/amiri-regular.ttf");
+  QFontDatabase::addApplicationFont(FONTS_DIR"/SimplifiedNaskh.ttf");
+
   FcConfig *conf = FcConfigGetCurrent();
   FcConfigParseAndLoad(conf,  reinterpret_cast<const FcChar8 *>(FONTS_CONF), 1);
-  if (!FcConfigAppFontAddDir(NULL, reinterpret_cast<const FcChar8 *>(FONTS_DIR))) {
-    qCritical() << "Failed to set fonts directory";
-    return 1;
-  }
   FcConfigSetCurrent(conf);
 
   avcodec_register_all();
