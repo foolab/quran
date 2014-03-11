@@ -60,6 +60,10 @@ pushd sailfish/sqlite
 %make_install
 popd
 
+pushd sailfish/quazip
+%make_install
+popd
+
 pushd sailfish
 %qmake5_install
 popd
