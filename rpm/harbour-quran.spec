@@ -26,6 +26,8 @@ Requires:  mapplauncherd-booster-silica-qt5
  and allows adding certain verses to a list of
  favorites to easily navigate to them later.
 
+%define __provides_exclude_from ^%{_datadir}/harbour-quran/lib/.*$
+
 %prep
 %setup -q
 
@@ -91,8 +93,6 @@ rm -rf %{buildroot}/%{_datadir}/harbour-quran/bin/
 desktop-file-install --delete-original                   \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
-
-%define __provides_exclude_from ^%{_datadir}/lib/.*$
 
 %files
 %defattr(-,root,root,-)
