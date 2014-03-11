@@ -9,6 +9,7 @@ CFLAGS="-DSQLITE_ENABLE_FTS4=1" \
     --enable-threadsafe=no \
     --enable-shared=yes \
     --enable-static=no \
+    --enable-dynamic-extensions=no \
     $@
 
 make
