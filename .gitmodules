@@ -1,3 +1,6 @@
 [submodule "libav"]
 	path = libav
 	url = git://git.libav.org/libav.git
+[submodule "libaudioresource-qt"]
+	path = libaudioresource-qt
+	url = https://github.com/nemomobile/libaudioresource-qt.git

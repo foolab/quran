@@ -12,11 +12,11 @@ BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(Qt5Sensors)
 BuildRequires:  pkgconfig(Qt5Test)
-BuildRequires:  pkgconfig(audioresource-qt)
 BuildRequires:  pkgconfig(qdeclarative5-boostable)
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  pkgconfig(fontconfig)
+BuildRequires:  pkgconfig(audioresource)
 BuildRequires:  desktop-file-utils
 Requires:  sailfishsilica-qt5
 Requires:  mapplauncherd-booster-silica-qt5
@@ -47,6 +47,12 @@ pushd quazip
 make %{?jobs:-j%jobs}
 popd
 
+mkdir libaudioresource-qt
+pushd libaudioresource-qt
+%qmake5 ../../libaudioresource-qt/src PREFIX=%{_datadir}/harbour-quran/
+make %{?jobs:-j%jobs}
+popd
+
 %qmake5
 
 make %{?jobs:-j%jobs}
@@ -63,6 +69,10 @@ pushd sailfish/sqlite
 popd
 
 pushd sailfish/quazip
+%make_install
+popd
+
+pushd sailfish/libaudioresource-qt
 %make_install
 popd
 
