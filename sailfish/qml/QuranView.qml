@@ -18,6 +18,8 @@ SilicaFlickable {
         // Needed to make flicking reliable with SilicaFlickable
         pressDelay: 0
 
+        // Work around a null pointer dereference in Silica.
+        interactive: ListView.isCurrentItem
         Component.onCompleted: scrollRequest()
 
         Item {
