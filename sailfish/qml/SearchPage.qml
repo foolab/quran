@@ -7,6 +7,7 @@ QuranPage {
         id: searchPage
 
         property string searchString
+        property Item searchField
 
         function doSearch() {
             searchModel.setQuery(searchPage.searchString, _settings.searchMatchWholeWords)
@@ -24,9 +25,12 @@ QuranPage {
                         }
 
                         SearchField {
+                                id: field
+                                Component.onCompleted: searchPage.searchField = field
                                 width: parent.width
                                 horizontalAlignment: TextInput.AlignRight
                                 onTextChanged: searchPage.searchString = text
+                                enableSoftwareInputPanel: false
                                 EnterKey.onClicked: {
                                     if (searchPage.searchString.length) {
                                         searchPage.doSearch()
@@ -94,6 +98,8 @@ QuranPage {
         SilicaListView {
                 id: view
                 anchors.fill: parent
+                anchors.bottomMargin: keyboard.visible ? keyboard.height : 0
+                clip: keyboard.visible
                 header: headerDelegate
 
                 ViewPlaceholder {
@@ -120,4 +126,61 @@ QuranPage {
                     id: searchModel
                 }
         }
+
+        Rectangle {
+            id: preview
+            property alias text: label.text
+            width: Theme.itemSizeLarge
+            height: width
+            color: Theme.highlightColor
+            visible: text != ""
+
+            anchors {
+                bottom: keyboard.top
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            Label {
+                color: Theme.primaryColor
+                id: label
+                anchors.fill: parent
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.fontSizeLarge
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+        }
+
+        Keyboard {
+            id: keyboard
+            anchors {
+                bottom: parent.bottom
+                right: parent.right
+                left: parent.left
+            }
+
+            opacity: searchPage.searchField.focus ? 1.0 : 0
+            visible: opacity > 0
+
+            Behavior on opacity {
+                NumberAnimation { duration: 200 }
+            }
+
+            onKeyPressed: {
+                if (code != " ") {
+                    preview.text = code
+                }
+            }
+
+            onKeyReleased: preview.text = ""
+            onKeyClicked: searchField.text = searchField.text + code
+            onBackspaceClicked: searchField.text = searchField.text.slice(0, -1)
+            onEnterClicked: {
+                if (searchPage.searchString.length) {
+                    searchPage.doSearch()
+                    searchPage.searchField.focus = false
+                }
+            }
+        }
+
 }

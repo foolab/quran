@@ -9,6 +9,8 @@
     <file alias="qml/IndexPageCell.qml">qml/IndexPageCell.qml</file>
     <file alias="qml/IndexPage.qml">qml/IndexPage.qml</file>
     <file alias="qml/main.qml">qml/main.qml</file>
+    <file alias="qml/Keyboard.qml">qml/Keyboard.qml</file>
+    <file alias="qml/CharacterKey.qml">qml/CharacterKey.qml</file>
     <file alias="qml/NumberLabel.qml">qml/NumberLabel.qml</file>
     <file alias="qml/PageSelectionPage.qml">qml/PageSelectionPage.qml</file>
     <file alias="qml/PartSelectionPage.qml">qml/PartSelectionPage.qml</file>
