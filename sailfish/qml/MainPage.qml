@@ -26,12 +26,17 @@ QuranPage {
                 highlightRangeMode: ListView.StrictlyEnforceRange
                 LayoutMirroring.enabled: true
                 LayoutMirroring.childrenInherit: false
-                interactive: false
                 highlightFollowsCurrentItem: true
                 highlightMoveVelocity: width * 2
                 highlightMoveDuration: 0
                 delegate: quranPageDelegate
                 currentIndex: _settings.pageNumber
+                onCurrentIndexChanged: {
+                    if (currentIndex != -1) {
+                        _settings.pageNumber = currentIndex
+                    }
+                }
+
                 clip: true
         }
 
@@ -89,17 +94,6 @@ QuranPage {
                         id: row
                         anchors.centerIn: parent
 
-                        IconButton {
-                                icon.source: "image://icon/" + theme.next
-                                enabled: _settings.pageNumber < 603
-                                onClicked: {
-                                        var newIndex = _settings.pageNumber + 1;
-                                        if (_data.hasPage(newIndex)) {
-                                                _settings.pageNumber = newIndex;
-                                        }
-                                }
-                        }
-
                         NumberLabel {
                                 width: 60
                                 height: Theme.itemSizeSmall
@@ -107,17 +101,6 @@ QuranPage {
                                 onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"));
                                 onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"));
                                 color: _colors.textColor
-                        }
-
-                        IconButton {
-                                icon.source: "image://icon/" + theme.previous
-                                enabled: _settings.pageNumber > 0
-                                onClicked: {
-                                        var newIndex = _settings.pageNumber - 1;
-                                        if (_data.hasPage(newIndex)) {
-                                                _settings.pageNumber = newIndex;
-                                        }
-                                }
                         }
                 }
         }

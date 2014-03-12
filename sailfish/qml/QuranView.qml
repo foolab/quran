@@ -15,6 +15,9 @@ SilicaFlickable {
         anchors.rightMargin: 10
         contentHeight: upper.height + column.height
 
+        // Needed to make flicking reliable with SilicaFlickable
+        pressDelay: 0
+
         Component.onCompleted: scrollRequest()
 
         Item {

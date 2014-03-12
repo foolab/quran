@@ -6,8 +6,6 @@ QtObject {
         property string favorites: _settings.theme + "/" + "favorites-add"
         property string favoritesAdd: _settings.theme + "/" + "favorites-add"
         property string favoritesRemove: _settings.theme + "/" + "favorites-remove"
-        property string previous: _settings.theme + "/" + "previous"
-        property string next: _settings.theme + "/" + "next"
         property string pageBack: _settings.theme + "/" + "page-back"
         property string remove: _settings.theme + "/" + "remove"
         property string downloaded: _settings.theme + "/" + "downloaded"
