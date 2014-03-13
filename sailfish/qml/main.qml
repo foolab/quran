@@ -8,13 +8,9 @@ ApplicationWindow {
 
         cover: Component {
                 CoverBackground {
-                        anchors.fill: parent
-
-                        Image {
-                                anchors.fill: parent
-                                source: "qrc:/logo.png"
-                                fillMode: Image.PreserveAspectFit
-                        }
+                    CoverPlaceholder {
+                        icon.source: "qrc:/logo.png"
+                    }
                 }
         }
 
