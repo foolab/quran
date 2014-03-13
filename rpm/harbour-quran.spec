@@ -101,6 +101,8 @@ rm -rf %{buildroot}/%{_datadir}/harbour-quran/include/
 rm -rf %{buildroot}/%{_datadir}/harbour-quran/share/
 rm -rf %{buildroot}/%{_datadir}/harbour-quran/bin/
 
+chmod -x %{buildroot}/%{_datadir}/harbour-quran/lib/*
+
 desktop-file-install --delete-original                   \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
