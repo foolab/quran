@@ -50,7 +50,7 @@ protected:
 private:
   void cleanup(AVFormatContext *ctx);
   bool decode(AVFormatContext *ctx, const Media& media);
-  bool decode(AVCodecContext *ctx, AVPacket *pkt, AudioBuffer& buffer, MediaResampler *resampler);
+  bool decode(AVCodecContext *ctx, AVPacket *pkt, AudioBuffer& buffer, MediaResampler **resampler);
   AVFormatContext *context(const QByteArray& data);
 
   bool stopRequested();

@@ -95,14 +95,7 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media& media) {
     return false;
   }
 
-  QScopedPointer<MediaResampler> resampler(MediaResampler::create(codec_ctx));
-  if (!resampler) {
-    play(AudioBuffer(Media::error()));
-    avcodec_close(codec_ctx);
-    qWarning() << "Initial creation of resampler failed";
-    return false;
-  }
-
+  MediaResampler *resampler = NULL;
   AVPacket pkt;
   av_init_packet(&pkt);
   int buffer_size = AVCODEC_MAX_AUDIO_FRAME_SIZE + FF_INPUT_BUFFER_PADDING_SIZE;
@@ -113,13 +106,21 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media& media) {
   AudioBuffer b(media);
 
   while (av_read_frame(ctx, &pkt) >= 0) {
-    if (!decode(codec_ctx, &pkt, b, resampler.data())) {
+    if (!decode(codec_ctx, &pkt, b, &resampler)) {
       avcodec_close(codec_ctx);
+      if (resampler) {
+	delete resampler;
+      }
+
       return false;
     }
 
     pkt.data = buffer;
     pkt.size = buffer_size;
+  }
+
+  if (resampler) {
+    delete resampler;
   }
 
   avcodec_close(codec_ctx);
@@ -136,7 +137,7 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media& media) {
 }
 
 bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt,
-			  AudioBuffer& buffer, MediaResampler *resampler) {
+			  AudioBuffer& buffer, MediaResampler **resampler) {
   AVFrame *frame = avcodec_alloc_frame();
   if (!frame) {
     return false;
@@ -162,7 +163,16 @@ bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt,
       Q_UNUSED(data_size);
 
       QByteArray data;
-      if (!resampler->resample(frame, data)) {
+      if (!(*resampler)) {
+	*resampler = MediaResampler::create(ctx);
+	if (!(*resampler)) {
+	  qWarning() << "Failed to create resampler";
+	  avcodec_free_frame(&frame);
+	  return false;
+	}
+      }
+
+      if (!(*resampler)->resample(frame, data)) {
 	avcodec_free_frame(&frame);
 	return false;
       }
