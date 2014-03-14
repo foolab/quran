@@ -275,6 +275,10 @@ void MediaPlaylist::replyFinished() {
   QByteArray data = m_reply->readAll();
 
   if (m_reply->error() != QNetworkReply::NoError || data.isEmpty()) {
+    if (m_reply->error() != QNetworkReply::NoError) {
+      qWarning() << "Error" << m_reply->errorString() << "downloading" << m_reply->url();
+    }
+
     m_queue.clear();
     m_reply->deleteLater();
     m_reply = 0;

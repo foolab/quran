@@ -99,6 +99,7 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media& media) {
   if (!resampler) {
     play(AudioBuffer(Media::error()));
     avcodec_close(codec_ctx);
+    qWarning() << "Initial creation of resampler failed";
     return false;
   }
 
