@@ -49,9 +49,9 @@ QuranPage {
                         height: view.height
 
                         PullDownMenu {
-                                MenuItem { text: qsTr("About"); onClicked: { pageStack.push(Qt.resolvedUrl("AboutPage.qml")); } }
-                                MenuItem { text: qsTr("Settings"); onClicked: { pageStack.push(Qt.resolvedUrl("SettingsPage.qml")); } }
-                                MenuItem { text: qsTr("Search"); onClicked: { pageStack.push(Qt.resolvedUrl("SearchPage.qml")); } }
+                                MenuItem { text: qsTr("About"); onClicked: { pageStack.push(Qt.resolvedUrl("AboutPage.qml")) } }
+                                MenuItem { text: qsTr("Settings"); onClicked: { pageStack.push(Qt.resolvedUrl("SettingsPage.qml")) } }
+                                MenuItem { text: qsTr("Search"); onClicked: { pageStack.push(Qt.resolvedUrl("SearchPage.qml")) } }
                                 MenuItem { text: qsTr("Favorites"); onClicked: pageStack.push(Qt.resolvedUrl("FavoritesPage.qml")) }
                         }
                 }
@@ -60,7 +60,7 @@ QuranPage {
         Connections {
                 target: _recitations
                 onPositionChanged: {
-                        pagePosition.setPosition(chapter, verse);
+                        pagePosition.setPosition(chapter, verse)
                 }
         }
 
@@ -98,8 +98,8 @@ QuranPage {
                                 width: 60
                                 height: Theme.itemSizeSmall
                                 number: _settings.pageNumber
-                                onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"));
-                                onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"));
+                                onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
+                                onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
                                 color: _colors.textColor
                         }
                 }
