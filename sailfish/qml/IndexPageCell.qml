@@ -7,13 +7,14 @@ BackgroundItem {
         property int sura
         width: parent.width
         height: Theme.itemSizeMedium
+        property bool highlight: ListView.isCurrentItem
 
         Item {
                 anchors.fill: parent
 
                 NumberLabel {
                         id: number
-                        color: Theme.primaryColor
+                        color: root.highlight ? Theme.highlightColor : Theme.primaryColor
                         number: root.sura
                         width: 70
                         anchors.right: parent.right
@@ -33,7 +34,7 @@ BackgroundItem {
                         anchors.bottom: parent.bottom
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
-                        color: Theme.primaryColor
+                        color: root.highlight ? Theme.highlightColor : Theme.primaryColor
                 }
         }
 }

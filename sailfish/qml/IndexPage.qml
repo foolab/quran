@@ -3,7 +3,6 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Quran 1.0
 
-// TODO: use positionViewAtIndex ?
 QuranPage {
         id: indexPage
 
@@ -77,7 +76,9 @@ QuranPage {
                 foreground: SilicaListView {
                         id: view
                         model: _data.verseCount
-
+                        highlightFollowsCurrentItem: false
+                        currentIndex: _data.firstSuraForPage(_settings.pageNumber)
+                        Component.onCompleted: view.positionViewAtIndex(currentIndex, ListView.Center)
                         anchors {
                                 fill: parent
                                 leftMargin: 16
