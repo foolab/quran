@@ -20,7 +20,7 @@ QuranPage {
                         left: parent.left
                 }
 
-                model: _data.pageCount()
+                model: _data.pageCount
                 orientation: ListView.Horizontal
                 snapMode: ListView.SnapOneItem
                 highlightRangeMode: ListView.StrictlyEnforceRange

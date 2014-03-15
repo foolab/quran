@@ -30,12 +30,13 @@ class TextProvider;
 class DataProvider : public QObject {
   Q_OBJECT
   Q_PROPERTY(QString basmala READ basmala NOTIFY basmalaChanged);
+  Q_PROPERTY(int pageCount READ pageCount CONSTANT);
 
 public:
   DataProvider(QObject *parent = 0);
   ~DataProvider();
 
-  Q_INVOKABLE int pageCount();
+  int pageCount() const;
   Q_INVOKABLE int partCount();
   Q_INVOKABLE QStringList surasForPage(int page);
   Q_INVOKABLE int suraCount();

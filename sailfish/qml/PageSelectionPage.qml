@@ -8,7 +8,7 @@ Dialog {
         allowedOrientations: _settings.orientation == 1 ? Orientation.Portrait | Orientation.PortraitInverted : _settings.orientation == 2 ? Orientation.Landscape | Orientation.LandscapeInverted : Orientation.All
 
         property int targetNumber: (hundreds.currentIndex * 100) + (tens.currentIndex * 10) + ones.currentIndex
-        canAccept: targetNumber >= 1 && targetNumber <= 604
+        canAccept: targetNumber >= 1 && targetNumber <= _data.pageCount
 
         onDone: {
                 if (dialog.result == DialogResult.Accepted) {

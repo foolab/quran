@@ -45,7 +45,7 @@ DataProvider::~DataProvider() {
   }
 }
 
-int DataProvider::pageCount() {
+int DataProvider::pageCount() const {
   return MAX_PAGE + 1;
 }
 
