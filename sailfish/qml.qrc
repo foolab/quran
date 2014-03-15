@@ -33,6 +33,5 @@
     <file alias="qml/TranslationSelector.qml">qml/TranslationSelector.qml</file>
     <file alias="qml/TranslationsListPage.qml">qml/TranslationsListPage.qml</file>
     <file alias="qml/TranslationsManager.qml">qml/TranslationsManager.qml</file>
-    <file alias="qml/QuranView.js">qml/QuranView.js</file>
   </qresource>
 </RCC>
