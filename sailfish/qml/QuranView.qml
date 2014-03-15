@@ -12,6 +12,9 @@ SilicaListView {
     highlightFollowsCurrentItem: true
     highlightMoveDuration: 500
 
+    // Needed to make flicking reliable with SilicaFlickable
+    pressDelay: 0
+
     anchors {
         leftMargin: 10
         rightMargin: 10
