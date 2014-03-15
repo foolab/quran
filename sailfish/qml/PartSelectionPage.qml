@@ -12,24 +12,25 @@ QuranPage {
                         rightMargin: 16
                 }
 
-// TODO: add back part recitation
-                delegate: BackgroundItem {
-                        width: view.width
-                        height: Theme.itemSizeMedium
+                highlightFollowsCurrentItem: false
+                currentIndex: _data.partNumberForPage(_settings.pageNumber)
+                Component.onCompleted: view.positionViewAtIndex(currentIndex, ListView.Center)
 
-                        Label {
-                                anchors.fill: parent
-                                anchors.rightMargin: 20
-                                color: Theme.primaryColor
-                                horizontalAlignment: Text.AlignRight
-                                verticalAlignment: Text.AlignVCenter
-                                text: _data.partName(index)
-                                font.family: Theme.fontFamily
-                        }
+                delegate: ListDelegate {
+                        number: index
+                        text: _data.partName(index)
+                        showPlay: _settings.recitationMode != 0 && _fsmon.available
+                        highlight: ListView.isCurrentItem
 
                         onClicked: {
-                                _settings.pageNumber = _data.pageNumberForPart(index)
-                                pageStack.pop()
+                            _settings.pageNumber = _data.pageNumberForPart(index)
+                            pageStack.pop()
+                        }
+
+                        onPlayClicked: {
+                            _settings.pageNumber = _data.pageNumberForPart(index)
+                            _recitations.playPart(index)
+                            pageStack.pop()
                         }
                 }
 

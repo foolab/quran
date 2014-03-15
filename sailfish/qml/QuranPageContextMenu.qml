@@ -73,12 +73,6 @@ Row {
         }
 
         IconButton {
-                icon.source: "image://icon/" + theme.playChapter
-                visible: _settings.recitationMode != 0 && _fsmon.available
-                onClicked: _recitations.playChapter(contextMenu.chapter);
-        }
-
-        IconButton {
                 icon.source: "image://icon/" + theme.stop
                 onClicked: _recitations.stop();
                 visible: _recitations.isPlaying

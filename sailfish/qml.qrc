@@ -6,8 +6,8 @@
     <file alias="qml/DownloadLabel.qml">qml/DownloadLabel.qml</file>
     <file alias="qml/FavoritesModel.qml">qml/FavoritesModel.qml</file>
     <file alias="qml/FavoritesPage.qml">qml/FavoritesPage.qml</file>
-    <file alias="qml/IndexPageCell.qml">qml/IndexPageCell.qml</file>
     <file alias="qml/IndexPage.qml">qml/IndexPage.qml</file>
+    <file alias="qml/ListDelegate.qml">qml/ListDelegate.qml</file>
     <file alias="qml/main.qml">qml/main.qml</file>
     <file alias="qml/Keyboard.qml">qml/Keyboard.qml</file>
     <file alias="qml/CharacterKey.qml">qml/CharacterKey.qml</file>

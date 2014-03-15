@@ -12,25 +12,6 @@ QuranPage {
                 }
         }
 
-        Component {
-                id: indexPageDelegate
-
-                IndexPageCell {
-                        id: cell
-                        sura: index
-                        width: view.width
-                        onClicked: {
-                                pagePosition.setPosition(sura, 0)
-                                pageStack.pop()
-                        }
-
-                        onPressAndHold: {
-                                grid.chapter = sura
-                                drawer.open = true
-                        }
-                }
-        }
-
         Drawer {
                 id: drawer
                 anchors.fill: parent
@@ -85,7 +66,28 @@ QuranPage {
                                 rightMargin: 16
                         }
 
-                        delegate: indexPageDelegate
+                        delegate: ListDelegate {
+                            number: index
+                            text: _data.fullSuraName(index)
+                            highlight: ListView.isCurrentItem
+                            showPlay: _settings.recitationMode != 0 && _fsmon.available
+                            onClicked: {
+                                pagePosition.setPosition(index, 0)
+                                pageStack.pop()
+                            }
+
+                            onPlayClicked: {
+                                pagePosition.setPosition(index, 0)
+                                _recitations.playChapter(index)
+                                pageStack.pop()
+                            }
+
+                            onPressAndHold: {
+                                grid.chapter = index
+                                drawer.open = true
+                            }
+                        }
+
                         header: PageHeader {
                                 width: view.width
                                 title: qsTr("Index")
