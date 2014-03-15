@@ -9,9 +9,11 @@ ListItem {
     property alias text: label.text
     property bool highlight
     property alias showPlay: play.visible
+    property alias showMore: more.visible
     property alias showNumber: numberLabel.visible
 
     signal playClicked
+    signal moreClicked
 
     contentHeight: Theme.itemSizeSmall
 
@@ -40,8 +42,22 @@ ListItem {
         anchors {
             top: parent.top
             right: numberLabel.visible ? numberLabel.left : parent.right
-            left: play.visible ? parent.left : undefined
+            left: more.visible ? more.right : play.visible ? play.right : parent.left
         }
+    }
+
+    IconButton {
+        id: more
+        width: Theme.itemSizeSmall
+        height: Theme.itemSizeSmall
+        icon.source: "image://theme/icon-lock-more"
+
+        anchors {
+            top: parent.top
+            left: play.visible ? play.right : parent.left
+        }
+
+        onClicked: root.moreClicked()
     }
 
     IconButton {

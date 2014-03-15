@@ -20,6 +20,7 @@ QuranPage {
                         number: index
                         text: _data.partName(index)
                         showPlay: _settings.recitationMode != 0 && _fsmon.available
+                        showMore: false
                         highlight: ListView.isCurrentItem
 
                         onClicked: {

@@ -14,6 +14,7 @@
     <file alias="qml/NumberLabel.qml">qml/NumberLabel.qml</file>
     <file alias="qml/PageSelectionPage.qml">qml/PageSelectionPage.qml</file>
     <file alias="qml/PartSelectionPage.qml">qml/PartSelectionPage.qml</file>
+    <file alias="qml/VerseSelectionPage.qml">qml/VerseSelectionPage.qml</file>
     <file alias="qml/QuranPage.qml">qml/QuranPage.qml</file>
     <file alias="qml/QuranTranslationLabel.qml">qml/QuranTranslationLabel.qml</file>
     <file alias="qml/QuranVerseLabel.qml">qml/QuranVerseLabel.qml</file>
