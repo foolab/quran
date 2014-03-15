@@ -49,7 +49,7 @@ int DataProvider::pageCount() const {
   return MAX_PAGE + 1;
 }
 
-int DataProvider::partCount() {
+int DataProvider::partCount() const {
   return 30;
 }
 
@@ -78,7 +78,7 @@ int DataProvider::firstSuraForPage(int page) {
   return (&Pages[page])->sura;
 }
 
-int DataProvider::suraCount() {
+int DataProvider::verseCount() const {
   return MAX_SURA + 1;
 }
 

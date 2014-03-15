@@ -5,7 +5,7 @@ import Sailfish.Silica 1.0
 QuranPage {
         SilicaListView {
                 id: view
-                model: _data.partCount()
+                model: _data.partCount
                 anchors {
                         fill: parent
                         leftMargin: 16

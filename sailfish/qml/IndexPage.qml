@@ -76,7 +76,7 @@ QuranPage {
                 // TODO: not dimmed when drawer is open?
                 foreground: SilicaListView {
                         id: view
-                        model: _data.suraCount()
+                        model: _data.verseCount
 
                         anchors {
                                 fill: parent

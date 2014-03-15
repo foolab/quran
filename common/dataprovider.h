@@ -31,15 +31,17 @@ class DataProvider : public QObject {
   Q_OBJECT
   Q_PROPERTY(QString basmala READ basmala NOTIFY basmalaChanged);
   Q_PROPERTY(int pageCount READ pageCount CONSTANT);
+  Q_PROPERTY(int partCount READ partCount CONSTANT);
+  Q_PROPERTY(int verseCount READ verseCount CONSTANT);
 
 public:
   DataProvider(QObject *parent = 0);
   ~DataProvider();
 
   int pageCount() const;
-  Q_INVOKABLE int partCount();
+  int partCount() const;
   Q_INVOKABLE QStringList surasForPage(int page);
-  Q_INVOKABLE int suraCount();
+  int verseCount() const;
   Q_INVOKABLE QString suraName(int sura);
   Q_INVOKABLE QString fullSuraName(int sura);
   Q_INVOKABLE QString translatedSuraName(int sura);
