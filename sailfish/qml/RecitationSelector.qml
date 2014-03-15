@@ -26,7 +26,7 @@ Dialog {
                         left: parent.left
                 }
 
-                delegate: ListDelegate {
+                delegate: BackgroundItem {
                         onClicked: {
                                 recitationsManager.changeRecitation(recitationId)
                                 pageStack.pop()
