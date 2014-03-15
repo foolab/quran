@@ -134,7 +134,7 @@ ApplicationWindow {
                 visible: opacity > 0
 
                 Behavior on opacity {
-                        NumberAnimation {}
+                        NumberAnimation { duration: 200 }
                 }
 
                 function show(text) {
