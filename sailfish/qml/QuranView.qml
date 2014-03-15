@@ -174,13 +174,6 @@ SilicaFlickable {
                                 numberFormatter: _formatter
                                 color: _recitations.chapter == chapter && _recitations.verse == verse ? _colors.highlightColor : _colors.verseColor
 
-                                onClicked: {
-                                        menu.visible = !menu.visible
-                                        if (!menu.visible && _settings.translationMode == 2) {
-                                                translation.shown = false;
-                                        }
-                                }
-
                                 function scrollRequest() {
                                         if (pagePosition.isValid() &&
                                             pagePosition.sura == chapter &&
@@ -194,10 +187,31 @@ SilicaFlickable {
                                 }
                         }
 
-                        QuranPageContextMenu {
-                                id: menu
-                                verse: _verse
-                                chapter: _chapter
+                        Row {
+                            anchors.horizontalCenter: parent.horizontalCenter
+
+                            IconButton {
+                                BookmarkItem {
+                                    id: checker
+                                    bookmarks: _bookmarks
+                                    bookmark: _bookmarks.serialize(_chapter, _verse)
+                                }
+
+                                icon.source: checker.isBookmarked ? "image://theme/icon-m-favorite-selected?black" : "image://theme/icon-m-favorite?black"
+                                onClicked: checker.toggle()
+                            }
+
+                            IconButton {
+                                icon.source: "image://theme/icon-m-region?black"
+                                visible: _settings.translationMode == 2 && _fsmon.available
+                                onClicked: translation.shown = !translation.shown;
+                            }
+
+                            IconButton {
+                                icon.source: "image://theme/icon-m-play?black"
+                                visible: _settings.recitationMode != 0 && _fsmon.available
+                                onClicked: _recitations.play(_chapter, _verse);
+                            }
                         }
 
                         QuranTranslationLabel {
