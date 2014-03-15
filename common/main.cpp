@@ -181,7 +181,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
     return 1;
   }
 
-  view->show();
+  view->showFullScreen();
 
 #else
   QDeclarativeItem *root = 0;
