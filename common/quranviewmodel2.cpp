@@ -39,6 +39,7 @@ QuranViewModel2::~QuranViewModel2() {
 void QuranViewModel2::setData(DataProvider *data) {
   if (m_data != data) {
     m_data = data;
+    emit dataChanged();
   }
 
   if (m_data && m_page != -1) {
@@ -53,6 +54,7 @@ DataProvider *QuranViewModel2::data() const {
 void QuranViewModel2::setPage(int page) {
   if (m_page != page) {
     m_page = page;
+    emit pageChanged();
   }
 
   if (m_data && m_page != -1) {

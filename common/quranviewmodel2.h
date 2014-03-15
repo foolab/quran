@@ -27,8 +27,8 @@ class QuranViewModelData;
 class QuranViewModel2 : public QAbstractListModel {
   Q_OBJECT
 
-  Q_PROPERTY(int page READ page WRITE setPage);
-  Q_PROPERTY(DataProvider * data READ data WRITE setData);
+  Q_PROPERTY(int page READ page WRITE setPage NOTIFY pageChanged);
+  Q_PROPERTY(DataProvider * data READ data WRITE setData NOTIFY dataChanged);
   Q_ENUMS(Type);
 
 public:
@@ -56,6 +56,10 @@ public:
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
   Q_INVOKABLE int findIndex(int chapter, int verse);
+
+signals:
+  void pageChanged();
+  void dataChanged();
 
 private:
   void populate();
