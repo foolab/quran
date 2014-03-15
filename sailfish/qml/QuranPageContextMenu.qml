@@ -65,16 +65,4 @@ Row {
                 visible: _settings.recitationMode != 0 && _fsmon.available
                 onClicked: _recitations.play(contextMenu.chapter, contextMenu.verse);
         }
-
-        IconButton {
-                icon.source: "image://icon/" + theme.playPage
-                visible: _settings.recitationMode != 0 && _fsmon.available
-                onClicked: _recitations.playPage(_settings.pageNumber);
-        }
-
-        IconButton {
-                icon.source: "image://icon/" + theme.stop
-                onClicked: _recitations.stop();
-                visible: _recitations.isPlaying
-        }
 }

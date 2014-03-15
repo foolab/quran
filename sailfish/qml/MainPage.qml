@@ -94,6 +94,12 @@ QuranPage {
                         id: row
                         anchors.centerIn: parent
 
+                        IconButton {
+                                icon.source: "image://theme/icon-m-play?black"
+                                visible: _settings.recitationMode != 0 && _fsmon.available
+                                onClicked: _recitations.playPage(_settings.pageNumber)
+                        }
+
                         NumberLabel {
                                 width: 60
                                 height: Theme.itemSizeSmall
@@ -101,6 +107,12 @@ QuranPage {
                                 onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
                                 onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
                                 color: _colors.textColor
+                        }
+
+                        IconButton {
+                                icon.source: "image://icon/" + theme.stop
+                                onClicked: _recitations.stop()
+                                visible: _recitations.isPlaying
                         }
                 }
         }
