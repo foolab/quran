@@ -2,85 +2,50 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-Dialog {
-        id: dialog
-        // TODO: copy of QuranPage
-        allowedOrientations: _settings.orientation == 1 ? Orientation.Portrait | Orientation.PortraitInverted : _settings.orientation == 2 ? Orientation.Landscape | Orientation.LandscapeInverted : Orientation.All
+QuranPage {
+    PageHeader {
+        width: parent.width
+        title: qsTr("Choose a page")
+    }
 
-        property int targetNumber: (hundreds.currentIndex * 100) + (tens.currentIndex * 10) + ones.currentIndex
-        canAccept: targetNumber >= 1 && targetNumber <= _data.pageCount
+    Column {
+        width: parent.width
+        anchors.verticalCenter: parent.verticalCenter
 
-        onDone: {
-                if (dialog.result == DialogResult.Accepted) {
-                    _settings.pageNumber = targetNumber - 1
-                }
+        Label {
+            width: parent.width
+            text: qsTr("Enter a page number between 1 and %1").arg(_data.pageCount)
+            font {
+                family: Theme.fontFamily
+                pixelSize: Theme.fontSizeLarge
+            }
+            wrapMode: Text.WordWrap
+            color: Theme.primaryColor
         }
 
-        DialogHeader {
-                width: dialog.width
-                title: qsTr("Choose a page")
-        }
+        TextField {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: _settings.pageNumber + 1
+            width: parent.width / 2
+            focus: true
+            horizontalAlignment: TextInput.AlignHCenter
+            inputMethodHints: Qt.ImhDigitsOnly
+            validator: IntValidator { bottom: 1; top: _data.pageCount }
 
-        Rectangle {
-                color: Theme.highlightColor
-                width: row.width
-                height: row.height
-                anchors.centerIn: parent
-                opacity: 0.3
-                border.width: 2
-                border.color: Theme.secondaryHighlightColor
-        }
+            font {
+                pixelSize: Theme.fontSizeLarge
+                family: Theme.fontFamilyHeading
+            }
 
-        Row {
-                id: row
-                anchors.centerIn: parent
-                width: Theme.itemSizeLarge * 3
-                height: Theme.itemSizeLarge
-                clip: true
+            EnterKey.enabled: acceptableInput
+            EnterKey.text: qsTr("Go!")
 
-                SilicaListView {
-                        id: hundreds
-                        width: Theme.itemSizeLarge
-                        height: Theme.itemSizeLarge
-                        model: 7
-                        snapMode: ListView.SnapToItem
-                        delegate: viewDelegate
-                        highlightRangeMode: ListView.StrictlyEnforceRange
-                        currentIndex: parseInt((_settings.pageNumber + 1) / 100)
+            EnterKey.onClicked: {
+                if (acceptableInput) {
+                    _settings.pageNumber = text - 1
+                    pageStack.pop()
                 }
-
-                SilicaListView {
-                        id: tens
-                        width: Theme.itemSizeLarge
-                        height: Theme.itemSizeLarge
-                        model: 10
-                        snapMode: ListView.SnapToItem
-                        delegate: viewDelegate
-                        highlightRangeMode: ListView.StrictlyEnforceRange
-                        currentIndex: parseInt(((_settings.pageNumber + 1) % 100) / 10)
-                }
-
-                SilicaListView {
-                        id: ones
-                        width: Theme.itemSizeLarge
-                        height: Theme.itemSizeLarge
-                        model: 10
-                        snapMode: ListView.SnapToItem
-                        delegate: viewDelegate
-                        highlightRangeMode: ListView.StrictlyEnforceRange
-                        currentIndex: parseInt((_settings.pageNumber + 1) % 10)
-                }
+            }
         }
-
-        Component {
-                id: viewDelegate
-
-                NumberLabel {
-                        width: Theme.itemSizeLarge
-                        height: Theme.itemSizeLarge
-
-                        number: modelData - 1
-                        enableSignals: false
-                }
-        }
+    }
 }
