@@ -11,7 +11,7 @@ Item {
 
     width: parent.width
     height: rect.height + 8
-    visible: item.chapter != -1 && item.verse != -1 && translationsManager.enabled && (_settings.translationMode == 1 || item.shown && _settings.translationMode == 2)
+    visible: item.chapter != -1 && item.verse != -1 && translationsManager.enabled && (_settings.translationMode == 1 || (item.shown && _settings.translationMode == 2))
     opacity: visible ? 1 : 0
 
     onChapterChanged: translation.resetText();
