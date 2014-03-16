@@ -39,7 +39,6 @@
 #include "search.h"
 #include "recitations.h"
 #include "colors.h"
-#include "toolbarlayout.h"
 #include "phoneflipcontrol.h"
 #ifndef SAILFISH
 #include <MDeclarativeCache>
@@ -119,9 +118,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<Translation>("Quran", 1, 0, "Translation");
 #ifndef SAILFISH
   qmlRegisterType<WindowController>("Quran", 1, 0, "WindowController");
-#endif
-#ifdef SAILFISH
-  qmlRegisterType<ToolBarLayout>("Quran", 1, 0, "ToolBarLayout");
 #endif
   qmlRegisterType<PhoneFlipControl>("Quran", 1, 0, "PhoneFlipControl");
   qmlRegisterType<InstalledTranslationsModel>("Quran", 1, 0, "InstalledTranslationsModel");
