@@ -8,22 +8,22 @@ QtObject {
 
         function changeRecitation(id) {
                 if (!enabled) {
-                        recitationError.show();
+                        banner.show(qsTr("Failed to load the recitation"))
                 }
 
                 if (!_recitations.load(id)) {
-                        recitationError.show();
+                        banner.show(qsTr("Failed to load the recitation"))
                 }
         }
 
         function recitationModeChanged() {
                 if (_settings.recitationMode != 0) {
                         if (!_recitations.loadDefault()) {
-                                if (_recitations.installed.length == 0) {
-                                        noRecitations.show();
+                                if (_recitations.installedCount == 0) {
+                                        banner.show(qsTr("You need to install a recitation first"))
                                 }
                                 else {
-                                        recitationError.show();
+                                        banner.show(qsTr("Failed to load the recitation"))
                                 }
 
                                 enabled = false;

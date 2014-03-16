@@ -163,26 +163,6 @@ ApplicationWindow {
 
 /*
         InfoBanner {
-                id: translationError
-                text: qsTr("Failed to load the translation");
-        }
-
-        InfoBanner {
-                id: recitationError
-                text: qsTr("Failed to load the recitation");
-        }
-
-        InfoBanner {
-                id: noTranslations
-                text: qsTr("You need to download a translation first");
-        }
-
-        InfoBanner {
-                id: noRecitations
-                text: qsTr("You need to install a recitation first");
-        }
-
-        InfoBanner {
                 id: massStorage
                 text: qsTr("Cannot be used in mass storage mode.");
         }

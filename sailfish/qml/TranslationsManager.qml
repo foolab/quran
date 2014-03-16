@@ -8,22 +8,22 @@ QtObject {
 
         function changeTranslation(id) {
                 if (!enabled) {
-                        translationError.show();
+                        banner.show(qsTr("Failed to load the translation"))
                 }
 
                 if (!_translations.load(id)) {
-                        translationError.show();
+                        banner.show(qsTr("Failed to load the translation"))
                 }
         }
 
         function translationModeChanged() {
                 if (_settings.translationMode != 0) {
                         if (!_translations.loadDefault()) {
-                                if (_translations.installed.length == 0) {
-                                        noTranslations.show();
+                                if (_translations.installedCount == 0) {
+                                        banner.show(qsTr("You need to download a translation first"))
                                 }
                                 else {
-                                        translationError.show();
+                                        banner.show(qsTr("Failed to load the translation"))
                                 }
 
                                 enabled = false;
