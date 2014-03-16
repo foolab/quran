@@ -136,7 +136,7 @@ QuranPage {
                                 currentIndex: _settings.translationMode
                                 onCurrentIndexChanged: _settings.translationMode = currentIndex
                                 enabled: _translations.installedCount > 1
-                       }
+                        }
 
                         TextSwitch {
                                 text: qsTr("Night mode")
