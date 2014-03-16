@@ -152,13 +152,13 @@ SilicaListView {
 
                     IconButton {
                         icon.source: "image://theme/icon-m-region?black"
-                        visible: _settings.translationMode == 2 && _fsmon.available
+                        visible: _settings.translationMode == 2
                         onClicked: translation.shown = !translation.shown;
                     }
 
                     IconButton {
                         icon.source: "image://theme/icon-m-play?black"
-                        visible: _settings.recitationMode != 0 && _fsmon.available && _recitations.installedCount > 0
+                        visible: _settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: _recitations.play(_chapter, _verse);
                     }
                 }

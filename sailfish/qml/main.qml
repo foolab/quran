@@ -14,10 +14,6 @@ ApplicationWindow {
                 }
         }
 
-        FSMonitor {
-                id: _fsmon
-        }
-
         Settings {
                 id: _settings
         }
@@ -163,11 +159,6 @@ ApplicationWindow {
 
 /*
         InfoBanner {
-                id: massStorage
-                text: qsTr("Cannot be used in mass storage mode.");
-        }
-
-        InfoBanner {
                 id: translations
         }
 
@@ -194,12 +185,4 @@ ApplicationWindow {
                 }
         }
 */
-        Connections {
-                target: _fsmon
-                onAvailableChanged: {
-                        if (!_fsmon.available) {
-                                _translations.stopDownloads();
-                        }
-                }
-        }
 }

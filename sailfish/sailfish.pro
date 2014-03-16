@@ -10,9 +10,9 @@ CONFIG += link_pkgconfig meegotouch sailfish
 
 PKGCONFIG += qdeclarative5-boostable sqlite3 Qt5Sensors
 
-SOURCES += fsmonitor.cpp audiopolicy.cpp
+SOURCES += audiopolicy.cpp
 
-HEADERS += fsmonitor.h audiopolicy.h
+HEADERS += audiopolicy.h
 
 INCLUDEPATH += libav/ ../libaudioresource-qt/include/
 

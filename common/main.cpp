@@ -35,7 +35,9 @@
 #include "translations.h"
 #include "translation.h"
 #include "downloader.h"
+#ifndef SAILFISH
 #include "fsmonitor.h"
+#endif
 #include "search.h"
 #include "recitations.h"
 #include "colors.h"
@@ -111,7 +113,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<AboutData>("Quran", 1, 0, "AboutData");
   qmlRegisterType<Translations>("Quran", 1, 0, "Translations");
   qmlRegisterType<Recitations>("Quran", 1, 0, "Recitations");
+#ifndef SAILFISH
   qmlRegisterType<FSMonitor>("Quran", 1, 0, "FSMonitor");
+#endif
   qmlRegisterType<Search>("Quran", 1, 0, "Search");
   qmlRegisterType<SearchModel>("Quran", 1, 0, "SearchModel");
   qmlRegisterType<Colors>("Quran", 1, 0, "Colors");

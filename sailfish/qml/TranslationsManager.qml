@@ -41,19 +41,12 @@ QtObject {
         }
 
         function reset() {
-                if (!_fsmon.available) {
-                        massStorage.show();
-                        enabled = false;
-                        return;
-                }
-
                 _translations.refresh();
 
                 translationModeChanged();
         }
 
         Component.onCompleted: {
-                _fsmon.availabilityChanged.connect(reset);
                 _settings.translationModeChanged.connect(translationModeChanged);
                 reset();
         }
