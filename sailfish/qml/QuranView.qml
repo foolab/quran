@@ -41,7 +41,7 @@ SilicaListView {
         }
     }
 
-    model: QuranViewModel2 {
+    model: QuranViewModel {
         data: _data
         page: index
     }

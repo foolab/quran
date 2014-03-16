@@ -6,7 +6,7 @@ ListView {
         id: view
         clip: true
         width: parent ? parent.width : undefined
-        model: QuranViewModel2 {data: _data; page: view.page}
+        model: QuranViewModel {data: _data; page: view.page}
         highlightMoveDuration: 1
         cacheBuffer: 999999999 // insanely high number
         Component.onCompleted: positionView();
@@ -15,7 +15,7 @@ ListView {
                 Loader {
                         ListView.delayRemove: true
                         width: view.width
-                        source: type == QuranViewModel2.Title ?
+                        source: type == QuranViewModel.Title ?
                                 Qt.resolvedUrl("ChapterDelegate.qml") :
                                 Qt.resolvedUrl("VerseDelegate.qml")
                 }

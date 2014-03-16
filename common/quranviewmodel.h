@@ -15,8 +15,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef QURAN_VIEW_MODEL_H
-#define QURAN_VIEW_MODEL_H
+#ifndef QURAN_VIEW_MODEL2_H
+#define QURAN_VIEW_MODEL2_H
 
 #include <QAbstractListModel>
 #include <QMultiMap>
@@ -27,17 +27,24 @@ class QuranViewModelData;
 class QuranViewModel : public QAbstractListModel {
   Q_OBJECT
 
-  Q_PROPERTY(int page READ page WRITE setPage);
-  Q_PROPERTY(DataProvider * data READ data WRITE setData);
+  Q_PROPERTY(int page READ page WRITE setPage NOTIFY pageChanged);
+  Q_PROPERTY(DataProvider * data READ data WRITE setData NOTIFY dataChanged);
+  Q_ENUMS(Type);
 
 public:
   QuranViewModel(QObject *parent = 0);
   ~QuranViewModel();
 
   typedef enum {
-    ChapterRole = Qt::UserRole,
-    VerseRole = Qt::UserRole + 1,
+    ChapterRole = Qt::UserRole + 1,
+    VerseRole,
+    TypeRole,
   } Roles;
+
+  typedef enum {
+    Title,
+    Verse,
+  } Type;
 
   void setData(DataProvider *data);
   DataProvider *data() const;
@@ -45,36 +52,39 @@ public:
   void setPage(int page);
   int page() const;
 
-  Q_INVOKABLE QList<int> chapters();
-  Q_INVOKABLE QList<int> verses(int chapter);
-
   int rowCount(const QModelIndex& parent = QModelIndex()) const;
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
-public slots:
-  void populate();
+  Q_INVOKABLE int findIndex(int chapter, int verse);
+
+signals:
+  void pageChanged();
+  void dataChanged();
 
 private:
+  void populate();
+  void clear();
+
   class Info {
   public:
-    Info(int chapter, int verse) :
-      m_chapter(chapter), m_verse(verse) {}
+  Info(int chapter, int verse, QuranViewModel::Type type) :
+    m_chapter(chapter), m_verse(verse), m_type(type) {}
 
     int m_chapter;
     int m_verse;
+    QuranViewModel::Type m_type;
   };
-
-  int m_page;
-  DataProvider *m_data;
-
-  QMultiMap<int, int> m_frags;
-  QList<Info> m_items;
 
 #ifdef SAILFISH
   QHash<int, QByteArray> roleNames() const;
   void setRoleNames(const QHash<int, QByteArray>& roles);
   QHash<int, QByteArray> m_roles;
 #endif
+
+  int m_page;
+  DataProvider *m_data;
+
+  QList<Info> m_info;
 };
 
-#endif /* QURAN_VIEW_MODEL_H */
+#endif /* QURAN_VIEW_MODEL2_H */

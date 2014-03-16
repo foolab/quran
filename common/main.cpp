@@ -24,7 +24,6 @@
 #endif
 #include "settings.h"
 #include "dataprovider.h"
-#include "quranviewmodel.h"
 #include "bookmarks.h"
 #include "numberformatter.h"
 #include "themeimageprovider.h"
@@ -60,7 +59,7 @@
 #include "models.h"
 #include "bookmarksmodel.h"
 #include "bookmarkitem.h"
-#include "quranviewmodel2.h"
+#include "quranviewmodel.h"
 #include "searchmodel.h"
 
 extern "C" {
@@ -118,7 +117,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<SearchModel>("Quran", 1, 0, "SearchModel");
   qmlRegisterType<Colors>("Quran", 1, 0, "Colors");
   qmlRegisterType<Translation>("Quran", 1, 0, "Translation");
-  qmlRegisterType<QuranViewModel>("Quran", 1, 0, "QuranViewModel");
 #ifndef SAILFISH
   qmlRegisterType<WindowController>("Quran", 1, 0, "WindowController");
 #endif
@@ -134,7 +132,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<InstallableRecitationsModel>("Quran", 1, 0, "InstallableRecitationsModel");
   qmlRegisterType<BookmarksModel>("Quran", 1, 0, "BookmarksModel");
   qmlRegisterType<BookmarkItem>("Quran", 1, 0, "BookmarkItem");
-  qmlRegisterType<QuranViewModel2>("Quran", 1, 0, "QuranViewModel2");
+  qmlRegisterType<QuranViewModel>("Quran", 1, 0, "QuranViewModel");
 
 #ifndef SAILFISH
   MApplicationWindow *view = new MApplicationWindow;

@@ -20,11 +20,14 @@
 #include <QDebug>
 
 QuranViewModel::QuranViewModel(QObject *parent)
-  : QAbstractListModel(parent), m_page(-1), m_data(0) {
+  : QAbstractListModel(parent),
+    m_page(-1),
+    m_data(0) {
 
   QHash<int, QByteArray> roles;
   roles[ChapterRole] = "chapter";
   roles[VerseRole] = "verse";
+  roles[TypeRole] = "type";
 
   setRoleNames(roles);
 }
@@ -36,6 +39,7 @@ QuranViewModel::~QuranViewModel() {
 void QuranViewModel::setData(DataProvider *data) {
   if (m_data != data) {
     m_data = data;
+    emit dataChanged();
   }
 
   if (m_data && m_page != -1) {
@@ -50,6 +54,7 @@ DataProvider *QuranViewModel::data() const {
 void QuranViewModel::setPage(int page) {
   if (m_page != page) {
     m_page = page;
+    emit pageChanged();
   }
 
   if (m_data && m_page != -1) {
@@ -63,7 +68,7 @@ int QuranViewModel::page() const {
 
 int QuranViewModel::rowCount(const QModelIndex& parent) const {
   if (!parent.isValid()) {
-    return m_items.size();
+    return m_info.size();
   }
 
   return 0;
@@ -72,16 +77,19 @@ int QuranViewModel::rowCount(const QModelIndex& parent) const {
 QVariant QuranViewModel::data(const QModelIndex& index, int role) const {
   int row = index.row();
 
-  if (row >= m_items.size()) {
+  if (row >= m_info.size()) {
     return QVariant();
   }
 
   switch (role) {
   case ChapterRole:
-    return m_items[row].m_chapter;
+    return m_info[row].m_chapter;
 
   case VerseRole:
-    return m_items[row].m_verse;
+    return m_info[row].m_verse;
+
+  case TypeRole:
+    return m_info[row].m_type;
 
   default:
     break;
@@ -90,42 +98,48 @@ QVariant QuranViewModel::data(const QModelIndex& index, int role) const {
   return QVariant();
 }
 
-QList<int> QuranViewModel::chapters() {
-  QList<int> c = m_frags.uniqueKeys();
-
-  qSort(c);
-
-  return c;
-}
-
-QList<int> QuranViewModel::verses(int chapter) {
-  QList<int> v = m_frags.values(chapter);
-
-  qSort(v);
-
-  return v;
-}
-
 void QuranViewModel::populate() {
-  beginResetModel();
+  clear();
 
-  m_frags.clear();
-  m_items.clear();
+  QList<Info> info;
 
   QList<Fragment> frags = m_data->pageFromIndex(m_page).fragments();
-
   foreach(const Fragment& frag, frags) {
     for (int x = frag.start(); x < frag.start() + frag.size(); x++) {
-      m_frags.insert(frag.sura(), x);
       if (x == 0) {
-	m_items << Info(frag.sura(), -1);
+	// Each chapter has a title.
+	// The delegate will take care of showing it.
+	info << Info(frag.sura(), -1, Title);
       }
 
-      m_items << Info(frag.sura(), x);
+      info << Info(frag.sura(), x, Verse);
     }
   }
 
-  endResetModel();
+  if (!info.isEmpty()) {
+    beginInsertRows(QModelIndex(), 0, info.size() - 1);
+    m_info = info;
+    endInsertRows();
+  }
+}
+
+void QuranViewModel::clear() {
+  if (!m_info.isEmpty()) {
+    beginRemoveRows(QModelIndex(), 0, m_info.size() - 1);
+    m_info.clear();
+    endRemoveRows();
+  }
+}
+
+int QuranViewModel::findIndex(int chapter, int verse) {
+  for (int x = 0; x < m_info.size(); x++) {
+    const Info& info = m_info[x];
+    if (info.m_chapter == chapter && info.m_verse == verse && info.m_type == Verse) {
+      return x;
+    }
+  }
+
+  return -1;
 }
 
 #ifdef SAILFISH
