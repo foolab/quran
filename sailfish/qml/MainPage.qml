@@ -72,20 +72,19 @@ QuranPage {
                 anchors.bottom: parent.bottom
 
                 PushUpMenu {
-                        // TODO: not working?
-//                        visible: selectTranslation.visible || selectRecitation.visible
+                        visible: selectTranslation.enabled || selectRecitation.enabled
 
                         MenuItem {
                                 id: selectTranslation
                                 text: qsTr("Select translation")
-                                visible: _settings.translationMode != 0
+                                enabled: _settings.translationMode != 0 && _translations.installedCount > 0
                                 onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
                         }
 
                         MenuItem {
                                 id: selectRecitation
                                 text: qsTr("Select recitation")
-                                visible: _settings.recitationMode != 0 // && _recitations.installed > 1
+                                enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
                                 onClicked: pageStack.push(Qt.resolvedUrl("RecitationSelector.qml"))
                         }
                 }
