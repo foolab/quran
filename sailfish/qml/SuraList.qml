@@ -13,7 +13,7 @@ Grid {
                 Label {
                         // Hack: we need to reverse them
                         Component.onCompleted: text = suras[suras.length - index - 1];
-                        color: _colors.textColor
+                        color: theme.textColor
                         font.family: Theme.fontFamily
                 }
         }

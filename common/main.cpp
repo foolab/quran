@@ -40,7 +40,9 @@
 #endif
 #include "search.h"
 #include "recitations.h"
+#ifndef SAILFISH
 #include "colors.h"
+#endif
 #include "phoneflipcontrol.h"
 #ifndef SAILFISH
 #include <MDeclarativeCache>
@@ -118,7 +120,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<Search>("Quran", 1, 0, "Search");
 #endif
   qmlRegisterType<SearchModel>("Quran", 1, 0, "SearchModel");
+#ifndef SAILFISH
   qmlRegisterType<Colors>("Quran", 1, 0, "Colors");
+#endif
   qmlRegisterType<Translation>("Quran", 1, 0, "Translation");
 #ifndef SAILFISH
   qmlRegisterType<WindowController>("Quran", 1, 0, "WindowController");

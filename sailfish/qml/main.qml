@@ -36,12 +36,6 @@ ApplicationWindow {
                 format: _settings.numberFormat
         }
 
-        Colors {
-                id: _colors
-                theme: _settings.theme
-                nightMode: _settings.nightMode
-        }
-
         Translations {
                 id: _translations
                 settings: _settings
@@ -65,6 +59,7 @@ ApplicationWindow {
 
         QuranTheme {
                 id: theme
+                inNightMode: _settings.nightMode
         }
 
         TranslationsManager {

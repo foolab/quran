@@ -36,7 +36,7 @@ SilicaListView {
             anchors.right: parent.right
             anchors.rightMargin: 10
             text: _data.partNameForPage(page)
-            color: _colors.textColor
+            color: theme.textColor
             font.family: Theme.fontFamily
         }
     }
@@ -61,7 +61,7 @@ SilicaListView {
             height: rect.height
             Rectangle {
                 id: rect
-                color: "#3f48cc"
+                color: theme.chapterBorder
                 height: childRect.height + 10
 
                 anchors {
@@ -80,7 +80,7 @@ SilicaListView {
 
                     height: column.height
                     y: 5
-                    color: "#bfe8f2"
+                    color: theme.chapterBackground
 
                     Column {
                         id: column
@@ -91,7 +91,7 @@ SilicaListView {
                             width: parent.width
                             font.family: _settings.fontFamily
                             font.pixelSize: _settings.fontSize
-                            color: _colors.titleColor
+                            color: theme.titleColor
                             horizontalAlignment: Text.AlignHCenter
                             text: _data.fullSuraName(_chapter);
                         }
@@ -102,7 +102,7 @@ SilicaListView {
                             font.pixelSize: _settings.fontSize
                             width: parent.width
                             horizontalAlignment: Text.AlignHCenter
-                            color: _colors.subtitleColor
+                            color: theme.subtitleColor
                             text: _data.hasBasmala(_chapter) ? _data.basmala : ""
                             visible: text != ""
                         }
@@ -133,7 +133,7 @@ SilicaListView {
                     verse: _verse
                     dataProvider: _data
                     numberFormatter: _formatter
-                    color: _recitations.chapter == chapter && _recitations.verse == verse ? _colors.highlightColor : _colors.verseColor
+                    color: _recitations.chapter == chapter && _recitations.verse == verse ? theme.highlightColor : theme.verseColor
                 }
 
                 Row {
@@ -146,18 +146,18 @@ SilicaListView {
                             bookmark: _bookmarks.serialize(_chapter, _verse)
                         }
 
-                        icon.source: checker.isBookmarked ? "image://theme/icon-m-favorite-selected?black" : "image://theme/icon-m-favorite?black"
+                        icon.source: checker.isBookmarked ? "image://theme/icon-m-favorite-selected?" + theme.iconHighlightColor : "image://theme/icon-m-favorite?" + theme.iconHighlightColor
                         onClicked: checker.toggle()
                     }
 
                     IconButton {
-                        icon.source: "image://theme/icon-m-region?black"
+                        icon.source: "image://theme/icon-m-region?" + theme.iconHighlightColor
                         visible: _settings.translationMode == 2
                         onClicked: translation.shown = !translation.shown;
                     }
 
                     IconButton {
-                        icon.source: "image://theme/icon-m-play?black"
+                        icon.source: "image://theme/icon-m-play?" + theme.iconHighlightColor
                         visible: _settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: _recitations.play(_chapter, _verse);
                     }

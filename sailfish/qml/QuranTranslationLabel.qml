@@ -27,13 +27,13 @@ Item {
         y: 0
         height: childRect.height + 10
         width: parent.width
-        color: "#00a3e8"
+        color: theme.translationBorder
 
         Rectangle {
             id: childRect
             height: translation.height
             width: parent.width
-            color: "#bfe8f2"
+            color: theme.translationBackground
             y: 5
 
             Label {
@@ -42,7 +42,7 @@ Item {
                 font.family: Theme.fontFamily
                 font.pixelSize: _settings.translationFontSize
                 wrapMode: Text.WordWrap
-                color: _colors.verseColor
+                color: theme.translationTextColor
                 horizontalAlignment: _settings.centerText ? Text.AlignHCenter : undefined
 
                 function resetText() {

@@ -8,7 +8,7 @@ QuranPage {
 
         Rectangle {
                 anchors.fill: parent
-                color: _colors.backgroundColor
+                color: theme.backgroundColor
         }
 
         SilicaListView {
@@ -94,7 +94,7 @@ QuranPage {
                         anchors.centerIn: parent
 
                         IconButton {
-                                icon.source: "image://theme/icon-m-play?black"
+                                icon.source: "image://theme/icon-m-play?" + theme.iconHighlightColor
                                 visible: _settings.recitationMode != 0 && _recitations.installedCount > 0
                                 onClicked: _recitations.playPage(_settings.pageNumber)
                         }
@@ -105,7 +105,7 @@ QuranPage {
                                 number: _settings.pageNumber
                                 onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
                                 onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
-                                color: _colors.textColor
+                                color: theme.textColor
                         }
 
                         IconButton {

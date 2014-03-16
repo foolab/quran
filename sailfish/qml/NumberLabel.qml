@@ -18,7 +18,6 @@ Label {
 
         property int number: 0
         property int format: _settings.numberFormat
-        color: _colors.numberLabeltextColor
 
         font.bold: true
         font.family: Theme.fontFamily

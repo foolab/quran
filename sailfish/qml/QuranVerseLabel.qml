@@ -19,7 +19,7 @@ Label {
 
         font.family: _settings.fontFamily
         font.pixelSize: _settings.fontSize
-	    color: _colors.verseColor
+	    color: theme.verseColor
         horizontalAlignment: _settings.centerText ? Text.AlignHCenter : Text.AlignHRight
 
         MouseArea {
