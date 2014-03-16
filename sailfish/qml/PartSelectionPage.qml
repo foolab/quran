@@ -19,7 +19,7 @@ QuranPage {
                 delegate: ListDelegate {
                         number: index
                         text: _data.partName(index)
-                        showPlay: _settings.recitationMode != 0 && _fsmon.available
+                        showPlay: _settings.recitationMode != 0 && _fsmon.available && _recitations.installedCount > 0
                         showMore: false
                         highlight: ListView.isCurrentItem
 

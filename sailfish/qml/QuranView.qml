@@ -158,7 +158,7 @@ SilicaListView {
 
                     IconButton {
                         icon.source: "image://theme/icon-m-play?black"
-                        visible: _settings.recitationMode != 0 && _fsmon.available
+                        visible: _settings.recitationMode != 0 && _fsmon.available && _recitations.installedCount > 0
                         onClicked: _recitations.play(_chapter, _verse);
                     }
                 }
