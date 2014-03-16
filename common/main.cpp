@@ -115,8 +115,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<Recitations>("Quran", 1, 0, "Recitations");
 #ifndef SAILFISH
   qmlRegisterType<FSMonitor>("Quran", 1, 0, "FSMonitor");
-#endif
   qmlRegisterType<Search>("Quran", 1, 0, "Search");
+#endif
   qmlRegisterType<SearchModel>("Quran", 1, 0, "SearchModel");
   qmlRegisterType<Colors>("Quran", 1, 0, "Colors");
   qmlRegisterType<Translation>("Quran", 1, 0, "Translation");
