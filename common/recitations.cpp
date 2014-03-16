@@ -352,6 +352,8 @@ bool Recitations::enableInstallable(const QString& rid) {
 
   emit added(rid);
 
+  emit installedCountChanged();
+
   return true;
 }
 
@@ -379,6 +381,8 @@ bool Recitations::disableInstallable(const QString& rid) {
   emit removed(rid);
 
   delete r;
+
+  emit installedCountChanged();
 
   return true;
 }
