@@ -98,7 +98,12 @@ desktop-file-install --delete-original                   \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
 
-tar -zxvf %SOURCE3 -C %{buildroot}/%{_datadir}/harbour-quran/lib/
+cp /usr/lib/libdbus-glib-1.so.2.2.2 %{buildroot}/%{_datadir}/harbour-quran/lib/libdbus-glib-1.so.2
+cp /usr/lib/libresourceqt5.so.1.0.0 %{buildroot}/%{_datadir}/harbour-quran/lib/libresourceqt5.so.1
+cp /usr/lib/libresource.so.0.0.18 %{buildroot}/%{_datadir}/harbour-quran/lib/libresource.so.0
+cp /usr/lib/libdbus-qeventloop-qt5.so.1.0.0 %{buildroot}/%{_datadir}/harbour-quran/lib/libdbus-qeventloop-qt5.so.1
+
+#tar -zxvf %SOURCE3 -C %{buildroot}/%{_datadir}/harbour-quran/lib/
 
 %files
 %defattr(-,root,root,-)
