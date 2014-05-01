@@ -8,6 +8,7 @@ URL:        https://gitorious.org/quran/
 Source0:    %{name}-%{version}.tar.bz2
 Source1:    harbour-quran.png
 Source2:    harbour-quran.desktop
+Source3:    bin.tgz
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(Qt5Sensors)
@@ -27,7 +28,7 @@ Requires:  mapplauncherd-booster-silica-qt5
  favorites to easily navigate to them later.
 
 %define __provides_exclude_from ^%{_datadir}/harbour-quran/lib/.*$
-%define __requires_exclude ^libsqlite3.so.0|libavresample.so.1|libavformat.so.54|libavfilter.so.3|libavcodec.so.54|libavutil.so.52|libquazip.so.1|libaudioresource-qt.so.2$
+%define __requires_exclude ^libsqlite3.so.0|libavresample.so.1|libavformat.so.54|libavfilter.so.3|libavcodec.so.54|libavutil.so.52|libquazip.so.1|libaudioresource-qt.so.2|libdbus-glib-1.so.2|libdbus-qeventloop-qt5.so.1|libresource.so.0|libresourceqt5.so.1$
 
 %prep
 %setup -q
@@ -96,6 +97,8 @@ chmod -x %{buildroot}/%{_datadir}/harbour-quran/lib/*
 desktop-file-install --delete-original                   \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
+
+tar -zxvf %SOURCE3 -C %{buildroot}/%{_datadir}/harbour-quran/lib/
 
 %files
 %defattr(-,root,root,-)
