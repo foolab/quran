@@ -9,7 +9,7 @@ PKGCONFIG += libpulse fontconfig
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/ ../libav/ ../sqlite/ ../quazip/quazip/
 
-DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.6.2\\\"
+DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.6.3\\\"
 
 SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quranviewmodel.cpp \
            position.cpp aboutdata.cpp \
