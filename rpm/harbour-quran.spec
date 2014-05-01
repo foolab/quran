@@ -8,7 +8,6 @@ URL:        https://gitorious.org/quran/
 Source0:    %{name}-%{version}.tar.bz2
 Source1:    harbour-quran.png
 Source2:    harbour-quran.desktop
-Source3:    bin.tgz
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(Qt5Sensors)
@@ -102,8 +101,6 @@ cp /usr/lib/libdbus-glib-1.so.2.2.2 %{buildroot}/%{_datadir}/harbour-quran/lib/l
 cp /usr/lib/libresourceqt5.so.1.0.0 %{buildroot}/%{_datadir}/harbour-quran/lib/libresourceqt5.so.1
 cp /usr/lib/libresource.so.0.0.18 %{buildroot}/%{_datadir}/harbour-quran/lib/libresource.so.0
 cp /usr/lib/libdbus-qeventloop-qt5.so.1.0.0 %{buildroot}/%{_datadir}/harbour-quran/lib/libdbus-qeventloop-qt5.so.1
-
-#tar -zxvf %SOURCE3 -C %{buildroot}/%{_datadir}/harbour-quran/lib/
 
 %files
 %defattr(-,root,root,-)
