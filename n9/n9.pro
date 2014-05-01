@@ -8,9 +8,9 @@ CONFIG += link_pkgconfig meegotouch debug
 
 PKGCONFIG += qmsystem2 qdeclarative-boostable sqlite3 libresourceqt1
 
-SOURCES += fsmonitor.cpp audiopolicy.cpp windowcontroller.cpp
+SOURCES += fsmonitor.cpp windowcontroller.cpp
 
-HEADERS += fsmonitor.h audiopolicy.h windowcontroller.h
+HEADERS += fsmonitor.h windowcontroller.h
 
 DEFINES += DATA_DIR=\\\"/opt/n9-quran/\\\"
 

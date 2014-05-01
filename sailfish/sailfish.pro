@@ -8,13 +8,9 @@ QT += qml quick
 
 CONFIG += link_pkgconfig meegotouch sailfish
 
-PKGCONFIG += qdeclarative5-boostable sqlite3 Qt5Sensors
+PKGCONFIG += qdeclarative5-boostable sqlite3 Qt5Sensors libresourceqt5
 
-SOURCES += audiopolicy.cpp
-
-HEADERS += audiopolicy.h
-
-INCLUDEPATH += libav/ ../libaudioresource-qt/include/
+INCLUDEPATH += libav/
 
 DEFINES += DATA_DIR=\\\"/usr/share/harbour-quran/\\\"
 DEFINES += SAILFISH=1
@@ -28,5 +24,4 @@ LIBS += -Wl,-rpath=/usr/share/harbour-quran/lib/ \
         -Llibav/libavfilter/ -lavfilter \
         -Llibav/libavresample/ -lavresample \
         -Lsqlite/ -lsqlite3 \
-        -Lquazip/quazip/ -lquazip \
-        -Llibaudioresource-qt/ -laudioresource-qt
+        -Lquazip/quazip/ -lquazip
