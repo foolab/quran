@@ -109,9 +109,8 @@ QuranPage {
                         }
 
                         IconButton {
-                                icon.source: "image://icon/" + theme.stop
+                                icon.source: _recitations.isPlaying ? "image://icon/" + theme.stop : ""
                                 onClicked: _recitations.stop()
-                                visible: _recitations.isPlaying
                         }
                 }
         }
