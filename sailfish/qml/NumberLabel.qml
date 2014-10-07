@@ -8,8 +8,10 @@ Label {
         property bool enableSignals: true
         signal clicked
         signal pressAndHold
+        property bool highlight: mouse.pressed && mouse.containsMouse
 
         MouseArea {
+                id: mouse
                 anchors.fill: parent
                 onClicked: label.clicked()
                 onPressAndHold: label.pressAndHold()

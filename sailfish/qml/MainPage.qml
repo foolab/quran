@@ -91,7 +91,7 @@ QuranPage {
                         number: _settings.pageNumber
                         onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
                         onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
-                        color: theme.textColor
+                        color: highlight ? Theme.highlightColor : theme.textColor
                 }
 
                 IconButton {
