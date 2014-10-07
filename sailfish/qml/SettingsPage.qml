@@ -82,7 +82,7 @@ QuranPage {
 
                         Slider {
                                 width: parent.width
-                                label: qsTr("Translation font size");
+                                label: qsTr("Translation text size");
                                 minimumValue: _settings.minTranslationFontSize
                                 maximumValue: _settings.maxTranslationFontSize
                                 valueText: value
