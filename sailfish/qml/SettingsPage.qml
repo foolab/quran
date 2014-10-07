@@ -91,15 +91,10 @@ QuranPage {
                                 onValueChanged: _settings.translationFontSize = value
                         }
 
-                        ComboBox {
-                                menu: ContextMenu {
-                                        MenuItem { text: qsTr("Uthmani") }
-                                        MenuItem { text: qsTr("Simple") }
-                                }
-
-                                label: qsTr("Text type")
-                                currentIndex: _settings.textType
-                                onCurrentIndexChanged: _settings.textType = currentIndex
+                        TextSwitch {
+                                text: qsTr("Use simplified text")
+                                checked: _settings.textType == 0
+                                onCheckedChanged: _settings.textType = checked ? 1 : 0
                         }
 
                         ComboBox {
