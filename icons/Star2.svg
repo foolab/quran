@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   viewBox="0 0 1000 1000"
+   id="svg3973"
+   inkscape:version="0.48.4 r9939"
+   width="100%"
+   height="100%"
+   sodipodi:docname="Star2.svg">
+  <defs
+     id="defs4147" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1024"
+     inkscape:window-height="686"
+     id="namedview4145"
+     showgrid="false"
+     inkscape:zoom="0.82623406"
+     inkscape:cx="500"
+     inkscape:cy="500"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3973" />
+  <metadata
+     id="metadata4143">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Star</dc:title>
+        <dc:date>2010-10-30T01:11:49</dc:date>
+        <dc:description>5 Pointed Yellow Star with rounded edges</dc:description>
+        <dc:source>https://openclipart.org/detail/93169/star-by-candyadams</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>CandyAdams</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>clipart_issue</rdf:li>
+            <rdf:li>five points</rdf:li>
+            <rdf:li>star</rdf:li>
+            <rdf:li>yellow</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     style="fill:#000000;stroke:#000000;stroke-width:20;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-linejoin:miter;fill-opacity:0.58904111"
+     inkscape:connector-curvature="0"
+     d="m 502.27543,32.392286 c 11.44865,-3.695913 23.50724,0.166576 32.94612,7.152371 14.60828,12.191306 24.05717,29.525656 31.97623,46.880828 22.28738,48.067685 36.19575,99.623055 50.41407,150.720355 6.37924,20.19738 14.4283,41.5712 31.27632,54.76197 0.95988,0.71836 1.92977,1.4159 2.91965,2.11343 10.70873,9.09924 24.56711,12.69104 37.96553,14.65873 17.41795,1.17643 34.98588,2.91508 52.39383,0.70794 29.59651,-0.64548 59.15303,0.42685 88.68956,2.2592 28.01669,2.86303 57.09327,4.59126 83.26018,16.41817 15.57818,6.34032 29.94648,21.92562 28.0867,40.5197 0.29996,17.07408 -10.75874,30.74375 -20.3976,43.38272 -37.3156,42.22711 -83.39017,74.40757 -128.64484,106.51516 -19.07776,13.94035 -40.52523,28.92181 -48.21433,53.03374 -0.32996,1.36384 -0.63992,2.71728 -0.94989,4.09154 -5.65933,16.6368 -3.65957,34.78322 0.78991,51.4929 7.5991,26.91249 17.8079,52.95046 25.24702,79.93582 11.26868,39.0101 21.55747,78.73856 24.40713,119.51853 1.61981,13.5135 -0.28996,27.66208 -5.98929,39.97832 -5.39936,11.72281 -17.24797,19.95793 -29.6765,21.03026 -14.07835,2.15509 -27.74674,-3.42523 -40.47524,-8.99512 -26.18691,-12.42034 -50.53405,-28.63031 -74.12127,-45.66274 -24.28714,-17.06366 -46.88448,-36.54268 -70.16174,-55.03265 -12.7385,-9.73431 -26.34689,-18.91683 -41.79508,-23.09165 -4.33948,-0.66631 -8.73897,-2.6444 -13.09845,-1.33261 -1.32984,-0.3748 -2.64969,-0.31233 -3.93954,0.13535 -20.94753,-0.41645 -39.58533,11.89979 -56.09339,23.98698 -46.97447,36.80296 -94.36889,74.03277 -147.91258,99.98745 -16.21809,7.20443 -34.21598,14.86694 -51.93388,9.41156 -11.62864,-2.8318 -20.55759,-12.67021 -25.00706,-23.89329 -3.93954,-8.42252 -3.76955,-17.95901 -4.74944,-27.05824 0.70991,-28.38044 7.85907,-56.00089 14.56828,-83.34023 10.02882,-37.49009 23.07729,-73.95989 35.74579,-110.54422 4.64946,-18.0423 9.49888,-37.77118 3.51959,-56.10499 0.89989,-2.08221 0.15998,-2.8318 -0.94989,-4.12277 -2.35972,-11.57706 -9.99883,-21.20725 -17.86789,-29.34866 C 252.02491,538.48243 235.95679,528.74813 221.42851,517.24395 179.97339,486.875 139.28819,454.79864 104.54228,416.17375 93.003629,402.02518 81.414994,385.87769 81.235015,366.49236 c 1.009882,-11.81651 6.53923,-23.33109 15.978118,-30.2336 10.098817,-7.46471 21.957417,-11.94144 34.025997,-14.50255 25.62698,-5.70525 51.90389,-6.77758 77.98081,-8.36005 32.97612,-0.24987 65.97223,0.0208 98.88836,1.78028 19.36772,-0.36439 40.43524,-2.39454 56.44335,-14.99187 0.73991,-0.59342 1.42983,-1.2285 2.06976,-1.93645 8.08904,-4.46633 13.29843,-12.8472 18.33784,-20.48889 11.67862,-19.87464 16.948,-42.74765 23.84719,-64.65244 8.55899,-29.44237 18.38784,-58.50994 29.50652,-87.02573 7.30914,-18.82312 15.19821,-37.46926 25.18704,-54.938954 9.07893,-16.116261 20.77755,-33.127869 38.77543,-38.74982 z"
+     id="path4003"
+     inkscape:export-filename="/mnt/5/scratchbox/users/mohammed/home/mohammed/quran/sailfish/quran/icons/favorite-selected.png"
+     inkscape:export-xdpi="4.9032125"
+     inkscape:export-ydpi="4.9032125" />
+</svg>

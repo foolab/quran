@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg6339"
+   viewBox="0 0 52.087 48.805"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   width="100%"
+   height="100%"
+   sodipodi:docname="learn-icon.svg">
+  <defs
+     id="defs11" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1024"
+     inkscape:window-height="686"
+     id="namedview9"
+     showgrid="false"
+     inkscape:zoom="8.4646457"
+     inkscape:cx="10.625396"
+     inkscape:cy="37.953867"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1-5" />
+  <g
+     transform="matrix(1.0794336,0,0,1.1641923,-225.12343,-246.28385)"
+     id="layer1-5"
+     inkscape:export-xdpi="88.879692"
+     inkscape:export-ydpi="88.879692">
+    <path
+       inkscape:connector-curvature="0"
+       d="m 232.58,218.9 c -2.2004,0 -3.9888,1.7884 -3.9888,3.9888 -2.9e-4,2.198 1.7884,3.9597 3.9888,3.9597 2.2004,0 3.9597,-1.7616 3.9597,-3.9597 0,-2.2004 -1.7593,-3.9888 -3.9597,-3.9888 z m -4.047,8.9384 c -1.8131,0.0643 -2.5913,1.514 -2.5913,1.514 l -5.8813,8.065 c -0.25436,0.35734 -0.3785,0.7799 -0.3785,1.252 0,1.2536 1.0174,2.271 2.271,2.271 0.30278,0 0.56526,-0.047 0.81524,-0.14557 l 3.5521,-0.98993 v 3.523 h 12.316 v -3.523 l 3.5521,0.98993 c 0.25905,0.0983 0.5151,0.14557 0.81523,0.14557 1.2536,0 2.271,-1.0174 2.271,-2.271 0,-0.47206 -0.1356,-0.89432 -0.3785,-1.252 l -5.8813,-8.065 c 0,0 -0.77139,-1.4497 -2.5913,-1.514 h -7.8903 z m -2.2128,2.7077 6.1724,2.009 6.1433,-2.009 v 4.7458 l -0.43674,-0.14558 c -3.1653,-0.93502 -4.3949,3.2329 -1.2228,4.1635 l 0.0872,0.0292 -4.5711,1.514 -4.6002,-1.514 0.0873,-0.0292 c 3.1724,-0.93062 1.9472,-5.0988 -1.2228,-4.1635 l -0.43674,0.14558 v -4.7458 z m -6.0269,14.441 c -0.30717,0 -0.5823,0.26604 -0.5823,0.58231 0,0.31392 0.27513,0.55319 0.5823,0.55319 h 24.835 c 0.31391,0 0.55319,-0.23898 0.55319,-0.55319 0,-0.31627 -0.23898,-0.58231 -0.55319,-0.58231 h -24.835 z"
+       id="path10921"
+       inkscape:export-xdpi="88.935532"
+       inkscape:export-ydpi="88.935532" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2.25"
+       inkscape:connector-curvature="0"
+       d="m 254.06,232.51 c 0,10.905 -9.5701,19.746 -21.376,19.746 -11.805,0 -21.376,-8.8406 -21.376,-19.746 0,-10.9054 9.5702,-19.746 21.376,-19.746 11.805,0 21.376,8.8406 21.376,19.746 z"
+       id="path3201"
+       inkscape:export-filename="/mnt/5/scratchbox/users/mohammed/home/mohammed/quran/sailfish/quran/icons/path10921.png"
+       inkscape:export-xdpi="88.935532"
+       inkscape:export-ydpi="88.935532" />
+  </g>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Learn icon</dc:title>
+        <dc:date>2013-10-06T15:28:42</dc:date>
+        <dc:description>learn, read icon/pictogram</dc:description>
+        <dc:source>https://openclipart.org/detail/184627/learn-icon-by-ousia-184627</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>ousia</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>icon</rdf:li>
+            <rdf:li>learn</rdf:li>
+            <rdf:li>read</rdf:li>
+            <rdf:li>study</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
