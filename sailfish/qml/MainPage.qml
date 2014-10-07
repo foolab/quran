@@ -15,7 +15,7 @@ QuranPage {
                 id: view
                 anchors {
                         top: parent.top
-                        bottom: panel.top
+                        bottom: row.top
                         right: parent.right
                         left: parent.left
                 }
@@ -64,54 +64,48 @@ QuranPage {
                 }
         }
 
-        SilicaFlickable {
-                id: panel
-                width: parent.width
-                height: row.height
-                contentHeight: height
-                anchors.bottom: parent.bottom
-
-                PushUpMenu {
-                        visible: selectTranslation.enabled || selectRecitation.enabled
-
-                        MenuItem {
-                                id: selectTranslation
-                                text: qsTr("Select translation")
-                                enabled: _settings.translationMode != 0 && _translations.installedCount > 0
-                                onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
-                        }
-
-                        MenuItem {
-                                id: selectRecitation
-                                text: qsTr("Select recitation")
-                                enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
-                                onClicked: pageStack.push(Qt.resolvedUrl("RecitationSelector.qml"))
-                        }
+        Row {
+                id: row
+                anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        bottom: parent.bottom
                 }
 
-                Row {
-                        id: row
-                        anchors.centerIn: parent
+                height: Theme.itemSizeSmall
 
-                        IconButton {
-                                icon.source: "image://theme/icon-m-play?" + theme.iconHighlightColor
-                                visible: _settings.recitationMode != 0 && _recitations.installedCount > 0
-                                onClicked: _recitations.playPage(_settings.pageNumber)
-                        }
-
-                        NumberLabel {
-                                width: 60
-                                height: Theme.itemSizeSmall
-                                number: _settings.pageNumber
-                                onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
-                                onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
-                                color: theme.textColor
-                        }
-
-                        IconButton {
-                                icon.source: _recitations.isPlaying ? "image://icon/" + theme.stop : ""
-                                onClicked: _recitations.stop()
-                        }
+                IconButton {
+                        icon.source: "qrc:/icons/reciter.png"
+                        onClicked: pageStack.push(Qt.resolvedUrl("RecitationSelector.qml"))
+                        enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
                 }
+
+                IconButton {
+                        icon.source: "qrc:/icons/translation.png"
+                        onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
+                        enabled: _settings.translationMode != 0 && _translations.installedCount > 0
+                }
+
+                NumberLabel {
+                        width: 60
+                        height: Theme.itemSizeSmall
+                        number: _settings.pageNumber
+                        onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
+                        onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
+                        color: theme.textColor
+                }
+
+                IconButton {
+                        icon.source: "qrc:/icons/play.png"
+                        enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
+                        onClicked: _recitations.playPage(_settings.pageNumber)
+                }
+
+                IconButton {
+                        icon.source: "qrc:/icons/stop.png"
+                        onClicked: _recitations.stop()
+                        enabled: _recitations.isPlaying
+                }
+
         }
+
 }
