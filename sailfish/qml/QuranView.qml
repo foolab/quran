@@ -146,18 +146,18 @@ SilicaListView {
                             bookmark: _bookmarks.serialize(_chapter, _verse)
                         }
 
-                        icon.source: checker.isBookmarked ? "image://theme/icon-m-favorite-selected?" + theme.iconHighlightColor : "image://theme/icon-m-favorite?" + theme.iconHighlightColor
+                        icon.source: checker.isBookmarked ? "qrc:/icons/favorite-selected.png" + theme.iconHighlightColor : "qrc:/icons/favorite-unselected.png"
                         onClicked: checker.toggle()
                     }
 
                     IconButton {
-                        icon.source: "image://theme/icon-m-region?" + theme.iconHighlightColor
+                        icon.source: "qrc:/icons/translation.png"
                         visible: _settings.translationMode == 2
                         onClicked: translation.shown = !translation.shown;
                     }
 
                     IconButton {
-                        icon.source: "image://theme/icon-m-play?" + theme.iconHighlightColor
+                        icon.source: "qrc:/icons/play.png"
                         visible: _settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: _recitations.play(_chapter, _verse);
                     }

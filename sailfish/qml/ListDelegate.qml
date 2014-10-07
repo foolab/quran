@@ -46,11 +46,11 @@ ListItem {
         }
     }
 
-    IconButton {
+    Button {
         id: more
         width: Theme.itemSizeSmall
         height: Theme.itemSizeSmall
-        icon.source: "image://theme/icon-lock-more"
+        text: "..."
 
         anchors {
             top: parent.top
@@ -64,7 +64,7 @@ ListItem {
         id: play
         width: Theme.itemSizeSmall
         height: Theme.itemSizeSmall
-        icon.source: "image://theme/icon-m-play"
+        icon.source: "qrc:/icons/play.png"
 
         anchors {
             top: parent.top
