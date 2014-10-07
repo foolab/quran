@@ -15,5 +15,4 @@ QtObject {
     property color verseColor: textColor
     property color highlightColor: "red"
     property color translationTextColor: textColor
-    property color iconHighlightColor: inNightMode ? "white" : "black"
 }

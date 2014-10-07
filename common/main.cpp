@@ -64,6 +64,9 @@
 #include "bookmarkitem.h"
 #include "quranviewmodel.h"
 #include "searchmodel.h"
+#ifdef SAILFISH
+#include "iconprovider.h"
+#endif
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -157,7 +160,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   ThemeImageProvider *theme = new ThemeImageProvider(DATA_DIR "/themes/");
 
 #ifdef SAILFISH
-  engine->addImageProvider("icon", theme);
+  engine->addImageProvider(QLatin1String("icon"), new IconProvider);
 #else
   engine->addImageProvider("theme", theme);
 #endif

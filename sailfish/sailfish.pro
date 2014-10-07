@@ -1,5 +1,3 @@
-include(../common/common.pri)
-
 VPATH += . ../data/ ../common/
 
 TARGET = harbour-quran
@@ -7,6 +5,9 @@ TARGET = harbour-quran
 QT += qml quick
 
 CONFIG += link_pkgconfig meegotouch sailfish
+
+# Has to be after sailfish keyword in config
+include(../common/common.pri)
 
 PKGCONFIG += qdeclarative5-boostable sqlite3 Qt5Sensors libresourceqt5
 

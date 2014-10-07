@@ -64,7 +64,7 @@ ListItem {
         id: play
         width: Theme.itemSizeSmall
         height: Theme.itemSizeSmall
-        icon.source: "qrc:/icons/play.png"
+        icon.source: "image://icon/play.png?"
 
         anchors {
             top: parent.top

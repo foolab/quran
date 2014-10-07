@@ -74,13 +74,13 @@ QuranPage {
                 height: Theme.itemSizeSmall
 
                 IconButton {
-                        icon.source: "qrc:/icons/reciter.png"
+                        icon.source: "image://icon/reciter.png?"
                         onClicked: pageStack.push(Qt.resolvedUrl("RecitationSelector.qml"))
                         enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
                 }
 
                 IconButton {
-                        icon.source: "qrc:/icons/translation.png"
+                        icon.source: "image://icon/translation.png?"
                         onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
                         enabled: _settings.translationMode != 0 && _translations.installedCount > 0
                 }
@@ -95,13 +95,13 @@ QuranPage {
                 }
 
                 IconButton {
-                        icon.source: "qrc:/icons/play.png"
+                        icon.source: "image://icon/play.png?"
                         enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: _recitations.playPage(_settings.pageNumber)
                 }
 
                 IconButton {
-                        icon.source: "qrc:/icons/stop.png"
+                        icon.source: "image://icon/stop.png?"
                         onClicked: _recitations.stop()
                         enabled: _recitations.isPlaying
                 }
