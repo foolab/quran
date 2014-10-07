@@ -97,15 +97,10 @@ QuranPage {
                                 onCheckedChanged: _settings.textType = checked ? 1 : 0
                         }
 
-                        ComboBox {
-                                menu: ContextMenu {
-                                        MenuItem { text: qsTr("Hindi") }
-                                        MenuItem { text: qsTr("Arabic") }
-                                }
-
-                                label: qsTr("Number format")
-                                currentIndex: _settings.numberFormat
-                                onCurrentIndexChanged: _settings.numberFormat = currentIndex
+                        TextSwitch {
+                                text: qsTr("Use Arabic numerals")
+                                checked: _settings.numberFormat == 1
+                                onCheckedChanged: _settings.numberFormat = checked ? 1 : 0
                         }
 
                         ComboBox {
