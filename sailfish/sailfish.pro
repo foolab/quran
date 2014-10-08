@@ -16,7 +16,7 @@ INCLUDEPATH += libav/
 DEFINES += DATA_DIR=\\\"/usr/share/harbour-quran/\\\"
 DEFINES += SAILFISH=1
 
-RESOURCES += qml.qrc ../icons/icons.qrc
+RESOURCES += sailfish.qrc ../icons/icons.qrc ../qml/qml.qrc
 
 LIBS += -Wl,-rpath=/usr/share/harbour-quran/lib/ \
         -Llibav/libavformat/ -lavformat \
