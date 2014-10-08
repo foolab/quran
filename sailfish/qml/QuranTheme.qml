@@ -1,5 +1,6 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
 QtObject {
     property bool inNightMode
@@ -15,4 +16,7 @@ QtObject {
     property color verseColor: textColor
     property color highlightColor: "red"
     property color translationTextColor: textColor
+    property color buttonNormalColor: inNightMode ? "white" : "black"
+
+    property color buttonHighlightColor: Theme.highlightColor
 }

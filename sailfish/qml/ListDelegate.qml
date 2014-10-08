@@ -60,11 +60,10 @@ ListItem {
         onClicked: root.moreClicked()
     }
 
-    IconButton {
+    ToolButton {
         id: play
         width: Theme.itemSizeSmall
-        height: Theme.itemSizeSmall
-        icon.source: "image://icon/play-white.png?"
+        icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play-white.png?" + Theme.primaryColor
 
         anchors {
             top: parent.top

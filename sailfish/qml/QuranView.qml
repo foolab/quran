@@ -139,25 +139,28 @@ SilicaListView {
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter
 
-                    IconButton {
+                    ToolButton {
                         BookmarkItem {
                             id: checker
                             bookmarks: _bookmarks
                             bookmark: _bookmarks.serialize(_chapter, _verse)
                         }
 
-                        icon.source: checker.isBookmarked ? "image://icon/favorite-selected.png?" + theme.iconHighlightColor : "image://icon/favorite-unselected.png?"
+                        width: Theme.itemSizeSmall
+                        icon.source:checker.isBookmarked ? highlight ? "image://icon/favorite-selected.png?" + theme.buttonHighlightColor : "image://icon/favorite-selected.png?" + theme.buttonNormalColor : highlight ? "image://icon/favorite-unselected.png?" + theme.buttonHighlightColor : "image://icon/favorite-unselected.png?" + theme.buttonNormalColor
                         onClicked: checker.toggle()
                     }
 
-                    IconButton {
-                        icon.source: "image://icon/translation.png?"
+                    ToolButton {
+                        width: Theme.itemSizeSmall
+                        icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
                         visible: _settings.translationMode == 2
                         onClicked: translation.shown = !translation.shown;
                     }
 
-                    IconButton {
-                        icon.source: "image://icon/play.png?"
+                    ToolButton {
+                        width: Theme.itemSizeSmall
+                        icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
                         visible: _settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: _recitations.play(_chapter, _verse);
                     }

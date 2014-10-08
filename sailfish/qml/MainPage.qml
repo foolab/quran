@@ -73,14 +73,16 @@ QuranPage {
 
                 height: Theme.itemSizeSmall
 
-                IconButton {
-                        icon.source: "image://icon/reciter.png?"
+                ToolButton {
+                        width: Theme.itemSizeSmall
+                        icon.source: highlight ? "image://icon/reciter.png?" + theme.buttonHighlightColor : "image://icon/reciter.png?" + theme.buttonNormalColor
                         onClicked: pageStack.push(Qt.resolvedUrl("RecitationSelector.qml"))
                         enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
                 }
 
-                IconButton {
-                        icon.source: "image://icon/translation.png?"
+                ToolButton {
+                        width: Theme.itemSizeSmall
+                        icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
                         onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
                         enabled: _settings.translationMode != 0 && _translations.installedCount > 0
                 }
@@ -94,14 +96,16 @@ QuranPage {
                         color: highlight ? Theme.highlightColor : theme.textColor
                 }
 
-                IconButton {
-                        icon.source: "image://icon/play.png?"
+                ToolButton {
+                        width: Theme.itemSizeSmall
+                        icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
                         enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: _recitations.playPage(_settings.pageNumber)
                 }
 
-                IconButton {
-                        icon.source: "image://icon/stop.png?"
+                ToolButton {
+                        width: Theme.itemSizeSmall
+                        icon.source: highlight ? "image://icon/stop.png?" + theme.buttonHighlightColor : "image://icon/stop.png?" + theme.buttonNormalColor
                         onClicked: _recitations.stop()
                         enabled: _recitations.isPlaying
                 }
