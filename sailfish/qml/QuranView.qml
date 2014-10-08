@@ -132,7 +132,6 @@ SilicaListView {
                     chapter: _chapter
                     verse: _verse
                     dataProvider: _data
-                    numberFormatter: _formatter
                     color: _recitations.chapter == chapter && _recitations.verse == verse ? theme.highlightColor : theme.verseColor
                 }
 

@@ -1,6 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Quran 1.0
 
 QuranPage {
         id: settingsPage
@@ -57,8 +58,14 @@ QuranPage {
 
                                         Component.onCompleted: populate();
 
+                                        NumberFormatter {
+                                                id: formatter
+                                                format: _settings.numberFormat
+                                                number: 1
+                                        }
+
                                         function populate() {
-                                                text = qsTr("%1 (%2)").arg(_data.basmala).arg(_formatter.number(1))
+                                                text = qsTr("%1 (%2)").arg(_data.basmala).arg(formatter.formattedNumber)
                                         }
 
                                         Connections {

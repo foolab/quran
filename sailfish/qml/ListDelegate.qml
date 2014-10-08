@@ -5,7 +5,7 @@ import Sailfish.Silica 1.0
 ListItem {
     id: root
 
-    property alias number: numberLabel.number
+    property int number
     property alias text: label.text
     property bool highlight
     property alias showPlay: play.visible
@@ -19,6 +19,7 @@ ListItem {
 
     NumberLabel {
         id: numberLabel
+        number: root.number + 1
         width: Theme.itemSizeSmall
         height: Theme.itemSizeSmall
         horizontalAlignment: Text.AlignRight

@@ -23,23 +23,33 @@
 class NumberFormatter : public QObject {
   Q_OBJECT
   Q_PROPERTY(int format READ format WRITE setFormat NOTIFY formatChanged);
+  Q_PROPERTY(int number READ number WRITE setNumber NOTIFY numberChanged);
+  Q_PROPERTY(QString formattedNumber READ formattedNumber NOTIFY formattedNumberChanged);
 
 public:
   NumberFormatter(QObject *parent = 0);
   ~NumberFormatter();
 
-  Q_INVOKABLE QString number(int number);
-
-  Q_INVOKABLE QString toHindi(int number);
-
   int format() const;
   void setFormat(int format);
 
+  int number() const;
+  void setNumber(int number);
+
+  QString formattedNumber() const;
+
 signals:
   void formatChanged();
+  void numberChanged();
+  void formattedNumberChanged();
 
 private:
+  void updateFormattedNumber();
+  QString toHindi();
+
   int m_format;
+  int m_number;
+  QString m_formattedNumber;
 };
 
 #endif /* NUMBER_FORMATTER_H */

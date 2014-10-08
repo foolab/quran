@@ -77,8 +77,14 @@ QuranPage {
                                         leftMargin: 16
                                 }
 
+                                NumberFormatter {
+                                        id: formatter
+                                        format: _settings.numberFormat
+                                        number: verse + 1
+                                }
+
                                 font.family: _settings.fontFamily
-                                text: qsTr("(%1) %2").arg(_formatter.number(verse + 1)).arg(_data.text(chapter, verse))
+                                text: qsTr("(%1) %2").arg(formatter.formattedNumber).arg(_data.text(chapter, verse))
                                 wrapMode: Text.WordWrap
                                 horizontalAlignment: Text.AlignRight
                                 color: Theme.primaryColor

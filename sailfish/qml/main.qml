@@ -31,11 +31,6 @@ ApplicationWindow {
                 settings: _settings
         }
 
-        NumberFormatter {
-                id: _formatter
-                format: _settings.numberFormat
-        }
-
         Translations {
                 id: _translations
                 settings: _settings

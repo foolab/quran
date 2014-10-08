@@ -31,7 +31,7 @@ QuranPage {
                                 color: Theme.primaryColor
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                number: index
+                                number: index + 1
                                 enableSignals: false
                         }
 

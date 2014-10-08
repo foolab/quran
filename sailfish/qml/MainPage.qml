@@ -90,7 +90,7 @@ QuranPage {
                 NumberLabel {
                         width: 60
                         height: Theme.itemSizeSmall
-                        number: _settings.pageNumber
+                        number: _settings.pageNumber + 1
                         onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
                         onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
                         color: highlight ? Theme.highlightColor : theme.textColor

@@ -18,7 +18,10 @@
 #include "numberformatter.h"
 
 NumberFormatter::NumberFormatter(QObject *parent) :
-  QObject(parent), m_format(-1) {
+  QObject(parent),
+  m_format(-1),
+  m_number(-1) {
+
 }
 
 NumberFormatter::~NumberFormatter() {
@@ -31,22 +34,46 @@ int NumberFormatter::format() const {
 }
 
 void NumberFormatter::setFormat(int format) {
-  if (NumberFormatter::format() != format) {
+  if (m_format != format) {
     m_format = format;
     emit formatChanged();
+
+    updateFormattedNumber();
   }
 }
 
-QString NumberFormatter::number(int number) {
-  if (m_format != 0) {
-    return QString("%1").arg(number);
-  }
-
-  return toHindi(number);
+int NumberFormatter::number() const {
+  return m_number;
 }
 
-QString NumberFormatter::toHindi(int number) {
-  QString in = QString("%1").arg(number);
+void NumberFormatter::setNumber(int number) {
+  if (m_number != number) {
+    m_number = number;
+    emit numberChanged();
+
+    updateFormattedNumber();
+  }
+}
+
+QString NumberFormatter::formattedNumber() const {
+  return m_formattedNumber;
+}
+
+void NumberFormatter::updateFormattedNumber() {
+  if (m_number != -1 && m_format != -1) {
+
+    if (m_format != 0) {
+      m_formattedNumber = QString("%1").arg(m_number);
+    } else {
+      m_formattedNumber = toHindi();
+    }
+
+    emit formattedNumberChanged();
+  }
+}
+
+QString NumberFormatter::toHindi() {
+  QString in = QString("%1").arg(m_number);
 
   QString result;
   QChar c;

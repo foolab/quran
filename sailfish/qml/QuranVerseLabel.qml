@@ -8,7 +8,6 @@ Label {
         property int verse: -1
         property int chapter: -1
         property DataProvider dataProvider: null
-        property NumberFormatter numberFormatter: null
         onChapterChanged: populate();
         onVerseChanged: populate();
         wrapMode: Text.WordWrap
@@ -22,14 +21,20 @@ Label {
 	    color: theme.verseColor
         horizontalAlignment: _settings.centerText ? Text.AlignHCenter : Text.AlignHRight
 
+        NumberFormatter {
+                id: formatter
+                format: _settings.numberFormat
+                number: verse + 1
+        }
+
         MouseArea {
                 anchors.fill: parent
                 onClicked: label.clicked();
         }
 
         function populate() {
-                if (label.chapter != -1 && label.verse != -1 && dataProvider && numberFormatter) {
-                        text = qsTr("%1 (%2)").arg(dataProvider.text(label.chapter, label.verse)).arg(numberFormatter.number(label.verse + 1))
+                if (label.chapter != -1 && label.verse != -1 && dataProvider) {
+                        text = qsTr("%1 (%2)").arg(dataProvider.text(label.chapter, label.verse)).arg(formatter.formattedNumber)
                 }
         }
 
