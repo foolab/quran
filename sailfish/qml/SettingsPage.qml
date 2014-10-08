@@ -93,7 +93,7 @@ QuranPage {
 
                         TextSwitch {
                                 text: qsTr("Use simplified text")
-                                checked: _settings.textType == 0
+                                checked: _settings.textType == 1
                                 onCheckedChanged: _settings.textType = checked ? 1 : 0
                         }
 
