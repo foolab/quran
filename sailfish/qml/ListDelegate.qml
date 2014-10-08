@@ -63,7 +63,7 @@ ListItem {
     ToolButton {
         id: play
         width: Theme.itemSizeSmall
-        icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play-white.png?" + Theme.primaryColor
+        icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + Theme.primaryColor
 
         anchors {
             top: parent.top
