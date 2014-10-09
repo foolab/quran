@@ -16,7 +16,7 @@ QuranPage {
                 }
         }
 
-        SilicaListView {
+        QuranListView {
                 id: view
                 anchors.fill: parent
                 model: ActiveTranslationsModel {
@@ -24,12 +24,12 @@ QuranPage {
                 }
 
                 delegate: translationsDelegate
-                header: PageHeader {
+                header: QuranPageHeader {
                         width: parent.width
                         title: qsTr("Available translations")
                 }
 
-                ViewPlaceholder {
+                QuranViewPlaceholder {
                         text: qsTr("No translations. Pull down to add a translation.")
                         enabled: view.count == 0
                 }

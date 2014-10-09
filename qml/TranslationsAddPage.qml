@@ -1,6 +1,5 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
 QuranPage {
@@ -19,7 +18,7 @@ QuranPage {
                 }
         }
 
-        SilicaListView {
+        QuranListView {
                 id: view
                 anchors.fill: parent
                 model: TranslationCollection {
@@ -28,7 +27,7 @@ QuranPage {
                 }
 
                 delegate: delegate
-                header: PageHeader {
+                header: QuranPageHeader {
                         width: parent.width
                         title: _translations.categoryName(translationsAddPage.cid)
                 }

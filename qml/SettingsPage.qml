@@ -76,7 +76,7 @@ QuranPage {
                                 }
                         }
 
-                        Slider {
+                        QuranSlider {
                                 width: parent.width
                                 label: qsTr("Text size")
                                 minimumValue: settings.minFontSize
@@ -87,7 +87,7 @@ QuranPage {
                                 onValueChanged: settings.fontSize = value
                         }
 
-                        Slider {
+                        QuranSlider {
                                 width: parent.width
                                 label: qsTr("Translation text size");
                                 minimumValue: settings.minTranslationFontSize

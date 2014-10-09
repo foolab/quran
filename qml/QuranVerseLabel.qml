@@ -1,9 +1,8 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
-Label {
+QuranLabel {
         id: label
         property int verse: -1
         property int chapter: -1

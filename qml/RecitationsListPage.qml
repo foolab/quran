@@ -16,7 +16,7 @@ QuranPage {
                 }
         }
 
-        SilicaListView {
+        QuranListView {
                 id: view
                 anchors.fill: parent
                 model: RecitationModel {
@@ -25,15 +25,16 @@ QuranPage {
 
                 delegate: recitationssDelegate
 
-                header: PageHeader {
+                header: QuranPageHeader {
                         width: parent.width
                         title: qsTr("Recitations")
                 }
 
-                ViewPlaceholder {
+                QuranViewPlaceholder {
                         text: qsTr("No recitations. Pull down to enable a recitation.")
                         enabled: view.count == 0
                 }
+
                 PullDownMenu {
                         MenuItem {
                                 text: qsTr("Add recitation")

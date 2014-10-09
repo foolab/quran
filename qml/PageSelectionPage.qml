@@ -12,13 +12,10 @@ QuranPage {
         width: parent.width
         anchors.verticalCenter: parent.verticalCenter
 
-        Label {
+        QuranLabel {
             width: parent.width
             text: qsTr("Enter a page number between 1 and %1").arg(_data.pageCount)
-            font {
-                family: Theme.fontFamily
-                pixelSize: Theme.fontSizeLarge
-            }
+            font.pixelSize: Theme.fontSizeLarge
             wrapMode: Text.WordWrap
             color: Theme.primaryColor
         }

@@ -1,9 +1,8 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
-SilicaListView {
+QuranListView {
     property int page: index
     id: view
     width: ListView.view.width
@@ -33,13 +32,12 @@ SilicaListView {
             suras: _data.surasForPage(page)
         }
 
-        Label {
+        QuranLabel {
             id: part
             anchors.right: parent.right
             anchors.rightMargin: theme.marginSmall
             text: _data.partNameForPage(page)
             color: theme.textColor
-            font.family: Theme.fontFamily
         }
     }
 
@@ -88,7 +86,7 @@ SilicaListView {
                         id: column
                         width: parent.width
 
-                        Label {
+                        QuranLabel {
                             id: title
                             width: parent.width
                             font.family: settings.fontFamily
@@ -98,7 +96,7 @@ SilicaListView {
                             text: _data.fullSuraName(_chapter);
                         }
 
-                        Label {
+                        QuranLabel {
                             id: subtitle
                             font.family: settings.fontFamily
                             font.pixelSize: settings.fontSize
@@ -147,20 +145,20 @@ SilicaListView {
                             bookmark: _bookmarks.serialize(_chapter, _verse)
                         }
 
-                        width: Theme.itemSizeSmall
+                        width: theme.toolButtonSize
                         icon.source:checker.isBookmarked ? highlight ? "image://icon/favorite-selected.png?" + theme.buttonHighlightColor : "image://icon/favorite-selected.png?" + theme.buttonNormalColor : highlight ? "image://icon/favorite-unselected.png?" + theme.buttonHighlightColor : "image://icon/favorite-unselected.png?" + theme.buttonNormalColor
                         onClicked: checker.toggle()
                     }
 
                     ToolButton {
-                        width: Theme.itemSizeSmall
+                        width: theme.toolButtonSize
                         icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
                         visible: settings.translationMode == 2
                         onClicked: translation.shown = !translation.shown;
                     }
 
                     ToolButton {
-                        width: Theme.itemSizeSmall
+                        width: theme.toolButtonSize
                         icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
                         visible: settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: _recitations.play(_chapter, _verse);

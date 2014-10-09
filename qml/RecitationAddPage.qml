@@ -1,6 +1,5 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
 QuranPage {
@@ -26,7 +25,7 @@ QuranPage {
                 }
         }
 
-        SilicaListView {
+        QuranListView {
                 anchors.fill: parent
 
                 model: InstallableRecitationsModel {
@@ -35,7 +34,7 @@ QuranPage {
 
                 delegate: recitationssDelegate
 
-                header: PageHeader {
+                header: QuranPageHeader {
                         width: parent.width
                         title: qsTr("Enable online recitations")
                 }

@@ -1,6 +1,5 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 
 Item {
     id: item
@@ -36,10 +35,9 @@ Item {
             color: theme.translationBackground
             y: 5
 
-            Label {
+            QuranLabel {
                 id: translation
                 width: parent.width
-                font.family: Theme.fontFamily
                 font.pixelSize: settings.translationFontSize
                 wrapMode: Text.WordWrap
                 color: theme.translationTextColor

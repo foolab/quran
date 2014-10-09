@@ -24,4 +24,10 @@ QtObject {
     property int marginMedium: 16
     property int marginLarge: 20
     property int spacing: 20
+    property int toolButtonSize: Theme.itemSizeSmall
+
+    property int fontSizeSmall: Theme.fontSizeSmall
+    property int fontSizeLarge: Theme.fontSizeLarge
+    property color primaryColor: Theme.primaryColor
+    property string fontFamilyHeading: Theme.fontFamilyHeading
 }

@@ -9,20 +9,19 @@ BackgroundItem {
         height: titleLabel.height + textLabel.height
         width: parent.width
 
-        Label {
+        QuranLabel {
                 id: titleLabel
-                font.family: Theme.fontFamilyHeading
+                font.family: theme.fontFamilyHeading
                 font.bold: true
-                color: Theme.primaryColor
+                color: theme.primaryColor
         }
 
-        Label {
+        QuranLabel {
                 id: textLabel
                 wrapMode: Text.WordWrap
                 anchors.top: titleLabel.bottom
                 width: parent.width
                 textFormat: Text.RichText
-                color: Theme.primaryColor
-                font.family: Theme.fontFamily
+                color: theme.primaryColor
         }
 }

@@ -1,6 +1,5 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
 QuranPage {
@@ -10,7 +9,7 @@ QuranPage {
                 id: _about
         }
 
-        SilicaFlickable {
+        QuranFlickable {
                 id: flick
                 anchors.fill: parent
                 contentHeight: col.height
@@ -33,26 +32,25 @@ QuranPage {
                                 height: 160
                         }
 
-                        Label {
+                        QuranLabel {
                                 text: qsTr("Holy Quran Version %1").arg(settings.version)
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                font.family: Theme.fontFamilyHeading
-                                font.pixelSize: Theme.fontSizeLarge
+                                font.family: theme.fontFamilyHeading
+                                font.pixelSize: theme.fontSizeLarge
                                 width: parent.width
                                 horizontalAlignment: Text.AlignHCenter
-                                color: Theme.primaryColor
+                                color: theme.primaryColor
                         }
 
-                        Label {
+                        QuranLabel {
                                 text: _about.copyright
-                                font.family: Theme.fontFamily
-                                font.pixelSize: Theme.fontSizeSmall
+                                font.pixelSize: theme.fontSizeSmall
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 horizontalAlignment: Text.AlignHCenter
                                 width: parent.width
                                 wrapMode: Text.WordWrap
                                 textFormat: Text.RichText
-                                color: Theme.primaryColor
+                                color: theme.primaryColor
                         }
 
                         AboutPageBlock {

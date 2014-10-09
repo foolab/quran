@@ -1,9 +1,8 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
-Label {
+QuranLabel {
         id: label
 
         property alias number: formatter.number
@@ -29,7 +28,6 @@ Label {
         }
 
         font.bold: true
-        font.family: Theme.fontFamily
 
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

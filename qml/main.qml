@@ -1,18 +1,9 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
-ApplicationWindow {
+QuranWindow {
         id: root
-
-        cover: Component {
-                CoverBackground {
-                    CoverPlaceholder {
-                        icon.source: "qrc:/logo.png"
-                    }
-                }
-        }
 
         Settings {
                 id: settings
@@ -109,7 +100,7 @@ ApplicationWindow {
                         }
                 }
         }
-
+/*
         Rectangle {
                 id: banner
                 width: parent.width
@@ -146,7 +137,7 @@ ApplicationWindow {
                         font.family: Theme.fontFamily
                 }
         }
-
+*/
 /*
         InfoBanner {
                 id: translations
