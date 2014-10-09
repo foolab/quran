@@ -4,7 +4,7 @@ import Sailfish.Silica 1.0
 
 QtObject {
     property bool inNightMode
-    property string stop: _settings.theme + "/" + "stop"
+    property string stop: settings.theme + "/" + "stop"
     property color chapterBorder: "#3f48cc"
     property color chapterBackground: inNightMode ? "gray" : "#bfe8f2"
     property color translationBorder: "#00a3e8"

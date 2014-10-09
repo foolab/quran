@@ -10,7 +10,7 @@ QuranPage {
         property Item searchField
 
         function doSearch() {
-            searchModel.setQuery(searchPage.searchString, _settings.searchMatchWholeWords)
+            searchModel.setQuery(searchPage.searchString, settings.searchMatchWholeWords)
         }
 
         Component {
@@ -41,8 +41,8 @@ QuranPage {
                         TextSwitch {
                                 width: parent.width
                                 text: qsTr("Match whole words only");
-                                checked: _settings.searchMatchWholeWords
-                                onCheckedChanged: _settings.searchMatchWholeWords = checked
+                                checked: settings.searchMatchWholeWords
+                                onCheckedChanged: settings.searchMatchWholeWords = checked
                         }
                 }
         }
@@ -88,11 +88,11 @@ QuranPage {
 
                                 NumberFormatter {
                                         id: formatter
-                                        format: _settings.numberFormat
+                                        format: settings.numberFormat
                                         number: verse + 1
                                 }
 
-                                font.family: _settings.fontFamily
+                                font.family: settings.fontFamily
                                 text: qsTr("(%1) %2").arg(formatter.formattedNumber).arg(_data.text(chapter, verse))
                                 wrapMode: Text.WordWrap
                                 horizontalAlignment: Text.AlignRight

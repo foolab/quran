@@ -16,14 +16,14 @@ Label {
 
         signal clicked
 
-        font.family: _settings.fontFamily
-        font.pixelSize: _settings.fontSize
+        font.family: settings.fontFamily
+        font.pixelSize: settings.fontSize
 	    color: theme.verseColor
-        horizontalAlignment: _settings.centerText ? Text.AlignHCenter : Text.AlignHRight
+        horizontalAlignment: settings.centerText ? Text.AlignHCenter : Text.AlignHRight
 
         NumberFormatter {
                 id: formatter
-                format: _settings.numberFormat
+                format: settings.numberFormat
                 number: verse + 1
         }
 
@@ -40,7 +40,7 @@ Label {
 
         Component.onCompleted: {
                 dataProvider.basmalaChanged.connect(populate);
-                _settings.numberFormatChanged.connect(populate);
+                settings.numberFormatChanged.connect(populate);
                 label.populate();
         }
 }

@@ -20,14 +20,14 @@ QuranPage {
 
                 model: _data.verseCount
                 highlightFollowsCurrentItem: false
-                currentIndex: _data.firstSuraForPage(_settings.pageNumber)
+                currentIndex: _data.firstSuraForPage(settings.pageNumber)
                 Component.onCompleted: view.positionViewAtIndex(currentIndex, ListView.Center)
 
                 delegate: ListDelegate {
                         number: index
                         text: _data.fullSuraName(index)
                         highlight: ListView.isCurrentItem
-                        showPlay: _settings.recitationMode != 0 && _recitations.installedCount > 0
+                        showPlay: settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: {
                                 pagePosition.setPosition(index, 0)
                                 pageStack.pop()

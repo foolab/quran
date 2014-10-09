@@ -15,7 +15,7 @@ ApplicationWindow {
         }
 
         Settings {
-                id: _settings
+                id: settings
         }
 
         Downloader {
@@ -28,25 +28,25 @@ ApplicationWindow {
 
         Bookmarks {
                 id: _bookmarks
-                settings: _settings
+                settings: settings
         }
 
         Translations {
                 id: _translations
-                settings: _settings
+                settings: settings
                 downloader: _downloader
                 data: _data
         }
 
         PhoneFlipControl {
                 id: flipControl
-                active: _settings.flipToStopRecitation && _recitations.isPlaying
+                active: settings.flipToStopRecitation && _recitations.isPlaying
                 onFlipped: _recitations.stop()
         }
 
         Recitations {
                 id: _recitations
-                settings: _settings
+                settings: settings
                 data: _data
                 downloader: _downloader
                 onError: banner.show(qsTr("Failed to play recitation"))
@@ -54,7 +54,7 @@ ApplicationWindow {
 
         QuranTheme {
                 id: theme
-                inNightMode: _settings.nightMode
+                inNightMode: settings.nightMode
         }
 
         TranslationsManager {
@@ -69,7 +69,7 @@ ApplicationWindow {
                 MainPage {}
         }
 
-        Component.onCompleted: _data.setTextType(_settings.textType)
+        Component.onCompleted: _data.setTextType(settings.textType)
 
         QtObject {
                 id: pagePosition
@@ -91,7 +91,7 @@ ApplicationWindow {
                 function setPosition(sura, aya) {
                         pagePosition.sura = sura
                         pagePosition.aya = aya
-                        _settings.pageNumber = _data.pageNumberForSuraAndAya(sura, aya)
+                        settings.pageNumber = _data.pageNumberForSuraAndAya(sura, aya)
                         changed()
                 }
 
@@ -101,11 +101,11 @@ ApplicationWindow {
         }
 
         Connections {
-                target: _settings
+                target: settings
                 onTextTypeChanged: {
                         var type = _data.textType();
-                        if (!_data.setTextType(_settings.textType)) {
-                                _settings.textType = type;
+                        if (!_data.setTextType(settings.textType)) {
+                                settings.textType = type;
                         }
                 }
         }

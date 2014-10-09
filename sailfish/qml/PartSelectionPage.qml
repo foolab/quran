@@ -13,23 +13,23 @@ QuranPage {
                 }
 
                 highlightFollowsCurrentItem: false
-                currentIndex: _data.partNumberForPage(_settings.pageNumber)
+                currentIndex: _data.partNumberForPage(settings.pageNumber)
                 Component.onCompleted: view.positionViewAtIndex(currentIndex, ListView.Center)
 
                 delegate: ListDelegate {
                         number: index
                         text: _data.partName(index)
-                        showPlay: _settings.recitationMode != 0 && _recitations.installedCount > 0
+                        showPlay: settings.recitationMode != 0 && _recitations.installedCount > 0
                         showMore: false
                         highlight: ListView.isCurrentItem
 
                         onClicked: {
-                            _settings.pageNumber = _data.pageNumberForPart(index)
+                            settings.pageNumber = _data.pageNumberForPart(index)
                             pageStack.pop()
                         }
 
                         onPlayClicked: {
-                            _settings.pageNumber = _data.pageNumberForPart(index)
+                            settings.pageNumber = _data.pageNumberForPart(index)
                             _recitations.playPart(index)
                             pageStack.pop()
                         }

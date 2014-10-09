@@ -25,7 +25,7 @@ QuranPage {
 
         TextField {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: _settings.pageNumber + 1
+            text: settings.pageNumber + 1
             width: parent.width / 2
             focus: true
             horizontalAlignment: TextInput.AlignHCenter
@@ -42,7 +42,7 @@ QuranPage {
 
             EnterKey.onClicked: {
                 if (acceptableInput) {
-                    _settings.pageNumber = text - 1
+                    settings.pageNumber = text - 1
                     pageStack.pop()
                 }
             }

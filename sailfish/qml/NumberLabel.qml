@@ -3,7 +3,6 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Quran 1.0
 
-// HACK: Seems the only way to listen to _settings.numberFormat is to alias it to a property!
 Label {
         id: label
 
@@ -26,7 +25,7 @@ Label {
 
         NumberFormatter {
                 id: formatter
-                format: _settings.numberFormat
+                format: settings.numberFormat
         }
 
         font.bold: true

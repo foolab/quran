@@ -79,11 +79,11 @@ QuranPage {
 
                                 NumberFormatter {
                                         id: formatter
-                                        format: _settings.numberFormat
+                                        format: settings.numberFormat
                                         number: verse + 1
                                 }
 
-                                font.family: _settings.fontFamily
+                                font.family: settings.fontFamily
                                 text: qsTr("(%1) %2").arg(formatter.formattedNumber).arg(_data.text(chapter, verse))
                                 wrapMode: Text.WordWrap
                                 horizontalAlignment: Text.AlignRight

@@ -30,10 +30,10 @@ QuranPage {
                 highlightMoveVelocity: width * 2
                 highlightMoveDuration: 0
                 delegate: quranPageDelegate
-                currentIndex: _settings.pageNumber
+                currentIndex: settings.pageNumber
                 onCurrentIndexChanged: {
                     if (currentIndex != -1) {
-                        _settings.pageNumber = currentIndex
+                        settings.pageNumber = currentIndex
                     }
                 }
         }
@@ -78,20 +78,20 @@ QuranPage {
                                 width: Theme.itemSizeSmall
                                 icon.source: highlight ? "image://icon/reciter.png?" + theme.buttonHighlightColor : "image://icon/reciter.png?" + theme.buttonNormalColor
                                 onClicked: pageStack.push(Qt.resolvedUrl("RecitationSelector.qml"))
-                                enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
+                                enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
                         }
 
                         ToolButton {
                                 width: Theme.itemSizeSmall
                                 icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
                                 onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
-                                enabled: _settings.translationMode != 0 && _translations.installedCount > 0
+                                enabled: settings.translationMode != 0 && _translations.installedCount > 0
                         }
 
                         NumberLabel {
                                 width: 60
                                 height: Theme.itemSizeSmall
-                                number: _settings.pageNumber + 1
+                                number: settings.pageNumber + 1
                                 onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
                                 onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
                                 color: highlight ? Theme.highlightColor : theme.textColor
@@ -100,8 +100,8 @@ QuranPage {
                         ToolButton {
                                 width: Theme.itemSizeSmall
                                 icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
-                                enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
-                                onClicked: _recitations.playPage(_settings.pageNumber)
+                                enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
+                                onClicked: _recitations.playPage(settings.pageNumber)
                         }
 
                         ToolButton {

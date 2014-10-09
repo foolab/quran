@@ -91,8 +91,8 @@ SilicaListView {
                         Label {
                             id: title
                             width: parent.width
-                            font.family: _settings.fontFamily
-                            font.pixelSize: _settings.fontSize
+                            font.family: settings.fontFamily
+                            font.pixelSize: settings.fontSize
                             color: theme.titleColor
                             horizontalAlignment: Text.AlignHCenter
                             text: _data.fullSuraName(_chapter);
@@ -100,8 +100,8 @@ SilicaListView {
 
                         Label {
                             id: subtitle
-                            font.family: _settings.fontFamily
-                            font.pixelSize: _settings.fontSize
+                            font.family: settings.fontFamily
+                            font.pixelSize: settings.fontSize
                             width: parent.width
                             horizontalAlignment: Text.AlignHCenter
                             color: theme.subtitleColor
@@ -155,14 +155,14 @@ SilicaListView {
                     ToolButton {
                         width: Theme.itemSizeSmall
                         icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
-                        visible: _settings.translationMode == 2
+                        visible: settings.translationMode == 2
                         onClicked: translation.shown = !translation.shown;
                     }
 
                     ToolButton {
                         width: Theme.itemSizeSmall
                         icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
-                        visible: _settings.recitationMode != 0 && _recitations.installedCount > 0
+                        visible: settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: _recitations.play(_chapter, _verse);
                     }
                 }

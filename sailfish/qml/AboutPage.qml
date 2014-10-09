@@ -34,7 +34,7 @@ QuranPage {
                         }
 
                         Label {
-                                text: qsTr("Holy Quran Version %1").arg(_settings.version)
+                                text: qsTr("Holy Quran Version %1").arg(settings.version)
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 font.family: Theme.fontFamilyHeading
                                 font.pixelSize: Theme.fontSizeLarge

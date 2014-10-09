@@ -17,7 +17,7 @@ QtObject {
         }
 
         function recitationModeChanged() {
-                if (_settings.recitationMode != 0) {
+                if (settings.recitationMode != 0) {
                         if (!_recitations.loadDefault()) {
                                 if (_recitations.installedCount == 0) {
                                         banner.show(qsTr("You need to install a recitation first"))
@@ -46,7 +46,7 @@ QtObject {
         }
 
         Component.onCompleted: {
-                _settings.recitationModeChanged.connect(recitationModeChanged);
+                settings.recitationModeChanged.connect(recitationModeChanged);
                 reset();
         }
 }

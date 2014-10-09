@@ -11,7 +11,7 @@ Item {
 
     width: parent.width
     height: rect.height + 8
-    visible: item.chapter != -1 && item.verse != -1 && translationsManager.enabled && (_settings.translationMode == 1 || (item.shown && _settings.translationMode == 2))
+    visible: item.chapter != -1 && item.verse != -1 && translationsManager.enabled && (settings.translationMode == 1 || (item.shown && settings.translationMode == 2))
     opacity: visible ? 1 : 0
 
     onChapterChanged: translation.resetText();
@@ -40,10 +40,10 @@ Item {
                 id: translation
                 width: parent.width
                 font.family: Theme.fontFamily
-                font.pixelSize: _settings.translationFontSize
+                font.pixelSize: settings.translationFontSize
                 wrapMode: Text.WordWrap
                 color: theme.translationTextColor
-                horizontalAlignment: _settings.centerText ? Text.AlignHCenter : undefined
+                horizontalAlignment: settings.centerText ? Text.AlignHCenter : undefined
 
                 function resetText() {
                     if (item.chapter != -1 && item.verse != -1) {
@@ -54,7 +54,7 @@ Item {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        if (_settings.translationMode == 2) {
+                        if (settings.translationMode == 2) {
                             shown = !shown;
                         }
                     }
@@ -66,7 +66,7 @@ Item {
                 }
 
                 Component.onCompleted: {
-                    _settings.defaultTranslationChanged.connect(resetText);
+                    settings.defaultTranslationChanged.connect(resetText);
                     translation.resetText();
                 }
             }

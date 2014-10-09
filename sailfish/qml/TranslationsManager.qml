@@ -17,7 +17,7 @@ QtObject {
         }
 
         function translationModeChanged() {
-                if (_settings.translationMode != 0) {
+                if (settings.translationMode != 0) {
                         if (!_translations.loadDefault()) {
                                 if (_translations.installedCount == 0) {
                                         banner.show(qsTr("You need to download a translation first"))
@@ -47,7 +47,7 @@ QtObject {
         }
 
         Component.onCompleted: {
-                _settings.translationModeChanged.connect(translationModeChanged);
+                settings.translationModeChanged.connect(translationModeChanged);
                 reset();
         }
 }
