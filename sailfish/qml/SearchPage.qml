@@ -54,7 +54,7 @@ QuranPage {
                 Label {
                         id: title
                         anchors.right: parent.right
-                        anchors.rightMargin: 20
+                        anchors.rightMargin: theme.largeMedium
                         font.family: Theme.fontFamily
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
@@ -82,8 +82,8 @@ QuranPage {
                                         top: parent.top
                                         right: parent.right
                                         left: parent.left
-                                        rightMargin: 16
-                                        leftMargin: 16
+                                        rightMargin: theme.marginMedium
+                                        leftMargin: theme.marginMedium
                                 }
 
                                 NumberFormatter {

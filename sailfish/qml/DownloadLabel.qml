@@ -39,9 +39,9 @@ BackgroundItem {
                 anchors {
                         top: parent.top
                         right: installed.left
-                        rightMargin: 10
+                        rightMargin: theme.marginSmall
                         left: parent.left
-                        leftMargin: 10
+                        leftMargin: theme.marginSmall
                 }
 
                 font.family: Theme.fontFamily

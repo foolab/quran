@@ -15,7 +15,7 @@ QuranPage {
                                 id: label
                                 anchors.left: parent.left
                                 anchors.right: parent.right
-                                anchors.leftMargin: 16
+                                anchors.leftMargin: theme.marginMedium
                                 text: name
                                 color: Theme.primaryColor
                                 anchors.verticalCenter: parent.verticalCenter

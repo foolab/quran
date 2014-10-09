@@ -139,7 +139,7 @@ ApplicationWindow {
                 Label {
                         id: label
                         anchors.fill: parent
-                        anchors.leftMargin: 20
+                        anchors.leftMargin: theme.largeMedium
                         color: Theme.primaryColor
                         truncationMode: TruncationMode.Fade
                         verticalAlignment: Text.AlignVCenter

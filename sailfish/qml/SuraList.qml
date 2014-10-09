@@ -6,7 +6,7 @@ Grid {
         property variant suras: []
         rows: 1
         columns: suras.length
-        spacing: 20
+        spacing: theme.spacing
 
         Repeater {
                 model: suras

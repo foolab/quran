@@ -34,9 +34,9 @@ Dialog {
 
                         anchors {
                                 left: parent.left
-                                leftMargin: 16
+                                leftMargin: theme.marginMedium
                                 right: parent.right
-                                rightMargin: 16
+                                rightMargin: theme.marginMedium
                         }
 
                         height: Theme.itemSizeSmall

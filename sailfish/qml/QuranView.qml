@@ -6,6 +6,8 @@ import Quran 1.0
 SilicaListView {
     property int page: index
     id: view
+    width: ListView.view.width
+    height: ListView.view.height
 
     // Work around a null pointer dereference in Silica.
     interactive: ListView.isCurrentItem
@@ -16,8 +18,8 @@ SilicaListView {
     pressDelay: 0
 
     anchors {
-        leftMargin: 10
-        rightMargin: 10
+        leftMargin: theme.marginSmall
+        rightMargin: theme.marginSmall
     }
 
     header: Item {
@@ -27,14 +29,14 @@ SilicaListView {
         SuraList {
             id: verse
             anchors.left: parent.left
-            anchors.leftMargin: 10
+            anchors.leftMargin: theme.marginSmall
             suras: _data.surasForPage(page)
         }
 
         Label {
             id: part
             anchors.right: parent.right
-            anchors.rightMargin: 10
+            anchors.rightMargin: theme.marginSmall
             text: _data.partNameForPage(page)
             color: theme.textColor
             font.family: Theme.fontFamily
@@ -67,8 +69,8 @@ SilicaListView {
                 anchors {
                     left: parent ? parent.left : undefined
                     right: parent ? parent.right : undefined
-                    rightMargin: 16
-                    leftMargin: 16
+                    rightMargin: theme.marginMedium
+                    leftMargin: theme.marginMedium
                 }
 
                 Rectangle {
@@ -123,8 +125,8 @@ SilicaListView {
                 anchors {
                     left: parent.left
                     right: parent.right
-                    rightMargin: 16
-                    leftMargin: 16
+                    rightMargin: theme.marginMedium
+                    leftMargin: theme.marginMedium
                 }
 
                 QuranVerseLabel {

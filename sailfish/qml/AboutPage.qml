@@ -14,16 +14,16 @@ QuranPage {
                 id: flick
                 anchors.fill: parent
                 contentHeight: col.height
-                anchors.topMargin: 16
-                anchors.bottomMargin: 16
+                anchors.topMargin: theme.marginMedium
+                anchors.bottomMargin: theme.marginMedium
 
                 Column {
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        anchors.leftMargin: 26
-                        anchors.rightMargin: 26
+                        anchors.leftMargin: theme.largeLarge
+                        anchors.rightMargin: theme.largeLarge
                         id: col
-                        spacing: 16
+                        spacing: theme.spacing
                         width: parent.width
 
                         Image {

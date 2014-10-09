@@ -8,8 +8,8 @@ QuranPage {
                 model: _data.partCount
                 anchors {
                         fill: parent
-                        leftMargin: 16
-                        rightMargin: 16
+                        leftMargin: theme.marginMedium
+                        rightMargin: theme.marginMedium
                 }
 
                 highlightFollowsCurrentItem: false

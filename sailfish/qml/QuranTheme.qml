@@ -19,4 +19,9 @@ QtObject {
     property color buttonNormalColor: inNightMode ? "white" : "black"
 
     property color buttonHighlightColor: Theme.highlightColor
+
+    property int marginSmall: 10
+    property int marginMedium: 16
+    property int marginLarge: 20
+    property int spacing: 20
 }

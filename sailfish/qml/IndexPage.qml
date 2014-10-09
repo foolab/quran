@@ -14,8 +14,8 @@ QuranPage {
                 id: view
                 anchors {
                         fill: parent
-                        leftMargin: 16
-                        rightMargin: 16
+                        leftMargin: theme.marginMedium
+                        rightMargin: theme.marginMedium
                 }
 
                 model: _data.verseCount
