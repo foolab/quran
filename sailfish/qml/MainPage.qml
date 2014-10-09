@@ -36,8 +36,6 @@ QuranPage {
                         _settings.pageNumber = currentIndex
                     }
                 }
-
-                clip: true
         }
 
         Component {
@@ -64,50 +62,58 @@ QuranPage {
                 }
         }
 
-        Row {
+        Rectangle {
                 id: row
-                anchors {
-                        horizontalCenter: parent.horizontalCenter
-                        bottom: parent.bottom
-                }
-
+                color: theme.backgroundColor
+                width: parent.width
                 height: Theme.itemSizeSmall
+                anchors.bottom: parent.bottom
 
-                ToolButton {
-                        width: Theme.itemSizeSmall
-                        icon.source: highlight ? "image://icon/reciter.png?" + theme.buttonHighlightColor : "image://icon/reciter.png?" + theme.buttonNormalColor
-                        onClicked: pageStack.push(Qt.resolvedUrl("RecitationSelector.qml"))
-                        enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
-                }
+                Row {
 
-                ToolButton {
-                        width: Theme.itemSizeSmall
-                        icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
-                        onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
-                        enabled: _settings.translationMode != 0 && _translations.installedCount > 0
-                }
+                        anchors {
+                                horizontalCenter: parent.horizontalCenter
+                                bottom: parent.bottom
+                        }
 
-                NumberLabel {
-                        width: 60
                         height: Theme.itemSizeSmall
-                        number: _settings.pageNumber + 1
-                        onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
-                        onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
-                        color: highlight ? Theme.highlightColor : theme.textColor
-                }
 
-                ToolButton {
-                        width: Theme.itemSizeSmall
-                        icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
-                        enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
-                        onClicked: _recitations.playPage(_settings.pageNumber)
-                }
+                        ToolButton {
+                                width: Theme.itemSizeSmall
+                                icon.source: highlight ? "image://icon/reciter.png?" + theme.buttonHighlightColor : "image://icon/reciter.png?" + theme.buttonNormalColor
+                                onClicked: pageStack.push(Qt.resolvedUrl("RecitationSelector.qml"))
+                                enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
+                        }
 
-                ToolButton {
-                        width: Theme.itemSizeSmall
-                        icon.source: highlight ? "image://icon/stop.png?" + theme.buttonHighlightColor : "image://icon/stop.png?" + theme.buttonNormalColor
-                        onClicked: _recitations.stop()
-                        enabled: _recitations.isPlaying
+                        ToolButton {
+                                width: Theme.itemSizeSmall
+                                icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
+                                onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
+                                enabled: _settings.translationMode != 0 && _translations.installedCount > 0
+                        }
+
+                        NumberLabel {
+                                width: 60
+                                height: Theme.itemSizeSmall
+                                number: _settings.pageNumber + 1
+                                onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
+                                onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
+                                color: highlight ? Theme.highlightColor : theme.textColor
+                        }
+
+                        ToolButton {
+                                width: Theme.itemSizeSmall
+                                icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
+                                enabled: _settings.recitationMode != 0 && _recitations.installedCount > 0
+                                onClicked: _recitations.playPage(_settings.pageNumber)
+                        }
+
+                        ToolButton {
+                                width: Theme.itemSizeSmall
+                                icon.source: highlight ? "image://icon/stop.png?" + theme.buttonHighlightColor : "image://icon/stop.png?" + theme.buttonNormalColor
+                                onClicked: _recitations.stop()
+                                enabled: _recitations.isPlaying
+                        }
                 }
 
         }
