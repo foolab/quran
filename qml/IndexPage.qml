@@ -4,11 +4,6 @@ import Sailfish.Silica 1.0
 import Quran 1.0
 
 QuranPage {
-        onStatusChanged: {
-                if (status == PageStatus.Active) {
-                        pageStack.pushAttached(Qt.resolvedUrl("PartSelectionPage.qml"))
-                }
-        }
 
         SilicaListView {
                 id: view
@@ -16,6 +11,10 @@ QuranPage {
                         fill: parent
                         leftMargin: theme.marginMedium
                         rightMargin: theme.marginMedium
+                }
+
+                PullDownMenu {
+                        MenuItem { text: qsTr("Choose part"); onClicked: { pageStack.replace(Qt.resolvedUrl("PartSelectionPage.qml"), PageStackAction.Animated) } }
                 }
 
                 model: _data.verseCount

@@ -1,5 +1,6 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Sailfish.Silica 1.0
 
 QuranPage {
         QuranListView {
@@ -14,6 +15,10 @@ QuranPage {
                 highlightFollowsCurrentItem: false
                 currentIndex: _data.partNumberForPage(settings.pageNumber)
                 Component.onCompleted: view.positionViewAtIndex(currentIndex, ListView.Center)
+
+                PullDownMenu {
+                        MenuItem { text: qsTr("Choose chapter"); onClicked: { pageStack.replace(Qt.resolvedUrl("IndexPage.qml"), PageStackAction.Animated) } }
+                }
 
                 delegate: ListDelegate {
                         number: index
