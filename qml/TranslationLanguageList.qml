@@ -1,37 +1,35 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
 QuranPage {
         Component {
                 id: language
 
-                BackgroundItem {
+                QuranBackgroundItem {
                         width: view.width
-                        height: Theme.itemSizeSmall
+                        height: theme.itemSizeSmall
                         onClicked: pageStack.push(Qt.resolvedUrl("TranslationsAddPage.qml"), {cid: translationId})
-                        Label {
+                        QuranLabel {
                                 id: label
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 anchors.leftMargin: theme.marginMedium
                                 text: name
-                                color: Theme.primaryColor
+                                color: theme.primaryColor
                                 anchors.verticalCenter: parent.verticalCenter
-                                font.family: Theme.fontFamily
                         }
                 }
         }
 
-        SilicaListView {
+        QuranListView {
                 id: view
                 anchors.fill: parent
                 model: TranslationCategoriesModel {
                         translations: _translations
                 }
                 delegate: language
-                header: PageHeader {
+                header: QuranPageHeader {
                         width: parent.width
                         title: qsTr("Choose language")
                 }

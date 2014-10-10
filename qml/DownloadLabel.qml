@@ -2,7 +2,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-BackgroundItem {
+QuranBackgroundItem {
         id: downloadLabel
 
         property alias showInstalled: installed.visible
@@ -34,7 +34,7 @@ BackgroundItem {
                 anchors.right: parent.right
         }
 
-        Label {
+        QuranLabel {
                 id: label
                 anchors {
                         top: parent.top
@@ -44,11 +44,10 @@ BackgroundItem {
                         leftMargin: theme.marginSmall
                 }
 
-                font.family: Theme.fontFamily
                 height: Theme.itemSizeLarge
                 wrapMode: Text.WordWrap
-                color: Theme.primaryColor
-                truncationMode: TruncationMode.Fade
+                color: theme.primaryColor
+                fadeTruncation: true
                 verticalAlignment: Text.AlignVCenter
         }
 

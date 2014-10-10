@@ -1,32 +1,20 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
-Dialog {
+QuranDialog {
         id: dialog
-
-        DialogHeader {
-                id: header
-                title: qsTr("Choose recitation")
-                acceptText: title
-        }
-
-        SilicaListView {
+        title: qsTr("Choose recitation")
+        content: QuranListView {
                 id: view
 
                 model: RecitationModel {
                         recitations: _recitations
                 }
 
-                anchors {
-                        top: header.bottom
-                        bottom: parent.bottom
-                        right: parent.right
-                        left: parent.left
-                }
+                anchors.fill: parent
 
-                delegate: BackgroundItem {
+                delegate: QuranBackgroundItem {
                         onClicked: {
                                 recitationsManager.changeRecitation(recitationId)
                                 pageStack.pop()
@@ -39,15 +27,14 @@ Dialog {
                                 rightMargin: theme.marginMedium
                         }
 
-                        height: Theme.itemSizeSmall
+                        height: theme.itemSizeSmall
 
-                        Label {
+                        QuranLabel {
                                 anchors.fill: parent
                                 wrapMode: Text.WordWrap
-                                truncationMode: TruncationMode.Fade
+                                fadeTruncation: true
                                 text: name
-                                font.family: Theme.fontFamily
-                                color: _recitations.current == recitationId ? Theme.highlightColor : Theme.primaryColor
+                                color: _recitations.current == recitationId ? theme.highlightColor : theme.primaryColor
                         }
                 }
         }

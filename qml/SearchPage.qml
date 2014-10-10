@@ -19,7 +19,7 @@ QuranPage {
                 Column {
                         width: parent.width
 
-                        PageHeader {
+                        QuranPageHeader {
                                 width: parent.width
                                 title: qsTr("Search")
                         }
@@ -38,7 +38,7 @@ QuranPage {
                                 }
                         }
 
-                        TextSwitch {
+                        QuranTextSwitch {
                                 width: parent.width
                                 text: qsTr("Match whole words only");
                                 checked: settings.searchMatchWholeWords
@@ -51,11 +51,10 @@ QuranPage {
         Component {
                 id: sectionDelegate
 
-                Label {
+                QuranLabel {
                         id: title
                         anchors.right: parent.right
                         anchors.rightMargin: theme.largeMedium
-                        font.family: Theme.fontFamily
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                         text: _data.fullSuraName(section)
@@ -66,7 +65,7 @@ QuranPage {
         Component {
                 id: searchPageDelegate
 
-                BackgroundItem {
+                QuranBackgroundItem {
                         id: item
                         width: parent.width
                         height: label.height
@@ -76,7 +75,7 @@ QuranPage {
                                 pageStack.pop()
                         }
 
-                        Label {
+                        QuranLabel {
                                 id: label
                                 anchors {
                                         top: parent.top
@@ -101,14 +100,14 @@ QuranPage {
                 }
         }
 
-        SilicaListView {
+        QuranListView {
                 id: view
                 anchors.fill: parent
                 anchors.bottomMargin: keyboard.visible ? keyboard.height : 0
                 clip: keyboard.visible
                 header: headerDelegate
 
-                ViewPlaceholder {
+                QuranViewPlaceholder {
                         text: searchModel.errorString
                         enabled: searchModel.error
                 }
@@ -146,11 +145,10 @@ QuranPage {
                 horizontalCenter: parent.horizontalCenter
             }
 
-            Label {
+            QuranLabel {
                 color: Theme.primaryColor
                 id: label
                 anchors.fill: parent
-                font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSizeLarge
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter

@@ -8,5 +8,10 @@
     <file alias="/qml/QuranSlider.qml">qml/QuranSlider.qml</file>
     <file alias="/qml/QuranPageHeader.qml">qml/QuranPageHeader.qml</file>
     <file alias="/qml/QuranViewPlaceholder.qml">qml/QuranViewPlaceholder.qml</file>
+    <file alias="/qml/QuranBackgroundItem.qml">qml/QuranBackgroundItem.qml</file>
+    <file alias="/qml/QuranGridView.qml">qml/QuranGridView.qml</file>
+    <file alias="/qml/QuranTextSwitch.qml">qml/QuranTextSwitch.qml</file>
+    <file alias="/qml/QuranPage.qml">qml/QuranPage.qml</file>
+    <file alias="/qml/QuranDialog.qml">qml/QuranDialog.qml</file>
   </qresource>
 </RCC>

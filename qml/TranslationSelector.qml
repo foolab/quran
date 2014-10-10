@@ -1,31 +1,18 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
-Dialog {
-        id: dialog
+QuranDialog {
+        title: qsTr("Choose translation")
 
-        DialogHeader {
-                id: header
-                title: qsTr("Choose translation")
-                acceptText: title
-        }
-
-        SilicaListView {
+        content: QuranListView {
                 id: view
                 model: InstalledTranslationsModel {
                         translations: _translations
                 }
 
-                anchors {
-                        top: header.bottom
-                        bottom: parent.bottom
-                        right: parent.right
-                        left: parent.left
-                }
-
-                delegate: BackgroundItem {
+                anchors.fill: parent
+                delegate: QuranBackgroundItem {
                         property int tid: translationId
                         onClicked: {
                                 translationsManager.changeTranslation(tid)
@@ -39,15 +26,14 @@ Dialog {
                                 rightMargin: theme.marginMedium
                         }
 
-                        height: Theme.itemSizeSmall
+                        height: theme.itemSizeSmall
 
-                        Label {
+                        QuranLabel {
                                 anchors.fill: parent
                                 wrapMode: Text.WordWrap
-                                truncationMode: TruncationMode.Fade
+                                fadeTruncation: true
                                 text: name
-                                color: _translations.current == tid ? Theme.highlightColor : Theme.primaryColor
-                                font.family: Theme.fontFamily
+                                color: _translations.current == tid ? theme.highlightColor : theme.primaryColor
                         }
                 }
         }

@@ -132,7 +132,7 @@ QuranListView {
                     chapter: _chapter
                     verse: _verse
                     dataProvider: _data
-                    color: _recitations.chapter == chapter && _recitations.verse == verse ? theme.highlightColor : theme.verseColor
+                    color: _recitations.chapter == chapter && _recitations.verse == verse ? theme.recitationHighlightColor : theme.verseColor
                 }
 
                 Row {

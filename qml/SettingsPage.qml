@@ -98,13 +98,13 @@ QuranPage {
                                 onValueChanged: settings.translationFontSize = value
                         }
 
-                        TextSwitch {
+                        QuranTextSwitch {
                                 text: qsTr("Use simplified text")
                                 checked: settings.textType == 1
                                 onCheckedChanged: settings.textType = checked ? 1 : 0
                         }
 
-                        TextSwitch {
+                        QuranTextSwitch {
                                 text: qsTr("Use Arabic numerals")
                                 checked: settings.numberFormat == 1
                                 onCheckedChanged: settings.numberFormat = checked ? 1 : 0
@@ -135,7 +135,7 @@ QuranPage {
                                 enabled: _translations.installedCount > 0
                         }
 
-                        TextSwitch {
+                        QuranTextSwitch {
                                 text: qsTr("Night mode")
                                 checked: settings.nightMode
                                 onCheckedChanged: settings.nightMode = checked
@@ -152,14 +152,14 @@ QuranPage {
                                 onCurrentIndexChanged: settings.centerText = (currentIndex == 1);
                         }
 
-                        TextSwitch {
+                        QuranTextSwitch {
                                 text: qsTr("Enable recitations")
                                 checked: settings.recitationMode == 1
                                 onCheckedChanged: settings.recitationMode = checked ? 1 : 0
                                 enabled: _recitations.installedCount > 0
                         }
 
-                        TextSwitch {
+                        QuranTextSwitch {
                                 text: qsTr("Flip phone to stop recitation")
                                 checked: settings.flipToStopRecitation
                                 onCheckedChanged: settings.flipToStopRecitation = checked

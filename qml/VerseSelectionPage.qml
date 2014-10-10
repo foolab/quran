@@ -1,12 +1,11 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 
 QuranPage {
         id: page
         property int chapter
 
-        SilicaGridView {
+        QuranGridView {
                 id: grid
                 model: _data.suraSize(parent.chapter)
                 cellWidth: grid.width / 7
@@ -18,17 +17,17 @@ QuranPage {
                         rightMargin: theme.marginMedium
                 }
 
-                header: PageHeader {
+                header: QuranPageHeader {
                         width: grid.width
                         title: qsTr("Choose a verse")
                 }
 
-                delegate: BackgroundItem {
+                delegate: QuranBackgroundItem {
                         width: grid.cellWidth
                         height: grid.cellHeight
                         NumberLabel {
                                 anchors.fill: parent
-                                color: Theme.primaryColor
+                                color: theme.primaryColor
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 number: index + 1

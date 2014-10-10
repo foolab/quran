@@ -1,8 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 
-BackgroundItem {
+QuranBackgroundItem {
         property alias title: titleLabel.text
         property alias text: textLabel.text
 

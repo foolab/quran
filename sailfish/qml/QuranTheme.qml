@@ -14,7 +14,7 @@ QtObject {
     property color titleColor: textColor
     property color subtitleColor: textColor
     property color verseColor: textColor
-    property color highlightColor: "red"
+    property color recitationHighlightColor: "red"
     property color translationTextColor: textColor
     property color buttonNormalColor: inNightMode ? "white" : "black"
 
@@ -30,4 +30,6 @@ QtObject {
     property int fontSizeLarge: Theme.fontSizeLarge
     property color primaryColor: Theme.primaryColor
     property string fontFamilyHeading: Theme.fontFamilyHeading
+    property int itemSizeSmall: Theme.itemSizeSmall
+    property color highlightColor: Theme.highlightColor
 }

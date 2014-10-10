@@ -1,9 +1,8 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 
 QuranPage {
-        SilicaListView {
+        QuranListView {
                 id: view
                 model: _data.partCount
                 anchors {
@@ -35,7 +34,7 @@ QuranPage {
                         }
                 }
 
-                header: PageHeader {
+                header: QuranPageHeader {
                         width: view.width
                         title: qsTr("Choose a part")
                 }

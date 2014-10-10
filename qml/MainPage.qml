@@ -11,7 +11,7 @@ QuranPage {
                 color: theme.backgroundColor
         }
 
-        SilicaListView {
+        QuranListView {
                 id: view
                 anchors {
                         top: parent.top
@@ -62,7 +62,7 @@ QuranPage {
                 id: row
                 color: theme.backgroundColor
                 width: parent.width
-                height: Theme.itemSizeSmall
+                height: theme.itemSizeSmall
                 anchors.bottom: parent.bottom
 
                 Row {
@@ -72,17 +72,17 @@ QuranPage {
                                 bottom: parent.bottom
                         }
 
-                        height: Theme.itemSizeSmall
+                        height: theme.itemSizeSmall
 
                         ToolButton {
-                                width: Theme.itemSizeSmall
+                                width: theme.itemSizeSmall
                                 icon.source: highlight ? "image://icon/reciter.png?" + theme.buttonHighlightColor : "image://icon/reciter.png?" + theme.buttonNormalColor
                                 onClicked: pageStack.push(Qt.resolvedUrl("RecitationSelector.qml"))
                                 enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
                         }
 
                         ToolButton {
-                                width: Theme.itemSizeSmall
+                                width: theme.itemSizeSmall
                                 icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
                                 onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
                                 enabled: settings.translationMode != 0 && _translations.installedCount > 0
@@ -90,22 +90,22 @@ QuranPage {
 
                         NumberLabel {
                                 width: 60
-                                height: Theme.itemSizeSmall
+                                height: theme.itemSizeSmall
                                 number: settings.pageNumber + 1
                                 onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
                                 onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
-                                color: highlight ? Theme.highlightColor : theme.textColor
+                                color: highlight ? theme.highlightColor : theme.textColor
                         }
 
                         ToolButton {
-                                width: Theme.itemSizeSmall
+                                width: theme.itemSizeSmall
                                 icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
                                 enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
                                 onClicked: _recitations.playPage(settings.pageNumber)
                         }
 
                         ToolButton {
-                                width: Theme.itemSizeSmall
+                                width: theme.itemSizeSmall
                                 icon.source: highlight ? "image://icon/stop.png?" + theme.buttonHighlightColor : "image://icon/stop.png?" + theme.buttonNormalColor
                                 onClicked: _recitations.stop()
                                 enabled: _recitations.isPlaying

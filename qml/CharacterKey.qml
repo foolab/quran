@@ -1,8 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 
-BackgroundItem {
+QuranBackgroundItem {
     property alias caption: label.text
     height: width
     onClicked: keyboard.keyClicked(caption)
@@ -10,11 +9,10 @@ BackgroundItem {
     onReleased: keyboard.keyReleased(caption)
     onCanceled: keyboard.keyReleased(caption)
 
-    Label {
+    QuranLabel {
         id: label
         anchors.fill: parent
-        font.family: Theme.fontFamily
-        font.pixelSize: Theme.fontSizeSmall
+        font.pixelSize: theme.fontSizeSmall
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
      }

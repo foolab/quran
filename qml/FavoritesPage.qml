@@ -22,15 +22,14 @@ QuranPage {
         Component {
                 id: sectionDelegate
 
-                Label {
+                QuranLabel {
                         id: title
                         anchors.right: parent.right
                         anchors.rightMargin: theme.largeMedium
-                        font.family: Theme.fontFamily
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                         text: _data.fullSuraName(section)
-                        color: Theme.highlightColor
+                        color: theme.highlightColor
                 }
         }
 
@@ -67,7 +66,7 @@ QuranPage {
                                 pageStack.pop()
                         }
 
-                        Label {
+                        QuranLabel {
                                 id: label
                                 anchors {
                                         top: parent.top
@@ -87,14 +86,14 @@ QuranPage {
                                 text: qsTr("(%1) %2").arg(formatter.formattedNumber).arg(_data.text(chapter, verse))
                                 wrapMode: Text.WordWrap
                                 horizontalAlignment: Text.AlignRight
-                                color: Theme.primaryColor
+                                color: theme.primaryColor
                         }
 
                         RemorseItem { id: remorse }
                 }
         }
 
-        SilicaListView {
+        QuranListView {
                 id: view
                 anchors.fill: parent
 
@@ -102,7 +101,7 @@ QuranPage {
                         bookmarks: _bookmarks
                 }
 
-                header: PageHeader {
+                header: QuranPageHeader {
                         width: parent.width
                         title: qsTr("Favorites")
                 }
@@ -112,7 +111,7 @@ QuranPage {
                 section.delegate: sectionDelegate
                 delegate: favoritesPageDelegate
 
-                ViewPlaceholder {
+                QuranViewPlaceholder {
                         text: qsTr("No favorites added.\nTap on a verse then tap the star button to add or remove favorites")
                         enabled: _bookmarks.empty
                 }
