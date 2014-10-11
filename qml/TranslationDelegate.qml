@@ -7,8 +7,9 @@ ContextMenuLabel {
         property bool showCategory
 
         property alias status: translation.status
-        // TODO:
-        //                        contentHeight: label.height
+
+        contentHeight: Math.max(label.height, indicator.height)
+
         DeleteItem {
                 id: deleter
                 onConfirmed: _translations.removeTranslation(tid)
