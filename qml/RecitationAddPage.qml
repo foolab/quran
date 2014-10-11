@@ -8,11 +8,29 @@ QuranPage {
         Component {
                 id: recitationssDelegate
 
-                DownloadLabel {
-                        showProgress: false
-                        showInstalled: installed
-                        text: qsTr("%1 (%2)").arg(name).arg(quality)
-                        onClicked: toggleRecitation(recitationId, installed);
+                ContextMenuLabel {
+                        onClicked: toggleRecitation(recitationId, installed)
+                        content: [
+                        QuranStatusIndicator {
+                                id: indicator
+                                anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
+                                isInstalled: installed
+                        },
+                        QuranLabel {
+                                text: qsTr("%1 (%2)").arg(name).arg(quality)
+                                anchors {
+                                        top: parent.top
+                                        bottom: parent.bottom
+                                        right: indicator.left
+                                        rightMargin: theme.marginSmall
+                                        left: parent.left
+                                        leftMargin: theme.marginSmall
+                                }
+
+                                verticalAlignment: Text.AlignVCenter
+                        }
+                        ]
                 }
         }
 

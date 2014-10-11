@@ -3,5 +3,51 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
+        // All children of the page created by our app will be children of this item
+        // And all of our children (items) will be children of the real Page content item!
+        default property alias _content: contentItem.data
+        property alias toolBar: toolBarItem.children
         allowedOrientations: settings.orientation == 1 ? Orientation.Portrait | Orientation.PortraitInverted : settings.orientation == 2 ? Orientation.Landscape | Orientation.LandscapeInverted : Orientation.All
+
+        function replaceAnimated(page, props) {
+                return pageStack.replace(page, props, PageStackAction.Animated)
+        }
+
+        function replaceImmediate(page, props) {
+                return pageStack.replace(page, props, PageStackAction.Immediate)
+        }
+
+        function pushAnimated(page, props) {
+                return pageStack.push(page, props, PageStackAction.Animated)
+        }
+
+        function pushImmediate(page, props) {
+                return pageStack.push(page, props, PageStackAction.Immediate)
+        }
+
+        Item {
+                id: contentItem
+                width: parent.width
+                anchors.top: parent.top
+                anchors.bottom: mouseGrabber.top
+        }
+
+        MouseArea {
+                id: mouseGrabber
+                width: parent.width
+                anchors.bottom: parent.bottom
+                height: toolBar.length > 0 ? Theme.itemSizeSmall : 0
+
+                Rectangle {
+                        anchors.fill: parent
+                        color: theme.backgroundColor
+                }
+
+                Row {
+                        id: toolBarItem
+                        height: parent.height
+                        anchors.top: parent.top
+                        anchors.horizontalCenter: parent.horizontalCenter
+                }
+        }
 }

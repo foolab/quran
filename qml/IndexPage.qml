@@ -1,22 +1,23 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
 QuranPage {
 
-        SilicaListView {
+        QuranPageMenu {
+                view: view
+
+                actions: [
+                MenuAction {
+                        text: qsTr("Choose part")
+                        onClicked: replaceAnimated(Qt.resolvedUrl("PartSelectionPage.qml"))
+                }
+                ]
+        }
+
+        QuranListView {
                 id: view
-                anchors {
-                        fill: parent
-                        leftMargin: theme.marginMedium
-                        rightMargin: theme.marginMedium
-                }
-
-                PullDownMenu {
-                        MenuItem { text: qsTr("Choose part"); onClicked: { pageStack.replace(Qt.resolvedUrl("PartSelectionPage.qml"), PageStackAction.Animated) } }
-                }
-
+                anchors.fill: parent
                 model: _data.verseCount
                 highlightFollowsCurrentItem: false
                 currentIndex: _data.firstSuraForPage(settings.pageNumber)
@@ -43,7 +44,7 @@ QuranPage {
                         }
                 }
 
-                header: PageHeader {
+                header: QuranPageHeader {
                         width: view.width
                         title: qsTr("Index")
                 }

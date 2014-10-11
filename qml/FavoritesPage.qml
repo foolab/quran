@@ -1,20 +1,18 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
 QuranPage {
         id: favoritesPage
-        property Item menu
 
-        RemorsePopup {
-                id: pageRemorse
+        DeletePopup {
+                id: popup
+                onConfirmed: _bookmarks.clear()
         }
 
         Connections {
                 target: _bookmarks
                 onCleared: {
-                        view.model.clear()
                         pageStack.pop()
                 }
         }
@@ -34,47 +32,32 @@ QuranPage {
         }
 
         Component {
-                id: contextMenuComponent
-                ContextMenu {
-                        id: menu
-
-                        MenuItem {
-                                text: qsTr("Remove")
-                                onClicked: remorse.execute(item, "Removing", function() { _bookmarks.remove(bookmark) } )
-                        }
-                }
-        }
-
-        Component {
                 id: favoritesPageDelegate
 
-                BackgroundItem {
+                ContextMenuLabel {
                         id: item
-                        width: parent.width
-                        height: menu && menu.parent == item ? label.height + menu.height : label.height
+                        contentHeight: label.height
 
-                        onPressAndHold: {
-                                if (!menu) {
-                                        menu = contextMenuComponent.createObject(view)
-                                }
-
-                                menu.show(item)
+                        actions: [
+                        MenuAction {
+                                text: qsTr("Remove")
+                                onClicked: deleter.confirm(item, qsTr("Removing"))
                         }
+                        ]
 
                         onClicked: {
                                 pagePosition.setPosition(chapter, verse)
                                 pageStack.pop()
                         }
 
-                        QuranLabel {
+                        DeleteItem {
+                                id: deleter
+                                onConfirmed: _bookmarks.remove(bookmark)
+                        }
+
+                        content: QuranLabel {
                                 id: label
-                                anchors {
-                                        top: parent.top
-                                        right: parent.right
-                                        left: parent.left
-                                        rightMargin: theme.marginMedium
-                                        leftMargin: theme.marginMedium
-                                }
+                                width: parent.width
 
                                 NumberFormatter {
                                         id: formatter
@@ -88,9 +71,17 @@ QuranPage {
                                 horizontalAlignment: Text.AlignRight
                                 color: theme.primaryColor
                         }
-
-                        RemorseItem { id: remorse }
                 }
+        }
+
+        QuranPageMenu {
+                view: view
+                actions: [
+                MenuAction {
+                        text: qsTr("Clear")
+                        onClicked: popup.confirm(qsTr("Clearing"))
+                }
+                ]
         }
 
         QuranListView {
@@ -114,15 +105,6 @@ QuranPage {
                 QuranViewPlaceholder {
                         text: qsTr("No favorites added.\nTap on a verse then tap the star button to add or remove favorites")
                         enabled: _bookmarks.empty
-                }
-
-                PullDownMenu {
-                        MenuItem {
-                                text: qsTr("Clear")
-                                onClicked: {
-                                        pageRemorse.execute("Clearing", function() { _bookmarks.clear() } )
-                                }
-                        }
                 }
         }
 }

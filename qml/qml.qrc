@@ -5,7 +5,6 @@
     <file alias="qml/MainPage.qml">MainPage.qml</file>
     <file alias="qml/AboutPageBlock.qml">AboutPageBlock.qml</file>
     <file alias="qml/AboutPage.qml">AboutPage.qml</file>
-    <file alias="qml/DownloadLabel.qml">DownloadLabel.qml</file>
     <file alias="qml/FavoritesModel.qml">FavoritesModel.qml</file>
     <file alias="qml/FavoritesPage.qml">FavoritesPage.qml</file>
     <file alias="qml/IndexPage.qml">IndexPage.qml</file>
@@ -26,11 +25,11 @@
     <file alias="qml/SearchPage.qml">SearchPage.qml</file>
     <file alias="qml/SettingsPage.qml">SettingsPage.qml</file>
     <file alias="qml/SuraList.qml">SuraList.qml</file>
-    <file alias="qml/TranslationLabel.qml">TranslationLabel.qml</file>
     <file alias="qml/TranslationLanguageList.qml">TranslationLanguageList.qml</file>
     <file alias="qml/TranslationsAddPage.qml">TranslationsAddPage.qml</file>
     <file alias="qml/TranslationSelector.qml">TranslationSelector.qml</file>
     <file alias="qml/TranslationsListPage.qml">TranslationsListPage.qml</file>
     <file alias="qml/TranslationsManager.qml">TranslationsManager.qml</file>
+    <file alias="qml/MenuAction.qml">MenuAction.qml</file>
   </qresource>
 </RCC>

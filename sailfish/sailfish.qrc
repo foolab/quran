@@ -13,5 +13,12 @@
     <file alias="/qml/QuranTextSwitch.qml">qml/QuranTextSwitch.qml</file>
     <file alias="/qml/QuranPage.qml">qml/QuranPage.qml</file>
     <file alias="/qml/QuranDialog.qml">qml/QuranDialog.qml</file>
+    <file alias="/qml/QuranPageMenu.qml">qml/QuranPageMenu.qml</file>
+    <file alias="/qml/QuranButton.qml">qml/QuranButton.qml</file>
+    <file alias="/qml/QuranComboBox.qml">qml/QuranComboBox.qml</file>
+    <file alias="/qml/ContextMenuLabel.qml">qml/ContextMenuLabel.qml</file>
+    <file alias="/qml/QuranStatusIndicator.qml">qml/QuranStatusIndicator.qml</file>
+    <file alias="/qml/DeleteItem.qml">qml/DeleteItem.qml</file>
+    <file alias="/qml/DeletePopup.qml">qml/DeletePopup.qml</file>
   </qresource>
 </RCC>

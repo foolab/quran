@@ -1,42 +1,43 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
 QuranPage {
         id: settingsPage
 
-        RemorsePopup { id: remorse }
+        DeletePopup {
+                id: deleter
+                onConfirmed: settings.reset()
+        }
 
-        SilicaFlickable {
+        QuranPageMenu {
+                view: flick
+                actions: [
+                MenuAction {
+                        text: qsTr("Reset")
+                        onClicked: deleter.confirm(qsTr("Resetting"))
+                },
+                MenuAction {
+                        text: qsTr("Manage recitations")
+                        onClicked: pushAnimated(Qt.resolvedUrl("RecitationsListPage.qml"))
+                },
+                MenuAction {
+                        text: qsTr("Manage translations")
+                        onClicked: pushAnimated(Qt.resolvedUrl("TranslationsListPage.qml"))
+                }
+                ]
+        }
+
+        QuranFlickable {
                 id: flick
                 anchors.fill: parent
                 contentHeight: col.height
-
-                PullDownMenu {
-                        MenuItem {
-                                text: qsTr("Reset")
-                                onClicked: {
-                                        remorse.execute("Resetting", function() { settings.reset() })
-                                }
-                        }
-
-                        MenuItem {
-                                text: qsTr("Manage recitations")
-                                onClicked: pageStack.push(Qt.resolvedUrl("RecitationsListPage.qml"))
-                        }
-
-                        MenuItem {
-                                text: qsTr("Manage translations")
-                                onClicked: pageStack.push(Qt.resolvedUrl("TranslationsListPage.qml"))
-                        }
-                }
 
                 Column {
                         id: col
                         width: parent.width
 
-                        PageHeader {
+                        QuranPageHeader {
                                 width: parent.width
                                 title: qsTr("Settings")
                         }
@@ -46,7 +47,7 @@ QuranPage {
                                 height: previewLabel.height
                                 color: theme.backgroundColor
 
-                                Label {
+                                QuranLabel {
                                         id: previewLabel
                                         width: parent.width
                                         anchors.horizontalCenter: parent.horizontalCenter
@@ -110,24 +111,24 @@ QuranPage {
                                 onCheckedChanged: settings.numberFormat = checked ? 1 : 0
                         }
 
-                        ComboBox {
-                                menu: ContextMenu {
-                                        MenuItem { text: qsTr("Automatic") }
-                                        MenuItem { text: qsTr("Portrait") }
-                                        MenuItem { text: qsTr("Landscape") }
-                                }
+                        QuranComboBox {
+                                actions: [
+                                        MenuAction { text: qsTr("Automatic") },
+                                        MenuAction { text: qsTr("Portrait") },
+                                        MenuAction { text: qsTr("Landscape") }
+                                ]
 
                                 label: qsTr("Orientation")
                                 currentIndex: settings.orientation
                                 onCurrentIndexChanged: settings.orientation = currentIndex
                         }
 
-                        ComboBox {
-                                menu: ContextMenu {
-                                        MenuItem { text: qsTr("Disabled") }
-                                        MenuItem { text: qsTr("Enabled") }
-                                        MenuItem { text: qsTr("Hidden") }
-                                }
+                        QuranComboBox {
+                                actions: [
+                                        MenuAction { text: qsTr("Disabled") },
+                                        MenuAction { text: qsTr("Enabled") },
+                                        MenuAction { text: qsTr("Hidden") }
+                                ]
 
                                 label: qsTr("Translation")
                                 currentIndex: settings.translationMode
@@ -141,11 +142,11 @@ QuranPage {
                                 onCheckedChanged: settings.nightMode = checked
                         }
 
-                        ComboBox {
-                                menu: ContextMenu {
-                                        MenuItem { text: qsTr("Automatic") }
-                                        MenuItem { text: qsTr("Center") }
-                                }
+                        QuranComboBox {
+                                actions: [
+                                        MenuAction { text: qsTr("Automatic") },
+                                        MenuAction { text: qsTr("Center") }
+                                ]
 
                                 label: qsTr("Text alignment");
                                 currentIndex: settings.centerText ? 1 : 0;

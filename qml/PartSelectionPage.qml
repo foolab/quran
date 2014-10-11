@@ -1,24 +1,25 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 
 QuranPage {
+        QuranPageMenu {
+                view: view
+
+                actions: [
+                MenuAction {
+                        text: qsTr("Choose chapter")
+                        onClicked: replaceAnimated(Qt.resolvedUrl("IndexPage.qml"))
+                }
+                ]
+        }
+
         QuranListView {
                 id: view
                 model: _data.partCount
-                anchors {
-                        fill: parent
-                        leftMargin: theme.marginMedium
-                        rightMargin: theme.marginMedium
-                }
-
+                anchors.fill: parent
                 highlightFollowsCurrentItem: false
                 currentIndex: _data.partNumberForPage(settings.pageNumber)
                 Component.onCompleted: view.positionViewAtIndex(currentIndex, ListView.Center)
-
-                PullDownMenu {
-                        MenuItem { text: qsTr("Choose chapter"); onClicked: { pageStack.replace(Qt.resolvedUrl("IndexPage.qml"), PageStackAction.Animated) } }
-                }
 
                 delegate: ListDelegate {
                         number: index

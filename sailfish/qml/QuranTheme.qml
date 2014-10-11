@@ -31,5 +31,15 @@ QtObject {
     property color primaryColor: Theme.primaryColor
     property string fontFamilyHeading: Theme.fontFamilyHeading
     property int itemSizeSmall: Theme.itemSizeSmall
+    property int characterKeySize: Theme.itemSizeExtraSmall
     property color highlightColor: Theme.highlightColor
+
+    property color statusError: "red"
+    property color statusDownloading: Theme.highlightColor
+    property color statusInstalled: Theme.primaryColor
+
+    property bool needsKeyboard: true
+    property string keyboardCapslock: "image://theme/icon-m-capslock"
+    property string keyboardEnter: "image://theme/icon-m-enter"
+    property string keyboardBackspace: "image://theme/icon-m-backspace"
 }

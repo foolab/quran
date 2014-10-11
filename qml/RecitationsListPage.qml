@@ -1,6 +1,5 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
 QuranPage {
@@ -9,11 +8,39 @@ QuranPage {
         Component {
                 id: recitationssDelegate
                 // TODO: Context menu
-                DownloadLabel {
-                        showInstalled: isOnline
-                        showProgress: false
-                        text: name
+                ContextMenuLabel {
+                        content: [
+                        QuranStatusIndicator {
+                                id: indicator
+                                anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
+                                isInstalled: true
+                        },
+                        QuranLabel {
+                                text: name
+                                anchors {
+                                        top: parent.top
+                                        bottom: parent.bottom
+                                        right: indicator.left
+                                        rightMargin: theme.marginSmall
+                                        left: parent.left
+                                        leftMargin: theme.marginSmall
+                                }
+
+                                verticalAlignment: Text.AlignVCenter
+                        }
+                        ]
                 }
+        }
+
+        QuranPageMenu {
+                view: view
+                actions: [
+                MenuAction {
+                        text: qsTr("Add recitation")
+                        onClicked: pushAnimated(Qt.resolvedUrl("RecitationAddPage.qml"))
+                }
+                ]
         }
 
         QuranListView {
@@ -33,13 +60,6 @@ QuranPage {
                 QuranViewPlaceholder {
                         text: qsTr("No recitations. Pull down to enable a recitation.")
                         enabled: view.count == 0
-                }
-
-                PullDownMenu {
-                        MenuItem {
-                                text: qsTr("Add recitation")
-                                onClicked: pageStack.push(Qt.resolvedUrl("RecitationAddPage.qml"))
-                        }
                 }
         }
 }

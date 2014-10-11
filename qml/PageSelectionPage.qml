@@ -3,7 +3,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 QuranPage {
-    PageHeader {
+    QuranPageHeader {
         width: parent.width
         title: qsTr("Choose a page")
     }
@@ -15,9 +15,9 @@ QuranPage {
         QuranLabel {
             width: parent.width
             text: qsTr("Enter a page number between 1 and %1").arg(_data.pageCount)
-            font.pixelSize: Theme.fontSizeLarge
+            font.pixelSize: theme.fontSizeLarge
             wrapMode: Text.WordWrap
-            color: Theme.primaryColor
+            color: theme.primaryColor
         }
 
         TextField {
@@ -30,8 +30,8 @@ QuranPage {
             validator: IntValidator { bottom: 1; top: _data.pageCount }
 
             font {
-                pixelSize: Theme.fontSizeLarge
-                family: Theme.fontFamilyHeading
+                pixelSize: theme.fontSizeLarge
+                family: theme.fontFamilyHeading
             }
 
             EnterKey.enabled: acceptableInput

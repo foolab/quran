@@ -1,8 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 
-ListItem {
+QuranBackgroundItem {
     id: root
 
     property int number
@@ -15,16 +14,23 @@ ListItem {
     signal playClicked
     signal moreClicked
 
-    contentHeight: Theme.itemSizeSmall
+    height: theme.itemSizeSmall
+
+    anchors {
+        right: parent.right
+        rightMargin: theme.marginMedium
+        left: parent.left
+        leftMargin: theme.marginMedium
+    }
 
     NumberLabel {
         id: numberLabel
         number: root.number + 1
-        width: Theme.itemSizeSmall
-        height: Theme.itemSizeSmall
+        width: theme.itemSizeSmall
+        height: width
         horizontalAlignment: Text.AlignRight
         verticalAlignment: Text.AlignVCenter
-        color: root.highlight ? Theme.highlightColor : Theme.primaryColor
+        color: root.highlight ? theme.highlightColor : theme.primaryColor
 
         anchors {
             top: parent.top
@@ -32,11 +38,10 @@ ListItem {
         }
     }
 
-    Label {
+    QuranLabel {
         id: label
-        height: Theme.itemSizeSmall
-        color: root.highlight ? Theme.highlightColor : Theme.primaryColor
-        font.family: Theme.fontFamily
+        height: theme.itemSizeSmall
+        color: root.highlight ? theme.highlightColor : theme.primaryColor
         horizontalAlignment: Text.AlignRight
         verticalAlignment: Text.AlignVCenter
 
@@ -47,10 +52,10 @@ ListItem {
         }
     }
 
-    Button {
+    QuranButton {
         id: more
-        width: Theme.itemSizeSmall
-        height: Theme.itemSizeSmall
+        width: theme.itemSizeSmall
+        height: width
         text: "..."
 
         anchors {
@@ -63,8 +68,8 @@ ListItem {
 
     ToolButton {
         id: play
-        width: Theme.itemSizeSmall
-        icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + Theme.primaryColor
+        width: theme.itemSizeSmall
+        icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.primaryColor
 
         anchors {
             top: parent.top
