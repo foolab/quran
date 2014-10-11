@@ -22,7 +22,6 @@ QtObject {
 
     property int marginSmall: 10
     property int marginMedium: 16
-    property int marginLarge: 20
     property int spacing: 20
     property int toolButtonSize: Theme.itemSizeSmall
 

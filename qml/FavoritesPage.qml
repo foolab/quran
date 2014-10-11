@@ -20,15 +20,7 @@ QuranPage {
         Component {
                 id: sectionDelegate
 
-                QuranLabel {
-                        id: title
-                        anchors.right: parent.right
-                        anchors.rightMargin: theme.largeMedium
-                        horizontalAlignment: Text.AlignRight
-                        verticalAlignment: Text.AlignVCenter
-                        text: _data.fullSuraName(section)
-                        color: theme.highlightColor
-                }
+                ChapterDelegate {}
         }
 
         Component {
