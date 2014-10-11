@@ -23,7 +23,7 @@ QuranPage {
                 currentIndex: _data.firstSuraForPage(settings.pageNumber)
                 Component.onCompleted: view.positionViewAtIndex(currentIndex, ListView.Center)
 
-                delegate: ListDelegate {
+                delegate: IndexDelegate {
                         number: index
                         text: _data.fullSuraName(index)
                         highlight: ListView.isCurrentItem

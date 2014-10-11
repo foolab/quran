@@ -8,7 +8,7 @@
     <file alias="qml/FavoritesModel.qml">FavoritesModel.qml</file>
     <file alias="qml/FavoritesPage.qml">FavoritesPage.qml</file>
     <file alias="qml/IndexPage.qml">IndexPage.qml</file>
-    <file alias="qml/ListDelegate.qml">ListDelegate.qml</file>
+    <file alias="qml/IndexDelegate.qml">IndexDelegate.qml</file>
     <file alias="qml/Keyboard.qml">Keyboard.qml</file>
     <file alias="qml/CharacterKey.qml">CharacterKey.qml</file>
     <file alias="qml/NumberLabel.qml">NumberLabel.qml</file>

@@ -21,7 +21,7 @@ QuranPage {
                 currentIndex: _data.partNumberForPage(settings.pageNumber)
                 Component.onCompleted: view.positionViewAtIndex(currentIndex, ListView.Center)
 
-                delegate: ListDelegate {
+                delegate: IndexDelegate {
                         number: index
                         text: _data.partName(index)
                         showPlay: settings.recitationMode != 0 && _recitations.installedCount > 0
