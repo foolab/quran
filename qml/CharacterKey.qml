@@ -2,6 +2,7 @@
 import QtQuick 2.0
 
 QuranBackgroundItem {
+    id: item
     property alias caption: label.text
     height: width
     onClicked: keyboard.keyClicked(caption)
@@ -15,5 +16,6 @@ QuranBackgroundItem {
         font.pixelSize: theme.fontSizeSmall
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+        color: item.highlighted ? theme.highlightColor : theme.primaryColor
      }
 }
