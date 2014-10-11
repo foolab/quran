@@ -42,4 +42,7 @@ QtObject {
     property string keyboardCapslock: "image://theme/icon-m-capslock"
     property string keyboardEnter: "image://theme/icon-m-enter"
     property string keyboardBackspace: "image://theme/icon-m-backspace"
+
+    property color keyboardPreviewTextColor: "white"
+    property color keyboardPreviewBackgroundColor: "black"
 }

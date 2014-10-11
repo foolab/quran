@@ -121,16 +121,21 @@ QuranPage {
             property alias text: label.text
             width: theme.itemSizeLarge
             height: width
-            color: theme.highlightColor
+            color: theme.keyboardPreviewBackgroundColor
             visible: text != ""
-
+            radius: width / 3
+            smooth: true
+            border {
+                    color: theme.keyboardPreviewTextColor
+                    width: 1
+            }
             anchors {
                 bottom: keyboard.top
                 horizontalCenter: parent.horizontalCenter
             }
 
             QuranLabel {
-                color: theme.primaryColor
+                color: theme.keyboardPreviewTextColor
                 id: label
                 anchors.fill: parent
                 font.pixelSize: theme.fontSizeLarge
