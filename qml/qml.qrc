@@ -32,5 +32,6 @@
     <file alias="qml/TranslationsListPage.qml">TranslationsListPage.qml</file>
     <file alias="qml/TranslationsManager.qml">TranslationsManager.qml</file>
     <file alias="qml/MenuAction.qml">MenuAction.qml</file>
+    <file alias="qml/VerseDelegate.qml">VerseDelegate.qml</file>
   </qresource>
 </RCC>
