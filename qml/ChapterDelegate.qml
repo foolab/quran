@@ -1,3 +1,4 @@
+// -*- qml -*-
 import QtQuick 2.0
 import Quran 1.0
 
