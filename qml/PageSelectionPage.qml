@@ -1,6 +1,5 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 
 QuranPage {
     QuranPageHeader {
@@ -20,7 +19,7 @@ QuranPage {
             color: theme.primaryColor
         }
 
-        TextField {
+        QuranTextField {
             anchors.horizontalCenter: parent.horizontalCenter
             text: settings.pageNumber + 1
             width: parent.width / 2
@@ -34,10 +33,9 @@ QuranPage {
                 family: theme.fontFamilyHeading
             }
 
-            EnterKey.enabled: acceptableInput
-            EnterKey.text: qsTr("Go!")
-
-            EnterKey.onClicked: {
+            enterKeyEnabled: acceptableInput
+            enterKeyText: qsTr("Go!")
+            onEnterKeyClicked: {
                 if (acceptableInput) {
                     settings.pageNumber = text - 1
                     pageStack.pop()

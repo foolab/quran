@@ -20,5 +20,7 @@
     <file alias="/qml/QuranStatusIndicator.qml">qml/QuranStatusIndicator.qml</file>
     <file alias="/qml/DeleteItem.qml">qml/DeleteItem.qml</file>
     <file alias="/qml/DeletePopup.qml">qml/DeletePopup.qml</file>
+    <file alias="/qml/QuranTextField.qml">qml/QuranTextField.qml</file>
+    <file alias="/qml/QuranSearchField.qml">qml/QuranSearchField.qml</file>
   </qresource>
 </RCC>

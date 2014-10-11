@@ -1,6 +1,5 @@
 // -*- qml -*-
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Quran 1.0
 
 QuranPage {
@@ -24,14 +23,14 @@ QuranPage {
                                 title: qsTr("Search")
                         }
 
-                        SearchField {
+                        QuranSearchField {
                                 id: field
                                 Component.onCompleted: searchPage.searchField = field
                                 width: parent.width
                                 horizontalAlignment: TextInput.AlignRight
                                 onTextChanged: searchPage.searchString = text
                                 enableSoftwareInputPanel: false
-                                EnterKey.onClicked: {
+                                onEnterKeyClicked: {
                                     if (searchPage.searchString.length) {
                                         searchPage.doSearch()
                                     }
@@ -58,7 +57,7 @@ QuranPage {
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                         text: _data.fullSuraName(section)
-                        color: Theme.highlightColor
+                        color: theme.highlightColor
                 }
         }
 
@@ -95,9 +94,20 @@ QuranPage {
                                 text: qsTr("(%1) %2").arg(formatter.formattedNumber).arg(_data.text(chapter, verse))
                                 wrapMode: Text.WordWrap
                                 horizontalAlignment: Text.AlignRight
-                                color: Theme.primaryColor
+                                color: theme.primaryColor
                         }
                 }
+        }
+
+        QuranPageMenu {
+                view: view
+                actions: [
+                MenuAction {
+                        text: qsTr("Search")
+                        onClicked: searchPage.doSearch()
+                        visible: searchPage.searchString.length > 0
+                }
+                ]
         }
 
         QuranListView {
@@ -110,15 +120,6 @@ QuranPage {
                 QuranViewPlaceholder {
                         text: searchModel.errorString
                         enabled: searchModel.error
-                }
-
-                PullDownMenu {
-                        visible: searchPage.searchString.length > 0
-
-                        MenuItem {
-                                text: qsTr("Search")
-                                onClicked: searchPage.doSearch()
-                        }
                 }
 
                 section.property: "chapter"
@@ -135,9 +136,9 @@ QuranPage {
         Rectangle {
             id: preview
             property alias text: label.text
-            width: Theme.itemSizeLarge
+            width: theme.itemSizeLarge
             height: width
-            color: Theme.highlightColor
+            color: theme.highlightColor
             visible: text != ""
 
             anchors {
@@ -146,10 +147,10 @@ QuranPage {
             }
 
             QuranLabel {
-                color: Theme.primaryColor
+                color: theme.primaryColor
                 id: label
                 anchors.fill: parent
-                font.pixelSize: Theme.fontSizeLarge
+                font.pixelSize: theme.fontSizeLarge
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }

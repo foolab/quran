@@ -31,6 +31,7 @@ QtObject {
     property color primaryColor: Theme.primaryColor
     property string fontFamilyHeading: Theme.fontFamilyHeading
     property int itemSizeSmall: Theme.itemSizeSmall
+    property int itemSizeLarge: Theme.itemSizeLarge
     property int characterKeySize: Theme.itemSizeExtraSmall
     property color highlightColor: Theme.highlightColor
 
