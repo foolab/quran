@@ -7,7 +7,7 @@ QuranPage {
 
         QuranGridView {
                 id: grid
-                model: _data.suraSize(parent.chapter)
+                model: _data.suraSize(page.chapter)
                 cellWidth: grid.width / 7
                 cellHeight: cellWidth
 
