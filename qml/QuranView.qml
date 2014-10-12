@@ -127,12 +127,18 @@ QuranListView {
                     leftMargin: theme.marginMedium
                 }
 
-                QuranVerseLabel {
-                    id: label
+                TextSupplier {
+                    id: supplier
                     chapter: _chapter
                     verse: _verse
-                    dataProvider: _data
-                    color: _recitations.chapter == chapter && _recitations.verse == verse ? theme.recitationHighlightColor : theme.verseColor
+                    data: _data
+                }
+
+                QuranVerseLabel {
+                    id: label
+                    color: _recitations.chapter == _chapter && _recitations.verse == _verse ? theme.recitationHighlightColor : theme.verseColor
+                    textSupplier: supplier
+                    verse: _verse
                 }
 
                 Row {
@@ -169,6 +175,7 @@ QuranListView {
                     id: translation
                     chapter: _chapter
                     verse: _verse
+                    textSupplier: supplier
                 }
             }
         }

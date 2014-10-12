@@ -7,14 +7,12 @@ Item {
     property bool shown: false
     property int verse: -1
     property int chapter: -1
+    property variant textSupplier
 
     width: parent.width
     height: rect.height + 8
     visible: item.chapter != -1 && item.verse != -1 && translationsManager.enabled && (settings.translationMode == 1 || (item.shown && settings.translationMode == 2))
     opacity: visible ? 1 : 0
-
-    onChapterChanged: translation.resetText();
-    onVerseChanged: translation.resetText();
 
     Behavior on opacity {
         NumberAnimation { duration: 100 }
@@ -42,12 +40,7 @@ Item {
                 wrapMode: Text.WordWrap
                 color: theme.translationTextColor
                 horizontalAlignment: settings.centerText ? Text.AlignHCenter : undefined
-
-                function resetText() {
-                    if (item.chapter != -1 && item.verse != -1) {
-                        translation.text = _data.secondaryText(item.chapter, item.verse);
-                    }
-                }
+                text: textSupplier.secondaryText
 
                 MouseArea {
                     anchors.fill: parent
@@ -56,16 +49,6 @@ Item {
                             shown = !shown;
                         }
                     }
-                }
-
-                Connections {
-                    target: translationsManager
-                    onEnabledChanged: translation.resetText();
-                }
-
-                Component.onCompleted: {
-                    settings.defaultTranslationChanged.connect(resetText);
-                    translation.resetText();
                 }
             }
         }

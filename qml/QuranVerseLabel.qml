@@ -4,11 +4,9 @@ import Quran 1.0
 
 QuranLabel {
         id: label
-        property int verse: -1
-        property int chapter: -1
-        property DataProvider dataProvider: null
         wrapMode: Text.WordWrap
-
+        property QtObject textSupplier
+        property int verse
         width: parent.width
 
         signal clicked
@@ -17,13 +15,6 @@ QuranLabel {
         font.pixelSize: settings.fontSize
 	    color: theme.verseColor
         horizontalAlignment: settings.centerText ? Text.AlignHCenter : Text.AlignHRight
-
-        TextSupplier {
-                id: supplier
-                chapter: label.chapter
-                verse: label.verse
-                data: label.dataProvider
-        }
 
         NumberFormatter {
                 id: formatter
@@ -36,5 +27,5 @@ QuranLabel {
                 onClicked: label.clicked();
         }
 
-        text: qsTr("%1 (%2)").arg(supplier.primaryText).arg(formatter.formattedNumber)
+        text: qsTr("%1 (%2)").arg(textSupplier.primaryText).arg(formatter.formattedNumber)
 }
