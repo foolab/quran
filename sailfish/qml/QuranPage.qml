@@ -29,6 +29,19 @@ Page {
                 pageStack.pop()
         }
 
+        function popToFirst() {
+                var p = pageStack.previousPage()
+                var page = p
+                while (page != null) {
+                    page = pageStack.previousPage(page)
+                    if (page != null) {
+                        p = page
+                    }
+                }
+
+                pageStack.pop(p)
+        }
+
         Item {
                 id: contentItem
                 width: parent.width

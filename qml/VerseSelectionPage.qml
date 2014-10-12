@@ -36,7 +36,7 @@ QuranPage {
 
                         onClicked: {
                                 pagePosition.setPosition(page.chapter, index)
-                                pageStack.pop(pageStack.previousPage(pageStack.previousPage()))
+                                popToFirst()
                         }
                 }
         }
