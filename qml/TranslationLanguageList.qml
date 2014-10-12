@@ -9,7 +9,7 @@ QuranPage {
                 QuranBackgroundItem {
                         width: view.width
                         height: theme.itemSizeSmall
-                        onClicked: pageStack.push(Qt.resolvedUrl("TranslationsAddPage.qml"), {cid: translationId})
+                        onClicked: pushAnimated(Qt.resolvedUrl("TranslationsAddPage.qml"), {cid: translationId})
                         QuranLabel {
                                 id: label
                                 anchors.left: parent.left

@@ -58,21 +58,21 @@ QuranPage {
         ToolButton {
                 width: theme.itemSizeSmall
                 icon.source: highlight ? "image://icon/reciter.png?" + theme.buttonHighlightColor : "image://icon/reciter.png?" + theme.buttonNormalColor
-                onClicked: pageStack.push(Qt.resolvedUrl("RecitationSelector.qml"))
+                onClicked: pushAnimated(Qt.resolvedUrl("RecitationSelector.qml"))
                 enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
         },
         ToolButton {
                 width: theme.itemSizeSmall
                 icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
-                onClicked: pageStack.push(Qt.resolvedUrl("TranslationSelector.qml"))
+                onClicked: pushAnimated(Qt.resolvedUrl("TranslationSelector.qml"))
                 enabled: settings.translationMode != 0 && _translations.installedCount > 0
         },
         NumberLabel {
                 width: 60
                 height: theme.itemSizeSmall
                 number: settings.pageNumber + 1
-                onClicked: pageStack.push(Qt.resolvedUrl("IndexPage.qml"))
-                onPressAndHold: pageStack.push(Qt.resolvedUrl("PageSelectionPage.qml"))
+                onClicked: pushAnimated(Qt.resolvedUrl("IndexPage.qml"))
+                onPressAndHold: pushAnimated(Qt.resolvedUrl("PageSelectionPage.qml"))
                 color: highlight ? theme.highlightColor : theme.textColor
         },
         ToolButton {

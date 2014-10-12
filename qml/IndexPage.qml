@@ -40,7 +40,7 @@ QuranPage {
                         }
 
                         onMoreClicked: {
-                                pageStack.push(Qt.resolvedUrl("VerseSelectionPage.qml"), {chapter: index})
+                                pushAnimated(Qt.resolvedUrl("VerseSelectionPage.qml"), {chapter: number})
                         }
                 }
 
