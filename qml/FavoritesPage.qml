@@ -28,7 +28,8 @@ QuranPage {
 
                 VerseDelegate {
                         id: item
-
+                        _chapter: chapter
+                        _verse: verse
                         actions: [
                         MenuAction {
                                 text: qsTr("Remove")

@@ -73,11 +73,11 @@ public:
 
   QString prefix() const;
 
-  Q_INVOKABLE QString text(int sura, int aya) const;
+  QString text(int sura, int aya) const;
 
   QStringList text(const Fragment& frag) const;
   QStringList secondaryText(const Fragment& frag) const;
-  Q_INVOKABLE QString secondaryText(int sura, int aya);
+  QString secondaryText(int sura, int aya);
 
   void setSecondaryText(TextProvider *text);
 

@@ -56,6 +56,8 @@ QuranPage {
 
                 VerseDelegate {
                         id: item
+                        _chapter: chapter
+                        _verse: verse
                         BookmarkItem {
                                 id: verseBookmark
                                 bookmarks: _bookmarks
