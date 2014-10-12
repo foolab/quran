@@ -92,6 +92,8 @@ public:
 
 signals:
   void basmalaChanged();
+  void textTypeChanged();
+  void secondaryTextProviderChanged();
 
 private:
   int m_index;

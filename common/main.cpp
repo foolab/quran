@@ -65,6 +65,7 @@
 #ifdef SAILFISH
 #include "iconprovider.h"
 #endif
+#include "textsupplier.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -138,6 +139,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<BookmarksModel>("Quran", 1, 0, "BookmarksModel");
   qmlRegisterType<BookmarkItem>("Quran", 1, 0, "BookmarkItem");
   qmlRegisterType<QuranViewModel>("Quran", 1, 0, "QuranViewModel");
+  qmlRegisterType<TextSupplier>("Quran", 1, 0, "TextSupplier");
 
 #ifndef SAILFISH
   MApplicationWindow *view = new MApplicationWindow;

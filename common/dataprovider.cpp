@@ -231,6 +231,8 @@ bool DataProvider::setTextType(int index) {
 
   emit basmalaChanged();
 
+  emit textTypeChanged();
+
   return true;
 }
 
@@ -296,6 +298,7 @@ void DataProvider::setSecondaryText(TextProvider *text) {
   if (m_secondary != text) {
     delete m_secondary;
     m_secondary = text;
+    emit secondaryTextProviderChanged();
   }
 }
 

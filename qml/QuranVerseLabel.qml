@@ -7,8 +7,6 @@ QuranLabel {
         property int verse: -1
         property int chapter: -1
         property DataProvider dataProvider: null
-        onChapterChanged: populate();
-        onVerseChanged: populate();
         wrapMode: Text.WordWrap
 
         width: parent.width
@@ -19,6 +17,13 @@ QuranLabel {
         font.pixelSize: settings.fontSize
 	    color: theme.verseColor
         horizontalAlignment: settings.centerText ? Text.AlignHCenter : Text.AlignHRight
+
+        TextSupplier {
+                id: supplier
+                chapter: label.chapter
+                verse: label.verse
+                data: label.dataProvider
+        }
 
         NumberFormatter {
                 id: formatter
@@ -31,15 +36,5 @@ QuranLabel {
                 onClicked: label.clicked();
         }
 
-        function populate() {
-                if (label.chapter != -1 && label.verse != -1 && dataProvider) {
-                        text = qsTr("%1 (%2)").arg(dataProvider.text(label.chapter, label.verse)).arg(formatter.formattedNumber)
-                }
-        }
-
-        Component.onCompleted: {
-                dataProvider.basmalaChanged.connect(populate);
-                settings.numberFormatChanged.connect(populate);
-                label.populate();
-        }
+        text: qsTr("%1 (%2)").arg(supplier.primaryText).arg(formatter.formattedNumber)
 }
