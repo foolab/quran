@@ -11,7 +11,7 @@ ContextMenuLabel {
 
         onClicked: {
                 pagePosition.setPosition(chapter, verse)
-                pageStack.pop()
+                popPage()
         }
 
         content: QuranLabel {

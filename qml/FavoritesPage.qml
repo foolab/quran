@@ -12,9 +12,7 @@ QuranPage {
 
         Connections {
                 target: _bookmarks
-                onCleared: {
-                        pageStack.pop()
-                }
+                onCleared: popPage()
         }
 
         Component {

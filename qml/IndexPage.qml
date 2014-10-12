@@ -30,13 +30,13 @@ QuranPage {
                         showPlay: settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: {
                                 pagePosition.setPosition(index, 0)
-                                pageStack.pop()
+                                popPage()
                         }
 
                         onPlayClicked: {
                                 pagePosition.setPosition(index, 0)
                                 _recitations.playChapter(index)
-                                pageStack.pop()
+                                popPage()
                         }
 
                         onMoreClicked: {

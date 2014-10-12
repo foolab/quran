@@ -17,7 +17,7 @@ QuranDialog {
                 delegate: QuranBackgroundItem {
                         onClicked: {
                                 recitationsManager.changeRecitation(recitationId)
-                                pageStack.pop()
+                                popPage()
                         }
 
                         anchors {

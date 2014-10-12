@@ -38,7 +38,7 @@ QuranPage {
             onEnterKeyClicked: {
                 if (acceptableInput) {
                     settings.pageNumber = text - 1
-                    pageStack.pop()
+                    popPage()
                 }
             }
         }

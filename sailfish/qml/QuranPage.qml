@@ -25,6 +25,10 @@ Page {
                 return pageStack.push(page, props, PageStackAction.Immediate)
         }
 
+        function popPage() {
+                pageStack.pop()
+        }
+
         Item {
                 id: contentItem
                 width: parent.width

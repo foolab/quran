@@ -16,7 +16,7 @@ QuranDialog {
                         property int tid: translationId
                         onClicked: {
                                 translationsManager.changeTranslation(tid)
-                                pageStack.pop()
+                                popPage()
                         }
 
                         anchors {

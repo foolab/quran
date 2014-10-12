@@ -30,13 +30,13 @@ QuranPage {
 
                         onClicked: {
                             settings.pageNumber = _data.pageNumberForPart(index)
-                            pageStack.pop()
+                            popPage()
                         }
 
                         onPlayClicked: {
                             settings.pageNumber = _data.pageNumberForPart(index)
                             _recitations.playPart(index)
-                            pageStack.pop()
+                            popPage()
                         }
                 }
 
