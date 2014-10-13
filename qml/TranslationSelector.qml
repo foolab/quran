@@ -2,16 +2,19 @@
 import QtQuick 2.0
 import Quran 1.0
 
-QuranDialog {
-        title: qsTr("Choose translation")
+QuranPage {
+        QuranListView {
+                anchors.fill: parent
 
-        content: QuranListView {
-                id: view
+                header: QuranPageHeader {
+                        width: parent.width
+                        title: qsTr("Choose translation")
+                }
+
                 model: InstalledTranslationsModel {
                         translations: _translations
                 }
 
-                anchors.fill: parent
                 delegate: QuranBackgroundItem {
                         property int tid: translationId
                         onClicked: {
