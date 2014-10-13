@@ -57,6 +57,22 @@ extern "C" {
 };
 #include <fontconfig/fontconfig.h>
 
+#ifndef QT_VERSION_5
+#include <QAbstractFileEngineHandler>
+#include "qmlfileengine.h"
+
+class QmlFileEngineHandler : public QAbstractFileEngineHandler {
+  QAbstractFileEngine *create(const QString& fileName) const {
+    QString fn = fileName.toLower();
+    if (fn.startsWith(':') && fn.endsWith(".qml")) {
+      return new QmlFileEngine(fileName);
+    }
+
+    return 0;
+  }
+};
+#endif
+
 #define FONTS_DIR         DATA_DIR"/fonts/"
 #define FONTS_CONF        FONTS_DIR"/fonts.conf"
 
@@ -72,6 +88,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   QQmlEngine *engine = view->engine();
 #else
   QApplication *app = MDeclarativeCache::qApplication(argc, argv);
+  QmlFileEngineHandler handler;
+  Q_UNUSED(handler);
+
   QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
   view->setWindowTitle(QObject::tr("Holy Quran"));
   view->setResizeMode(QDeclarativeView::SizeRootObjectToView);

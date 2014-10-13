@@ -4,9 +4,9 @@ TARGET = n9-quran
 
 QT += declarative
 
-CONFIG += link_pkgconfig meegotouch debug
+CONFIG += link_pkgconfig debug harmattan
 
-# Has to be after sailfish keyword in config
+# Has to be after harmattan keyword in config
 include(../common/common.pri)
 
 PKGCONFIG += qmsystem2 qdeclarative-boostable sqlite3 libresourceqt1
