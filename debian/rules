@@ -2,3 +2,39 @@
 
 %:
 	dh $@ --buildsystem=qmake
+
+override_dh_auto_configure:
+	# Nothing
+
+override_dh_auto_build:
+	cd n9 && ../build-libav.sh --prefix=/opt/n9-quran/ --enable-shared --disable-static
+	cd n9 && ../build_sqlite.sh --prefix=/opt/n9-quran/
+	mkdir -p n9/quazip
+	cd n9/quazip && qmake ../../quazip PREFIX=/opt/n9-quran/ && make
+	cd n9 && qmake && make
+
+override_dh_auto_install:
+	cd n9/libav && $(MAKE) DESTDIR=$$(pwd)/../../debian/n9-quran prefix=/opt/n9-quran install
+	cd n9/sqlite && $(MAKE) DESTDIR=$$(pwd)/../../debian/n9-quran prefix=/opt/n9-quran install
+	cd n9/quazip && $(MAKE) INSTALL_ROOT=$$(pwd)/../../debian/n9-quran prefix=/opt/n9-quran install
+	cd n9 && $(MAKE) INSTALL_ROOT=$$(pwd)/../debian/n9-quran prefix=/opt/n9-quran install
+
+	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/lib/*.so
+	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/lib/*.la
+	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/lib/pkgconfig/
+	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/include/
+	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/share/
+	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/bin/sqlite3
+	mv $$(pwd)/debian/n9-quran/usr/bin/n9-quran $$(pwd)/debian/n9-quran/opt/n9-quran/bin
+	rm -rf $$(pwd)/debian/n9-quran/usr/
+	dh_install
+
+override_dh_shlibdeps:
+	dh_shlibdeps -lopt/n9-quran/lib/
+
+override_dh_auto_clean:
+	rm -rf n9/libav
+	rm -rf n9/sqlite
+	rm -rf n9/quazip
+	-$(MAKE) -C n9 distclean
+	dh_clean
