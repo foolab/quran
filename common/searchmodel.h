@@ -55,7 +55,7 @@ private:
   void clearModel();
   void setResults(const QList<QPair<int, int> >& results);
 
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
   QHash<int, QByteArray> roleNames() const;
   void setRoleNames(const QHash<int, QByteArray>& roles);
   QHash<int, QByteArray> m_roles;

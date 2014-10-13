@@ -25,8 +25,11 @@
  * https://together.jolla.com/question/44325/iconbutton-how-to-use-own-icons-with-highlight/
  */
 IconProvider::IconProvider() :
+#ifdef QT_VERSION_5
   QQuickImageProvider(QQuickImageProvider::Pixmap) {
-
+#else
+  QDeclarativeImageProvider(QDeclarativeImageProvider::Pixmap) {
+#endif
 }
 
 IconProvider::~IconProvider() {

@@ -180,7 +180,7 @@ void SearchModel::setResults(const QList<QPair<int, int> >& results) {
   }
 }
 
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
 QHash<int, QByteArray> SearchModel::roleNames() const {
   return m_roles;
 }

@@ -127,7 +127,7 @@ void BookmarksModel::setIds(const QList<uint>& ids) {
   }
 }
 
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
 QHash<int, QByteArray> BookmarksModel::roleNames() const {
   return m_roles;
 }

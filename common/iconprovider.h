@@ -18,9 +18,17 @@
 #ifndef ICON_PROVIDER_H
 #define ICON_PROVIDER_H
 
+#ifdef QT_VERSION_5
 #include <QQuickImageProvider>
+#else
+#include <QDeclarativeImageProvider>
+#endif /* QT_VERSION_5 */
 
+#ifdef QT_VERSION_5
 class IconProvider : public QQuickImageProvider {
+#else
+class IconProvider : public QDeclarativeImageProvider {
+#endif /* QT_VERSION_5 */
 public:
   IconProvider();
   ~IconProvider();

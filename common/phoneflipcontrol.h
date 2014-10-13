@@ -19,16 +19,16 @@
 #define PHONE_FLIP_CONTROL_H
 
 #include <QObject>
-#ifndef SAILFISH
+#ifndef QT_VERSION_5
 #include <qmobilityglobal.h>
 #endif
 
-#ifndef SAILFISH
+#ifndef QT_VERSION_5
 QTM_BEGIN_NAMESPACE
 #endif
 
 class QOrientationSensor;
-#ifndef SAILFISH
+#ifndef QT_VERSION_5
 QTM_END_NAMESPACE
 
 QTM_USE_NAMESPACE;

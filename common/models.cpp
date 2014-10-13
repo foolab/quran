@@ -113,7 +113,7 @@ QList<int> TranslationModel::ids() const {
   return m_ids;
 }
 
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
 QHash<int, QByteArray> TranslationModel::roleNames() const {
   return m_roles;
 }
@@ -321,7 +321,7 @@ void RecitationModel::refresh() {
   setIds(m_recitations->installed());
 }
 
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
 QHash<int, QByteArray> RecitationModel::roleNames() const {
   return m_roles;
 }
@@ -441,7 +441,7 @@ void InstallableRecitationsModel::refresh() {
   setIds(m_recitations->installable());
 }
 
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
 QHash<int, QByteArray> InstallableRecitationsModel::roleNames() const {
   return m_roles;
 }

@@ -20,7 +20,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QFontDatabase>
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
 #include <QStandardPaths>
 #endif
 
@@ -36,7 +36,7 @@
 #define DEFAULT_THEME              "blue"
 
 #define FONT_FAMILY                "Simplified Naskh"
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
 #define FONT_MIN_SIZE              22
 #define FONT_MAX_SIZE              54
 #else
@@ -55,7 +55,7 @@
 #define DEFAULT_RECITATION_MODE             0
 Q_DECLARE_METATYPE(QList<uint>);
 
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
 #define CONF_FILE "harbour-quran.conf"
 #else
 #define USER_DIR "/home/user/MyDocs/.n9-quran/"
@@ -78,7 +78,7 @@ Settings::Settings(QObject *parent) : QObject(parent) {
   qRegisterMetaType<QList<uint> >("QList<uint>");
   qRegisterMetaTypeStreamOperators<QList<uint> >("QList<uint>");
 
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
   m_settings = new QSettings(QString("%1%2harbour-quran%2%3")
 			     .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
 			     .arg(QDir::separator()).arg(CONF_FILE),
@@ -96,7 +96,7 @@ Settings::~Settings() {
 }
 
 QString Settings::dataDir() const {
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
   static QString dir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-quran/";
 #else
   static QString dir = USER_DIR;
