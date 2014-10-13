@@ -12,7 +12,6 @@
     <file alias="/qml/QuranGridView.qml">qml/QuranGridView.qml</file>
     <file alias="/qml/QuranTextSwitch.qml">qml/QuranTextSwitch.qml</file>
     <file alias="/qml/QuranPage.qml">qml/QuranPage.qml</file>
-    <file alias="/qml/QuranDialog.qml">qml/QuranDialog.qml</file>
     <file alias="/qml/QuranPageMenu.qml">qml/QuranPageMenu.qml</file>
     <file alias="/qml/QuranButton.qml">qml/QuranButton.qml</file>
     <file alias="/qml/QuranComboBox.qml">qml/QuranComboBox.qml</file>
