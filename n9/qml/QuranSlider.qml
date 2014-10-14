@@ -13,6 +13,9 @@ Column {
         Label {
                 id: textLabel
                 width: parent.width * 0.9
+                x: quranTheme.marginSmall
+                font.bold: true
+                font.pixelSize: 26
         }
 
         Slider {

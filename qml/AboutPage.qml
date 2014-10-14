@@ -19,8 +19,8 @@ QuranPage {
                 Column {
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        anchors.leftMargin: quranTheme.largeLarge
-                        anchors.rightMargin: quranTheme.largeLarge
+                        anchors.leftMargin: quranTheme.marginMedium
+                        anchors.rightMargin: quranTheme.marginMedium
                         id: col
                         spacing: quranTheme.spacing
                         width: parent.width

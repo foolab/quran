@@ -15,6 +15,7 @@ ListDelegate {
         property list<MenuAction> actions
         property alias currentIndex: dialog.selectedIndex
         width: parent.width
+        x: quranTheme.marginSmall
 
         onClicked: dialog.open()
 
