@@ -4,6 +4,7 @@ import Quran 1.0
 
 QuranPage {
         id: settingsPage
+        menu: pageMenu
 
         DeletePopup {
                 id: deleter
@@ -11,6 +12,7 @@ QuranPage {
         }
 
         QuranPageMenu {
+                id: pageMenu
                 view: flick
                 actions: [
                 MenuAction {

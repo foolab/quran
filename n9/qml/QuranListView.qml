@@ -1,0 +1,7 @@
+// -*- qml -*-
+import QtQuick 1.1
+import com.nokia.meego 1.0
+
+ListView {
+    property int highlightMoveVelocity
+}

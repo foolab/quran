@@ -4,6 +4,7 @@ import Quran 1.0
 
 QuranPage {
         id: searchPage
+        menu: pageMenu
 
         property string searchString
         property Item searchField
@@ -27,7 +28,6 @@ QuranPage {
                                 id: field
                                 Component.onCompleted: searchPage.searchField = field
                                 width: parent.width
-                                horizontalAlignment: TextInput.AlignRight
                                 onTextChanged: searchPage.searchString = text
                                 enableSoftwareInputPanel: false
                                 onEnterKeyClicked: {
@@ -85,6 +85,7 @@ QuranPage {
         }
 
         QuranPageMenu {
+                id: pageMenu
                 view: view
                 actions: [
                 MenuAction {

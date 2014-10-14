@@ -4,6 +4,7 @@ import Quran 1.0
 
 QuranPage {
         id: quranPage
+        menu: view.currentItem ? view.currentItem.menu : null
 
         Rectangle {
                 anchors.fill: parent
@@ -35,7 +36,9 @@ QuranPage {
                 id: quranPageDelegate
 
                 QuranView {
+                        property alias menu: pageMenu
                         QuranPageMenu {
+                                id: pageMenu
                                 view: view
                                 actions: [
                                 MenuAction { text: qsTr("About"); onClicked: { pushAnimated(Qt.resolvedUrl("AboutPage.qml")) } },
@@ -56,13 +59,11 @@ QuranPage {
 
         toolBar: [
         ToolButton {
-                width: theme.itemSizeSmall
                 icon.source: highlight ? "image://icon/reciter.png?" + theme.buttonHighlightColor : "image://icon/reciter.png?" + theme.buttonNormalColor
                 onClicked: pushAnimated(Qt.resolvedUrl("RecitationSelector.qml"))
                 enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
         },
         ToolButton {
-                width: theme.itemSizeSmall
                 icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
                 onClicked: pushAnimated(Qt.resolvedUrl("TranslationSelector.qml"))
                 enabled: settings.translationMode != 0 && _translations.installedCount > 0
@@ -76,13 +77,11 @@ QuranPage {
                 color: highlight ? theme.highlightColor : theme.textColor
         },
         ToolButton {
-                width: theme.itemSizeSmall
                 icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
                 enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
                 onClicked: _recitations.playPage(settings.pageNumber)
         },
         ToolButton {
-                width: theme.itemSizeSmall
                 icon.source: highlight ? "image://icon/stop.png?" + theme.buttonHighlightColor : "image://icon/stop.png?" + theme.buttonNormalColor
                 onClicked: _recitations.stop()
                 enabled: _recitations.isPlaying

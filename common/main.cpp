@@ -95,6 +95,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   view->setWindowTitle(QObject::tr("Holy Quran"));
   view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
   QDeclarativeEngine *engine = view->engine();
+  view->setBackgroundBrush(QBrush(Qt::black));
+  view->setAttribute(Qt::WA_NoSystemBackground);
+  view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+  view->viewport()->setAttribute(Qt::WA_NoSystemBackground);
 #endif
 
   QFontDatabase::addApplicationFont(FONTS_DIR"/amiri-regular.ttf");
@@ -106,14 +110,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   avcodec_register_all();
   av_register_all();
-
-  bool dev = false;
-  for (int x = 0; x < argc; x++) {
-    if (QLatin1String("-quran-dev") == QLatin1String(argv[x])) {
-      dev = true;
-      break;
-    }
-  }
 
   qmlRegisterType<DataProvider>("Quran", 1, 0, "DataProvider");
   qmlRegisterType<Settings>("Quran", 1, 0, "Settings");
@@ -141,9 +137,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   QObject::connect(engine, SIGNAL(quit()), app, SLOT(quit()));
 
   engine->addImageProvider(QLatin1String("icon"), new IconProvider);
-
-  QUrl sourceUrl = dev ? QUrl::fromLocalFile(QDir::currentPath() + "/main.qml")
-    : QUrl("qrc:/qml/main.qml");
 
   view->setSource(QUrl("qrc:/qml/main.qml"));
 

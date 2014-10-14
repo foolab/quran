@@ -7,6 +7,7 @@ SearchField {
 
         signal enterKeyClicked
 
+        horizontalAlignment: TextInput.AlignRight
         EnterKey.onClicked: enterKeyClicked()
         EnterKey.enabled: enterKeyEnabled
         EnterKey.text: enterKeyText

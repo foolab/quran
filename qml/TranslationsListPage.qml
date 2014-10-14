@@ -3,6 +3,7 @@ import QtQuick 2.0
 import Quran 1.0
 
 QuranPage {
+        menu: pageMenu
         Component {
                 id: translationsDelegate
 
@@ -13,6 +14,7 @@ QuranPage {
         }
 
         QuranPageMenu {
+                id: pageMenu
                 view: view
 
                 actions: [

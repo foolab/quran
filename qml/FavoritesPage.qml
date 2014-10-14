@@ -4,6 +4,7 @@ import Quran 1.0
 
 QuranPage {
         id: favoritesPage
+        menu: pageMenu
 
         DeletePopup {
                 id: popup
@@ -43,6 +44,7 @@ QuranPage {
         }
 
         QuranPageMenu {
+                id: pageMenu
                 view: view
                 actions: [
                 MenuAction {

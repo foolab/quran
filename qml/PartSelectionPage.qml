@@ -2,7 +2,9 @@
 import QtQuick 2.0
 
 QuranPage {
+        menu: pageMenu
         QuranPageMenu {
+                id: pageMenu
                 view: view
 
                 actions: [

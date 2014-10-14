@@ -68,7 +68,6 @@ QuranBackgroundItem {
 
     ToolButton {
         id: play
-        width: theme.itemSizeSmall
         icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.primaryColor
 
         anchors {

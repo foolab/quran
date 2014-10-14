@@ -6,6 +6,7 @@ Page {
         // All children of the page created by our app will be children of this item
         // And all of our children (items) will be children of the real Page content item!
         default property alias _content: contentItem.data
+        property Item menu
         property alias toolBar: toolBarItem.children
         allowedOrientations: settings.orientation == 1 ? Orientation.Portrait | Orientation.PortraitInverted : settings.orientation == 2 ? Orientation.Landscape | Orientation.LandscapeInverted : Orientation.All
 

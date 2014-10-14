@@ -24,7 +24,6 @@ QuranPage {
             text: settings.pageNumber + 1
             width: parent.width / 2
             focus: true
-            horizontalAlignment: TextInput.AlignHCenter
             inputMethodHints: Qt.ImhDigitsOnly
             validator: IntValidator { bottom: 1; top: _data.pageCount }
 

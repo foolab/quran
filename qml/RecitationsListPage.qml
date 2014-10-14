@@ -4,6 +4,7 @@ import Quran 1.0
 
 QuranPage {
 	    id: recitationsListPage
+        menu: pageMenu
 
         Component {
                 id: recitationssDelegate
@@ -34,6 +35,7 @@ QuranPage {
         }
 
         QuranPageMenu {
+                id: pageMenu
                 view: view
                 actions: [
                 MenuAction {

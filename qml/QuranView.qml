@@ -151,20 +151,17 @@ QuranListView {
                             bookmark: _bookmarks.serialize(_chapter, _verse)
                         }
 
-                        width: theme.toolButtonSize
                         icon.source:checker.isBookmarked ? highlight ? "image://icon/favorite-selected.png?" + theme.buttonHighlightColor : "image://icon/favorite-selected.png?" + theme.buttonNormalColor : highlight ? "image://icon/favorite-unselected.png?" + theme.buttonHighlightColor : "image://icon/favorite-unselected.png?" + theme.buttonNormalColor
                         onClicked: checker.toggle()
                     }
 
                     ToolButton {
-                        width: theme.toolButtonSize
                         icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
                         visible: settings.translationMode == 2
                         onClicked: translation.shown = !translation.shown;
                     }
 
                     ToolButton {
-                        width: theme.toolButtonSize
                         icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
                         visible: settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: _recitations.play(_chapter, _verse);
