@@ -8,7 +8,9 @@ QuranBackgroundItem {
         property alias content: row.children
         property alias contentHeight: row.height
 
-        width: parent.width
+//        x: quranTheme.marginSmall
+        width: parent ? parent.width : quranTheme.itemSizeLarge
+        height: row.height
 
         property Item _menu
         property Component _menuComponent: Component {
@@ -33,14 +35,12 @@ QuranBackgroundItem {
                     _menu = _menuComponent.createObject(label)
                 }
 
-                _menu.show(label)
+                _menu.open()
         }
-
-        height: _menu && _menu.parent == label ? _menu.height + row.height : row.height
 
         Item {
                 id: row
-                height: Theme.itemSizeLarge
+                height: quranTheme.itemSizeSmall
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.leftMargin: quranTheme.marginSmall
