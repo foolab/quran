@@ -24,13 +24,13 @@ Item {
         y: 0
         height: childRect.height + 10
         width: parent.width
-        color: theme.translationBorder
+        color: quranTheme.translationBorder
 
         Rectangle {
             id: childRect
             height: translation.height
             width: parent.width
-            color: theme.translationBackground
+            color: quranTheme.translationBackground
             y: 5
 
             QuranLabel {
@@ -38,7 +38,7 @@ Item {
                 width: parent.width
                 font.pixelSize: settings.translationFontSize
                 wrapMode: Text.WordWrap
-                color: theme.translationTextColor
+                color: quranTheme.translationTextColor
                 horizontalAlignment: settings.centerText ? Text.AlignHCenter : undefined
                 text: textSupplier.secondaryText
 

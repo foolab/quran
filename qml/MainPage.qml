@@ -8,7 +8,7 @@ QuranPage {
 
         Rectangle {
                 anchors.fill: parent
-                color: theme.backgroundColor
+                color: quranTheme.backgroundColor
         }
 
         QuranListView {
@@ -59,30 +59,30 @@ QuranPage {
 
         toolBar: [
         ToolButton {
-                icon.source: highlight ? "image://icon/reciter.png?" + theme.buttonHighlightColor : "image://icon/reciter.png?" + theme.buttonNormalColor
+                icon.source: highlight ? "image://icon/reciter.png?" + quranTheme.buttonHighlightColor : "image://icon/reciter.png?" + quranTheme.buttonNormalColor
                 onClicked: pushAnimated(Qt.resolvedUrl("RecitationSelector.qml"))
                 enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
         },
         ToolButton {
-                icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
+                icon.source: highlight ? "image://icon/translation.png?" + quranTheme.buttonHighlightColor : "image://icon/translation.png?" + quranTheme.buttonNormalColor
                 onClicked: pushAnimated(Qt.resolvedUrl("TranslationSelector.qml"))
                 enabled: settings.translationMode != 0 && _translations.installedCount > 0
         },
         NumberLabel {
                 width: 60
-                height: theme.itemSizeSmall
+                height: quranTheme.itemSizeSmall
                 number: settings.pageNumber + 1
                 onClicked: pushAnimated(Qt.resolvedUrl("IndexPage.qml"))
                 onPressAndHold: pushAnimated(Qt.resolvedUrl("PageSelectionPage.qml"))
-                color: highlight ? theme.highlightColor : theme.textColor
+                color: highlight ? quranTheme.highlightColor : quranTheme.textColor
         },
         ToolButton {
-                icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
+                icon.source: highlight ? "image://icon/play.png?" + quranTheme.buttonHighlightColor : "image://icon/play.png?" + quranTheme.buttonNormalColor
                 enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
                 onClicked: _recitations.playPage(settings.pageNumber)
         },
         ToolButton {
-                icon.source: highlight ? "image://icon/stop.png?" + theme.buttonHighlightColor : "image://icon/stop.png?" + theme.buttonNormalColor
+                icon.source: highlight ? "image://icon/stop.png?" + quranTheme.buttonHighlightColor : "image://icon/stop.png?" + quranTheme.buttonNormalColor
                 onClicked: _recitations.stop()
                 enabled: _recitations.isPlaying
         }

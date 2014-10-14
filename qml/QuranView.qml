@@ -17,8 +17,8 @@ QuranListView {
     pressDelay: 0
 
     anchors {
-        leftMargin: theme.marginSmall
-        rightMargin: theme.marginSmall
+        leftMargin: quranTheme.marginSmall
+        rightMargin: quranTheme.marginSmall
     }
 
     header: Item {
@@ -28,16 +28,16 @@ QuranListView {
         SuraList {
             id: verse
             anchors.left: parent.left
-            anchors.leftMargin: theme.marginSmall
+            anchors.leftMargin: quranTheme.marginSmall
             suras: _data.surasForPage(page)
         }
 
         QuranLabel {
             id: part
             anchors.right: parent.right
-            anchors.rightMargin: theme.marginSmall
+            anchors.rightMargin: quranTheme.marginSmall
             text: _data.partNameForPage(page)
-            color: theme.textColor
+            color: quranTheme.textColor
         }
     }
 
@@ -61,14 +61,14 @@ QuranListView {
             height: rect.height
             Rectangle {
                 id: rect
-                color: theme.chapterBorder
+                color: quranTheme.chapterBorder
                 height: childRect.height + 10
 
                 anchors {
                     left: parent ? parent.left : undefined
                     right: parent ? parent.right : undefined
-                    rightMargin: theme.marginMedium
-                    leftMargin: theme.marginMedium
+                    rightMargin: quranTheme.marginMedium
+                    leftMargin: quranTheme.marginMedium
                 }
 
                 Rectangle {
@@ -80,7 +80,7 @@ QuranListView {
 
                     height: column.height
                     y: 5
-                    color: theme.chapterBackground
+                    color: quranTheme.chapterBackground
 
                     Column {
                         id: column
@@ -91,7 +91,7 @@ QuranListView {
                             width: parent.width
                             font.family: settings.fontFamily
                             font.pixelSize: settings.fontSize
-                            color: theme.titleColor
+                            color: quranTheme.titleColor
                             horizontalAlignment: Text.AlignHCenter
                             text: _data.fullSuraName(_chapter);
                         }
@@ -102,7 +102,7 @@ QuranListView {
                             font.pixelSize: settings.fontSize
                             width: parent.width
                             horizontalAlignment: Text.AlignHCenter
-                            color: theme.subtitleColor
+                            color: quranTheme.subtitleColor
                             text: _data.hasBasmala(_chapter) ? _data.basmala : ""
                             visible: text != ""
                         }
@@ -123,8 +123,8 @@ QuranListView {
                 anchors {
                     left: parent.left
                     right: parent.right
-                    rightMargin: theme.marginMedium
-                    leftMargin: theme.marginMedium
+                    rightMargin: quranTheme.marginMedium
+                    leftMargin: quranTheme.marginMedium
                 }
 
                 TextSupplier {
@@ -136,7 +136,7 @@ QuranListView {
 
                 QuranVerseLabel {
                     id: label
-                    color: _recitations.chapter == _chapter && _recitations.verse == _verse ? theme.recitationHighlightColor : theme.verseColor
+                    color: _recitations.chapter == _chapter && _recitations.verse == _verse ? quranTheme.recitationHighlightColor : quranTheme.verseColor
                     textSupplier: supplier
                     verse: _verse
                 }
@@ -151,18 +151,18 @@ QuranListView {
                             bookmark: _bookmarks.serialize(_chapter, _verse)
                         }
 
-                        icon.source:checker.isBookmarked ? highlight ? "image://icon/favorite-selected.png?" + theme.buttonHighlightColor : "image://icon/favorite-selected.png?" + theme.buttonNormalColor : highlight ? "image://icon/favorite-unselected.png?" + theme.buttonHighlightColor : "image://icon/favorite-unselected.png?" + theme.buttonNormalColor
+                        icon.source:checker.isBookmarked ? highlight ? "image://icon/favorite-selected.png?" + quranTheme.buttonHighlightColor : "image://icon/favorite-selected.png?" + quranTheme.buttonNormalColor : highlight ? "image://icon/favorite-unselected.png?" + quranTheme.buttonHighlightColor : "image://icon/favorite-unselected.png?" + quranTheme.buttonNormalColor
                         onClicked: checker.toggle()
                     }
 
                     ToolButton {
-                        icon.source: highlight ? "image://icon/translation.png?" + theme.buttonHighlightColor : "image://icon/translation.png?" + theme.buttonNormalColor
+                        icon.source: highlight ? "image://icon/translation.png?" + quranTheme.buttonHighlightColor : "image://icon/translation.png?" + quranTheme.buttonNormalColor
                         visible: settings.translationMode == 2
                         onClicked: translation.shown = !translation.shown;
                     }
 
                     ToolButton {
-                        icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.buttonNormalColor
+                        icon.source: highlight ? "image://icon/play.png?" + quranTheme.buttonHighlightColor : "image://icon/play.png?" + quranTheme.buttonNormalColor
                         visible: settings.recitationMode != 0 && _recitations.installedCount > 0
                         onClicked: _recitations.play(_chapter, _verse);
                     }

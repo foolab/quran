@@ -40,7 +40,7 @@ Page {
 
                 ToolIcon {
                         id: backIcon;
-                        visible: pageStack.depth > 1
+                        visible: pageStack && pageStack.depth > 1 ? true : false
                         iconId: "toolbar-back"
                         onClicked: pageStack.pop()
                 }

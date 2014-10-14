@@ -10,9 +10,9 @@ QuranBackgroundItem {
 
         QuranLabel {
                 id: titleLabel
-                font.family: theme.fontFamilyHeading
+                font.family: quranTheme.fontFamilyHeading
                 font.bold: true
-                color: theme.primaryColor
+                color: quranTheme.primaryColor
         }
 
         QuranLabel {
@@ -21,6 +21,6 @@ QuranBackgroundItem {
                 anchors.top: titleLabel.bottom
                 width: parent.width
                 textFormat: Text.RichText
-                color: theme.primaryColor
+                color: quranTheme.primaryColor
         }
 }

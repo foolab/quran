@@ -25,13 +25,13 @@ QtObject {
     property int spacing: 20
     property int toolButtonSize: 60
 
-    property int fontSizeSmall: Theme.fontSizeSmall
-    property int fontSizeLarge: Theme.fontSizeLarge
-    property color primaryColor: Theme.primaryColor
-    property string fontFamilyHeading: Theme.fontFamilyHeading
+    property int fontSizeSmall: 24
+    property int fontSizeLarge: 32
+    property color primaryColor: "black"
+    property string fontFamilyHeading: "Nokia Pure Text"
     property int itemSizeSmall: 60
-    property int itemSizeLarge: Theme.itemSizeLarge
-    property int characterKeySize: Theme.itemSizeExtraSmall
+    property int itemSizeLarge: 120
+    property int characterKeySize: 60
     property color highlightColor: "blue"
 
     property color statusError: "red"

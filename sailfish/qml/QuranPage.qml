@@ -58,7 +58,7 @@ Page {
 
                 Rectangle {
                         anchors.fill: parent
-                        color: theme.backgroundColor
+                        color: quranTheme.backgroundColor
                 }
 
                 Row {

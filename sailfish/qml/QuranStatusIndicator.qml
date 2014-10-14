@@ -6,5 +6,5 @@ GlassItem {
         property bool isInstalled: false
         property bool error: false
         dimmed: !(isInstalled || downloading || error)
-        color: downloading ? theme.statusDownloading : error ? theme.statusError : theme.statusInstalled
+        color: downloading ? quranTheme.statusDownloading : error ? quranTheme.statusError : quranTheme.statusInstalled
 }

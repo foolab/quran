@@ -43,7 +43,7 @@ QuranBackgroundItem {
                 height: Theme.itemSizeLarge
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.leftMargin: theme.marginSmall
-                anchors.rightMargin: theme.marginSmall
+                anchors.leftMargin: quranTheme.marginSmall
+                anchors.rightMargin: quranTheme.marginSmall
         }
 }

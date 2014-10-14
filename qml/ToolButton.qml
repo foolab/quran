@@ -22,7 +22,7 @@ import QtQuick 2.0
 MouseArea {
         property alias icon: image
         property bool highlight: pressed && containsMouse
-        width: theme.toolButtonSize
+        width: quranTheme.toolButtonSize
         height: width
         anchors.verticalCenter: parent.verticalCenter
 

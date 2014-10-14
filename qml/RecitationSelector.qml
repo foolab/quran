@@ -23,19 +23,19 @@ QuranPage {
 
                         anchors {
                                 left: parent.left
-                                leftMargin: theme.marginMedium
+                                leftMargin: quranTheme.marginMedium
                                 right: parent.right
-                                rightMargin: theme.marginMedium
+                                rightMargin: quranTheme.marginMedium
                         }
 
-                        height: theme.itemSizeSmall
+                        height: quranTheme.itemSizeSmall
 
                         QuranLabel {
                                 anchors.fill: parent
                                 wrapMode: Text.WordWrap
                                 fadeTruncation: true
                                 text: name
-                                color: _recitations.current == recitationId ? theme.highlightColor : theme.primaryColor
+                                color: _recitations.current == recitationId ? quranTheme.highlightColor : quranTheme.primaryColor
                         }
                 }
         }

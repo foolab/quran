@@ -12,11 +12,11 @@ Column {
 
         Label {
                 id: textLabel
-                width: parent.width
+                width: parent.width * 0.9
         }
 
         Slider {
                 id: slider
-                width: parent.width
+                width: parent.width * 0.9
         }
 }

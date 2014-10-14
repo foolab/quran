@@ -13,16 +13,16 @@ QuranPage {
                 id: flick
                 anchors.fill: parent
                 contentHeight: col.height
-                anchors.topMargin: theme.marginMedium
-                anchors.bottomMargin: theme.marginMedium
+                anchors.topMargin: quranTheme.marginMedium
+                anchors.bottomMargin: quranTheme.marginMedium
 
                 Column {
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        anchors.leftMargin: theme.largeLarge
-                        anchors.rightMargin: theme.largeLarge
+                        anchors.leftMargin: quranTheme.largeLarge
+                        anchors.rightMargin: quranTheme.largeLarge
                         id: col
-                        spacing: theme.spacing
+                        spacing: quranTheme.spacing
                         width: parent.width
 
                         Image {
@@ -35,22 +35,22 @@ QuranPage {
                         QuranLabel {
                                 text: qsTr("Holy Quran Version %1").arg(settings.version)
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                font.family: theme.fontFamilyHeading
-                                font.pixelSize: theme.fontSizeLarge
+                                font.family: quranTheme.fontFamilyHeading
+                                font.pixelSize: quranTheme.fontSizeLarge
                                 width: parent.width
                                 horizontalAlignment: Text.AlignHCenter
-                                color: theme.primaryColor
+                                color: quranTheme.primaryColor
                         }
 
                         QuranLabel {
                                 text: _about.copyright
-                                font.pixelSize: theme.fontSizeSmall
+                                font.pixelSize: quranTheme.fontSizeSmall
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 horizontalAlignment: Text.AlignHCenter
                                 width: parent.width
                                 wrapMode: Text.WordWrap
                                 textFormat: Text.RichText
-                                color: theme.primaryColor
+                                color: quranTheme.primaryColor
                         }
 
                         AboutPageBlock {

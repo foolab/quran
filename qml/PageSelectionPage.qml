@@ -14,9 +14,9 @@ QuranPage {
         QuranLabel {
             width: parent.width
             text: qsTr("Enter a page number between 1 and %1").arg(_data.pageCount)
-            font.pixelSize: theme.fontSizeLarge
+            font.pixelSize: quranTheme.fontSizeLarge
             wrapMode: Text.WordWrap
-            color: theme.primaryColor
+            color: quranTheme.primaryColor
         }
 
         QuranTextField {
@@ -28,8 +28,8 @@ QuranPage {
             validator: IntValidator { bottom: 1; top: _data.pageCount }
 
             font {
-                pixelSize: theme.fontSizeLarge
-                family: theme.fontFamilyHeading
+                pixelSize: quranTheme.fontSizeLarge
+                family: quranTheme.fontFamilyHeading
             }
 
             enterKeyEnabled: acceptableInput

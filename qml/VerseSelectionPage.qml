@@ -13,8 +13,8 @@ QuranPage {
 
                 anchors {
                         fill: parent
-                        leftMargin: theme.marginMedium
-                        rightMargin: theme.marginMedium
+                        leftMargin: quranTheme.marginMedium
+                        rightMargin: quranTheme.marginMedium
                 }
 
                 header: QuranPageHeader {
@@ -27,7 +27,7 @@ QuranPage {
                         height: grid.cellHeight
                         NumberLabel {
                                 anchors.fill: parent
-                                color: theme.primaryColor
+                                color: quranTheme.primaryColor
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 number: index + 1

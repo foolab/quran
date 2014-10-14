@@ -122,14 +122,14 @@ QuranPage {
         Rectangle {
             id: preview
             property alias text: label.text
-            width: theme.itemSizeLarge
+            width: quranTheme.itemSizeLarge
             height: width
-            color: theme.keyboardPreviewBackgroundColor
+            color: quranTheme.keyboardPreviewBackgroundColor
             visible: text != ""
             radius: width / 3
             smooth: true
             border {
-                    color: theme.keyboardPreviewTextColor
+                    color: quranTheme.keyboardPreviewTextColor
                     width: 1
             }
             anchors {
@@ -138,10 +138,10 @@ QuranPage {
             }
 
             QuranLabel {
-                color: theme.keyboardPreviewTextColor
+                color: quranTheme.keyboardPreviewTextColor
                 id: label
                 anchors.fill: parent
-                font.pixelSize: theme.fontSizeLarge
+                font.pixelSize: quranTheme.fontSizeLarge
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }

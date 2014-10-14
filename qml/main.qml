@@ -44,7 +44,7 @@ QuranWindow {
         }
 
         QuranTheme {
-                id: theme
+                id: quranTheme
                 inNightMode: settings.nightMode
         }
 
@@ -55,6 +55,17 @@ QuranWindow {
         RecitationsManager {
                 id: recitationsManager
         }
+
+        FSMonitor {
+                id: fsmon
+                onAvailableChanged: {
+                        if (!fsmon.available) {
+// TODO: show banner
+                                _translations.stopDownloads();
+                        }
+                }
+        }
+
 
         initialPage: Component {
                 MainPage {}
@@ -101,6 +112,7 @@ QuranWindow {
                 }
         }
 /*
+// TODO:
         Rectangle {
                 id: banner
                 width: parent.width
@@ -130,7 +142,7 @@ QuranWindow {
                 Label {
                         id: label
                         anchors.fill: parent
-                        anchors.leftMargin: theme.largeMedium
+                        anchors.leftMargin: quranTheme.largeMedium
                         color: Theme.primaryColor
                         truncationMode: TruncationMode.Fade
                         verticalAlignment: Text.AlignVCenter

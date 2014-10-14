@@ -14,23 +14,23 @@ QuranBackgroundItem {
     signal playClicked
     signal moreClicked
 
-    height: theme.itemSizeSmall
+    height: quranTheme.itemSizeSmall
 
     anchors {
         right: parent.right
-        rightMargin: theme.marginMedium
+        rightMargin: quranTheme.marginMedium
         left: parent.left
-        leftMargin: theme.marginMedium
+        leftMargin: quranTheme.marginMedium
     }
 
     NumberLabel {
         id: numberLabel
         number: root.number + 1
-        width: theme.itemSizeSmall
+        width: quranTheme.itemSizeSmall
         height: width
         horizontalAlignment: Text.AlignRight
         verticalAlignment: Text.AlignVCenter
-        color: root.highlight ? theme.highlightColor : theme.primaryColor
+        color: root.highlight ? quranTheme.highlightColor : quranTheme.primaryColor
 
         anchors {
             top: parent.top
@@ -40,8 +40,8 @@ QuranBackgroundItem {
 
     QuranLabel {
         id: label
-        height: theme.itemSizeSmall
-        color: root.highlight ? theme.highlightColor : theme.primaryColor
+        height: quranTheme.itemSizeSmall
+        color: root.highlight ? quranTheme.highlightColor : quranTheme.primaryColor
         horizontalAlignment: Text.AlignRight
         verticalAlignment: Text.AlignVCenter
 
@@ -54,7 +54,7 @@ QuranBackgroundItem {
 
     QuranButton {
         id: more
-        width: theme.itemSizeSmall
+        width: quranTheme.itemSizeSmall
         height: width
         text: "..."
 
@@ -68,7 +68,7 @@ QuranBackgroundItem {
 
     ToolButton {
         id: play
-        icon.source: highlight ? "image://icon/play.png?" + theme.buttonHighlightColor : "image://icon/play.png?" + theme.primaryColor
+        icon.source: highlight ? "image://icon/play.png?" + quranTheme.buttonHighlightColor : "image://icon/play.png?" + quranTheme.primaryColor
 
         anchors {
             top: parent.top

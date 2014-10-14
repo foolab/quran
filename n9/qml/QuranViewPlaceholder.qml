@@ -12,8 +12,8 @@ Label {
                 verticalCenter: parent.verticalCenter
                 right: parent.right
                 left: parent.left
-                rightMargin: theme.marginMedium
-                leftMargin: theme.marginMedium
+                rightMargin: quranTheme.marginMedium
+                leftMargin: quranTheme.marginMedium
         }
 
         visible: parent.count == 0

@@ -8,15 +8,15 @@ QuranPage {
 
                 QuranBackgroundItem {
                         width: view.width
-                        height: theme.itemSizeSmall
+                        height: quranTheme.itemSizeSmall
                         onClicked: pushAnimated(Qt.resolvedUrl("TranslationsAddPage.qml"), {cid: translationId})
                         QuranLabel {
                                 id: label
                                 anchors.left: parent.left
                                 anchors.right: parent.right
-                                anchors.leftMargin: theme.marginMedium
+                                anchors.leftMargin: quranTheme.marginMedium
                                 text: name
-                                color: theme.primaryColor
+                                color: quranTheme.primaryColor
                                 anchors.verticalCenter: parent.verticalCenter
                         }
                 }

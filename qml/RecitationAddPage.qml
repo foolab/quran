@@ -23,9 +23,9 @@ QuranPage {
                                         top: parent.top
                                         bottom: parent.bottom
                                         right: indicator.left
-                                        rightMargin: theme.marginSmall
+                                        rightMargin: quranTheme.marginSmall
                                         left: parent.left
-                                        leftMargin: theme.marginSmall
+                                        leftMargin: quranTheme.marginSmall
                                 }
 
                                 verticalAlignment: Text.AlignVCenter

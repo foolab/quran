@@ -47,7 +47,7 @@ QuranPage {
                         Rectangle {
                                 width: parent.width
                                 height: previewLabel.height
-                                color: theme.backgroundColor
+                                color: quranTheme.backgroundColor
 
                                 QuranLabel {
                                         id: previewLabel
@@ -56,7 +56,7 @@ QuranPage {
                                         horizontalAlignment: Text.AlignHCenter
                                         font.family: settings.fontFamily
                                         font.pixelSize: settings.fontSize
-                                        color: theme.textColor
+                                        color: quranTheme.textColor
                                         wrapMode: Text.WordWrap
 
                                         Component.onCompleted: populate();
