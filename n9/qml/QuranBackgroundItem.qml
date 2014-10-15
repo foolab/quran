@@ -8,6 +8,5 @@ MouseArea {
                 anchors.fill: parent
                 visible: mouse.pressed
                 source: theme.inverted ? "image://theme/meegotouch-panel-inverted-background-pressed" : "image://theme/meegotouch-panel-background-pressed"
-
         }
 }
