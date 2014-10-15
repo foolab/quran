@@ -34,7 +34,7 @@ QuranPage {
                         QuranLabel {
                                 anchors.fill: parent
                                 wrapMode: Text.WordWrap
-                                fadeTruncation: true
+                                truncateText: true
                                 text: name
                                 color: _translations.current == tid ? quranTheme.highlightColor : quranTheme.primaryColor
                         }

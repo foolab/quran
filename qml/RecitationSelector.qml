@@ -33,7 +33,7 @@ QuranPage {
                         QuranLabel {
                                 anchors.fill: parent
                                 wrapMode: Text.WordWrap
-                                fadeTruncation: true
+                                truncateText: true
                                 text: name
                                 color: _recitations.current == recitationId ? quranTheme.highlightColor : quranTheme.primaryColor
                         }
