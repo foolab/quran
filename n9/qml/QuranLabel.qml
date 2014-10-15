@@ -8,6 +8,7 @@ Text {
         font.family: "Nokia Pure Text"
         font.pixelSize: 24
         wrapMode: Text.WordWrap
+        color: quranTheme.primaryColor
 
         // TODO: this is for RecitationSelector.qml,
         // TranslationSelector.qml and DownloadLabel.qml. Check if we can remove it.
