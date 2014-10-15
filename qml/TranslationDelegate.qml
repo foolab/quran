@@ -29,7 +29,7 @@ ContextMenuLabel {
         },
         MenuAction {
                 text: qsTr("Remove")
-                onClicked: deleter.confirm(contextLabel, qsTr("Removing"))
+                onClicked: deleter.confirm(contextLabel, qsTr("Removing"), qsTr("Remove translation?"))
                 visible: status == Translation.Installed
         }
         ]

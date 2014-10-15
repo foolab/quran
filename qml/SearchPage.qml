@@ -78,7 +78,7 @@ QuranPage {
                         MenuAction {
                                 text: qsTr("Remove from favorites")
                                 visible: verseBookmark.isBookmarked
-                                onClicked: deleter.confirm(item, qsTr("Removing"))
+                                onClicked: deleter.confirm(item, qsTr("Removing"), qsTr("Remove item?"))
                         }
                         ]
                 }

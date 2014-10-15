@@ -32,7 +32,7 @@ QuranPage {
                         actions: [
                         MenuAction {
                                 text: qsTr("Remove")
-                                onClicked: deleter.confirm(item, qsTr("Removing"))
+                                onClicked: deleter.confirm(item, qsTr("Removing"), qsTr("Remove item?"))
                         }
                         ]
 
@@ -49,7 +49,7 @@ QuranPage {
                 actions: [
                 MenuAction {
                         text: qsTr("Clear")
-                        onClicked: popup.confirm(qsTr("Clearing"))
+                        onClicked: popup.confirm(qsTr("Clearing"), qsTr("Clear all favorites?"))
                 }
                 ]
         }

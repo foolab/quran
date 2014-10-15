@@ -5,7 +5,7 @@ import Sailfish.Silica 1.0
 RemorsePopup {
         signal confirmed
 
-        function confirm(message) {
+        function confirm(message, question) {
                 execute(message, confirmed)
         }
 }

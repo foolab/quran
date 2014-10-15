@@ -17,7 +17,7 @@ QuranPage {
                 actions: [
                 MenuAction {
                         text: qsTr("Reset")
-                        onClicked: deleter.confirm(qsTr("Resetting"))
+                        onClicked: deleter.confirm(qsTr("Resetting"), qsTr("Reset settings?"))
                 },
                 MenuAction {
                         text: qsTr("Manage recitations")
