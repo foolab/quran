@@ -8,19 +8,19 @@ QuranBackgroundItem {
         property alias content: row.children
         property alias contentHeight: row.height
 
-//        x: quranTheme.marginSmall
         width: parent ? parent.width : quranTheme.itemSizeLarge
         height: row.height
 
         property Item _menu
         property Component _menuComponent: Component {
                 ContextMenu {
+                        id: _menu
                         Repeater {
                                 model: label.actions
                                 MenuItem {
                                         text: modelData.text
                                         visible: modelData.visible === true
-                                        onClicked: modelData.clicked()
+                                        onClicked: { _menu.close(); modelData.clicked() }
                                 }
                         }
                 }
