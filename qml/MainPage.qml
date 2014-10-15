@@ -21,8 +21,7 @@ QuranPage {
                 LayoutMirroring.enabled: true
                 LayoutMirroring.childrenInherit: false
                 highlightFollowsCurrentItem: true
-                highlightMoveVelocity: width * 2
-                highlightMoveDuration: 0
+                highlightMoveDuration: 1
                 delegate: quranPageDelegate
                 currentIndex: settings.pageNumber
                 onCurrentIndexChanged: {
