@@ -1,10 +1,13 @@
 // -*- qml -*-
 import QtQuick 1.1
-import com.nokia.meego 1.0
 
-Label {
+Text {
+        // Some brilliant decided to force left alignment for all Harmattan
+        // Labels. Even for Arabic and since we don't know if our text is
+        // Arabic or not, we have to stop using Label.
         font.family: "Nokia Pure Text"
         font.pixelSize: 24
+        wrapMode: Text.WordWrap
 
         // TODO: this is for RecitationSelector.qml,
         // TranslationSelector.qml and DownloadLabel.qml. Check if we can remove it.
