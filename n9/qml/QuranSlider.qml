@@ -21,5 +21,6 @@ Column {
         Slider {
                 id: slider
                 width: parent.width * 0.9
+                valueIndicatorVisible: true
         }
 }
