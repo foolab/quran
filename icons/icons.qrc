@@ -7,5 +7,6 @@
       <file>translation.png</file>
       <file>favorite-unselected.png</file>
       <file>favorite-selected.png</file>
+      <file>search.png</file>
     </qresource>
 </RCC>
