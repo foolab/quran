@@ -27,5 +27,5 @@ LIBS += -Wl,-rpath=/opt/n9-quran/lib/ \
         -Lsqlite/ -lsqlite3 \
         -Lquazip/quazip/ -lquazip
 
-SOURCES += fsmonitor.cpp
-HEADERS += fsmonitor.h
+SOURCES += fsmonitor.cpp audiopolicy.cpp
+HEADERS += fsmonitor.h audiopolicy.h
