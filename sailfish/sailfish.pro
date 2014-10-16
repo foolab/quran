@@ -4,12 +4,12 @@ TARGET = harbour-quran
 
 QT += qml quick
 
-CONFIG += link_pkgconfig meegotouch sailfish
+CONFIG += link_pkgconfig sailfish
 
 # Has to be after sailfish keyword in config
 include(../common/common.pri)
 
-PKGCONFIG += qdeclarative5-boostable sqlite3 Qt5Sensors libresourceqt5
+PKGCONFIG += qdeclarative5-boostable Qt5Sensors libresourceqt5
 
 INCLUDEPATH += libav/
 

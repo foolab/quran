@@ -9,7 +9,7 @@ CONFIG += link_pkgconfig debug harmattan
 # Has to be after harmattan keyword in config
 include(../common/common.pri)
 
-PKGCONFIG += qmsystem2 qdeclarative-boostable sqlite3 libresourceqt1
+PKGCONFIG += qmsystem2 qdeclarative-boostable libresourceqt1
 
 INCLUDEPATH += libav/
 
