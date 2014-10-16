@@ -4,7 +4,6 @@ import Quran 1.0
 
 QuranPage {
         id: searchPage
-        menu: pageMenu
 
         property string searchString
         property Item searchField
@@ -42,6 +41,16 @@ QuranPage {
                                 text: qsTr("Match whole words only");
                                 checked: settings.searchMatchWholeWords
                                 onCheckedChanged: settings.searchMatchWholeWords = checked
+                        }
+
+                        QuranButton {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: qsTr("Search")
+                                onClicked: {
+                                    if (searchPage.searchString.length) {
+                                        searchPage.doSearch()
+                                    }
+                                }
                         }
                 }
         }
@@ -82,18 +91,6 @@ QuranPage {
                         }
                         ]
                 }
-        }
-
-        QuranPageMenu {
-                id: pageMenu
-                view: view
-                actions: [
-                MenuAction {
-                        text: qsTr("Search")
-                        onClicked: searchPage.doSearch()
-                        visible: searchPage.searchString.length > 0
-                }
-                ]
         }
 
         QuranListView {
