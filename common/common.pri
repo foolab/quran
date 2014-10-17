@@ -4,7 +4,7 @@ QT += network
 
 CONFIG += mobility link_pkgconfig
 MOBILITY = sensors
-PKGCONFIG += libpulse fontconfig
+!android:PKGCONFIG += libpulse fontconfig
 
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/ ../libav/ ../sqlite/ ../quazip/quazip/
@@ -19,7 +19,7 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            index.cpp search.cpp recitations.cpp recitation.cpp mediaplaylist.cpp \
            main.cpp phoneflipcontrol.cpp mediaplayer.cpp iconprovider.cpp \
            media.cpp audiooutput.cpp mediadecoder.cpp models.cpp bookmarksmodel.cpp \
-           bookmarkitem.cpp pulse.cpp mediaresampler.cpp searchmodel.cpp
+           bookmarkitem.cpp mediaresampler.cpp searchmodel.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h quranviewmodel.h \
            position.h aboutdata.h textsupplier.h trans-meta.h recite-meta.h \
@@ -27,11 +27,21 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h qu
            index.h search.h recitations.h recitation.h mediaplaylist.h \
            phoneflipcontrol.h mediaplayer.h iconprovider.h \
            media.h audiooutput.h mediadecoder.h models.h bookmarksmodel.h \
-           bookmarkitem.h pulse.h mediaresampler.h searchmodel.h
+           bookmarkitem.h mediaresampler.h searchmodel.h
 
 harmattan {
 SOURCES += qmlfileengine.cpp
 HEADERS += qmlfileengine.h
+}
+
+!android {
+SOURCES += pulse.cpp
+HEADERS += pulse.h
+}
+
+android {
+SOURCES += sles.cpp
+HEADERS += sles.h
 }
 
 target.path = /usr/bin/

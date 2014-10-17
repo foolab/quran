@@ -16,12 +16,16 @@
  */
 
 #include "audiooutput.h"
+#ifndef ANDROID
 #include "pulse.h"
+#else
+#include "sles.h"
+#endif
 #include <QDebug>
 
 AudioOutput::AudioOutput(QObject *parent) :
   QObject(parent),
-  m_pulse(0) {
+  m_out(0) {
 
 }
 
@@ -30,30 +34,34 @@ AudioOutput::~AudioOutput() {
 }
 
 void AudioOutput::stop() {
-  if (m_pulse) {
+  if (m_out) {
     m_mutex.lock();
     m_buffers.clear();
     m_buffers << AudioBuffer(Media::eos());
     m_cond.wakeOne();
     m_mutex.unlock();
-    m_pulse->stop();
-    delete m_pulse;
-    m_pulse = 0;
+    m_out->stop();
+    delete m_out;
+    m_out = 0;
   }
 }
 
 bool AudioOutput::start() {
-  if (!m_pulse) {
-    m_pulse = new Pulse(this);
-    QObject::connect(m_pulse, SIGNAL(positionChanged(int)),
+  if (!m_out) {
+#ifndef ANDROID
+    m_out = new Pulse(this);
+#else
+    m_out = new Sles(this);
+#endif
+    QObject::connect(m_out, SIGNAL(positionChanged(int)),
 		     this, SLOT(pulsePositionChanged(int)), Qt::QueuedConnection);
 
-    QObject::connect(m_pulse, SIGNAL(finished()), this, SIGNAL(finished()));
-    QObject::connect(m_pulse, SIGNAL(error()), this, SIGNAL(error()));
+    QObject::connect(m_out, SIGNAL(finished()), this, SIGNAL(finished()));
+    QObject::connect(m_out, SIGNAL(error()), this, SIGNAL(error()));
 
-    if (!m_pulse->connect()) {
-      delete m_pulse;
-      m_pulse = 0;
+    if (!m_out->connect()) {
+      delete m_out;
+      m_out = 0;
 
       return false;
     }
@@ -71,9 +79,9 @@ void AudioOutput::play(const QList<AudioBuffer>& buffers) {
     return;
   }
 
-  if (!m_pulse->isRunning()) {
+  if (!m_out->isRunning()) {
     m_mutex.unlock();
-    m_pulse->start();
+    m_out->start();
   }
   else {
     m_cond.wakeOne();
@@ -87,13 +95,13 @@ void AudioOutput::play(const AudioBuffer& buffer) {
   m_mutex.lock();
   m_buffers << buffer;
 
-  if (m_pulse->isRunning()) {
+  if (m_out->isRunning()) {
     m_cond.wakeOne();
     m_mutex.unlock();
   }
   else {
     m_mutex.unlock();
-    m_pulse->start();
+    m_out->start();
   }
 }
 
@@ -116,7 +124,7 @@ AudioBuffer AudioOutput::buffer() {
 }
 
 void AudioOutput::pulsePositionChanged(int index) {
-  if (m_pulse) {
+  if (m_out) {
     emit positionChanged(index);
   }
 }

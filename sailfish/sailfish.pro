@@ -14,7 +14,7 @@ PKGCONFIG += qdeclarative5-boostable Qt5Sensors libresourceqt5
 INCLUDEPATH += libav/
 
 DEFINES += DATA_DIR=\\\"/usr/share/harbour-quran/\\\"
-DEFINES += SAILFISH=1
+DEFINES += SAILFISH=1 BOOSTER=1
 
 RESOURCES += sailfish.qrc ../icons/icons.qrc ../qml/qml.qrc
 SOURCES += fsmonitor.cpp audiopolicy.cpp

@@ -28,20 +28,21 @@
 #include "search.h"
 #include "recitations.h"
 #include "phoneflipcontrol.h"
-#ifndef SAILFISH
+#ifdef BOOSTER
 #include <MDeclarativeCache>
+#endif /* BOOSTER */
+#ifdef QT_VERSION_5
+#include <QGuiApplication>
+#include <QQuickView>
+#include <QtQuick>
+#include <QQmlError>
+#else /* QT_VERSION_5 */
 #include <QApplication>
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 #include <QtDeclarative>
-#else
-#include <MDeclarativeCache>
-#include <QGuiApplication>
-#include <QQuickView>
-#include <QtQuick>
-#include <QQmlError>
-#endif
+#endif /* QT_VERSION_5 */
 #include <QFontDatabase>
 #include "models.h"
 #include "bookmarksmodel.h"
@@ -55,7 +56,9 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 };
+#ifndef ANDROID
 #include <fontconfig/fontconfig.h>
+#endif
 
 #ifndef QT_VERSION_5
 #include <QAbstractFileEngineHandler>
@@ -77,21 +80,31 @@ class QmlFileEngineHandler : public QAbstractFileEngineHandler {
 #define FONTS_CONF        FONTS_DIR"/fonts.conf"
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
-#ifdef SAILFISH
+#if defined(QT_VERSION_5) && defined(BOOSTER)
   QGuiApplication *app = MDeclarativeCache::qApplication(argc, argv);
-  app->setApplicationName("harbour-quran");
-  app->setApplicationDisplayName(QObject::tr("Holy Quran"));
-
   QQuickView *view = MDeclarativeCache::qQuickView();
-  view->setTitle(app->applicationDisplayName());
-  view->setResizeMode(QQuickView::SizeRootObjectToView);
-  QQmlEngine *engine = view->engine();
-#else
+#elif defined(QT_VERSION_5)
+  QGuiApplication *app = new QGuiApplication(argc, argv);
+  QQuickView *view = new QQuickView;
+#elif defined(BOOSTER)
   QApplication *app = MDeclarativeCache::qApplication(argc, argv);
   QmlFileEngineHandler handler;
   Q_UNUSED(handler);
 
   QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
+#else
+  QApplication *app = new QApplication(argc, argv);
+  QDeclarativeView *view = new QDeclarativeView;
+#endif
+
+#ifdef QT_VERSION_5
+  app->setApplicationName("harbour-quran");
+  app->setApplicationDisplayName(QObject::tr("Holy Quran"));
+
+  view->setTitle(app->applicationDisplayName());
+  view->setResizeMode(QQuickView::SizeRootObjectToView);
+  QQmlEngine *engine = view->engine();
+#else
   view->setWindowTitle(QObject::tr("Holy Quran"));
   view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
   QDeclarativeEngine *engine = view->engine();
@@ -104,9 +117,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   QFontDatabase::addApplicationFont(FONTS_DIR"/amiri-regular.ttf");
   QFontDatabase::addApplicationFont(FONTS_DIR"/SimplifiedNaskh.ttf");
 
+#ifndef ANDROID
   FcConfig *conf = FcConfigGetCurrent();
   FcConfigParseAndLoad(conf,  reinterpret_cast<const FcChar8 *>(FONTS_CONF), 1);
   FcConfigSetCurrent(conf);
+#endif
 
   avcodec_register_all();
   av_register_all();
@@ -140,7 +155,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   view->setSource(QUrl("qrc:/qml/main.qml"));
 
-#ifdef SAILFISH
+#ifdef QT_VERSION_5
   if (view->status() == QQuickView::Error) {
     qCritical() << "Errors loading QML:";
     QList<QQmlError> errors = view->errors();
@@ -154,7 +169,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
     return 1;
   }
-
 #else
   if (view->status() == QDeclarativeView::Error) {
     qCritical() << "Errors loading QML:";

@@ -15,61 +15,44 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef AUDIO_OUTPUT_H
-#define AUDIO_OUTPUT_H
+#include "sles.h"
+#include <SLES/OpenSLES.h>
+#include <SLES/OpenSLES_Android.h>
 
-#include <QObject>
-#include <QMutex>
-#include <QWaitCondition>
-#include "media.h"
+Sles::Sles(AudioOutput *parent) :
+  QObject(parent) {
 
-#ifndef ANDROID
-class Pulse;
-#else
-class Sles;
-#endif
+}
 
-class AudioBuffer {
-public:
- AudioBuffer(const Media& m) : media(m) {}
+Sles::~Sles() {
 
-  QByteArray data;
-  Media media;
-};
+}
 
-class AudioOutput : public QObject {
-  Q_OBJECT
+void Sles::start() {
 
-public:
-  AudioOutput(QObject *parent = 0);
-  ~AudioOutput();
+}
 
-  bool start();
-  void stop();
+void Sles::stop() {
 
-  void play(const QList<AudioBuffer>& buffers);
-  void play(const AudioBuffer& buffer);
+}
 
-  AudioBuffer buffer();
+bool Sles::connect() {
+  //  slCreateEngine(
+}
 
+bool Sles::isRunning() {
+
+}
+#if 0
 signals:
-  void finished();
   void error();
+  void finished();
   void positionChanged(int index);
 
-private slots:
-  void pulsePositionChanged(int index);
-
 private:
-  QMutex m_mutex;
-  QWaitCondition m_cond;
-  QList<AudioBuffer> m_buffers;
-
-#ifndef ANDROID
-  Pulse *m_out;
-#else
-  Sles *m_out;
-#endif
+  AudioOutput *m_audio;
+  bool m_stop;
+  bool m_started;
 };
 
-#endif /* AUDIO_OUTPUT_H */
+#endif

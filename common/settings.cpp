@@ -55,10 +55,14 @@
 #define DEFAULT_RECITATION_MODE             0
 Q_DECLARE_METATYPE(QList<uint>);
 
-#ifdef QT_VERSION_5
-#define CONF_FILE "harbour-quran.conf"
-#else
+#if defined(HARMATTAN)
 #define USER_DIR "/home/user/MyDocs/.n9-quran/"
+#define CONF_FILE "quran.conf"
+#elif defined(SAILFISH)
+#define CONF_FILE "harbour-quran.conf"
+#elif defined(ANDROID)
+#define CONF_FILE "android-quran.conf"
+#elif defined(DESKTOP)
 #define CONF_FILE "quran.conf"
 #endif
 
@@ -78,14 +82,24 @@ Settings::Settings(QObject *parent) : QObject(parent) {
   qRegisterMetaType<QList<uint> >("QList<uint>");
   qRegisterMetaTypeStreamOperators<QList<uint> >("QList<uint>");
 
-#ifdef QT_VERSION_5
+#if defined(HARMATTAN)
+  m_settings = new QSettings(QString("%1%2.config%2%3")
+			     .arg(QDir::homePath()).arg(QDir::separator()).arg(CONF_FILE),
+			     QSettings::IniFormat);
+#elif defined(SAILFISH)
   m_settings = new QSettings(QString("%1%2harbour-quran%2%3")
 			     .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
 			     .arg(QDir::separator()).arg(CONF_FILE),
 			     QSettings::IniFormat);
+#elif defined(ANDROID)
+  m_settings = new QSettings(QString("%1%2android-quran%2%3")
+			     .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+			     .arg(QDir::separator()).arg(CONF_FILE),
+			     QSettings::IniFormat);
 #else
-  m_settings = new QSettings(QString("%1%2.config%2%3")
-			     .arg(QDir::homePath()).arg(QDir::separator()).arg(CONF_FILE),
+  m_settings = new QSettings(QString("%1%2quran%2%3")
+			     .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+			     .arg(QDir::separator()).arg(CONF_FILE),
 			     QSettings::IniFormat);
 #endif
 }
