@@ -29,11 +29,6 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h qu
            media.h audiooutput.h mediadecoder.h models.h bookmarksmodel.h \
            bookmarkitem.h mediaresampler.h searchmodel.h
 
-harmattan {
-SOURCES += qmlfileengine.cpp
-HEADERS += qmlfileengine.h
-}
-
 !android {
 SOURCES += pulse.cpp
 HEADERS += pulse.h
