@@ -58,18 +58,12 @@ Item {
         ToolBar {
                 id: mouseGrabber
                 width: parent.width
+                height: 100
                 anchors.bottom: parent.bottom
 
-//                Rectangle {
-//                        anchors.fill: parent
-//                        color: quranTheme.backgroundColor
-//                }
-
-                ToolButton {
-                        id: backIcon;
-                        visible: pageStack && pageStack.depth > 1 ? true : false
-//                        iconId: "toolbar-back"
-                        onClicked: popPage()
+                Rectangle {
+                        anchors.fill: parent
+                        color: quranTheme.backgroundColor
                 }
 
                 Row {
@@ -83,7 +77,6 @@ Item {
                         visible: page.menu != null
                         onClicked: page.menu.popup()
                 }
-
         }
 }
 //TODO:
