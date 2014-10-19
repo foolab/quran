@@ -9,5 +9,6 @@
       <file>favorite-selected.png</file>
       <file>search.png</file>
       <file>back.png</file>
+      <file>menu.png</file>
     </qresource>
 </RCC>
