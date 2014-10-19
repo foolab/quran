@@ -12,5 +12,12 @@ ApplicationWindow {
         StackView {
                 id: stack
                 anchors.fill: parent
+
+                Keys.onReleased: {
+                    if (event.key === Qt.Key_Back && stack.depth > 1) {
+                        stack.pop()
+                        event.accepted = true
+                    }
+                }
         }
 }
