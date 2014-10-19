@@ -13,14 +13,13 @@ Item {
 //        allowedOrientations: settings.orientation == 1 ? Orientation.Portrait | Orientation.PortraitInverted : settings.orientation == 2 ? Orientation.Landscape | Orientation.LandscapeInverted : Orientation.All
 
         function combine(page, props1, props2) {
+
+                if (props1 != undefined) {
+                    props2["properties"] = props1
+                }
+
                 props2["item"] = page
                 props2["destroyOnPop"] = true
-                // TODO: menu -> settings -> manage translations -> add -> tap on language
-                // and this fails
-                // TODO: also index and tap on verse selection => fail
-                for (x in props1) {
-                        props2[x] = props1[x]
-                }
 
                 return props2
         }
