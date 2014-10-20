@@ -71,7 +71,7 @@ QuranPage {
                 enabled: settings.translationMode != 0 && _translations.installedCount > 0
         },
         NumberLabel {
-                width: quranTheme.itemSizeLarge
+                width: quranTheme.toolButtonSize
                 height: parent.height
                 number: settings.pageNumber + 1
                 onClicked: pushAnimated(Qt.resolvedUrl("IndexPage.qml"))
