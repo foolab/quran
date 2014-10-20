@@ -12,15 +12,29 @@ Column {
 
         Label {
                 id: textLabel
-                width: parent.width * 0.9
-                x: quranTheme.marginSmall
+
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: quranTheme.marginSmall
+                    rightMargin: quranTheme.marginSmall
+                }
+
                 font.bold: true
-                font.pixelSize: 26
+                font.pixelSize: quranTheme.fontSizeSmall
         }
 
         Slider {
                 id: slider
-                width: parent.width * 0.9
+
+            anchors {
+                left: parent.left
+                right: parent.right
+                leftMargin: quranTheme.marginSmall
+                rightMargin: quranTheme.marginSmall
+            }
+                height: quranTheme.itemSizeSmall
+
 //                valueIndicatorVisible: true
                 updateValueWhileDragging: true
         }

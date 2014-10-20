@@ -28,7 +28,7 @@ QtObject {
     property int fontSizeLarge: 32
     property color primaryColor: inNightMode ? "white" : "black"
     property string fontFamilyHeading: "Nokia Pure Text"
-    property int itemSizeSmall: 60
+    property int itemSizeSmall: 50
     property int itemSizeLarge: 120
     property int characterKeySize: 60
     property color highlightColor: "blue"
@@ -44,5 +44,7 @@ QtObject {
 
     property color keyboardPreviewTextColor: "white"
     property color keyboardPreviewBackgroundColor: "black"
+
+    property int toolBarHeight: 100
 }
 //TODO:

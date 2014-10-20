@@ -4,16 +4,20 @@ import QtQuick.Controls 1.2
 
 Item {
         id: page
+        clip: pageStack && pageStack.depth > 1
+
+        property bool __toolBarVisible: toolBarItem.children.length > 0
+        property string __pageTitle
+        property QuranPageMenu menu
 
         // All children of the page created by our app will be children of this item
         // And all of our children (items) will be children of the real Page content item!
         default property alias _content: contentItem.data
-        property QuranPageMenu menu
+
         property alias toolBar: toolBarItem.children
 //        allowedOrientations: settings.orientation == 1 ? Orientation.Portrait | Orientation.PortraitInverted : settings.orientation == 2 ? Orientation.Landscape | Orientation.LandscapeInverted : Orientation.All
 
         function combine(page, props1, props2) {
-
                 if (props1 != undefined) {
                     props2["properties"] = props1
                 }
@@ -52,30 +56,40 @@ Item {
                 id: contentItem
                 width: parent.width
                 anchors.top: parent.top
-                anchors.bottom: mouseGrabber.top
+                anchors.bottom: bar.top
         }
 
         ToolBar {
-                id: mouseGrabber
+                id: bar
                 width: parent.width
-                height: 100
+                height: toolBarItem.children.length > 0 ? quranTheme.toolBarHeight : 0
                 anchors.bottom: parent.bottom
+                visible: height > 0
 
                 Rectangle {
                         anchors.fill: parent
                         color: quranTheme.backgroundColor
-                }
-
-                Row {
-                        id: toolBarItem
                         height: parent.height
-                        anchors.top: parent.top
-                        anchors.horizontalCenter: parent.horizontalCenter
-                }
 
-                ToolButton {
-                        visible: page.menu != null
-                        onClicked: page.menu.popup()
+                        Row {
+                                id: toolBarItem
+                                height: parent.height
+                                anchors.top: parent.top
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                spacing: quranTheme.spacing
+                        }
+
+                        Item {
+                                width: quranTheme.separator
+                                height: parent.height
+                                anchors.left: toolBarItem.right
+                        }
+
+                        MenuButton {
+                                anchors.left: toolBarItem.right
+                                anchors.right: parent.right
+                                menu: page.menu
+                        }
                 }
         }
 }
