@@ -71,8 +71,8 @@ QuranPage {
                 enabled: settings.translationMode != 0 && _translations.installedCount > 0
         },
         NumberLabel {
-                width: 60
-                height: quranTheme.itemSizeSmall
+                width: quranTheme.itemSizeLarge
+                height: parent.height
                 number: settings.pageNumber + 1
                 onClicked: pushAnimated(Qt.resolvedUrl("IndexPage.qml"))
                 onPressAndHold: pushAnimated(Qt.resolvedUrl("PageSelectionPage.qml"))
