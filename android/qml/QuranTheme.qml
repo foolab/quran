@@ -21,7 +21,7 @@ Item {
     property color buttonHighlightColor: "blue"
 
     property int marginSmall: Screen.height / 100
-    property int marginMedium: Screen.height / 40
+    property int marginMedium: Screen.height / 80
     property int spacing: Screen.height / 50
     property int toolButtonSize: Screen.height / 15
 
