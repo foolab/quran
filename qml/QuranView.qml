@@ -16,11 +16,6 @@ QuranListView {
     // Needed to make flicking reliable with SilicaFlickable
     pressDelay: 0
 
-    anchors {
-        leftMargin: quranTheme.marginSmall
-        rightMargin: quranTheme.marginSmall
-    }
-
     header: Item {
         width: parent.width
         height: Math.max(verse.height, part.height)
@@ -67,8 +62,8 @@ QuranListView {
                 anchors {
                     left: parent ? parent.left : undefined
                     right: parent ? parent.right : undefined
-                    rightMargin: quranTheme.marginMedium
-                    leftMargin: quranTheme.marginMedium
+                    rightMargin: quranTheme.marginSmall
+                    leftMargin: quranTheme.marginSmall
                 }
 
                 Rectangle {
@@ -123,8 +118,8 @@ QuranListView {
                 anchors {
                     left: parent.left
                     right: parent.right
-                    rightMargin: quranTheme.marginMedium
-                    leftMargin: quranTheme.marginMedium
+                    rightMargin: quranTheme.marginSmall
+                    leftMargin: quranTheme.marginSmall
                 }
 
                 TextSupplier {
