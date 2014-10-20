@@ -1,7 +1,8 @@
 // -*- qml -*-
 import QtQuick 2.0
+import QtQuick.Window 2.2
 
-QtObject {
+Item {
     property bool inNightMode
     property string stop: settings.theme + "/" + "stop"
     property color chapterBorder: "#3f48cc"
@@ -19,17 +20,17 @@ QtObject {
 
     property color buttonHighlightColor: "blue"
 
-    property int marginSmall: 10
-    property int marginMedium: 16
-    property int spacing: 20
-    property int toolButtonSize: 60
+    property int marginSmall: Screen.height / 100
+    property int marginMedium: Screen.height / 40
+    property int spacing: Screen.height / 50
+    property int toolButtonSize: Screen.height / 15
 
-    property int fontSizeSmall: 24
-    property int fontSizeLarge: 32
+    property int fontSizeSmall: Screen.height / 35
+    property int fontSizeLarge: Screen.height / 25
     property color primaryColor: inNightMode ? "white" : "black"
     property string fontFamilyHeading: "Nokia Pure Text"
-    property int itemSizeSmall: 50
-    property int itemSizeLarge: 120
+    property int itemSizeSmall: Screen.height / 12
+    property int itemSizeLarge: Screen.height / 10
     property int characterKeySize: 60
     property color highlightColor: "blue"
 
@@ -45,6 +46,6 @@ QtObject {
     property color keyboardPreviewTextColor: "white"
     property color keyboardPreviewBackgroundColor: "black"
 
-    property int toolBarHeight: 100
+    property int toolBarHeight: Screen.height / 12
 }
 //TODO:
