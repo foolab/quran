@@ -25,6 +25,11 @@ QuranPage {
                         spacing: quranTheme.spacing
                         width: parent.width
 
+                        QuranPageHeader {
+                                width: parent.width
+                                title: qsTr("About")
+                        }
+
                         Image {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 source: "qrc:/logo.png"
