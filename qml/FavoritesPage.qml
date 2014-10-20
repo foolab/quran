@@ -73,7 +73,7 @@ QuranPage {
                 delegate: favoritesPageDelegate
 
                 QuranViewPlaceholder {
-                        text: qsTr("No favorites added.\nTap on a verse then tap the star button to add or remove favorites")
+                        text: qsTr("No favorites added.\nTap the star button to add or remove favorites")
                         enabled: _bookmarks.empty
                 }
         }
