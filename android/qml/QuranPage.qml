@@ -17,6 +17,11 @@ Item {
         property alias toolBar: toolBarItem.children
 //        allowedOrientations: settings.orientation == 1 ? Orientation.Portrait | Orientation.PortraitInverted : settings.orientation == 2 ? Orientation.Landscape | Orientation.LandscapeInverted : Orientation.All
 
+        Rectangle {
+                anchors.fill: parent
+                color: quranTheme.backgroundColor
+        }
+
         function combine(page, props1, props2) {
                 if (props1 != undefined) {
                     props2["properties"] = props1
