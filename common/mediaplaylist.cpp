@@ -289,9 +289,14 @@ void MediaPlaylist::replyFinished() {
   const Media& media = m_queue.dequeue();
   if (!media.setData(data)) {
     m_queue.clear();
+    m_reply->deleteLater();
+    m_reply = 0;
     emit mediaAvailable(Media::error());
     return;
   }
+
+  m_reply->deleteLater();
+  m_reply = 0;
 
   emit mediaAvailable(media);
 
