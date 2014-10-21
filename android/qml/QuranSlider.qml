@@ -3,41 +3,54 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2
 
 Column {
-        property alias value: slider.value
-        property alias minimumValue: slider.minimumValue
-        property alias maximumValue: slider.maximumValue
-        property alias stepSize: slider.stepSize
-        property bool valueText //: slider.valueIndicatorText
-        property alias label: textLabel.text
+    id: column
 
-        Label {
-                id: textLabel
+    property int value
+    property alias minimumValue: slider.minimumValue
+    property alias maximumValue: slider.maximumValue
+    property alias stepSize: slider.stepSize
+    property bool valueText //: slider.tickmarksEnabled //TODO: Not supported
+    property alias label: textLabel.text
 
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                    leftMargin: quranTheme.marginSmall
-                    rightMargin: quranTheme.marginSmall
-                }
+    Label {
+        id: textLabel
 
-                font.bold: true
-                font.pixelSize: quranTheme.fontSizeSmall
+        anchors {
+            left: parent.left
+            right: parent.right
+            leftMargin: quranTheme.marginSmall
+            rightMargin: quranTheme.marginSmall
         }
 
-        Slider {
-                id: slider
+        font.bold: true
+        font.pixelSize: quranTheme.fontSizeSmall
+    }
 
-            anchors {
-                left: parent.left
-                right: parent.right
-                leftMargin: quranTheme.marginSmall
-                rightMargin: quranTheme.marginSmall
+    Slider {
+        id: slider
+
+        anchors {
+            left: parent.left
+            right: parent.right
+            leftMargin: quranTheme.marginSmall
+            rightMargin: quranTheme.marginSmall
+        }
+
+        height: quranTheme.itemSizeSmall
+        stepSize: 1.0
+
+        property bool _completed: false
+
+        // This is a hack because Slider likes to reset its value on creation
+        Component.onCompleted: {
+            slider.value = column.value
+            _completed = true
+        }
+
+        onValueChanged: {
+            if (_completed) {
+                column.value = value
             }
-                height: quranTheme.itemSizeSmall
-
-//                valueIndicatorVisible: true
-                updateValueWhileDragging: true
         }
+    }
 }
-
-//TODO:
