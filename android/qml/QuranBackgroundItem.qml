@@ -6,6 +6,6 @@ MouseArea {
         id: mouse
         Rectangle {
                 anchors.fill: parent
-                color: mouse.pressed && mouse.containsMouse ? quranTheme.highlightColor : quranTheme.backgroundColor
+                color: mouse.pressed ? "lightgray" : quranTheme.backgroundColor
         }
 }

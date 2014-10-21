@@ -47,7 +47,6 @@ public:
   bool start();
   void stop();
 
-  void play(const QList<AudioBuffer>& buffers);
   void play(const AudioBuffer& buffer);
 
   AudioBuffer buffer();

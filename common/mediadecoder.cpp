@@ -343,7 +343,11 @@ bool MediaDecoder::stopRequested() {
 void MediaDecoder::setOutput(AudioOutput *audio) {
   QMutexLocker locker(&m_audioMutex);
   m_audio = audio;
-  m_audio->play(m_buffers);
+
+  foreach (const AudioBuffer& buffer, m_buffers) {
+    m_audio->play(buffer);
+  }
+
   m_buffers.clear();
 }
 

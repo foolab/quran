@@ -2,7 +2,6 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.2
 
-
 QuranBackgroundItem {
         id: label
         property list<MenuAction> actions
@@ -12,7 +11,7 @@ QuranBackgroundItem {
         width: parent ? parent.width : quranTheme.itemSizeLarge
         height: row.height
 
-        property Item _menu
+        property QtObject _menu
         property Component _menuComponent: Component {
                 Menu {
                         id: menu
@@ -51,5 +50,3 @@ QuranBackgroundItem {
                 anchors.rightMargin: quranTheme.marginSmall
         }
 }
-
-//TODO:
