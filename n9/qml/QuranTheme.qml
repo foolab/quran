@@ -30,7 +30,7 @@ QtObject {
     property color primaryColor: inNightMode ? "white" : "black"
     property string fontFamilyHeading: "Nokia Pure Text"
     property int itemSizeSmall: 60
-    property int itemSizeLarge: 120
+    property int itemSizeLarge: 80
     property int characterKeySize: 60
     property color highlightColor: "blue"
 

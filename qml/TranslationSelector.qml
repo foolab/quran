@@ -15,27 +15,21 @@ QuranPage {
                         translations: _translations
                 }
 
-                delegate: QuranBackgroundItem {
+                delegate: QuranListDelegate {
                         property int tid: translationId
                         onClicked: {
                                 translationsManager.changeTranslation(tid)
                                 popPage()
                         }
 
-                        anchors {
-                                left: parent.left
-                                leftMargin: quranTheme.marginMedium
-                                right: parent.right
-                                rightMargin: quranTheme.marginMedium
-                        }
-
-                        height: quranTheme.itemSizeSmall
+                        contentHeight: quranTheme.itemSizeLarge
 
                         QuranLabel {
                                 anchors.fill: parent
                                 wrapMode: Text.WordWrap
                                 truncateText: true
                                 text: name
+                                verticalAlignment: Text.AlignVCenter
                                 color: _translations.current == tid ? quranTheme.highlightColor : quranTheme.primaryColor
                         }
                 }

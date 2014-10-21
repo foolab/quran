@@ -9,28 +9,30 @@ QuranPage {
         Component {
                 id: recitationssDelegate
                 // TODO: Context menu
-                ContextMenuLabel {
-                        content: [
-                        QuranStatusIndicator {
-                                id: indicator
-                                anchors.right: parent.right
-                                anchors.verticalCenter: parent.verticalCenter
-                                isInstalled: true
-                        },
-                        QuranLabel {
-                                text: name
-                                anchors {
-                                        top: parent.top
-                                        bottom: parent.bottom
-                                        right: indicator.left
-                                        rightMargin: quranTheme.marginSmall
-                                        left: parent.left
-                                        leftMargin: quranTheme.marginSmall
+                QuranListDelegate {
+                        contentHeight: quranTheme.itemSizeLarge
+                        Item {
+                                anchors.fill: parent
+                                QuranStatusIndicator {
+                                        id: indicator
+                                        anchors.right: parent.right
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        isInstalled: true
                                 }
 
-                                verticalAlignment: Text.AlignVCenter
+                                QuranLabel {
+                                        text: name
+                                        anchors {
+                                                top: parent.top
+                                                bottom: parent.bottom
+                                                right: indicator.left
+                                                rightMargin: quranTheme.marginSmall
+                                                left: parent.left
+                                        }
+
+                                        verticalAlignment: Text.AlignVCenter
+                                }
                         }
-                        ]
                 }
         }
 

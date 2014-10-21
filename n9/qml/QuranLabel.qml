@@ -6,7 +6,7 @@ Text {
         // Labels. Even for Arabic and since we don't know if our text is
         // Arabic or not, we have to stop using Label.
         font.family: "Nokia Pure Text"
-        font.pixelSize: 24
+        font.pixelSize: quranTheme.fontSizeSmall
         wrapMode: Text.WordWrap
         color: quranTheme.primaryColor
 

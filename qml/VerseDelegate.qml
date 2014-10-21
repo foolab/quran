@@ -2,7 +2,7 @@
 import QtQuick 2.0
 import Quran 1.0
 
-ContextMenuLabel {
+QuranListDelegate {
         id: item
         property int _chapter
         property int _verse
@@ -14,7 +14,7 @@ ContextMenuLabel {
                 popPage()
         }
 
-        content: QuranLabel {
+        QuranLabel {
                 id: label
                 width: parent.width
 

@@ -1,7 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.0
 
-QuranBackgroundItem {
+QuranListDelegate {
     id: root
 
     property int number
@@ -14,67 +14,64 @@ QuranBackgroundItem {
     signal playClicked
     signal moreClicked
 
-    height: quranTheme.itemSizeSmall
+    contentHeight: quranTheme.itemSizeLarge
 
-    anchors {
-        right: parent.right
-        rightMargin: quranTheme.marginMedium
-        left: parent.left
-        leftMargin: quranTheme.marginMedium
-    }
+    Item {
+        anchors.fill: parent
 
-    NumberLabel {
-        id: numberLabel
-        number: root.number + 1
-        width: quranTheme.itemSizeSmall
-        height: width
-        horizontalAlignment: Text.AlignRight
-        verticalAlignment: Text.AlignVCenter
-        color: root.highlight ? quranTheme.highlightColor : quranTheme.primaryColor
+        NumberLabel {
+            id: numberLabel
+            number: root.number + 1
+            width: quranTheme.itemSizeSmall
+            height: width
+            horizontalAlignment: Text.AlignRight
+            verticalAlignment: Text.AlignVCenter
+            color: root.highlight ? quranTheme.highlightColor : quranTheme.primaryColor
 
-        anchors {
-            top: parent.top
-            right: parent.right
-        }
-    }
-
-    QuranLabel {
-        id: label
-        height: quranTheme.itemSizeSmall
-        color: root.highlight ? quranTheme.highlightColor : quranTheme.primaryColor
-        horizontalAlignment: Text.AlignRight
-        verticalAlignment: Text.AlignVCenter
-
-        anchors {
-            top: parent.top
-            right: numberLabel.visible ? numberLabel.left : parent.right
-            left: more.visible ? more.right : play.visible ? play.right : parent.left
-        }
-    }
-
-    QuranButton {
-        id: more
-        width: quranTheme.itemSizeSmall
-        height: width
-        text: "..."
-
-        anchors {
-            top: parent.top
-            left: play.visible ? play.right : parent.left
+            anchors {
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+            }
         }
 
-        onClicked: root.moreClicked()
-    }
+        QuranLabel {
+            id: label
+            height: parent.height
+            color: root.highlight ? quranTheme.highlightColor : quranTheme.primaryColor
+            horizontalAlignment: Text.AlignRight
+            verticalAlignment: Text.AlignVCenter
 
-    ToolButton {
-        id: play
-        icon.source: highlight ? "image://icon/play.png?" + quranTheme.buttonHighlightColor : "image://icon/play.png?" + quranTheme.primaryColor
-
-        anchors {
-            top: parent.top
-            left: parent.left
+            anchors {
+                top: parent.top
+                right: numberLabel.visible ? numberLabel.left : parent.right
+                left: more.visible ? more.right : play.visible ? play.right : parent.left
+            }
         }
 
-        onClicked: root.playClicked()
+        QuranButton {
+            id: more
+            width: quranTheme.itemSizeSmall
+            height: width
+            text: "..."
+
+            anchors {
+                left: play.visible ? play.right : parent.left
+                verticalCenter: parent.verticalCenter
+            }
+
+            onClicked: root.moreClicked()
+        }
+
+        ToolButton {
+            id: play
+            icon.source: highlight ? "image://icon/play.png?" + quranTheme.buttonHighlightColor : "image://icon/play.png?" + quranTheme.primaryColor
+
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+            }
+
+            onClicked: root.playClicked()
+        }
     }
 }
