@@ -23,6 +23,10 @@
 #include "audiooutput.h"
 
 class AudioOutput;
+class Engine;
+class Mix;
+class Sink;
+typedef const struct SLAndroidSimpleBufferQueueItf_ * const * SLAndroidSimpleBufferQueueItf;
 
 class Sles : public QObject {
   Q_OBJECT
@@ -44,9 +48,17 @@ signals:
   void positionChanged(int index);
 
 private:
+  static void slesCallback(SLAndroidSimpleBufferQueueItf q, void *context);
+  void writeData();
+  //  void drain();
+
   AudioOutput *m_audio;
   bool m_stop;
   bool m_started;
+
+  Engine *m_engine;
+  Mix *m_mix;
+  Sink *m_sink;
 };
 
 #endif /* SLES_H */
