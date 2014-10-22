@@ -17,6 +17,7 @@ QuranPage {
 
                 Column {
                         width: parent.width
+                        spacing: quranTheme.spacing
 
                         QuranPageHeader {
                                 width: parent.width
@@ -26,9 +27,15 @@ QuranPage {
                         QuranSearchField {
                                 id: field
                                 Component.onCompleted: searchPage.searchField = field
-                                width: parent.width
+                                anchors {
+                                    left: parent.left
+                                    leftMargin: quranTheme.marginMedium
+                                    right: parent.right
+                                    rightMargin: quranTheme.marginMedium
+                                }
+
                                 onTextChanged: searchPage.searchString = text
-                                enableSoftwareInputPanel: false
+                                enableSoftwareInputPanel: quranTheme.platformUsableKeyboard
                                 onEnterKeyClicked: {
                                     if (searchPage.searchString.length) {
                                         searchPage.doSearch()
@@ -37,7 +44,13 @@ QuranPage {
                         }
 
                         QuranTextSwitch {
-                                width: parent.width
+                                anchors {
+                                    left: parent.left
+                                    leftMargin: quranTheme.marginMedium
+                                    right: parent.right
+                                    rightMargin: quranTheme.marginMedium
+                                }
+
                                 text: qsTr("Match whole words only");
                                 checked: settings.searchMatchWholeWords
                                 onCheckedChanged: settings.searchMatchWholeWords = checked
@@ -122,7 +135,7 @@ QuranPage {
             width: quranTheme.itemSizeLarge
             height: width
             color: quranTheme.keyboardPreviewBackgroundColor
-            visible: text != ""
+            visible: !quranTheme.platformUsableKeyboard && text != ""
             radius: width / 3
             smooth: true
             border {
@@ -152,8 +165,8 @@ QuranPage {
                 left: parent.left
             }
 
-            opacity: searchPage.searchField.focus ? 1.0 : 0
-            visible: opacity > 0
+            opacity: quranTheme.platformUsableKeyboard ? 0 : searchPage.searchField.focus ? 1.0 : 0
+            visible: !quranTheme.platformUsableKeyboard && opacity > 0
 
             Behavior on opacity {
                 NumberAnimation { duration: 200 }

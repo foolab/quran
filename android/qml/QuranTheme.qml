@@ -47,5 +47,6 @@ Item {
     property color keyboardPreviewBackgroundColor: "black"
 
     property int toolBarHeight: Screen.height / 12
+    property bool platformUsableKeyboard: true
 }
 //TODO:

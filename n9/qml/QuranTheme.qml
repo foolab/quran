@@ -45,4 +45,5 @@ QtObject {
 
     property color keyboardPreviewTextColor: "white"
     property color keyboardPreviewBackgroundColor: "black"
+    property bool platformUsableKeyboard: true
 }
