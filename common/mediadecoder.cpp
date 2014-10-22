@@ -30,6 +30,14 @@ extern "C" {
 #include <libavcodec/avcodec.h>
 };
 
+// From: http://osdir.com/ml/kde-commits/2013-11/msg04596.html
+// Has been deprecated for ages. Now removed. For now do what ffmpeg does
+// http://ffmpeg.org/pipermail/ffmpeg-cvslog/2012-August/053785.html
+// 192000 = 1 second of 48khz 32bit audio
+#ifndef AVCODEC_MAX_AUDIO_FRAME_SIZE
+#define AVCODEC_MAX_AUDIO_FRAME_SIZE 192000
+#endif
+
 MediaDecoder::MediaDecoder(QObject *parent) :
   QThread(parent),
   m_audio(0),
@@ -138,12 +146,10 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media& media) {
 
 bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt,
 			  AudioBuffer& buffer, MediaResampler **resampler) {
-  AVFrame *frame = avcodec_alloc_frame();
+  AVFrame *frame = av_frame_alloc();
   if (!frame) {
     return false;
   }
-
-  avcodec_get_frame_defaults(frame);
 
   int len = 0;
   int got_frame = 0;
@@ -151,7 +157,7 @@ bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt,
   while (len >= 0) {
     len = avcodec_decode_audio4(ctx, frame, &got_frame, pkt);
     if (len < 0) {
-      avcodec_free_frame(&frame);
+      av_frame_free(&frame);
       // We will skip the packet but just return true so we don't signal an error
       return true;
     }
@@ -167,13 +173,13 @@ bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt,
 	*resampler = MediaResampler::create(ctx);
 	if (!(*resampler)) {
 	  qWarning() << "Failed to create resampler";
-	  avcodec_free_frame(&frame);
+	  av_frame_free(&frame);
 	  return false;
 	}
       }
 
       if (!(*resampler)->resample(frame, data)) {
-	avcodec_free_frame(&frame);
+	av_frame_free(&frame);
 	return false;
       }
 
@@ -184,12 +190,12 @@ bool MediaDecoder::decode(AVCodecContext *ctx, AVPacket *pkt,
     pkt->data += len;
 
     if (pkt->size == 0) {
-      avcodec_free_frame(&frame);
+      av_frame_free(&frame);
       return true;
     }
   }
 
-  avcodec_free_frame(&frame);
+  av_frame_free(&frame);
   return true;
 }
 
