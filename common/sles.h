@@ -47,10 +47,14 @@ signals:
   void finished();
   void positionChanged(int index);
 
+private slots:
+  void drainAndFinish();
+  void drainAndError();
+
 private:
   static void slesCallback(SLAndroidSimpleBufferQueueItf q, void *context);
   void writeData();
-  //  void drain();
+  void drain();
 
   AudioOutput *m_audio;
   bool m_stop;

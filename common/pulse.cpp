@@ -286,7 +286,6 @@ void Pulse::drain() {
   }
 
   pa_threaded_mainloop_unlock(m_loop);
-
 }
 
 void Pulse::start() {

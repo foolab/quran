@@ -18,7 +18,6 @@
 #include "sles.h"
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
-#include <android/log.h>
 
 class Engine {
 public:
@@ -40,7 +39,10 @@ public:
   }
 
   ~Engine() {
-    // TODO:
+    if (m_object) {
+      (*m_object)->Destroy(m_object);
+      m_object = 0;
+    }
   }
 
   bool isOk() {
@@ -69,7 +71,10 @@ public:
   }
 
   ~Mix() {
-    // TODO:
+    if (m_object) {
+      (*m_object)->Destroy(m_object);
+      m_object = 0;
+    }
   }
 
   bool isOk() {
@@ -129,7 +134,13 @@ public:
   }
 
   ~Sink() {
-    // TODO:
+    if (m_playerObject) {
+      (*m_playerObject)->Destroy(m_playerObject);
+      m_playerObject = 0;
+    }
+
+    m_player = 0;
+    m_queue = 0;
   }
 
   bool isOk() {
@@ -146,6 +157,19 @@ public:
     return true;
   }
 
+  void stop() {
+    if (m_player) {
+      (*m_player)->SetPlayState(m_player,
+				SL_PLAYSTATE_STOPPED);
+    }
+
+    if (m_queue) {
+      (*m_queue)->Clear(m_queue);
+    }
+
+    m_data.clear();
+  }
+
   SLEngineItf m_engine;
   SLObjectItf m_mix;
   SLObjectItf m_playerObject;
@@ -158,11 +182,13 @@ void Sles::slesCallback(SLAndroidSimpleBufferQueueItf q, void *context) {
   Q_UNUSED(q);
 
   Sles *sles = (Sles *)context;
+
   sles->writeData();
 }
 
 Sles::Sles(AudioOutput *parent) :
   QObject(parent),
+  m_audio(parent),
   m_stop(false),
   m_started(false),
   m_engine(0),
@@ -172,7 +198,16 @@ Sles::Sles(AudioOutput *parent) :
 }
 
 Sles::~Sles() {
+  stop();
 
+  delete m_sink;
+  m_sink = 0;
+
+  delete m_mix;
+  m_mix = 0;
+
+  delete m_engine;
+  m_engine = 0;
 }
 
 void Sles::start() {
@@ -197,7 +232,9 @@ void Sles::start() {
 }
 
 void Sles::stop() {
-
+  if (m_sink) {
+    m_sink->stop();
+  }
 }
 
 bool Sles::connect() {
@@ -273,4 +310,25 @@ void Sles::writeData() {
   if (!m_sink->play(buffer.data)) {
     emit error();
   }
+}
+
+void Sles::drain() {
+  // Android does not need that because OpenSL ES callback gets called when
+  // we are done playing the data (Which is a drain), we reach writeData()
+  // which detects EOS and sets m_stop. It will then never try to playback
+  // any buffers because of that flag.
+  // The callback will not be called too because we did not write any data
+  // so everything should stop.
+}
+
+void Sles::drainAndFinish() {
+  drain();
+
+  emit finished();
+}
+
+void Sles::drainAndError() {
+  drain();
+
+  emit error();
 }
