@@ -22,11 +22,11 @@ pushd android/libav
 ../../libav/configure --disable-programs --disable-doc  --disable-avdevice --disable-swscale \
     --disable-network  --disable-everything --enable-sram --enable-bsf=mp3_header_decompress \
     --enable-demuxer=mp3 --enable-decoder=mp3 --enable-pic --disable-static --enable-shared \
-    --enable-cross-compile --sysroot=$SYSROOT --target-os=linux --arch=arm \
+    --enable-cross-compile --sysroot=$SYSROOT --target-os=android --arch=arm \
     --cross-prefix=$TOOLCHAIN/arm-linux-androideabi- \
     --extra-cflags="-march=armv7-a -mfloat-abi=softfp" \
-    --extra-ldflags="-Wl,--fix-cortex-a8" --disable-symver
-sed -e 's/SHFLAGS.*/SHFLAGS="-shared"/' -i config.mak
+    --extra-ldflags="-Wl,--fix-cortex-a8"
+
 make
 popd
 
