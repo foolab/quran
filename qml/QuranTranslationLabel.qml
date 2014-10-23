@@ -37,7 +37,6 @@ Item {
                 id: translation
                 width: parent.width
                 font.pixelSize: settings.translationFontSize
-                wrapMode: Text.WordWrap
                 color: quranTheme.translationTextColor
                 horizontalAlignment: settings.centerText ? Text.AlignHCenter : undefined
                 text: textSupplier.secondaryText

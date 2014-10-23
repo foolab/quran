@@ -33,7 +33,6 @@ QuranListDelegate {
 
                 font.family: settings.fontFamily
                 text: qsTr("(%1) %2").arg(formatter.formattedNumber).arg(supplier.primaryText)
-                wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignRight
                 color: quranTheme.primaryColor
         }

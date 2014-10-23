@@ -24,7 +24,6 @@ QuranPage {
                         contentHeight: quranTheme.itemSizeLarge
 
                         QuranLabel {
-                                wrapMode: Text.WordWrap
                                 truncateText: true
                                 text: name
                                 anchors.fill: parent

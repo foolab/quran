@@ -53,7 +53,6 @@ QuranPage {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 horizontalAlignment: Text.AlignHCenter
                                 width: parent.width
-                                wrapMode: Text.WordWrap
                                 textFormat: Text.RichText
                                 color: quranTheme.primaryColor
                         }

@@ -61,7 +61,6 @@ QuranListDelegate {
                                 left: parent.left
                         }
 
-                        wrapMode: Text.WordWrap
                         verticalAlignment: Text.AlignVCenter
 
                         Translation {

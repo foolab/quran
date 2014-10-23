@@ -17,7 +17,6 @@ QuranBackgroundItem {
 
         QuranLabel {
                 id: textLabel
-                wrapMode: Text.WordWrap
                 anchors.top: titleLabel.bottom
                 width: parent.width
                 textFormat: Text.RichText

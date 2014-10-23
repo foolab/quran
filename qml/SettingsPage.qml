@@ -57,7 +57,6 @@ QuranPage {
                                         font.family: settings.fontFamily
                                         font.pixelSize: settings.fontSize
                                         color: quranTheme.textColor
-                                        wrapMode: Text.WordWrap
 
                                         Component.onCompleted: populate();
 

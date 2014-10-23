@@ -26,7 +26,6 @@ QuranPage {
 
                         QuranLabel {
                                 anchors.fill: parent
-                                wrapMode: Text.WordWrap
                                 truncateText: true
                                 text: name
                                 verticalAlignment: Text.AlignVCenter

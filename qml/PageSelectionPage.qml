@@ -15,7 +15,6 @@ QuranPage {
             width: parent.width
             text: qsTr("Enter a page number between 1 and %1").arg(_data.pageCount)
             font.pixelSize: quranTheme.fontSizeLarge
-            wrapMode: Text.WordWrap
             color: quranTheme.primaryColor
         }
 

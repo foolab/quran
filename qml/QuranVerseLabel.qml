@@ -4,7 +4,6 @@ import Quran 1.0
 
 QuranLabel {
         id: label
-        wrapMode: Text.WordWrap
         property QtObject textSupplier
         property int verse
         width: parent.width
