@@ -33,3 +33,5 @@ ANDROID_EXTRA_LIBS = android/libav/libavutil/libavutil.so \
                      android/libav/libavresample/libavresample.so \
                      android/sqlite/.libs/libsqlite3.so \
                      android/quazip/quazip/libquazip.so
+
+ANDROID_PACKAGE_SOURCE_DIR = android/apk
