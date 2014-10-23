@@ -139,6 +139,7 @@ QuranListView {
 
                 Row {
                     anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: quranTheme.spacing
 
                     ToolButton {
                         BookmarkItem {
