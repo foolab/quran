@@ -1,6 +1,6 @@
 VPATH += . ../data/ ../common/
 
-TARGET = android-quran
+TARGET = Quran
 
 QT += qml quick sensors
 

@@ -57,7 +57,7 @@ popd
     --target android-19 --name Quran
 
 /mnt/4/android/qt5.3/5.3/android_armv7/bin/androiddeployqt \
-    --input android/android-libandroid-quran.so-deployment-settings.json \
+    --input android/android-libQuran.so-deployment-settings.json \
     --output apk \
     --deployment bundled \
     --verbose
