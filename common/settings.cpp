@@ -116,9 +116,11 @@ QString Settings::dataDir() const {
   return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-quran/";
 #elif defined(HARMATTAN)
   return USER_DIR;
-#endif
-
+#elif defined(QT_VERSION_5)
   return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/quran/";
+#else
+#error "I don't know of a data path for this platform"
+#endif
 }
 
 QString Settings::recitationsDir() const {
