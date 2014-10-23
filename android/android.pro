@@ -2,7 +2,7 @@ VPATH += . ../data/ ../common/
 
 TARGET = Quran
 
-QT += qml quick sensors
+QT += qml quick sensors androidextras
 
 CONFIG += android
 
@@ -15,8 +15,8 @@ DEFINES += DATA_DIR=\\\"/usr/share/harbour-quran/\\\"
 DEFINES += ANDROID=1
 
 RESOURCES += android.qrc ../icons/icons.qrc ../qml/qml.qrc
-SOURCES += fsmonitor.cpp audiopolicy.cpp application.cpp
-HEADERS += fsmonitor.h audiopolicy.h application.h
+SOURCES += fsmonitor.cpp audiopolicy.cpp application.cpp orientation.cpp
+HEADERS += fsmonitor.h audiopolicy.h application.h orientation.h
 
 LIBS += -Llibav/libavformat/ -lavformat \
         -Llibav/libavcodec/ -lavcodec \

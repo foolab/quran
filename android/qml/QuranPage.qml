@@ -9,9 +9,6 @@ Item {
         property QuranPageMenu menu
         property list<Item> toolBar
 
-// TODO:
-//        allowedOrientations: settings.orientation == 1 ? Orientation.Portrait | Orientation.PortraitInverted : settings.orientation == 2 ? Orientation.Landscape | Orientation.LandscapeInverted : Orientation.All
-
         Rectangle {
                 anchors.fill: parent
                 color: quranTheme.backgroundColor

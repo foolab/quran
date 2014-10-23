@@ -20,6 +20,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include "iconprovider.h"
+#include "orientation.h"
 
 Application::Application(int& argc, char **argv) {
   m_app = new QGuiApplication(argc, argv);
@@ -35,7 +36,7 @@ Application::~Application() {
 }
 
 void Application::registerQmlTypes() {
-
+  qmlRegisterType<Orientation>("QuranAndroid", 1, 0, "Orientation");
 }
 
 void Application::addImageProvider(const QLatin1String& id, IconProvider *provider) {

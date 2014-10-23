@@ -1,6 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.2
 import QtQuick.Controls 1.2 as Ctrls
+import QuranAndroid 1.0
 
 Ctrls.ApplicationWindow {
         id: rootWindow
@@ -14,6 +15,11 @@ Ctrls.ApplicationWindow {
         property string __pageTitle
 
         visible: true
+
+        Orientation {
+            orientation: settings.orientation == 1 ? Orientation.OrientationPortrait : settings.orientation == 2 ? Orientation.OrientationLandscape : Orientation.OrientationAll
+            Component.onCompleted: applyOrientation()
+        }
 
         toolBar: Ctrls.ToolBar {
                 id: title
