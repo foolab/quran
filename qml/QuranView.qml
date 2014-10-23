@@ -131,6 +131,7 @@ QuranListView {
 
                 QuranVerseLabel {
                     id: label
+                    width: parent.width
                     color: _recitations.chapter == _chapter && _recitations.verse == _verse ? quranTheme.recitationHighlightColor : quranTheme.verseColor
                     textSupplier: supplier
                     verse: _verse
