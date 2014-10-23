@@ -17,8 +17,7 @@ Ctrls.ApplicationWindow {
 
         toolBar: Ctrls.ToolBar {
                 id: title
-                visible: height > 0
-                height: stack.depth > 1 ? quranTheme.toolBarHeight : 0
+                height: quranTheme.toolBarHeight
                 width: parent.width
 
                 Rectangle {
@@ -31,8 +30,9 @@ Ctrls.ApplicationWindow {
                         anchors.left: parent.left
                         height: parent.height
                         onClicked: pageStack.pop()
-                        visible: parent.visible
-                        opacity: visible ? 1.0 : 0
+                        opacity: pageStack.depth > 1 ? 1.0 : 0.0
+                        visible: opacity > 0
+
                         property bool _highlight: highlight || (mouse.pressed && mouse.containsMouse)
                         icon.source: _highlight ? "image://icon/back.png?" + quranTheme.buttonHighlightColor : "image://icon/back.png?" + quranTheme.buttonNormalColor
 
@@ -44,8 +44,15 @@ Ctrls.ApplicationWindow {
                 Item {
                     id: separator
                     anchors.left: backButton.right
-                    width: quranTheme.spacing
+                    width: visible ? quranTheme.spacing : 0
                     height: parent.height
+                    visible: backButton.visible
+                    Behavior on width {
+                        SequentialAnimation {
+                            PauseAnimation { duration: 400 }
+                            PropertyAnimation { duration: 400 }
+                        }
+                    }
                 }
 
                 QuranLabel {
@@ -56,6 +63,8 @@ Ctrls.ApplicationWindow {
                     font.pixelSize: quranTheme.fontSizeLarge
                     verticalAlignment: Text.AlignVCenter
                     color: mouse.pressed && mouse.containsMouse ? quranTheme.highlightColor : quranTheme.textColor
+                    visible: backButton.visible
+                    opacity: backButton.opacity
 
                     MouseArea {
                         id: mouse
@@ -66,6 +75,15 @@ Ctrls.ApplicationWindow {
 
                 Behavior on height {
                         PropertyAnimation { duration: 200 }
+                }
+
+                Row {
+                        id: toolBarItem
+                        height: parent.height
+                        anchors.top: parent.top
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: quranTheme.spacing
+                        children: pageStack.currentItem.toolBar
                 }
 
                 MenuButton {
