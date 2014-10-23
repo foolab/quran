@@ -36,13 +36,6 @@
 #define DEFAULT_THEME              "blue"
 
 #define FONT_FAMILY                "Simplified Naskh"
-#ifdef QT_VERSION_5
-#define FONT_MIN_SIZE              22
-#define FONT_MAX_SIZE              54
-#else
-#define FONT_MIN_SIZE              16
-#define FONT_MAX_SIZE              48
-#endif
 
 #define MIN_TRANSLATION_FONT_SIZE  FONT_MIN_SIZE
 #define MAX_TRANSLATION_FONT_SIZE  FONT_MAX_SIZE
@@ -152,10 +145,8 @@ void Settings::setPageNumber(int page) {
 
 void Settings::setFontSize(int size) {
   if (size != fontSize()) {
-    if (size >= minFontSize() && size <= maxFontSize()) {
-      m_settings->setValue("General/fontSize", size);
-      emit fontSizeChanged();
-    }
+    m_settings->setValue("General/fontSize", size);
+    emit fontSizeChanged();
   }
 }
 
@@ -183,14 +174,6 @@ void Settings::setTextType(int type) {
 
 int Settings::textType() const {
   return m_settings->value("General/textType", DEFAULT_TEXT_TYPE).toInt();
-}
-
-int Settings::minFontSize() const {
-  return FONT_MIN_SIZE;
-}
-
-int Settings::maxFontSize() const {
-  return FONT_MAX_SIZE;
 }
 
 void Settings::setBookmarks(const QList<uint>& bookmarks) {
@@ -251,14 +234,6 @@ void Settings::setDefaultTranslation(const QString& id) {
 
 QString Settings::defaultTranslation() const {
   return m_settings->value("General/defaultTranslation").toString();
-}
-
-int Settings::minTranslationFontSize() const {
-  return MIN_TRANSLATION_FONT_SIZE;
-}
-
-int Settings::maxTranslationFontSize() const {
-  return MAX_TRANSLATION_FONT_SIZE;
 }
 
 QString Settings::translationFontFamily() const {

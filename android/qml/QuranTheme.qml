@@ -48,5 +48,9 @@ Item {
 
     property int toolBarHeight: Screen.height / 12
     property bool platformUsableKeyboard: true
+
+    property int minimumFontSize: Screen.height / 70
+    property int maximumFontSize: Screen.height / 10
+    property int minimumTranslationFontSize: minimumFontSize
+    property int maximumTranslationFontSize: maximumFontSize
 }
-//TODO:

@@ -81,8 +81,8 @@ QuranPage {
                         QuranSlider {
                                 width: parent.width
                                 label: qsTr("Text size")
-                                minimumValue: settings.minFontSize
-                                maximumValue: settings.maxFontSize
+                                minimumValue: quranTheme.minimumFontSize
+                                maximumValue: quranTheme.maximumFontSize
                                 valueText: value
                                 stepSize: 1
                                 value: settings.fontSize
@@ -92,8 +92,8 @@ QuranPage {
                         QuranSlider {
                                 width: parent.width
                                 label: qsTr("Translation text size");
-                                minimumValue: settings.minTranslationFontSize
-                                maximumValue: settings.maxTranslationFontSize
+                                minimumValue: quranTheme.minimumTranslationFontSize
+                                maximumValue: quranTheme.maximumTranslationFontSize
                                 valueText: value
                                 stepSize: 1
                                 value: settings.translationFontSize

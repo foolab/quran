@@ -31,11 +31,7 @@ class Settings : public QObject {
   Q_PROPERTY(int textType READ textType WRITE setTextType NOTIFY textTypeChanged);
   Q_PROPERTY(int numberFormat READ numberFormat WRITE setNumberFormat NOTIFY numberFormatChanged);
   Q_PROPERTY(QString fontFamily READ fontFamily CONSTANT);
-  Q_PROPERTY(int minFontSize READ minFontSize CONSTANT);
-  Q_PROPERTY(int maxFontSize READ maxFontSize CONSTANT);
   Q_PROPERTY(QString translationFontFamily READ translationFontFamily CONSTANT);
-  Q_PROPERTY(int minTranslationFontSize READ minTranslationFontSize CONSTANT);
-  Q_PROPERTY(int maxTranslationFontSize READ maxTranslationFontSize CONSTANT);
   Q_PROPERTY(int translationFontSize READ translationFontSize WRITE setTranslationFontSize NOTIFY translationFontSizeChanged);
 
   Q_PROPERTY(QString version READ version CONSTANT);
@@ -73,11 +69,6 @@ public:
 
   int textType() const;
 
-  int minFontSize() const;
-  int maxFontSize() const;
-
-  int minTranslationFontSize() const;
-  int maxTranslationFontSize() const;
   int translationFontSize() const;
   QString translationFontFamily() const;
 

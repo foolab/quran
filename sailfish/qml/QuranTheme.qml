@@ -46,4 +46,9 @@ QtObject {
     property color keyboardPreviewTextColor: "white"
     property color keyboardPreviewBackgroundColor: "black"
     property bool platformUsableKeyboard: false
+
+    property int minimumFontSize: Theme.fontSizeTiny
+    property int maximumFontSize: Theme.fontSizeHuge
+    property int minimumTranslationFontSize: minimumFontSize
+    property int maximumTranslationFontSize: maximumFontSize
 }
