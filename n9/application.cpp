@@ -59,6 +59,10 @@ Application::~Application() {
   delete m_app;
 }
 
+void Application::registerQmlTypes() {
+
+}
+
 void Application::addImageProvider(const QLatin1String& id, IconProvider *provider) {
   m_view->engine()->addImageProvider(id, provider);
 }

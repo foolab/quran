@@ -86,7 +86,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<QuranViewModel>("Quran", 1, 0, "QuranViewModel");
   qmlRegisterType<TextSupplier>("Quran", 1, 0, "TextSupplier");
 
-  //  QObject::connect(engine, SIGNAL(quit()), app, SLOT(quit()));
+  app.registerQmlTypes();
 
   app.addImageProvider(QLatin1String("icon"), new IconProvider);
 

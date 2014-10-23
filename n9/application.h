@@ -32,6 +32,7 @@ public:
   Application(int& argc, char **argv);
   ~Application();
 
+  void registerQmlTypes();
   void addImageProvider(const QLatin1String& id, IconProvider *provider);
   bool load(const QUrl& url);
   int exec();
