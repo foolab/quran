@@ -6,6 +6,7 @@ Label {
 //    font.family: Theme.fontFamily
 
     property bool truncateText: false
-//    truncationMode: truncateText ? TruncationMode.Fade : TruncationMode.None
+    elide: truncateText ? Text.ElideRight : Text.ElideNone
+
 }
 //TODO:
