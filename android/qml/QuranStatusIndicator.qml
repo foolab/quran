@@ -8,9 +8,9 @@ Rectangle {
         property bool error: false
         property bool _dimmed: !(isInstalled || downloading || error)
         color: downloading ? quranTheme.statusDownloading : error ? quranTheme.statusError : quranTheme.statusInstalled
-        width: 32
-        height: 32
-        radius: 10
+        width: quranTheme.itemSizeSmall / 2
+        height: width
+        radius: width / 3
         opacity: _dimmed ? 0.5 : 1.0
+        smooth: true
 }
-//TODO:
