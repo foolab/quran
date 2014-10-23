@@ -110,13 +110,15 @@ Settings::~Settings() {
 }
 
 QString Settings::dataDir() const {
-#ifdef QT_VERSION_5
-  static QString dir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-quran/";
-#else
-  static QString dir = USER_DIR;
+#if defined(ANDROID)
+  return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/org.foolab.quran/";
+#elif defined(SAILFISH)
+  return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-quran/";
+#elif defined(HARMATTAN)
+  return USER_DIR;
 #endif
 
-  return dir;
+  return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/quran/";
 }
 
 QString Settings::recitationsDir() const {
