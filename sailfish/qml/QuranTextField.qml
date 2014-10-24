@@ -2,7 +2,7 @@
 import Sailfish.Silica 1.0
 
 TextField {
-        property bool enterKeyEnabled
+        property bool enterKeyEnabled: true
         property string enterKeyText
 
         signal enterKeyClicked

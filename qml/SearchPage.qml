@@ -26,7 +26,9 @@ QuranPage {
 
                         QuranSearchField {
                                 id: field
+
                                 Component.onCompleted: searchPage.searchField = field
+
                                 anchors {
                                     left: parent.left
                                     leftMargin: quranTheme.marginMedium
@@ -34,6 +36,7 @@ QuranPage {
                                     rightMargin: quranTheme.marginMedium
                                 }
 
+                                enterKeyText: qsTr("Search")
                                 onTextChanged: searchPage.searchString = text
                                 enableSoftwareInputPanel: quranTheme.platformUsableKeyboard
                                 onEnterKeyClicked: {

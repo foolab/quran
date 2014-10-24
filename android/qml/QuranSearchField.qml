@@ -3,7 +3,7 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2
 
 TextField {
-        property bool enterKeyEnabled
+        property bool enterKeyEnabled: true
         property string enterKeyText
         property bool enableSoftwareInputPanel
 
