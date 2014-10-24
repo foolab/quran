@@ -34,5 +34,6 @@
     <file alias="qml/MenuAction.qml">MenuAction.qml</file>
     <file alias="qml/VerseDelegate.qml">VerseDelegate.qml</file>
     <file alias="qml/ChapterDelegate.qml">ChapterDelegate.qml</file>
+    <file alias="qml/ListDelegate.qml">ListDelegate.qml</file>
   </qresource>
 </RCC>

@@ -15,18 +15,17 @@ QuranPage {
                         recitations: _recitations
                 }
 
-                delegate: QuranListDelegate {
+                delegate: ListDelegate {
                         onClicked: {
                                 recitationsManager.changeRecitation(recitationId)
                                 popPage()
                         }
 
-                        contentHeight: quranTheme.itemSizeLarge
-
                         QuranLabel {
                                 truncateText: true
                                 text: name
-                                anchors.fill: parent
+                                width: parent.width
+                                height: quranTheme.itemSizeLarge
                                 verticalAlignment: Text.AlignVCenter
                                 color: _recitations.current == recitationId ? quranTheme.highlightColor : quranTheme.primaryColor
                         }

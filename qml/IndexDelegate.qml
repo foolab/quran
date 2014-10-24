@@ -1,7 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.0
 
-QuranListDelegate {
+ListDelegate {
     id: root
 
     property int number
@@ -17,7 +17,8 @@ QuranListDelegate {
     contentHeight: quranTheme.itemSizeLarge
 
     Item {
-        anchors.fill: parent
+        width: parent.width
+        height: quranTheme.itemSizeLarge
 
         NumberLabel {
             id: numberLabel

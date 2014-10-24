@@ -2,12 +2,10 @@
 import QtQuick 2.0
 import Quran 1.0
 
-QuranListDelegate {
+ListDelegate {
         id: item
         property int _chapter
         property int _verse
-
-        contentHeight: label.height
 
         onClicked: {
                 pagePosition.setPosition(chapter, verse)

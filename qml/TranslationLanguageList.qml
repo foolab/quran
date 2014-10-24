@@ -6,12 +6,13 @@ QuranPage {
         Component {
                 id: language
 
-                QuranListDelegate {
+                ListDelegate {
                         contentHeight: quranTheme.itemSizeLarge
                         onClicked: pushAnimated(Qt.resolvedUrl("TranslationsAddPage.qml"), {cid: translationId})
                         QuranLabel {
                                 id: label
-                                anchors.fill: parent
+                                width: parent.width
+                                height: quranTheme.itemSizeLarge
                                 text: name
                                 color: quranTheme.primaryColor
                                 verticalAlignment: Text.AlignVCenter

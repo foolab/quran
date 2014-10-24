@@ -8,11 +8,14 @@ QuranPage {
         Component {
                 id: recitationssDelegate
                 // TODO: Context menu
-                QuranListDelegate {
+                ListDelegate {
                         contentHeight: quranTheme.itemSizeLarge
                         onClicked: toggleRecitation(recitationId, installed)
+
                         Item {
-                                anchors.fill: parent
+                                width: parent.width
+                                height: quranTheme.itemSizeLarge
+
                                 QuranStatusIndicator {
                                         id: indicator
                                         anchors.right: parent.right

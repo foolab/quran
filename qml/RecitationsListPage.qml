@@ -9,10 +9,12 @@ QuranPage {
         Component {
                 id: recitationssDelegate
                 // TODO: Context menu
-                QuranListDelegate {
+                ListDelegate {
                         contentHeight: quranTheme.itemSizeLarge
                         Item {
-                                anchors.fill: parent
+                                width: parent.width
+                                height: quranTheme.itemSizeLarge
+
                                 QuranStatusIndicator {
                                         id: indicator
                                         anchors.right: parent.right

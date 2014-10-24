@@ -15,17 +15,16 @@ QuranPage {
                         translations: _translations
                 }
 
-                delegate: QuranListDelegate {
+                delegate: ListDelegate {
                         property int tid: translationId
                         onClicked: {
                                 translationsManager.changeTranslation(tid)
                                 popPage()
                         }
 
-                        contentHeight: quranTheme.itemSizeLarge
-
                         QuranLabel {
-                                anchors.fill: parent
+                                width: parent.width
+                                height: quranTheme.itemSizeLarge
                                 truncateText: true
                                 text: name
                                 verticalAlignment: Text.AlignVCenter

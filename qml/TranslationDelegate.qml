@@ -2,7 +2,7 @@
 import QtQuick 2.0
 import Quran 1.0
 
-QuranListDelegate {
+ListDelegate {
         id: contextLabel
         property int tid
         property bool showCategory
@@ -35,7 +35,9 @@ QuranListDelegate {
         ]
 
         Item {
-                anchors.fill: parent
+                width: parent.width
+                height: quranTheme.itemSizeLarge
+
                 QuranStatusIndicator {
                         id: indicator
                         anchors.right: parent.right
