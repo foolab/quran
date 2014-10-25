@@ -5,6 +5,7 @@
 	  android:versionCode="1"
 	  android:installLocation="auto">
   <application
+      android:theme="@android:style/Theme.Holo.NoActionBar"
       android:hardwareAccelerated="true"
       android:name="org.qtproject.qt5.android.bindings.QtApplication"
       android:icon="@drawable/icon"
