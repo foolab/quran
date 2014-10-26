@@ -23,10 +23,18 @@ QuranWindow {
         }
 
         Translations {
-                id: _translations
-                settings: settings
-                downloader: _downloader
-                data: _data
+            id: _translations
+            settings: settings
+            downloader: _downloader
+            data: _data
+            Component.onCompleted: {
+                refresh()
+                loadTranslation(settings.defaultTranslation)
+            }
+
+            onDownloadError: {
+                banner.showMessage(qsTr("Failed to download %1").arg(name))
+            }
         }
 
         PhoneFlipControl {
@@ -46,10 +54,6 @@ QuranWindow {
         QuranTheme {
                 id: quranTheme
                 inNightMode: settings.nightMode
-        }
-
-        TranslationsManager {
-                id: translationsManager
         }
 
         RecitationsManager {
@@ -116,31 +120,10 @@ QuranWindow {
             id: banner
         }
 /*
-        InfoBanner {
-                id: translations
-        }
-
+// TODO:
         Connections {
                 target: _recitations
                 onError: { playerError.text = msg; playerError.show(); }
-        }
-
-        Connections {
-                target: _translations
-                onInstalled: {
-                        translations.text = qsTr("Installed ") + _translations.translationName(id);
-                        translations.show();
-                }
-
-                onFailed: {
-                        translations.text = qsTr("Failed to download ") + _translations.translationName(id);
-                        translations.show();
-                }
-
-                onRemoved: {
-                        translations.text = qsTr("Removed ") + _translations.translationName(id);
-                        translations.show();
-                }
         }
 */
 }

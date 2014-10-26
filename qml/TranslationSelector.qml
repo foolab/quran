@@ -3,33 +3,38 @@ import QtQuick 2.0
 import Quran 1.0
 
 QuranPage {
-        QuranListView {
-                anchors.fill: parent
+    QuranListView {
+        anchors.fill: parent
 
-                header: QuranPageHeader {
-                        width: parent.width
-                        title: qsTr("Choose translation")
-                }
-
-                model: InstalledTranslationsModel {
-                        translations: _translations
-                }
-
-                delegate: ListDelegate {
-                        property int tid: translationId
-                        onClicked: {
-                                translationsManager.changeTranslation(tid)
-                                popPage()
-                        }
-
-                        QuranLabel {
-                                width: parent.width
-                                height: quranTheme.itemSizeLarge
-                                truncateText: true
-                                text: name
-                                verticalAlignment: Text.AlignVCenter
-                                color: _translations.current == tid ? quranTheme.highlightColor : quranTheme.primaryColor
-                        }
-                }
+        header: QuranPageHeader {
+            width: parent.width
+            title: qsTr("Choose translation")
         }
+
+        model: _translations
+
+        delegate: ListDelegate {
+            id: item
+            visible: translation.status == Translation.Installed
+
+            onClicked: {
+                if (_translations.loadTranslation(translation.uuid)) {
+                    settings.defaultTranslation = translation.uuid
+                    popPage()
+                } else {
+                    banner.showMessage(qsTr("Failed to load translation"))
+                }
+            }
+
+            QuranLabel {
+                visible: item.visible
+                width: parent.width
+                height: item.visible ? quranTheme.itemSizeLarge : 0
+                truncateText: true
+                text: translation.name
+                verticalAlignment: Text.AlignVCenter
+                color: translation.loaded ? quranTheme.highlightColor : quranTheme.primaryColor
+            }
+        }
+    }
 }

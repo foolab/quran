@@ -11,6 +11,6 @@ Rectangle {
         width: quranTheme.itemSizeSmall / 2
         height: width
         radius: width / 3
-        opacity: _dimmed ? 0.5 : 1.0
+        opacity: _dimmed ? 0.3 : 1.0
         smooth: true
 }

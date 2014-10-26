@@ -17,54 +17,268 @@
 
 #include "translation.h"
 #include "translations.h"
-#include "translation_p.h"
-#include <QDebug>
+#include "downloader.h"
+#include <QLocale>
+#include <QTemporaryFile>
+#include <QNetworkReply>
+#include "index.h"
+#ifdef QT_VERSION_5
+#include <QQmlInfo>
+#else
+#include <QDeclarativeInfo>
+#endif
 
-Translation::Translation(QObject *parent)
-  : QObject(parent), m_tid(-1),
-    d_ptr(0), m_translations(0) {
+Translation::Translation(int tid, const QString& id, const QString& name, int language,
+			 Translations *parent) :
+  QObject(parent),
+  m_translations(parent),
+  m_downloader(0),
+  m_reply(0),
+  m_file(0),
+  m_status(None),
+  m_tid(tid),
+  m_size(0),
+  m_progress(0),
+  m_name(name),
+  m_language(language),
+  m_id(id),
+  m_loaded(false) {
+
 }
 
 Translation::~Translation() {
-  if (m_translations) {
-    m_translations->unregisterTranslation(this);
-  }
 
-  d_ptr = 0;
 }
 
-void Translation::init() {
-  d_ptr = m_translations->registerTranslation(this);
+bool Translation::isLoaded() const {
+  return m_loaded;
 }
 
-void Translation::setTid(int tid) {
-  if (m_tid != tid) {
-    m_tid = tid;
-
-    emit tidChanged();
+void Translation::setLoaded(bool loaded) {
+  if (m_loaded != loaded) {
+    m_loaded = loaded;
+    emit loadedChanged();
   }
+}
+
+void Translation::setDownloader(Downloader *downloader) {
+  m_downloader = downloader;
 }
 
 int Translation::tid() const {
   return m_tid;
 }
 
-int Translation::downloadProgress() const {
-  return d_ptr ? d_ptr->downloadProgress() : 0;
+QString Translation::uuid() const {
+  return m_id;
+}
+
+QString Translation::name() const {
+  return m_name;
+}
+
+QString Translation::language() const {
+  return QLocale::languageToString(static_cast<QLocale::Language>(m_language));
+}
+
+qint64 Translation::downloadProgress() const {
+  return m_progress;
+}
+
+void Translation::setStatus(Translation::Status status) {
+  if (m_status != status) {
+    m_status = status;
+    emit statusChanged();
+  }
 }
 
 Translation::Status Translation::status() const {
-  return d_ptr ? d_ptr->status() : Translation::None;
+  return m_status;
 }
 
-QString Translation::error() const {
-  return d_ptr ? d_ptr->error() : QString();
+qint64 Translation::downloadSize() const {
+  return m_size;
 }
 
-void Translation::setTranslations(Translations *translations) {
-  m_translations = translations;
+bool Translation::startDownload() {
+  stopDownload();
+
+  QTemporaryFile *file = new QTemporaryFile(this);
+
+  if (!file->open()) {
+    delete file;
+    return false;
+  }
+
+  m_file = file;
+
+  QString url = QString("http://tanzil.net/trans/?transID=%1&type=txt").arg(m_id);
+  m_reply = m_downloader->get(url);
+  m_reply->setParent(this);
+
+  m_offset = 0;
+  m_offsets.clear();
+
+  QObject::connect(m_reply, SIGNAL(downloadProgress(qint64, qint64)),
+		   this, SLOT(replyDownloadProgress(qint64, qint64)));
+  QObject::connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)),
+		   this, SLOT(replyError()));
+  QObject::connect(m_reply, SIGNAL(finished()),
+		   this, SLOT(replyFinished()));
+  QObject::connect(m_reply, SIGNAL(readyRead()),
+		   this, SLOT(replyReadyRead()));
+
+  setStatus(Translation::Downloading);
+
+  return true;
 }
 
-Translations *Translation::translations() const {
-  return m_translations;
+void Translation::stopDownload() {
+  if (status() != Translation::Downloading) {
+    return;
+  }
+
+  m_reply->abort();
+  m_reply->deleteLater();
+  m_reply = 0;
+  delete m_file;
+  m_file = 0;
+
+  setStatus(Translation::None);
 }
+
+void Translation::replyDownloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
+  if (!m_reply || !m_file) {
+    return;
+  }
+
+  if (bytesTotal == -1) {
+    // We can try to get it from the HTTP content length header
+    QVariant val = m_reply->header(QNetworkRequest::ContentLengthHeader);
+    if (!val.isValid()) {
+      // HACK: Let's hardcode an arbitrary value (3MB).
+      bytesTotal = 1024 * 1024 * 3;
+    } else {
+      bytesTotal = val.value<qint64>();
+    }
+  }
+
+  if (bytesTotal < bytesReceived) {
+    bytesTotal = bytesReceived;
+  }
+
+  if (bytesTotal != m_size) {
+    m_size = bytesTotal;
+    emit downloadSizeChanged();
+  }
+
+  if (bytesReceived != m_progress) {
+    m_progress = bytesReceived;
+    emit downloadProgressChanged();
+  }
+}
+
+void Translation::replyError() {
+  if (!m_reply || !m_file) {
+    return;
+  }
+
+  qmlInfo(this) << "Error downloading " << name() << " " << m_reply->errorString();
+
+  m_reply->deleteLater();
+  m_reply = 0;
+  delete m_file;
+  m_file = 0;
+
+  setStatus(Translation::Error);
+}
+
+void Translation::replyFinished() {
+  if (!m_reply || !m_file) {
+    return;
+  }
+
+  if (m_reply->error() != QNetworkReply::NoError) {
+    replyError();
+  }
+  else if (!readData()) {
+    replyError();
+  }
+  else if (!install()) {
+    replyError();
+  }
+  else {
+    delete m_file;
+    m_file = 0;
+
+    m_reply->deleteLater();
+    m_reply = 0;
+
+    setStatus(Translation::Installed);
+
+    // Emit this after we set the status because Translations object depends on that
+    emit installed();
+  }
+}
+
+void Translation::replyReadyRead() {
+  if (!m_reply || !m_file) {
+    return;
+  }
+
+  if (!readData()) {
+    replyError();
+  }
+}
+
+bool Translation::readData() {
+  if (!m_reply || !m_file) {
+    return false;
+  }
+
+  while (m_reply->canReadLine()) {
+    QByteArray data = m_reply->readLine();
+
+    if (m_reply->error() != QNetworkReply::NoError) {
+      return false;
+    }
+
+    if (m_file->write(data) != data.size() || m_file->error() != QFile::NoError) {
+      return false;
+    }
+
+    if (data.startsWith('\n') || data.startsWith('#')) {
+      // Empty lines or comments.
+      m_offset += data.size();
+    }
+    else {
+      m_offsets << qMakePair<off_t, size_t>(m_offset, data.size() - 1);
+      m_offset += data.size();
+    }
+  }
+
+  return true;
+}
+
+bool Translation::install() {
+  QString index = m_translations->indexPath(m_tid);
+  QString data = m_translations->dataPath(m_tid);
+
+  if (!m_file->rename(data)) {
+    m_file->remove();
+    return false;
+  }
+
+  QMap<QString, QVariant> meta;
+  meta["size"] = m_file->size();
+
+  if (!Index::write(index, m_offsets, meta)) {
+    m_file->remove();
+    return false;
+  }
+
+  m_file->setAutoRemove(false);
+
+  return true;
+}
+

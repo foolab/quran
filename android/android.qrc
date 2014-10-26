@@ -23,5 +23,6 @@
     <file alias="/qml/MenuButton.qml">qml/MenuButton.qml</file>
     <file alias="/qml/QuranContextMenu.qml">qml/QuranContextMenu.qml</file>
     <file alias="/qml/QuranNotificationBanner.qml">qml/QuranNotificationBanner.qml</file>
+    <file alias="/qml/QuranProgressBar.qml">qml/QuranProgressBar.qml</file>
   </qresource>
 </RCC>

@@ -17,17 +17,17 @@
 
 #include "translations.h"
 #include "trans-meta.h"
-#include <QLocale>
-#include <QDebug>
 #include "translation.h"
-#include "downloader.h"
-#include <QNetworkReply>
-#include <QTemporaryFile>
-#include "translation_p.h"
 #include "settings.h"
 #include "dataprovider.h"
 #include "textprovider.h"
-#include <QDebug>
+#ifdef QT_VERSION_5
+#include <QQmlInfo>
+#include <QQmlEngine>
+#else
+#include <QDeclarativeInfo>
+#include <QDeclarativeEngine>
+#endif
 
 #define INDEX_SUFFIX ".idx"
 #define DATA_SUFFIX ".txt"
@@ -35,15 +35,47 @@
 
 // TODO: limit the number of simultaneously downloaded translations.
 
-Translations::Translations(QObject *parent)
-  : QObject(parent), m_downloader(0), m_settings(0),
-    m_data(0), m_current(0) {
+Translations::Translations(QObject *parent) :
+  QAbstractListModel(parent),
+  m_downloader(0),
+  m_settings(0),
+  m_data(0) {
 
+  QHash<int, QByteArray> roles;
+
+  roles[TranslationRole] = "translation";
+  roles[LanguageRole] = "language";
+
+  setRoleNames(roles);
 }
 
 Translations::~Translations() {
-  qDeleteAll(m_info);
+  clear();
 }
+
+void Translations::clear() {
+  foreach (Translation *t, m_translations) {
+    t->stopDownload();
+  }
+
+  loadTranslation(QString());
+
+  bool emitSignal = !m_translations.isEmpty();
+
+  if (emitSignal) {
+    beginRemoveRows(QModelIndex(), 0, m_translations.size() - 1);
+  }
+
+  qDeleteAll(m_translations);
+  m_translations.clear();
+
+  if (emitSignal) {
+    endRemoveRows();
+  }
+
+  emit installedCountChanged();
+}
+
 
 Settings *Translations::settings() const {
   return m_settings;
@@ -62,7 +94,6 @@ Downloader *Translations::downloader() const {
 
 void Translations::setDownloader(Downloader *downloader) {
   if (m_downloader != downloader) {
-
     m_downloader = downloader;
     emit downloaderChanged();
   }
@@ -74,261 +105,69 @@ DataProvider *Translations::data() const {
 
 void Translations::setData(DataProvider *data) {
   if (m_data != data) {
-
     m_data = data;
     emit dataChanged();
   }
 }
 
-TranslationPrivate *Translations::info(int tid) {
-  foreach (TranslationPrivate *p, m_info) {
-    if (p->tid() == tid) {
-      return p;
-    }
-  }
-
-  return 0;
-}
-
-int Translations::current() const {
-  return m_current;
-}
-
-void Translations::setCurrent(int tid) {
-  if (m_current != tid) {
-    m_current = tid;
-
-    emit currentChanged();
-  }
-}
-
-void Translations::unload() {
-  // TODO: what to do with current ?
-  m_data->setSecondaryText(0);
-}
-
-bool Translations::load(int tid) {
-  if (m_installed.isEmpty()) {
-    return false;
-  }
-
-  if (m_installed.indexOf(tid) == -1) {
-    return false;
-  }
-
-  TextProvider *s = m_data->secondaryTextProvider();
-  if (s && s->id() == tid) {
-
-    setCurrent(tid);
-
-    return true;
-  }
-
-  TextProvider *p = new TextProvider(tid, data(tid), index(tid));
-  if (!p->load()) {
-    delete p;
-    return false;
-  }
-
-  m_data->setSecondaryText(p);
-
-  setCurrent(tid);
-
-  m_settings->setDefaultTranslation(id(tid));
-
-  return true;
-}
-
-bool Translations::loadDefault() {
-  if (m_installed.isEmpty()) {
-    return false;
-  }
-
-  QString id = m_settings->defaultTranslation();
-
-  int t = id.isEmpty() ? m_installed.at(0) : tid(id);
-
-  return load(t);
-}
-
 void Translations::refresh() {
+  clear();
+
+  QList<Translation *> translations;
+
+  // Let's get all translations:
+  for (int x = 0; x < TRANSLATIONS_LEN; x++) {
+    Translation *t = new Translation(x, QString::fromUtf8(Ts[x].id),
+				     QString::fromUtf8(Ts[x].name),
+				     Ts[x].language,
+				     this);
+    QObject::connect(t, SIGNAL(statusChanged()), this, SLOT(translationStatusChanged()));
+    t->setDownloader(m_downloader);
+    translations << t;
+  }
+
+  // Now check which ones are installed
   QDir dir(m_settings->translationsDir());
   dir.mkpath(".");
 
-  QStringList list = dir.entryList(QStringList() << INDEX_FILTER,
-				     QDir::Files | QDir::NoDotAndDotDot, QDir::Name);
-
-  m_installed.clear();
+  QStringList list =
+    dir.entryList(QStringList() << INDEX_FILTER, QDir::Files | QDir::NoDotAndDotDot, QDir::Name);
 
   foreach (const QString& file, list) {
-    int tid = Translations::tid(QFileInfo(file).completeBaseName());
-    if (m_installed.indexOf(tid) == -1) {
-      m_installed << tid;
+    int tid = lookup(QFileInfo(file).completeBaseName());
+    if (tid == -1) {
+      qmlInfo(this) << "Unknown translation " << file;
+      continue;
     }
+
+    translations[tid]->setStatus(Translation::Installed);
   }
 
-  emit refreshed();
-  emit activeChanged();
+  beginInsertRows(QModelIndex(), 0, translations.size() - 1);
+  m_translations = translations;
+  endInsertRows();
+
   emit installedCountChanged();
+  emit refreshed();
 }
 
-TranslationPrivate *Translations::registerTranslation(Translation *t) {
-  TranslationPrivate *p = info(t->tid());
+int Translations::installedCount() const {
+  int count = 0;
 
-  if (!p) {
-    p = new TranslationPrivate(m_installed.indexOf(t->tid()) == -1 ?
-			       Translation::None : Translation::Installed, t->tid(), this);
-    m_info << p;
-  }
-
-  p->add(t);
-
-  return p;
-}
-
-void Translations::unregisterTranslation(Translation *t) {
-  TranslationPrivate *p = t->d_ptr;
-
-  if (!p) {
-    return;
-  }
-
-  p->remove(t);
-
-  if (p->canDestroy()) {
-    m_info.takeAt(m_info.indexOf(p));
-    delete p;
-  }
-}
-
-QList<int> Translations::categories() const {
-  QList<int> res;
-
-  for (int x = 0; x < TRANSLATIONS_LEN; x++) {
-    int language = Ts[x].language;
-    if (res.indexOf(language) == -1) {
-      res << language;
+  foreach (Translation *t, m_translations) {
+    if (t->status() == Translation::Installed) {
+      count++;
     }
   }
 
-  qSort(res);
-
-  return res;
+  return count;
 }
 
-QString Translations::categoryName(int category) {
-  return QLocale::languageToString(static_cast<QLocale::Language>(category));
-}
-
-QList<int> Translations::translations(int category) {
-  QList<int> res;
-
-  for (int x = 0; x < TRANSLATIONS_LEN; x++) {
-    if (Ts[x].language == category) {
-      res << x;
-    }
-  }
-
-  return res;
-}
-
-QString Translations::translationName(int translation) {
-  return QString::fromUtf8(Ts[translation].name);
-}
-
-QString Translations::categoryNameForTranslation(int translation) {
-  return categoryName(Ts[translation].language);
-}
-
-QList<int> Translations::installed() const {
-  return m_installed;
-}
-
-QList<int> Translations::active() const {
-  QList<int> res = m_installed;
-
-  res += downloads();
-
-  res += error();
-
-  return res;
-}
-
-void Translations::startDownload(int tid) {
-  TranslationPrivate *p = info(tid);
-  if (!p || !p->canDownload()) {
-    return;
-  }
-
-  QString url = QString("http://tanzil.net/trans/?transID=%1&type=txt").arg(id(tid));
-  QNetworkReply *reply = m_downloader->get(url);
-
-  if (!p->startDownload(reply)) {
-    delete reply;
-  }
-}
-
-void Translations::stopDownload(int tid) {
-  TranslationPrivate *p = info(tid);
-  if (!p) {
-    return;
-  }
-
-  p->stopDownload();
-}
-
-void Translations::stopDownloads() {
-  foreach (const TranslationPrivate *p, m_info) {
-    if (p->status() == Translation::Downloading) {
-      stopDownload(p->tid());
-    }
-  }
-}
-
-QList<int> Translations::downloads() const {
-  QList<int> res;
-
-  foreach (const TranslationPrivate *p, m_info) {
-    if (p->status() == Translation::Downloading) {
-      res << p->tid();
-    }
-  }
-
-  qSort(res);
-
-  return res;
-}
-
-QList<int> Translations::error() const {
-  QList<int> res;
-
-  foreach (const TranslationPrivate *p, m_info) {
-    if (p->status() == Translation::Error) {
-      res << p->tid();
-    }
-  }
-
-  qSort(res);
-
-  return res;
-}
-
-void Translations::removeTranslation(int tid) {
-  TranslationPrivate *p = info(tid);
-  if (!p) {
-    return;
-  }
-
-  p->stopDownload();
-
-  p->remove();
-}
-
-QString Translations::id(int tid) const {
+QString Translations::translationId(int tid) const {
   return QString::fromUtf8(Ts[tid].id);
 }
 
-int Translations::tid(const QString& id) {
+int Translations::lookup(const QString& id) {
   for (int x = 0; x < TRANSLATIONS_LEN; x++) {
     if (QLatin1String(Ts[x].id) == id) {
       return x;
@@ -338,58 +177,132 @@ int Translations::tid(const QString& id) {
   return -1;
 }
 
-QString Translations::index(int tid) const {
+QString Translations::indexPath(int tid) const {
   return QString("%1%2%3%4").arg(m_settings->translationsDir()).arg(QDir::separator())
-    .arg(id(tid)).arg(INDEX_SUFFIX);
+    .arg(translationId(tid)).arg(INDEX_SUFFIX);
 }
 
-QString Translations::data(int tid) const {
+QString Translations::dataPath(int tid) const {
   return QString("%1%2%3%4").arg(m_settings->translationsDir()).arg(QDir::separator())
-    .arg(id(tid)).arg(DATA_SUFFIX);
+    .arg(translationId(tid)).arg(DATA_SUFFIX);
 }
 
-void Translations::statusChanged(int tid, Translation::Status oldStatus,
-				 Translation::Status newStatus) {
-
-  TranslationPrivate *p = info(tid);
-  if (!p) {
-    return;
+bool Translations::removeTranslation(const QString& id) {
+  int tid = lookup(id);
+  if (tid == -1) {
+    qmlInfo(this) << "Unknown translation " << id;
+    return false;
   }
 
-  if (oldStatus == Translation::None && newStatus == Translation::Downloading) {
-    // User initiated a download
-    emit activeChanged();
-  }
-  else if (oldStatus == Translation::Installed && newStatus == Translation::None) {
-    // User removed a translation
-    m_installed.takeAt(m_installed.indexOf(p->tid()));
-    emit activeChanged();
-    emit removed(tid);
+  Translation *t = m_translations[tid];
+  t->stopDownload();
+
+  QString index = indexPath(tid);
+  QString data = dataPath(tid);
+
+  if (QFile(index).remove() && QFile(data).remove()) {
+    t->setStatus(Translation::None);
     emit installedCountChanged();
+    return true;
   }
-  else if (oldStatus == Translation::Error && newStatus == Translation::Downloading) {
-    // User restarted a failed download.
-    emit activeChanged();
+
+  return false;
+}
+
+bool Translations::loadTranslation(const QString& id) {
+  if (id.isEmpty()) {
+    TextProvider *p = m_data->secondaryTextProvider();
+    if (p) {
+      m_translations[p->id()]->setLoaded(false);
+    }
+
+    m_data->setSecondaryText(0);
+    return true;
   }
-  else if (oldStatus == Translation::Downloading && newStatus == Translation::None) {
-    // User stopped a download
-    emit activeChanged();
-    emit removed(tid);
+
+  int tid = lookup(id);
+  if (tid == -1) {
+    qmlInfo(this) << "Unknown translation " << id;
+    return false;
   }
-  else if (oldStatus == Translation::Downloading && newStatus == Translation::Installed) {
-    // Translation installed.
-    m_installed.append(p->tid());
-    emit activeChanged();
-    emit added(tid);
-    emit installedCountChanged();
+
+  Translation *t = m_translations[tid];
+  if (t->status() != Translation::Installed) {
+    qmlInfo(this) << "Translation " << id << " is not installed";
+    return false;
   }
-  else if (oldStatus == Translation::Downloading && newStatus == Translation::Error) {
-    // Error!
-    emit failed(tid);
-    emit activeChanged();
+
+  TextProvider *p = m_data->secondaryTextProvider();
+  if (p && p->id() == tid) {
+    return true;
+  }
+
+  p = new TextProvider(tid, dataPath(tid), indexPath(tid));
+  if (!p->load()) {
+    qmlInfo(this) << "Failed to load translation " << tid;
+    delete p;
+    return false;
+  }
+
+  TextProvider *old = m_data->secondaryTextProvider();
+  if (old) {
+    m_translations[old->id()]->setLoaded(false);
+  }
+
+  m_translations[tid]->setLoaded(true);
+
+  m_data->setSecondaryText(p);
+
+  return true;
+}
+
+int Translations::rowCount(const QModelIndex& parent) const {
+  if (!parent.isValid()) {
+    return m_translations.size();
+  }
+
+  return 0;
+}
+
+QVariant Translations::data(const QModelIndex& index, int role) const {
+  if (index.row() >= 0 && index.row() < m_translations.size()) {
+    QObject *translation = m_translations[index.row()];
+
+    switch (role) {
+    case LanguageRole:
+      return dynamic_cast<Translation *>(translation)->language();
+    case TranslationRole:
+#ifdef QT_VERSION_5
+      QQmlEngine::setObjectOwnership(translation, QQmlEngine::CppOwnership);
+#else
+      QDeclarativeEngine::setObjectOwnership(translation, QDeclarativeEngine::CppOwnership);
+#endif
+      return QVariant::fromValue<QObject *>(translation);
+
+    default:
+      break;
+    }
+  }
+
+  return QVariant();
+}
+
+void Translations::translationStatusChanged() {
+  if (Translation *t = dynamic_cast<Translation *>(sender())) {
+    if (t->status() == Translation::Installed) {
+      emit installedCountChanged();
+    } else if (t->status() == Translation::Error) {
+      emit downloadError(t->name());
+    }
   }
 }
 
-int Translations::installedCount() const {
-  return m_installed.size();
+#ifdef QT_VERSION_5
+QHash<int, QByteArray> Translations::roleNames() const {
+  return m_roles;
 }
+
+void Translations::setRoleNames(const QHash<int, QByteArray>& roles) {
+  m_roles = roles;
+}
+#endif

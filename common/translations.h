@@ -18,54 +18,34 @@
 #ifndef TRANSLATIONS_H
 #define TRANSLATIONS_H
 
-#include <QObject>
-#include <QStringList>
+#include <QAbstractListModel>
 #include "translation.h"
 #include <QDir>
 #include <QVariant>
 
 class Downloader;
-class TranslationPrivate;
 class Settings;
 class DataProvider;
+class Translation;
 
-class Translations : public QObject {
+class Translations : public QAbstractListModel {
   Q_OBJECT
 
   Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
-  Q_PROPERTY(int current READ current NOTIFY currentChanged);
   Q_PROPERTY(Settings *settings READ settings WRITE setSettings NOTIFY settingsChanged);
   Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
   Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
+
+  enum {
+    TranslationRole = Qt::UserRole,
+    LanguageRole = Qt::UserRole + 1,
+  };
 
 public:
   Translations(QObject *parent = 0);
   ~Translations();
 
-  QList<int> installed() const;
-  QList<int> active() const;
-  QList<int> categories() const;
-
-  int current() const;
-
-  Q_INVOKABLE QString categoryName(int category);
-  QList<int> translations(int category);
-  Q_INVOKABLE QString translationName(int translation);
-
-  Q_INVOKABLE QString categoryNameForTranslation(int translation);
-
-  void statusChanged(int tid, Translation::Status oldStatus, Translation::Status newStatus);
-
-  Q_INVOKABLE bool load(int tid);
-  Q_INVOKABLE bool loadDefault();
-
-  TranslationPrivate *registerTranslation(Translation *t);
-  void unregisterTranslation(Translation *t);
-
-  QString index(int tid) const;
-  QString data(int tid) const;
-
-  Q_INVOKABLE QString id(int tid) const;
+  int installedCount() const;
 
   Settings *settings() const;
   void setSettings(Settings *settings);
@@ -76,48 +56,45 @@ public:
   DataProvider *data() const;
   void setData(DataProvider *data);
 
-  int installedCount() const;
+  Q_INVOKABLE bool loadTranslation(const QString& id);
+  Q_INVOKABLE bool removeTranslation(const QString& id);
+
+  QString indexPath(int tid) const;
+  QString dataPath(int tid) const;
+
+  int rowCount(const QModelIndex& parent = QModelIndex()) const;
+  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
 public slots:
   void refresh();
-  void startDownload(int tid);
-  void stopDownload(int tid);
-  void removeTranslation(int tid);
-  void unload();
-  void stopDownloads();
 
 signals:
-  void currentChanged();
-
-  void refreshed();
-  void activeChanged();
-  void added(int id);
-  void failed(int id);
-  void removed(int id);
   void installedCountChanged();
-
   void settingsChanged();
   void downloaderChanged();
   void dataChanged();
+  void refreshed();
+  void downloadError(const QString& name);
+
+private slots:
+  void translationStatusChanged();
 
 private:
-  TranslationPrivate *info(int tid);
-  int tid(const QString& id);
-  QList<int> downloads() const;
-  QList<int> error() const;
+  int lookup(const QString& id);
+  QString translationId(int tid) const;
+  void clear();
 
-  void setCurrent(int tid);
-
+  QList<Translation *> m_translations;
   Downloader *m_downloader;
 
   Settings *m_settings;
   DataProvider *m_data;
 
-  QList<TranslationPrivate *> m_info;
-
-  QList<int> m_installed;
-
-  int m_current;
+#ifdef QT_VERSION_5
+  QHash<int, QByteArray> roleNames() const;
+  void setRoleNames(const QHash<int, QByteArray>& roles);
+  QHash<int, QByteArray> m_roles;
+#endif
 };
 
 #endif /* TRANSLATIONS_H */

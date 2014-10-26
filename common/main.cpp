@@ -21,7 +21,6 @@
 #include "numberformatter.h"
 #include "aboutdata.h"
 #include "translations.h"
-#include "translation.h"
 #include "downloader.h"
 #include "fsmonitor.h"
 #include "search.h"
@@ -73,19 +72,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<Recitations>("Quran", 1, 0, "Recitations");
   qmlRegisterType<FSMonitor>("Quran", 1, 0, "FSMonitor");
   qmlRegisterType<SearchModel>("Quran", 1, 0, "SearchModel");
-  qmlRegisterType<Translation>("Quran", 1, 0, "Translation");
   qmlRegisterType<PhoneFlipControl>("Quran", 1, 0, "PhoneFlipControl");
-  qmlRegisterType<InstalledTranslationsModel>("Quran", 1, 0, "InstalledTranslationsModel");
-  qmlRegisterType<ActiveTranslationsModel>("Quran", 1, 0, "ActiveTranslationsModel");
-  qmlRegisterType<TranslationCategoriesModel>("Quran", 1, 0, "TranslationCategoriesModel");
-  qmlRegisterType<TranslationCollection>("Quran", 1, 0, "TranslationCollection");
   qmlRegisterType<RecitationModel>("Quran", 1, 0, "RecitationModel");
   qmlRegisterType<InstallableRecitationsModel>("Quran", 1, 0, "InstallableRecitationsModel");
   qmlRegisterType<BookmarksModel>("Quran", 1, 0, "BookmarksModel");
   qmlRegisterType<BookmarkItem>("Quran", 1, 0, "BookmarkItem");
   qmlRegisterType<QuranViewModel>("Quran", 1, 0, "QuranViewModel");
   qmlRegisterType<TextSupplier>("Quran", 1, 0, "TextSupplier");
-
+  qmlRegisterUncreatableType<Translation>("Quran", 1, 0, "Translation",
+					  "Use Translations to obtain a Translation");
   app.registerQmlTypes();
 
   app.addImageProvider(QLatin1String("icon"), new IconProvider);

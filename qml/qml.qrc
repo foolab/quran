@@ -9,7 +9,6 @@
     <file alias="qml/FavoritesPage.qml">FavoritesPage.qml</file>
     <file alias="qml/IndexPage.qml">IndexPage.qml</file>
     <file alias="qml/IndexDelegate.qml">IndexDelegate.qml</file>
-    <file alias="qml/TranslationDelegate.qml">TranslationDelegate.qml</file>
     <file alias="qml/Keyboard.qml">Keyboard.qml</file>
     <file alias="qml/CharacterKey.qml">CharacterKey.qml</file>
     <file alias="qml/NumberLabel.qml">NumberLabel.qml</file>
@@ -26,11 +25,8 @@
     <file alias="qml/SearchPage.qml">SearchPage.qml</file>
     <file alias="qml/SettingsPage.qml">SettingsPage.qml</file>
     <file alias="qml/SuraList.qml">SuraList.qml</file>
-    <file alias="qml/TranslationLanguageList.qml">TranslationLanguageList.qml</file>
-    <file alias="qml/TranslationsAddPage.qml">TranslationsAddPage.qml</file>
+    <file alias="qml/TranslationAddPage.qml">TranslationAddPage.qml</file>
     <file alias="qml/TranslationSelector.qml">TranslationSelector.qml</file>
-    <file alias="qml/TranslationsListPage.qml">TranslationsListPage.qml</file>
-    <file alias="qml/TranslationsManager.qml">TranslationsManager.qml</file>
     <file alias="qml/MenuAction.qml">MenuAction.qml</file>
     <file alias="qml/VerseDelegate.qml">VerseDelegate.qml</file>
     <file alias="qml/ChapterDelegate.qml">ChapterDelegate.qml</file>

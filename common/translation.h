@@ -19,24 +19,26 @@
 #define TRANSLATION_H
 
 #include <QObject>
-#include <QPointer>
+#include <QPair>
 
 class Translations;
-class TranslationPrivate;
+class Downloader;
+class QNetworkReply;
+class QTemporaryFile;
 
 class Translation : public QObject {
   Q_OBJECT
 
   Q_ENUMS(Status);
 
-  Q_PROPERTY(int tid READ tid WRITE setTid NOTIFY tidChanged);
-  Q_PROPERTY(int downloadProgress READ downloadProgress NOTIFY downloadProgressChanged);
-  Q_PROPERTY(QString error READ error() NOTIFY errorChanged);
+  Q_PROPERTY(int tid READ tid CONSTANT);
+  Q_PROPERTY(QString uuid READ uuid CONSTANT);
+  Q_PROPERTY(QString name READ name CONSTANT);
+  Q_PROPERTY(QString language READ language CONSTANT);
+  Q_PROPERTY(qint64 downloadSize READ downloadSize NOTIFY downloadSizeChanged);
+  Q_PROPERTY(qint64 downloadProgress READ downloadProgress NOTIFY downloadProgressChanged);
   Q_PROPERTY(Status status READ status NOTIFY statusChanged);
-  Q_PROPERTY(Translations * translations READ translations WRITE setTranslations);
-
-  friend class TranslationPrivate;
-  friend class Translations;
+  Q_PROPERTY(bool loaded READ isLoaded NOTIFY loadedChanged);
 
 public:
   enum Status {
@@ -46,33 +48,63 @@ public:
     Error,
   };
 
-  Translation(QObject *parent = 0);
+  Translation(int tid, const QString& id,
+	      const QString& name, int language, Translations *parent = 0);
   ~Translation();
 
-  void setTid(int tid);
+  void setDownloader(Downloader *downloader);
+
   int tid() const;
+  QString uuid() const;
+  QString name() const;
+  QString language() const;
 
-  void setTranslations(Translations *translations);
-  Translations *translations() const;
+  qint64 downloadSize() const;
+  qint64 downloadProgress() const;
 
-  int downloadProgress() const;
+  void setStatus(Status status);
   Status status() const;
-  QString error() const;
 
-signals:
-  void tidChanged();
-  void downloadProgressChanged();
-  void statusChanged();
-  void errorChanged();
+  Q_INVOKABLE bool startDownload();
+
+  bool isLoaded() const;
+  void setLoaded(bool loaded);
 
 public slots:
-  void init();
+  void stopDownload();
+
+signals:
+  void statusChanged();
+  void downloadProgressChanged();
+  void downloadSizeChanged();
+  void loadedChanged();
+  void installed();
+
+private slots:
+  void replyDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+  void replyError();
+  void replyFinished();
+  void replyReadyRead();
 
 private:
-  int m_tid;
+  bool readData();
+  bool install();
 
-  TranslationPrivate *d_ptr;
-  QPointer<Translations> m_translations;
+  Translations *m_translations;
+  Downloader *m_downloader;
+  QNetworkReply *m_reply;
+  QTemporaryFile *m_file;
+  Status m_status;
+  const int m_tid;
+  qint64 m_size;
+  qint64 m_progress;
+  const QString m_name;
+  const int m_language;
+  const QString m_id;
+  bool m_loaded;
+
+  quint64 m_offset;
+  QList<QPair<off_t, size_t> > m_offsets;
 };
 
 #endif /* TRANSLATION_H */

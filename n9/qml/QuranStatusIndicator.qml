@@ -11,5 +11,5 @@ Rectangle {
         width: 32
         height: 32
         radius: 10
-        opacity: _dimmed ? 0.5 : 1.0
+        opacity: _dimmed ? 0.3 : 1.0
 }
