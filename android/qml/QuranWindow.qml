@@ -68,7 +68,7 @@ Ctrls.ApplicationWindow {
                     text: stack.currentItem ? stack.currentItem.__pageTitle : ""
                     font.pixelSize: quranTheme.fontSizeLarge
                     verticalAlignment: Text.AlignVCenter
-                    color: mouse.pressed && mouse.containsMouse ? quranTheme.highlightColor : quranTheme.textColor
+                    color: (backButton.pressed && backButton.containsMouse) || (mouse.pressed && mouse.containsMouse) ? quranTheme.highlightColor : quranTheme.textColor
                     visible: backButton.visible
                     opacity: backButton.opacity
 
