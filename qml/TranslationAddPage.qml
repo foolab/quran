@@ -107,7 +107,7 @@ QuranPage {
 
         header: QuranPageHeader {
             width: parent.width
-            title: qsTr("Available translations")
+            title: qsTr("Manage translations")
         }
     }
 }
