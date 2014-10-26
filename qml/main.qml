@@ -3,122 +3,119 @@ import QtQuick 2.0
 import Quran 1.0
 
 QuranWindow {
-        id: root
+    id: root
 
-        Settings {
-                id: settings
+    Settings {
+        id: settings
+    }
+
+    Downloader {
+        id: _downloader
+    }
+
+    DataProvider {
+        id: _data
+    }
+
+    Bookmarks {
+        id: _bookmarks
+        settings: settings
+    }
+
+    Translations {
+        id: _translations
+        settings: settings
+        downloader: _downloader
+        data: _data
+        Component.onCompleted: {
+            refresh()
+            loadTranslation(settings.defaultTranslation)
         }
 
-        Downloader {
-                id: _downloader
-        }
+        onDownloadError: banner.showMessage(qsTr("Failed to download %1").arg(name))
+    }
 
-        DataProvider {
-                id: _data
-        }
+    PhoneFlipControl {
+        id: flipControl
+        active: settings.flipToStopRecitation && _recitations.isPlaying
+        onFlipped: _recitations.stop()
+    }
 
-        Bookmarks {
-                id: _bookmarks
-                settings: settings
-        }
+    Recitations {
+        id: _recitations
+        settings: settings
+        data: _data
+        downloader: _downloader
+        onError: banner.show(qsTr("Failed to play recitation"))
+    }
 
-        Translations {
-            id: _translations
-            settings: settings
-            downloader: _downloader
-            data: _data
-            Component.onCompleted: {
-                refresh()
-                loadTranslation(settings.defaultTranslation)
+    QuranTheme {
+        id: quranTheme
+        inNightMode: settings.nightMode
+    }
+
+    RecitationsManager {
+        id: recitationsManager
+    }
+
+    FSMonitor {
+        id: fsmon
+        onAvailableChanged: {
+            if (!fsmon.available) {
+                // TODO: show banner
+                _translations.stopDownloads();
             }
+        }
+    }
 
-            onDownloadError: {
-                banner.showMessage(qsTr("Failed to download %1").arg(name))
-            }
+    initialPage: Component {
+        MainPage {}
+    }
+
+    Component.onCompleted: _data.setTextType(settings.textType)
+
+    QtObject {
+        id: pagePosition
+
+        property int sura: -1
+        property int aya: -1
+
+        signal changed
+
+        function isValid() {
+            return sura != -1 && aya != -1
         }
 
-        PhoneFlipControl {
-                id: flipControl
-                active: settings.flipToStopRecitation && _recitations.isPlaying
-                onFlipped: _recitations.stop()
+        function reset() {
+            sura = -1
+            aya = -1
         }
 
-        Recitations {
-                id: _recitations
-                settings: settings
-                data: _data
-                downloader: _downloader
-                onError: banner.show(qsTr("Failed to play recitation"))
+        function setPosition(sura, aya) {
+            pagePosition.sura = sura
+            pagePosition.aya = aya
+            settings.pageNumber = _data.pageNumberForSuraAndAya(sura, aya)
+            changed()
         }
-
-        QuranTheme {
-                id: quranTheme
-                inNightMode: settings.nightMode
-        }
-
-        RecitationsManager {
-                id: recitationsManager
-        }
-
-        FSMonitor {
-                id: fsmon
-                onAvailableChanged: {
-                        if (!fsmon.available) {
-// TODO: show banner
-                                _translations.stopDownloads();
-                        }
-                }
-        }
-
-
-        initialPage: Component {
-                MainPage {}
-        }
-
-        Component.onCompleted: _data.setTextType(settings.textType)
-
-        QtObject {
-                id: pagePosition
-
-                property int sura: -1
-                property int aya: -1
-
-                signal changed
-
-                function isValid() {
-                        return sura != -1 && aya != -1;
-                }
-
-                function reset() {
-                        sura = -1;
-                        aya = -1;
-                }
-
-                function setPosition(sura, aya) {
-                        pagePosition.sura = sura
-                        pagePosition.aya = aya
-                        settings.pageNumber = _data.pageNumberForSuraAndAya(sura, aya)
-                        changed()
-                }
 
 //                onSuraChanged: console.log("Sura " + sura);
 //                onAyaChanged: console.log("Aya " + aya);
 //                onYChanged: console.log("Y " + y);
-        }
+    }
 
-        Connections {
-                target: settings
-                onTextTypeChanged: {
-                        var type = _data.textType();
-                        if (!_data.setTextType(settings.textType)) {
-                                settings.textType = type;
-                        }
-                }
+    Connections {
+        target: settings
+        onTextTypeChanged: {
+            var type = _data.textType();
+            if (!_data.setTextType(settings.textType)) {
+                settings.textType = type;
+            }
         }
+    }
 
-        QuranNotificationBanner {
-            id: banner
-        }
+    QuranNotificationBanner {
+        id: banner
+    }
 /*
 // TODO:
         Connections {
