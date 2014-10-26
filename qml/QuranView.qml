@@ -154,7 +154,7 @@ QuranListView {
 
                     ToolButton {
                         icon.source: highlight ? "image://icon/translation.png?" + quranTheme.buttonHighlightColor : "image://icon/translation.png?" + quranTheme.buttonNormalColor
-                        visible: settings.translationMode == 2
+                        visible: settings.translationsHidden
                         onClicked: translation.shown = !translation.shown;
                     }
 

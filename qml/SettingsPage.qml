@@ -124,17 +124,10 @@ QuranPage {
                                 onCurrentIndexChanged: settings.orientation = currentIndex
                         }
 
-                        QuranComboBox {
-                                actions: [
-                                        MenuAction { text: qsTr("Disabled") },
-                                        MenuAction { text: qsTr("Enabled") },
-                                        MenuAction { text: qsTr("Hidden") }
-                                ]
-
-                                label: qsTr("Translation")
-                                currentIndex: settings.translationMode
-                                onCurrentIndexChanged: settings.translationMode = currentIndex
-                                enabled: _translations.installedCount > 0
+                        QuranTextSwitch {
+                                text: qsTr("Hide translations by default")
+                                checked: settings.translationsHidden
+                                onCheckedChanged: settings.translationsHidden = checked
                         }
 
                         QuranTextSwitch {

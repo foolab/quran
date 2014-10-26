@@ -37,7 +37,7 @@ class Settings : public QObject {
   Q_PROPERTY(QString version READ version CONSTANT);
   Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged);
   Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY orientationChanged);
-  Q_PROPERTY(int translationMode READ translationMode WRITE setTranslationMode NOTIFY translationModeChanged);
+  Q_PROPERTY(bool translationsHidden READ areTranslationsHidden WRITE setTranslationsHidden NOTIFY translationsHiddenChanged);
   Q_PROPERTY(QString defaultTranslation READ defaultTranslation WRITE setDefaultTranslation NOTIFY defaultTranslationChanged);
 
   Q_PROPERTY(bool searchMatchWholeWords READ searchMatchWholeWords WRITE setSearchMatchWholeWords NOTIFY searchMatchWholeWordsChanged);
@@ -85,8 +85,8 @@ public:
   void setOrientation(int orientation);
   int orientation() const;
 
-  void setTranslationMode(int mode);
-  int translationMode() const;
+  void setTranslationsHidden(bool hidden);
+  bool areTranslationsHidden() const;
 
   void setDefaultTranslation(const QString& id);
   QString defaultTranslation() const;
@@ -132,7 +132,7 @@ signals:
   void yChanged();
   void fullScreenChanged();
   void orientationChanged();
-  void translationModeChanged();
+  void translationsHiddenChanged();
   void defaultTranslationChanged();
   void translationFontSizeChanged();
   void searchMatchWholeWordsChanged();

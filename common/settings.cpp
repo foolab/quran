@@ -30,7 +30,7 @@
 #define DEFAULT_PAGE_NUMBER        0
 #define DEFAULT_FULL_SCREEN        false
 #define DEFAULT_ORIENTATION        1
-#define DEFAULT_TRANSLATION_MODE   0
+#define DEFAULT_TRANSLATIONS_HIDDEN   false
 #define DEFAULT_FLIP_TO_STOP_RECITATION       true
 #define DEFAULT_NIGHT_MODE         false
 #define DEFAULT_THEME              "blue"
@@ -64,12 +64,6 @@ Q_DECLARE_METATYPE(QList<uint>);
  * 0 = Automatic
  * 1 = Portrait
  * 2 = Landscape
- */
-/*!
- * Translation mode:
- * 0 = Off
- * 1 = On
- * 2 = Hidden
  */
 Settings::Settings(QObject *parent) : QObject(parent) {
   qRegisterMetaType<QList<uint> >("QList<uint>");
@@ -211,18 +205,15 @@ int Settings::orientation() const {
   return qBound(0, m_settings->value("General/orientation", DEFAULT_ORIENTATION).toInt(), 2);
 }
 
-void Settings::setTranslationMode(int mode) {
-  int m = qBound(0, mode, 2);
-
-  if (translationMode() != m) {
-    m_settings->setValue("General/translationMode", m);
-    emit translationModeChanged();
+void Settings::setTranslationsHidden(bool hidden) {
+  if (areTranslationsHidden() != hidden) {
+    m_settings->setValue("translationsHidden", hidden);
+    emit translationsHiddenChanged();
   }
 }
 
-int Settings::translationMode() const {
-  return qBound(0, m_settings->value("General/translationMode",
-				     DEFAULT_TRANSLATION_MODE).toInt(), 2);
+bool Settings::areTranslationsHidden() const {
+  return m_settings->value("translationsHidden", DEFAULT_TRANSLATIONS_HIDDEN).toBool();
 }
 
 void Settings::setDefaultTranslation(const QString& id) {
@@ -342,4 +333,5 @@ void Settings::reset() {
   setFlipToStopRecitation(DEFAULT_FLIP_TO_STOP_RECITATION);
   setNightModeEnabled(DEFAULT_NIGHT_MODE);
   setTheme(DEFAULT_THEME);
+  setTranslationsHidden(DEFAULT_TRANSLATIONS_HIDDEN);
 }

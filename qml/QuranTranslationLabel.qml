@@ -11,7 +11,7 @@ Item {
 
     width: parent.width
     height: rect.height + 8
-    visible: item.chapter != -1 && item.verse != -1 && (settings.translationMode == 1 || (item.shown && settings.translationMode == 2))
+    visible: item.chapter != -1 && item.verse != -1 && ((item.shown && settings.translationsHidden) || !settings.translationsHidden)
     opacity: visible ? 1 : 0
 
     Behavior on opacity {
@@ -44,8 +44,8 @@ Item {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        if (settings.translationMode == 2) {
-                            shown = !shown;
+                        if (settings.translationsHidden) {
+                            shown = !shown
                         }
                     }
                 }
