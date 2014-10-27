@@ -447,18 +447,11 @@ bool output() {
   puts("// Command:");
   printf("// %s\n", QCoreApplication::arguments().join(" ").toUtf8().data());
   puts("");
-  puts("#define MIN_SURA 0");
-  puts("#define MAX_SURA 113");
-  puts("#define MIN_PAGE 0");
-  puts("#define MAX_PAGE 603");
   printf("#define MIN_FRAG %i\n", frags.first().index);
   printf("#define MAX_FRAG %i\n", frags.last().index);
   printf("#define MIN_TEXT %i\n", 0);
   printf("#define MAX_TEXT %i\n", offsets.size() - 1);
-  puts("#define MIN_PART 0");
-  puts("#define MAX_PART 29");
   puts("");
-  printf("#define BASMALA \"%s\"\n", encode(basmala).toLatin1().data());
   printf("#define PREFIX \"%s\"\n", encode(prefix).toLatin1().data());
   puts("");
   puts("struct _Sura {");

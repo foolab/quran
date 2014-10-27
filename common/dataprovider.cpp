@@ -25,10 +25,20 @@
 #include <QDebug>
 #include "textprovider.h"
 
+#define MIN_CHAPTER 0
+#define MAX_CHAPTER 113
+#define MIN_PAGE 0
+#define MAX_PAGE 603
+#define MIN_PART 0
+#define MAX_PART 29
+
 #define CLAMP(min, x, max) qMax(qMin(x, max), min)
 
 DataProvider::DataProvider(QObject *parent) :
-  QObject(parent), m_index(-1), m_data(0), m_secondary(0) {
+  QObject(parent),
+  m_index(-1),
+  m_data(0),
+  m_secondary(0) {
 
 }
 
@@ -50,7 +60,7 @@ int DataProvider::pageCount() const {
 }
 
 int DataProvider::partCount() const {
-  return 30;
+  return MAX_PART + 1;
 }
 
 QStringList DataProvider::surasForPage(int page) {
@@ -79,7 +89,7 @@ int DataProvider::firstSuraForPage(int page) {
 }
 
 int DataProvider::verseCount() const {
-  return MAX_SURA + 1;
+  return MAX_CHAPTER + 1;
 }
 
 QString DataProvider::suraName(int sura) {
@@ -237,7 +247,7 @@ bool DataProvider::setTextType(int index) {
 }
 
 Sura DataProvider::sura(int index) const {
-  return Sura(CLAMP(MIN_SURA, index, MAX_SURA));
+  return Sura(CLAMP(MIN_CHAPTER, index, MAX_CHAPTER));
 }
 
 Page DataProvider::pageFromIndex(int index) const {
@@ -245,11 +255,11 @@ Page DataProvider::pageFromIndex(int index) const {
 }
 
 Page DataProvider::pageForSura(int sura) const {
-  return Page(Suras[CLAMP(MIN_SURA, sura, MAX_SURA)].page);
+  return Page(Suras[CLAMP(MIN_CHAPTER, sura, MAX_CHAPTER)].page);
 }
 
 Page DataProvider::page(int sura, int aya) const {
-  sura = CLAMP(MIN_SURA, sura, MAX_SURA);
+  sura = CLAMP(MIN_CHAPTER, sura, MAX_CHAPTER);
 
   aya = CLAMP(0, aya, Suras[sura].length - 1);
 
