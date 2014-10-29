@@ -41,21 +41,28 @@ QuranWindow {
         onFlipped: _recitations.stop()
     }
 
+    MediaPlayer {
+        id: audioPlayer
+    }
+
     Recitations {
         id: _recitations
+        player: audioPlayer
         settings: settings
-        data: _data
-        downloader: _downloader
-        onError: banner.show(qsTr("Failed to play recitation"))
+//        data: _data
+//        downloader: _downloader
+// TODO:
+//        onError: banner.show(qsTr("Failed to play recitation"))
+
+        Component.onCompleted: {
+            refresh()
+            loadRecitation(settings.defaultRecitation)
+        }
     }
 
     QuranTheme {
         id: quranTheme
         inNightMode: settings.nightMode
-    }
-
-    RecitationsManager {
-        id: recitationsManager
     }
 
     FSMonitor {

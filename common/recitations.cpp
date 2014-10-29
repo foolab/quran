@@ -17,39 +17,53 @@
 
 #include "recitations.h"
 #include "recitation.h"
-#include <QDebug>
 #include "settings.h"
-#include "mediaplayer.h"
-#include "media.h"
-#include "mediaplaylist.h"
 #include "recite-meta.h"
+#ifdef QT_VERSION_5
+#include <QQmlInfo>
+#include <QQmlEngine>
+#else
+#include <QDeclarativeInfo>
+#include <QDeclarativeEngine>
+#endif
+#include <QDir>
+#include "mediaplayer.h"
 
 Recitations::Recitations(QObject *parent)
-  : QObject(parent),
+  : QAbstractListModel(parent),
     m_settings(0),
     m_data(0),
-    m_player(0),
-    m_recitation(0),
     m_downloader(0),
-    m_chapter(-1),
-    m_verse(-1) {
+    m_player(0) {
 
+  QHash<int, QByteArray> roles;
+
+  roles[RecitationRole] = "recitation";
+
+  setRoleNames(roles);
 }
 
 Recitations::~Recitations() {
-  if (m_player) {
-    m_player->stop();
+  clear();
+}
+
+void Recitations::clear() {
+  // unload recitation
+  loadRecitation(QString());
+
+  bool emitSignal = !m_recitations.isEmpty();
+  if (emitSignal) {
+    beginRemoveRows(QModelIndex(), 0, m_recitations.size() - 1);
   }
 
-  qDeleteAll(m_installed);
-  m_installed.clear();
+  qDeleteAll(m_recitations);
+  m_recitations.clear();
 
-  if (m_player) {
-    delete m_player;
-    m_player = 0;
+  if (emitSignal) {
+    endRemoveRows();
   }
 
-  m_recitation = 0;
+  emit installedCountChanged();
 }
 
 Settings *Recitations::settings() const {
@@ -69,7 +83,6 @@ DataProvider *Recitations::data() const {
 
 void Recitations::setData(DataProvider *data) {
   if (m_data != data) {
-
     m_data = data;
     emit dataChanged();
   }
@@ -81,67 +94,169 @@ Downloader *Recitations::downloader() const {
 
 void Recitations::setDownloader(Downloader *downloader) {
   if (m_downloader != downloader) {
-
     m_downloader = downloader;
     emit downloaderChanged();
   }
 }
 
-int Recitations::chapter() const {
-  return m_chapter;
+MediaPlayer *Recitations::player() const {
+  return m_player;
 }
 
-int Recitations::verse() const {
-  return m_verse;
-}
-
-void Recitations::setChapter(int chapter) {
-  if (chapter != m_chapter) {
-    m_chapter = chapter;
-    emit chapterChanged();
+void Recitations::setPlayer(MediaPlayer *player) {
+  if (m_player != player) {
+    m_player = player;
+    emit playerChanged();
   }
-}
-
-void Recitations::setVerse(int verse) {
-  if (m_verse != verse) {
-    m_verse = verse;
-    emit verseChanged();
-  }
-}
-
-QString Recitations::current() const {
-  return m_current;
-}
-
-QStringList Recitations::installed() const {
-  return m_installed.keys();
 }
 
 void Recitations::refresh() {
+  clear();
+
+  QList<Recitation *> recitations;
+
+  // Create entries for all our known recitations
+  for (int x = 0; x < RECITATIONS_LEN; x++) {
+    RecitationInfo *info = new RecitationInfo;
+    info->m_type = Recitation::Online,
+    info->m_id = x;
+    info->m_uuid = QString::fromUtf8(Rs[x].id);
+    info->m_name = QString::fromUtf8(Rs[x].translated_name);
+    info->m_quality = QString::fromUtf8(Rs[x].quality);
+    info->m_dir =
+      QString("%1%2%3%2").arg(m_settings->recitationsDir()).arg(QDir::separator()).arg(info->m_uuid);
+    info->m_url = QString::fromUtf8(Rs[x].url);
+    info->m_status = Recitation::None;
+
+    recitations << new Recitation(info, this);
+  }
+
   QDir dir(m_settings->recitationsDir());
   dir.mkpath(".");
 
-  qDeleteAll(m_installed);
-  m_installed.clear();
-
   QStringList entries(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
 
-  entries += dir.entryList(QStringList() << "*.zip", QDir::Files | QDir::NoDotAndDotDot);
-
   foreach (const QString& entry, entries) {
-    Recitation *r = Recitation::create(entry, dir.filePath(entry));
-    if (r && !m_installed.contains(r->id())) {
-      m_installed.insert(r->id(), r);
+    QString recitationDir =
+      QString("%1%2%3%2").arg(m_settings->recitationsDir()).arg(QDir::separator()).arg(entry);
+    QString id = entry;
+
+    RecitationInfo *info = Recitation::guessType(recitationDir);
+    if (!info) {
+      qmlInfo(this) << "Invalid recitation in " << recitationDir;
+      continue;
     }
-    else if (r) {
-      delete r;
+
+    info->m_uuid = id;
+
+    // If it's an online recitation and we know about it then update the existing
+    if (info->m_type == Recitation::Online) {
+      int x = lookup(info->m_uuid);
+      if (x == -1) {
+	// That is strange but we will just load it.
+	info->m_id = recitations.size();
+	recitations << new Recitation(info, this);
+	recitations[info->m_id]->setStatus(Recitation::Installed);
+      } else {
+	recitations[x]->setStatus(Recitation::Installed);
+	delete info;
+      }
+    } else {
+      info->m_id = recitations.size();
+      recitations << new Recitation(info, this);
+      recitations[info->m_id]->setStatus(Recitation::Installed);
     }
   }
 
-  emit refreshed();
+  // zipped zekr
+  entries = dir.entryList(QStringList() << "*.zip", QDir::Files | QDir::NoDotAndDotDot);
+  foreach (const QString& entry, entries) {
+    QString recitationDir =
+      QString("%1%2%3").arg(m_settings->recitationsDir()).arg(QDir::separator()).arg(entry);
+    QString id = entry;
+
+    RecitationInfo *info = Recitation::guessType(recitationDir);
+    if (!info) {
+      qmlInfo(this) << "Invalid recitation in " << recitationDir;
+      continue;
+    }
+
+    info->m_uuid = id;
+    info->m_id = recitations.size();
+    recitations << new Recitation(info, this);
+    recitations[info->m_id]->setStatus(Recitation::Installed);
+  }
+
+  foreach (Recitation *r, recitations) {
+    QObject::connect(r, SIGNAL(enabled()), this, SIGNAL(installedCountChanged()));
+    QObject::connect(r, SIGNAL(disabled()), this, SIGNAL(installedCountChanged()));
+  }
+
+  beginInsertRows(QModelIndex(), 0, recitations.size() - 1);
+  m_recitations = recitations;
+  endInsertRows();
+
   emit installedCountChanged();
+  emit refreshed();
 }
 
+bool Recitations::loadRecitation(const QString& id) {
+  if (id.isEmpty()) {
+    if (Recitation *r = m_player->recitation()) {
+      r->setLoaded(false);
+    }
+
+    m_player->setRecitation(0);
+    return true;
+  }
+
+  int x = -1;
+  // lookup() checks built ins only
+  foreach (Recitation *r, m_recitations) {
+    if (r->uuid() == id) {
+      x = r->rid();
+      break;
+    }
+  }
+
+  if (x == -1) {
+    qmlInfo(this) << "Unknown recitation " << id;
+    return false;
+  }
+
+  if (m_recitations[x]->status() == Recitation::Installed) {
+    m_player->setRecitation(m_recitations[x]);
+    m_recitations[x]->setLoaded(true);
+    return true;
+  }
+
+  qmlInfo(this) << "Recitation " << id << " is not enabled";
+
+  return false;
+}
+
+int Recitations::lookup(const QString& id) {
+  for (int x = 0; x < RECITATIONS_LEN; x++) {
+    if (QLatin1String(Rs[x].id) == id) {
+      return x;
+    }
+  }
+
+  return -1;
+}
+
+int Recitations::installedCount() const {
+  int count = 0;
+  foreach (Recitation *r, m_recitations) {
+    if (r->status() == Recitation::Installed) {
+      ++count;
+    }
+  }
+
+  return count;
+}
+
+#if 0
 Recitation *Recitations::recitation(const QString& id) {
   return m_installed.contains(id) ? m_installed[id] : 0;
 }
@@ -390,3 +505,43 @@ bool Recitations::disableInstallable(const QString& rid) {
 bool Recitations::installableIsInstalled(const QString& rid) {
   return m_installed.contains(rid);
 }
+#endif
+
+int Recitations::rowCount(const QModelIndex& parent) const {
+  if (!parent.isValid()) {
+    return m_recitations.size();
+  }
+
+  return 0;
+}
+
+QVariant Recitations::data(const QModelIndex& index, int role) const {
+  if (index.row() >= 0 && index.row() < m_recitations.size()) {
+    QObject *recitation = m_recitations[index.row()];
+
+    switch (role) {
+    case RecitationRole:
+#ifdef QT_VERSION_5
+      QQmlEngine::setObjectOwnership(recitation, QQmlEngine::CppOwnership);
+#else
+      QDeclarativeEngine::setObjectOwnership(recitation, QDeclarativeEngine::CppOwnership);
+#endif
+      return QVariant::fromValue<QObject *>(recitation);
+
+    default:
+      break;
+    }
+  }
+
+  return QVariant();
+}
+
+#ifdef QT_VERSION_5
+QHash<int, QByteArray> Recitations::roleNames() const {
+  return m_roles;
+}
+
+void Recitations::setRoleNames(const QHash<int, QByteArray>& roles) {
+  m_roles = roles;
+}
+#endif

@@ -19,7 +19,7 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            translations.cpp translation.cpp downloader.cpp textprovider.cpp \
            index.cpp search.cpp recitations.cpp recitation.cpp mediaplaylist.cpp \
            main.cpp phoneflipcontrol.cpp mediaplayer.cpp iconprovider.cpp \
-           media.cpp audiooutput.cpp mediadecoder.cpp models.cpp bookmarksmodel.cpp \
+           media.cpp audiooutput.cpp mediadecoder.cpp bookmarksmodel.cpp \
            bookmarkitem.cpp mediaresampler.cpp searchmodel.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h quranviewmodel.h \
@@ -27,7 +27,7 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h qu
            translations.h translation.h downloader.h textprovider.h \
            index.h search.h recitations.h recitation.h mediaplaylist.h \
            phoneflipcontrol.h mediaplayer.h iconprovider.h \
-           media.h audiooutput.h mediadecoder.h models.h bookmarksmodel.h \
+           media.h audiooutput.h mediadecoder.h bookmarksmodel.h \
            bookmarkitem.h mediaresampler.h searchmodel.h
 
 !android {

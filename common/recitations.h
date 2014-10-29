@@ -18,48 +18,30 @@
 #ifndef RECITATIONS_H
 #define RECITATIONS_H
 
-#include <QObject>
-#include <QDir>
-#include <QMap>
-#include <QVariant>
+#include <QAbstractListModel>
 
 class Settings;
 class DataProvider;
 class Recitation;
-class MediaPlayer;
-class AudioPolicy;
-class MediaPlaylist;
 class Downloader;
+class MediaPlayer;
 
-class Recitations : public QObject {
+class Recitations : public QAbstractListModel {
   Q_OBJECT
 
   Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
-  Q_PROPERTY(QString current READ current NOTIFY currentChanged);
-  Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY playingChanged);
-  Q_PROPERTY(int chapter READ chapter NOTIFY chapterChanged);
-  Q_PROPERTY(int verse READ verse NOTIFY verseChanged);
   Q_PROPERTY(Settings *settings READ settings WRITE setSettings NOTIFY settingsChanged);
-  Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
   Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
+  Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
+  Q_PROPERTY(MediaPlayer *player READ player WRITE setPlayer NOTIFY playerChanged);
+
+  enum {
+    RecitationRole = Qt::UserRole,
+  };
 
 public:
   Recitations(QObject *parent = 0);
   ~Recitations();
-
-  QStringList installed() const;
-
-  Recitation *recitation(const QString& id);
-
-  Q_INVOKABLE bool load(const QString& id);
-  Q_INVOKABLE bool loadDefault();
-
-  QString current() const;
-
-  bool isPlaying() const;
-
-  int chapter() const;
-  int verse() const;
 
   Settings *settings() const;
   void setSettings(Settings *settings);
@@ -72,64 +54,41 @@ public:
 
   int installedCount() const;
 
-  QStringList installable();
-  QString installableName(const QString& rid);
-  QString installableQuality(const QString& rid);
-  bool installableIsInstalled(const QString& rid);
+  MediaPlayer *player() const;
+  void setPlayer(MediaPlayer *player);
 
-  Q_INVOKABLE bool enableInstallable(const QString& rid);
-  Q_INVOKABLE bool disableInstallable(const QString& rid);
+  Q_INVOKABLE bool loadRecitation(const QString& id);
+
+  int rowCount(const QModelIndex& parent = QModelIndex()) const;
+  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
 public slots:
   void refresh();
-  void play(int chapter, int verse);
-  void unload();
-  void playPage(int page);
-  void playChapter(int chapter);
-  void playPart(int part);
-  void stop();
 
 signals:
-  void currentChanged();
-  void playingChanged();
-  void error(const QString& msg);
-  void positionChanged(int chapter, int verse);
-  void verseChanged();
-  void chapterChanged();
   void installedCountChanged();
-  void added(const QString& id);
-  void removed(const QString& id);
-  void refreshed();
-
   void settingsChanged();
   void downloaderChanged();
   void dataChanged();
-
-private slots:
-  void playerStateChanged();
-  void playerError();
-  void playerPositionChanged(int chapter, int verse);
+  void playerChanged();
+  void refreshed();
 
 private:
-  void setChapter(int chapter);
-  void setVerse(int verse);
-  int recetationId(const QString& rid);
+  void clear();
+  int lookup(const QString& id);
 
   Settings *m_settings;
   DataProvider *m_data;
-
-  QHash<QString, Recitation *> m_installed;
-
-  MediaPlayer *m_player;
-  Recitation *m_recitation;
   Downloader *m_downloader;
+  MediaPlayer *m_player;
 
-  QString m_current;
+  QList<Recitation *> m_recitations;
 
-  int m_chapter;
-  int m_verse;
-
-  int m_playingId;
+#ifdef QT_VERSION_5
+  QHash<int, QByteArray> roleNames() const;
+  void setRoleNames(const QHash<int, QByteArray>& roles);
+  QHash<int, QByteArray> m_roles;
+#endif
 };
 
 #endif /* RECITATIONS_H */

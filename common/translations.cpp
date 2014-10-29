@@ -28,6 +28,7 @@
 #include <QDeclarativeInfo>
 #include <QDeclarativeEngine>
 #endif
+#include <QDir>
 
 #define INDEX_SUFFIX ".idx"
 #define DATA_SUFFIX ".txt"

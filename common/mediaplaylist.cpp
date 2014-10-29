@@ -56,12 +56,12 @@ void MediaPlaylist::playPage(int page) {
       Sura s = m_data->sura(f.sura());
 
       if (s.hasBasmala()) {
-	addMedia(m_recitation->mediaUrl(1, 1, index++));
+	//	addMedia(m_recitation->mediaUrl(1, 1, index++));
       }
     }
 
     for (int x = f.start(); x < f.start() + f.size(); x++) {
-      addMedia(m_recitation->mediaUrl(f.sura() + 1, x + 1, index++));
+      //      addMedia(m_recitation->mediaUrl(f.sura() + 1, x + 1, index++));
     }
   }
 }
@@ -79,11 +79,11 @@ void MediaPlaylist::playChapter(int chapter) {
   int index = 0;
 
   if (s.hasBasmala()) {
-    addMedia(m_recitation->mediaUrl(1, 1, index++));
+    //    addMedia(m_recitation->mediaUrl(1, 1, index++));
   }
 
   for (int x = 0; x < s.size(); x++) {
-    addMedia(m_recitation->mediaUrl(chapter + 1, x + 1, index++));
+    //    addMedia(m_recitation->mediaUrl(chapter + 1, x + 1, index++));
   }
 }
 
@@ -95,7 +95,7 @@ void MediaPlaylist::playVerse(int chapter, int verse) {
   m_mode = PlayVerse;
   m_playingId = -1;
 
-  addMedia(m_recitation->mediaUrl(chapter + 1, verse + 1, 0));
+  //  addMedia(m_recitation->mediaUrl(chapter + 1, verse + 1, 0));
 }
 
 void MediaPlaylist::playPart(int part) {
@@ -115,12 +115,12 @@ void MediaPlaylist::playPart(int part) {
       Sura s = m_data->sura(frag.sura());
 
       if (s.hasBasmala()) {
-	addMedia(m_recitation->mediaUrl(1, 1, index++));
+	//	addMedia(m_recitation->mediaUrl(1, 1, index++));
       }
     }
 
     for (int x = frag.start(); x < frag.start() + frag.size(); x++) {
-      addMedia(m_recitation->mediaUrl(frag.sura() + 1, x + 1, index++));
+      //      addMedia(m_recitation->mediaUrl(frag.sura() + 1, x + 1, index++));
     }
   }
 }
@@ -180,6 +180,7 @@ bool MediaPlaylist::signalMedia(int index, int& chapter, int& verse) const {
 }
 
 void MediaPlaylist::start() {
+#if 0
   if (m_recitation->isOnline()) {
     download();
   }
@@ -190,6 +191,7 @@ void MediaPlaylist::start() {
 
     emit mediaAvailable(Media::eos());
   }
+#endif
 }
 
 void MediaPlaylist::stop() {

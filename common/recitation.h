@@ -18,42 +18,97 @@
 #ifndef RECITATION_H
 #define RECITATION_H
 
+#include <QObject>
 #include <QString>
+#include <QUrl>
 
 class Media;
-class QUrl;
+class RecitationInfo;
+class QIODevice;
 
-class Recitation {
+class Recitation : public QObject {
+  Q_OBJECT
+
+  Q_ENUMS(Type Status);
+
+  Q_PROPERTY(int rid READ rid CONSTANT);
+  Q_PROPERTY(QString name READ name CONSTANT);
+  Q_PROPERTY(QString uuid READ uuid CONSTANT);
+  Q_PROPERTY(QString quality READ quality CONSTANT);
+  Q_PROPERTY(Type type READ type CONSTANT);
+  Q_PROPERTY(Status status READ status WRITE setStatus NOTIFY statusChanged);
+  Q_PROPERTY(bool loaded READ isLoaded NOTIFY loadedChanged);
+
 public:
-  static Recitation *create(const QString& id, const QString& dir);
-  static Recitation *createOnline(const QString& name, const QString& id,
-				  const QString& dir, const QUrl& url);
+  enum Type {
+    Unzipped = 0,
+    Zipped,
+    Simple,
+    Online,
+  };
 
-  virtual ~Recitation();
+  enum Status {
+    None,
+    Installed
+  };
 
-  QString id() const;
+  static RecitationInfo *guessType(const QString& recitationDir);
+
+  Recitation(RecitationInfo *info, QObject *parent = 0);
+  ~Recitation();
+
+  QUrl playBackUrl(const Media& media);
+  QUrl downloadBackUrl(const Media& media);
+  QByteArray data(const Media& media);
+  bool setData(const Media& media, const QByteArray& data);
+
+  bool isLoaded() const;
+  void setLoaded(bool loaded);
+
+  Q_INVOKABLE bool enable();
+  Q_INVOKABLE bool disable();
+
+  /*
+    Q_INVOKABLE bool clear();
+    Q_INVOKABLE bool download();
+    Q_INVOKABLE bool remove();
+  */
+
+  int rid() const;
+  QString uuid() const;
   QString name() const;
-  QString dir() const;
+  QString quality() const;
 
-  bool isValid();
+  Type type() const;
+  Status status() const;
+  void setStatus(Status status);
 
-  virtual Media mediaUrl(int chapter, int verse, int index) = 0;
-
-  virtual QByteArray data(const Media& media);
-  virtual bool setData(const Media& media, const QByteArray& data);
-
-  virtual bool install();
-  virtual bool enable();
-  virtual bool disable();
-  virtual bool isOnline();
-
-protected:
-  Recitation(const QString& name, const QString& id, const QString& dir);
+signals:
+  void statusChanged();
+  void enabled();
+  void disabled();
+  void loadedChanged();
 
 private:
-  const QString m_name;
-  const QString m_id;
-  const QString m_dir;
+  static RecitationInfo *parseZekr(QIODevice *dev, const Type& type);
+
+  QString path(const QString fileName) const;
+
+  RecitationInfo *m_info;
+  bool m_loaded;
+};
+
+class RecitationInfo {
+public:
+  QString m_uuid;
+  QString m_name;
+  QString m_quality;
+  QString m_dir;
+  QString m_subdir;
+  QUrl m_url;
+  int m_id;
+  Recitation::Type m_type;
+  Recitation::Status m_status;
 };
 
 #endif /* RECITATION_H */

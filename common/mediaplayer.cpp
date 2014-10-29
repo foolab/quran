@@ -152,3 +152,11 @@ void MediaPlayer::audioPositionChanged(int index) {
     emit positionChanged(chapter, verse);
   }
 }
+
+void MediaPlayer::setRecitation(Recitation *recitation) {
+  // TODO:
+}
+
+Recitation *MediaPlayer::recitation() const {
+  return 0;
+}

@@ -21,7 +21,7 @@ QuranPage {
                 },
                 MenuAction {
                         text: qsTr("Manage recitations")
-                        onClicked: pushAnimated(Qt.resolvedUrl("RecitationsListPage.qml"))
+                        onClicked: pushAnimated(Qt.resolvedUrl("RecitationAddPage.qml"))
                 },
                 MenuAction {
                         text: qsTr("Manage translations")

@@ -25,6 +25,7 @@ class Media;
 class MediaDecoder;
 class AudioPolicy;
 class AudioOutput;
+class Recitation;
 
 class MediaPlayer : public QObject {
   Q_OBJECT
@@ -36,6 +37,9 @@ public:
   void start(MediaPlaylist *list);
 
   bool isPlaying() const;
+
+  Recitation *recitation() const;
+  void setRecitation(Recitation *recitation);
 
 public slots:
   void stop();

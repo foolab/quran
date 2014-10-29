@@ -19,9 +19,6 @@
 #define TRANSLATIONS_H
 
 #include <QAbstractListModel>
-#include "translation.h"
-#include <QDir>
-#include <QVariant>
 
 class Downloader;
 class Settings;

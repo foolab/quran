@@ -28,13 +28,15 @@
 #include "phoneflipcontrol.h"
 #include "application.h"
 #include <QFontDatabase>
-#include "models.h"
 #include "bookmarksmodel.h"
 #include "bookmarkitem.h"
 #include "quranviewmodel.h"
 #include "searchmodel.h"
 #include "iconprovider.h"
 #include "textsupplier.h"
+#include "translation.h"
+#include "recitation.h"
+#include "mediaplayer.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -73,14 +75,16 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<FSMonitor>("Quran", 1, 0, "FSMonitor");
   qmlRegisterType<SearchModel>("Quran", 1, 0, "SearchModel");
   qmlRegisterType<PhoneFlipControl>("Quran", 1, 0, "PhoneFlipControl");
-  qmlRegisterType<RecitationModel>("Quran", 1, 0, "RecitationModel");
-  qmlRegisterType<InstallableRecitationsModel>("Quran", 1, 0, "InstallableRecitationsModel");
   qmlRegisterType<BookmarksModel>("Quran", 1, 0, "BookmarksModel");
   qmlRegisterType<BookmarkItem>("Quran", 1, 0, "BookmarkItem");
   qmlRegisterType<QuranViewModel>("Quran", 1, 0, "QuranViewModel");
   qmlRegisterType<TextSupplier>("Quran", 1, 0, "TextSupplier");
+  qmlRegisterType<MediaPlayer>("Quran", 1, 0, "MediaPlayer");
   qmlRegisterUncreatableType<Translation>("Quran", 1, 0, "Translation",
 					  "Use Translations to obtain a Translation");
+  qmlRegisterUncreatableType<Recitation>("Quran", 1, 0, "Recitation",
+					  "Use Recitations to obtain a Recitation");
+
   app.registerQmlTypes();
 
   app.addImageProvider(QLatin1String("icon"), new IconProvider);
