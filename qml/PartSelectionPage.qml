@@ -37,7 +37,7 @@ QuranPage {
 
                         onPlayClicked: {
                             settings.pageNumber = _data.pageNumberForPart(index)
-                            _recitations.playPart(index)
+                            playAudio(MediaPlayer.PlayPart, index)
                             popPage()
                         }
                 }

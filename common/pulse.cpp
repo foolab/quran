@@ -19,6 +19,12 @@
 #include "audiooutput.h"
 #include <QDebug>
 #include "media.h"
+#ifdef QT_VERSION_5
+#include <QQmlInfo>
+#else
+#include <QDeclarativeInfo>
+#endif
+#include <cstring>
 
 Pulse::Pulse(AudioOutput *parent) :
   QObject(parent),
@@ -81,7 +87,7 @@ bool Pulse::connect() {
   pa_context_set_state_callback(m_ctx, (pa_context_notify_cb_t)contextStateCallback, this);
 
   if (pa_context_connect(m_ctx, NULL, PA_CONTEXT_NOAUTOSPAWN, NULL) < 0) {
-    qDebug() << pa_context_errno(m_ctx);
+    qmlInfo(this) << "Error from pulseaudio " << std::strerror(pa_context_errno(m_ctx));
     pa_context_unref(m_ctx);
     m_ctx = 0;
     return false;
@@ -173,7 +179,7 @@ bool Pulse::createStream() {
   pa_stream_set_state_callback(m_stream, (pa_stream_notify_cb_t)streamStateCallback, this);
   pa_threaded_mainloop_lock(m_loop);
   if (pa_stream_connect_playback(m_stream, NULL, NULL, PA_STREAM_NOFLAGS, NULL, NULL) < 0) {
-    qDebug() << pa_context_errno(m_ctx);
+    qmlInfo(this) << "Error from pulseaudio " << std::strerror(pa_context_errno(m_ctx));
     pa_threaded_mainloop_unlock(m_loop);
     return false;
   }
@@ -239,7 +245,7 @@ void Pulse::writeData() {
     void *data;
     size_t len = buffer.data.size();
     if (pa_stream_begin_write(m_stream, &data, &len) < 0) {
-      qDebug() << pa_context_errno(m_ctx);
+      qmlInfo(this) << "Error from pulseaudio " << std::strerror(pa_context_errno(m_ctx));
       emit error();
       return;
     }
@@ -248,7 +254,7 @@ void Pulse::writeData() {
     memcpy(data, buffer.data.constData(), len);
     buffer.data.remove(0, len);
     if (pa_stream_write(m_stream, data, len, NULL, 0, PA_SEEK_RELATIVE) < 0) {
-      qDebug() << pa_context_errno(m_ctx);
+      qmlInfo(this) << "Error from pulseaudio " << std::strerror(pa_context_errno(m_ctx));
       emit error();
       return;
     }

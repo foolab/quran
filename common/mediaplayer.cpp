@@ -24,88 +24,26 @@
 #include "mediadecoder.h"
 #include "audiooutput.h"
 #include "audiopolicy.h"
+#ifdef QT_VERSION_5
+#include <QQmlInfo>
+#else
+#include <QDeclarativeInfo>
+#endif
 
 MediaPlayer::MediaPlayer(QObject *parent) :
   QObject(parent),
+  m_data(0),
   m_list(0),
   m_decoder(0),
   m_policy(0),
-  m_audio(0) {
+  m_audio(0),
+  m_recitation(0) {
 
   QObject::connect(this, SIGNAL(error()), this, SLOT(stop()));
 }
 
 MediaPlayer::~MediaPlayer() {
   stop();
-}
-
-void MediaPlayer::start(MediaPlaylist *list) {
-  m_list = list;
-
-  m_policy = new AudioPolicy(this);
-  QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
-  QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
-  QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
-
-  if (!m_policy->acquire()) {
-    emit error();
-    return;
-  }
-
-  QObject::connect(m_list, SIGNAL(mediaAvailable(const Media&)),
-		   this, SLOT(mediaAvailable(const Media&)));
-
-  m_decoder = new MediaDecoder(this);
-
-  m_list->start();
-
-  m_decoder->start();
-
-  emit stateChanged();
-}
-
-void MediaPlayer::stop() {
-  if (m_decoder) {
-    m_decoder->stop();
-    while (m_decoder->isRunning()) {
-      m_decoder->wait(20);
-    }
-
-    m_decoder->deleteLater();
-    m_decoder = 0;
-  }
-
-  if (m_audio) {
-    m_audio->stop();
-    QObject::disconnect(m_audio, SIGNAL(positionChanged(int)),
-			this, SLOT(audioPositionChanged(int)));
-
-    QObject::disconnect(m_audio, SIGNAL(error()), this, SIGNAL(error()));
-    QObject::disconnect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
-
-    m_audio->deleteLater();
-    m_audio = 0;
-  }
-
-  if (m_list) {
-    m_list->stop();
-    QObject::disconnect(m_list, SIGNAL(mediaAvailable(const Media&)),
-			this, SLOT(mediaAvailable(const Media&)));
-    m_list->deleteLater();
-    m_list = 0;
-
-    emit stateChanged();
-  }
-
-  if (m_policy) {
-    QObject::disconnect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
-    QObject::disconnect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
-    QObject::disconnect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
-
-    m_policy->release();
-    m_policy->deleteLater();
-    m_policy = 0;
-  }
 }
 
 bool MediaPlayer::isPlaying() const {
@@ -121,6 +59,7 @@ void MediaPlayer::policyAcquired() {
   QObject::connect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
 
   if (!m_audio->start()) {
+    qmlInfo(this) << "Failed to start audio output";
     delete m_audio;
     m_audio = 0;
     emit error();
@@ -154,9 +93,135 @@ void MediaPlayer::audioPositionChanged(int index) {
 }
 
 void MediaPlayer::setRecitation(Recitation *recitation) {
-  // TODO:
+  if (m_recitation) {
+    stop();
+  }
+
+  m_recitation = recitation;
 }
 
 Recitation *MediaPlayer::recitation() const {
-  return 0;
+  return m_recitation;
+}
+
+Downloader *MediaPlayer::downloader() const {
+  return m_downloader;
+}
+
+void MediaPlayer::setDownloader(Downloader *downloader) {
+  if (m_downloader != downloader) {
+    m_downloader = downloader;
+    emit downloaderChanged();
+  }
+}
+
+DataProvider *MediaPlayer::data() const {
+  return m_data;
+}
+
+void MediaPlayer::setData(DataProvider *data) {
+  if (m_data != data) {
+    m_data = data;
+    emit dataChanged();
+  }
+}
+
+bool MediaPlayer::play(const PlayType& type, uint id) {
+  stop();
+
+  if (!m_recitation) {
+    qmlInfo(this) << "No recitation set";
+    return false;
+  }
+
+  switch (type) {
+  case PlayVerse:
+    m_list = MediaPlaylist::verseList(m_data, m_recitation, m_downloader, id, this);
+    break;
+
+  case PlayPage:
+    m_list = MediaPlaylist::pageList(m_data, m_recitation, m_downloader, id, this);
+    break;
+
+  case PlayChapter:
+    m_list = MediaPlaylist::chapterList(m_data, m_recitation, m_downloader, id, this);
+    break;
+
+  case PlayPart:
+    m_list = MediaPlaylist::partList(m_data, m_recitation, m_downloader, id, this);
+    break;
+
+  default:
+    qmlInfo(this) << "Unknown play type" << type;
+    return false;
+  }
+
+  m_policy = new AudioPolicy(this);
+  QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
+  QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
+  QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
+
+  if (!m_policy->acquire()) {
+    delete m_list;
+    m_list = 0;
+    emit error();
+    return false;
+  }
+
+  QObject::connect(m_list, SIGNAL(mediaAvailable(const Media&)),
+		   this, SLOT(mediaAvailable(const Media&)));
+
+  m_decoder = new MediaDecoder(this);
+
+  m_list->start();
+
+  m_decoder->start();
+
+  emit playingChanged();
+
+  return true;
+}
+
+void MediaPlayer::stop() {
+  if (m_decoder) {
+    m_decoder->stop();
+    while (m_decoder->isRunning()) {
+      m_decoder->wait(20);
+    }
+
+    m_decoder->deleteLater();
+    m_decoder = 0;
+  }
+
+  if (m_audio) {
+    m_audio->stop();
+    QObject::disconnect(m_audio, SIGNAL(positionChanged(int)),
+			this, SLOT(audioPositionChanged(int)));
+
+    QObject::disconnect(m_audio, SIGNAL(error()), this, SIGNAL(error()));
+    QObject::disconnect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
+
+    m_audio->deleteLater();
+    m_audio = 0;
+  }
+
+  if (m_list) {
+    m_list->stop();
+    QObject::disconnect(m_list, SIGNAL(mediaAvailable(const Media&)),
+			this, SLOT(mediaAvailable(const Media&)));
+    m_list->deleteLater();
+    m_list = 0;
+
+    emit playingChanged();
+  }
+
+  if (m_policy) {
+    QObject::disconnect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
+    QObject::disconnect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
+    QObject::disconnect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
+
+    m_policy->release();
+    m_policy->deleteLater();
+    m_policy = 0;
+  }
 }

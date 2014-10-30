@@ -52,11 +52,6 @@ QuranPage {
         }
     }
 
-    Connections {
-        target: _recitations
-        onPositionChanged: pagePosition.setPosition(chapter, verse)
-    }
-
     toolBar: [
         ToolButton {
             icon.source: highlight ? "image://icon/reciter.png?" + quranTheme.buttonHighlightColor : "image://icon/reciter.png?" + quranTheme.buttonNormalColor
@@ -80,12 +75,12 @@ QuranPage {
         ToolButton {
             icon.source: highlight ? "image://icon/play.png?" + quranTheme.buttonHighlightColor : "image://icon/play.png?" + quranTheme.buttonNormalColor
             enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
-            onClicked: _recitations.playPage(settings.pageNumber)
+            onClicked: playAudio(MediaPlayer.PlayPage, settings.pageNumber)
         },
         ToolButton {
             icon.source: highlight ? "image://icon/stop.png?" + quranTheme.buttonHighlightColor : "image://icon/stop.png?" + quranTheme.buttonNormalColor
-            onClicked: _recitations.stop()
-            enabled: _recitations.isPlaying
+            onClicked: audioPlayer.stop()
+            enabled: audioPlayer.playing
         }
     ]
 }

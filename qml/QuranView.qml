@@ -132,7 +132,7 @@ QuranListView {
                 QuranVerseLabel {
                     id: label
                     width: parent.width
-                    color: _recitations.chapter == _chapter && _recitations.verse == _verse ? quranTheme.recitationHighlightColor : quranTheme.verseColor
+                    color: recitationPosition.chapter == _chapter && recitationPosition.verse == _verse ? quranTheme.recitationHighlightColor : quranTheme.verseColor
                     textSupplier: supplier
                     verse: _verse
                 }
@@ -161,7 +161,7 @@ QuranListView {
                     ToolButton {
                         icon.source: highlight ? "image://icon/play.png?" + quranTheme.buttonHighlightColor : "image://icon/play.png?" + quranTheme.buttonNormalColor
                         visible: settings.recitationMode != 0 && _recitations.installedCount > 0
-                        onClicked: _recitations.play(_chapter, _verse);
+                        onClicked: playAudio(MediaPlayer.PlayVerse, checker.bookmark)
                     }
                 }
 

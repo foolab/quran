@@ -33,14 +33,14 @@ class MediaPlaylist : public QObject {
 
 public:
   static MediaPlaylist *partList(DataProvider *data, Recitation *recitation,
-				 Downloader *downloader, int part, QObject *parent = 0);
+				 Downloader *downloader, uint part, QObject *parent = 0);
   static MediaPlaylist *pageList(DataProvider *data, Recitation *recitation,
-				 Downloader *downloader, int page, QObject *parent = 0);
+				 Downloader *downloader, uint page, QObject *parent = 0);
   static MediaPlaylist *verseList(DataProvider *data, Recitation *recitation,
-				  Downloader *downloader, int chapter, int verse,
+				  Downloader *downloader, uint serialized,
 				  QObject *parent = 0);
   static MediaPlaylist *chapterList(DataProvider *data, Recitation *recitation,
-				    Downloader *downloader, int chapter, QObject *parent = 0);
+				    Downloader *downloader, uint chapter, QObject *parent = 0);
 
   ~MediaPlaylist();
 

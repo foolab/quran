@@ -164,9 +164,6 @@ RecitationInfo *Recitation::parseZekr(QIODevice *dev, const Type& type) {
     quality = QString::fromUtf8(map["audio.quality"]);
   }
 
-  qDebug() << map;
-  qDebug() << subdir;
-
   if (name.isEmpty() || subdir.isEmpty()) {
     return 0;
   }
@@ -221,7 +218,7 @@ QUrl Recitation::playBackUrl(const Media& media) {
   return QUrl::fromLocalFile(mp3);
 }
 
-QUrl Recitation::downloadBackUrl(const Media& media) {
+QUrl Recitation::downloadUrl(const Media& media) {
   if (!m_info->m_url.isValid()) {
     return QUrl();
   }
@@ -352,6 +349,7 @@ void Recitation::setLoaded(bool loaded) {
   }
 }
 
+// TODO: remove this
 #if 0
 #include <QFile>
 #include <QDir>

@@ -37,22 +37,40 @@ QuranWindow {
 
     PhoneFlipControl {
         id: flipControl
-        active: settings.flipToStopRecitation && _recitations.isPlaying
-        onFlipped: _recitations.stop()
+// TODO:
+        active: settings.flipToStopRecitation && audioPlayer.playing
+        onFlipped: audioPlayer.stop()
+    }
+
+
+    function playAudio(mode, id) {
+        if (!audioPlayer.play(mode, id)) {
+            banner.showMessage(qsTr("Failed to start audio playback"))
+        }
     }
 
     MediaPlayer {
         id: audioPlayer
+        downloader: _downloader
+        data: _data
+        onError: banner.showMessage(qsTr("Failed to play recitation"))
+
+        onPositionChanged: {
+            pagePosition.setPosition(chapter, verse)
+            recitationPosition.verse = verse
+            recitationPosition.chapter = chapter
+        }
+
+        onPlayingChanged: {
+            recitationPosition.verse = -1
+            recitationPosition.chapter = -1
+        }
     }
 
     Recitations {
         id: _recitations
         player: audioPlayer
         settings: settings
-//        data: _data
-//        downloader: _downloader
-// TODO:
-//        onError: banner.show(qsTr("Failed to play recitation"))
 
         Component.onCompleted: {
             refresh()
@@ -108,6 +126,12 @@ QuranWindow {
 //                onSuraChanged: console.log("Sura " + sura);
 //                onAyaChanged: console.log("Aya " + aya);
 //                onYChanged: console.log("Y " + y);
+    }
+
+    QtObject {
+        id: recitationPosition
+        property int verse: -1
+        property int chapter: -1
     }
 
     Connections {

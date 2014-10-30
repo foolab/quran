@@ -37,7 +37,7 @@ QuranPage {
 
                         onPlayClicked: {
                                 pagePosition.setPosition(index, 0)
-                                _recitations.playChapter(index)
+                                playAudio(MediaPlayer.PlayChapter, index)
                                 popPage()
                         }
 

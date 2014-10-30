@@ -42,8 +42,10 @@ public:
 
   QList<uint> bookmarks() const;
 
-  Q_INVOKABLE int sura(uint bookmark);
-  Q_INVOKABLE int aya(uint bookmark);
+  Q_INVOKABLE static int sura(uint bookmark);
+  Q_INVOKABLE static int aya(uint bookmark);
+
+  static void deserialize(uint bookmark, int& sura, int& aya);
 
   bool isEmpty();
 
@@ -62,8 +64,6 @@ signals:
   void settingsChanged();
 
 private:
-  void deserialize(uint bookmark, int& sura, int& aya);
-
   QList<uint> m_bookmarks;
 
   Settings *m_settings;

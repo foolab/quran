@@ -20,34 +20,57 @@
 
 #include <QObject>
 
+class DataProvider;
 class MediaPlaylist;
 class Media;
 class MediaDecoder;
 class AudioPolicy;
 class AudioOutput;
 class Recitation;
+class Downloader;
 
 class MediaPlayer : public QObject {
   Q_OBJECT
 
+  Q_ENUMS(PlayType);
+
+  Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
+  Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
+  Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged);
+
 public:
+  enum PlayType {
+    PlayVerse,
+    PlayPage,
+    PlayChapter,
+    PlayPart,
+  };
+
   MediaPlayer(QObject *parent = 0);
   ~MediaPlayer();
 
-  void start(MediaPlaylist *list);
-
-  bool isPlaying() const;
-
   Recitation *recitation() const;
   void setRecitation(Recitation *recitation);
+
+  Downloader *downloader() const;
+  void setDownloader(Downloader *downloader);
+
+  DataProvider *data() const;
+  void setData(DataProvider *data);
+
+  Q_INVOKABLE bool play(const PlayType& type, uint id);
+
+  bool isPlaying() const;
 
 public slots:
   void stop();
 
 signals:
-  void error();
-  void stateChanged();
+  void downloaderChanged();
+  void playingChanged();
+  void dataChanged();
   void positionChanged(int chapter, int verse);
+  void error();
 
 private slots:
   void policyAcquired();
@@ -57,10 +80,13 @@ private slots:
   void audioPositionChanged(int index);
 
 private:
+  DataProvider *m_data;
   MediaPlaylist *m_list;
   MediaDecoder* m_decoder;
   AudioPolicy *m_policy;
   AudioOutput *m_audio;
+  Downloader *m_downloader;
+  Recitation *m_recitation;
 };
 
 #endif /* MEDIA_PLAYER_H */

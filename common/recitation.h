@@ -58,7 +58,7 @@ public:
   ~Recitation();
 
   QUrl playBackUrl(const Media& media);
-  QUrl downloadBackUrl(const Media& media);
+  QUrl downloadUrl(const Media& media);
   QByteArray data(const Media& media);
   bool setData(const Media& media, const QByteArray& data);
 

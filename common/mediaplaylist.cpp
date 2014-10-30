@@ -22,15 +22,21 @@
 #include "media.h"
 #include "downloader.h"
 #include <QNetworkReply>
+#include "bookmarks.h"
+#ifdef QT_VERSION_5
+#include <QQmlInfo>
+#else
+#include <QDeclarativeInfo>
+#endif
 
 MediaPlaylist::MediaPlaylist(DataProvider *data, Recitation *recitation,
-			     Downloader *downloader, QObject *parent)
-  : QObject(parent),
-    m_data(data),
-    m_recitation(recitation),
-    m_downloader(downloader),
-    m_playingId(-1),
-    m_reply(0) {
+			     Downloader *downloader, QObject *parent) :
+  QObject(parent),
+  m_data(data),
+  m_recitation(recitation),
+  m_downloader(downloader),
+  m_playingId(-1),
+  m_reply(0) {
 
 }
 
@@ -56,12 +62,12 @@ void MediaPlaylist::playPage(int page) {
       Sura s = m_data->sura(f.sura());
 
       if (s.hasBasmala()) {
-	//	addMedia(m_recitation->mediaUrl(1, 1, index++));
+	addMedia(Media(m_recitation, 1, 1, index++));
       }
     }
 
     for (int x = f.start(); x < f.start() + f.size(); x++) {
-      //      addMedia(m_recitation->mediaUrl(f.sura() + 1, x + 1, index++));
+      addMedia(Media(m_recitation, f.sura() + 1, x + 1, index++));
     }
   }
 }
@@ -79,11 +85,11 @@ void MediaPlaylist::playChapter(int chapter) {
   int index = 0;
 
   if (s.hasBasmala()) {
-    //    addMedia(m_recitation->mediaUrl(1, 1, index++));
+    addMedia(Media(m_recitation, 1, 1, index++));
   }
 
   for (int x = 0; x < s.size(); x++) {
-    //    addMedia(m_recitation->mediaUrl(chapter + 1, x + 1, index++));
+    addMedia(Media(m_recitation, chapter + 1, x + 1, index++));
   }
 }
 
@@ -95,7 +101,7 @@ void MediaPlaylist::playVerse(int chapter, int verse) {
   m_mode = PlayVerse;
   m_playingId = -1;
 
-  //  addMedia(m_recitation->mediaUrl(chapter + 1, verse + 1, 0));
+  addMedia(Media(m_recitation, chapter + 1, verse + 1, 0));
 }
 
 void MediaPlaylist::playPart(int part) {
@@ -115,12 +121,12 @@ void MediaPlaylist::playPart(int part) {
       Sura s = m_data->sura(frag.sura());
 
       if (s.hasBasmala()) {
-	//	addMedia(m_recitation->mediaUrl(1, 1, index++));
+	addMedia(Media(m_recitation, 1, 1, index++));
       }
     }
 
     for (int x = frag.start(); x < frag.start() + frag.size(); x++) {
-      //      addMedia(m_recitation->mediaUrl(frag.sura() + 1, x + 1, index++));
+      addMedia(Media(m_recitation, frag.sura() + 1, x + 1, index++));
     }
   }
 }
@@ -180,8 +186,7 @@ bool MediaPlaylist::signalMedia(int index, int& chapter, int& verse) const {
 }
 
 void MediaPlaylist::start() {
-#if 0
-  if (m_recitation->isOnline()) {
+  if (m_recitation->type() == Recitation::Online) {
     download();
   }
   else {
@@ -191,7 +196,6 @@ void MediaPlaylist::start() {
 
     emit mediaAvailable(Media::eos());
   }
-#endif
 }
 
 void MediaPlaylist::stop() {
@@ -210,7 +214,7 @@ void MediaPlaylist::addMedia(const Media& media) {
 }
 
 MediaPlaylist *MediaPlaylist::partList(DataProvider *data, Recitation *recitation,
-				       Downloader *downloader, int part, QObject *parent) {
+				       Downloader *downloader, uint part, QObject *parent) {
 
   MediaPlaylist *list = new MediaPlaylist(data, recitation, downloader, parent);
 
@@ -220,7 +224,7 @@ MediaPlaylist *MediaPlaylist::partList(DataProvider *data, Recitation *recitatio
 }
 
 MediaPlaylist *MediaPlaylist::pageList(DataProvider *data, Recitation *recitation,
-				       Downloader *downloader, int page, QObject *parent) {
+				       Downloader *downloader, uint page, QObject *parent) {
 
   MediaPlaylist *list = new MediaPlaylist(data, recitation, downloader, parent);
 
@@ -231,8 +235,10 @@ MediaPlaylist *MediaPlaylist::pageList(DataProvider *data, Recitation *recitatio
 
 MediaPlaylist *MediaPlaylist::verseList(DataProvider *data, Recitation *recitation,
 					Downloader *downloader,
-					int chapter, int verse, QObject *parent) {
+					uint serialized, QObject *parent) {
 
+  int chapter, verse;
+  Bookmarks::deserialize(serialized, chapter, verse);
   MediaPlaylist *list = new MediaPlaylist(data, recitation, downloader, parent);
 
   list->playVerse(chapter, verse);
@@ -241,7 +247,7 @@ MediaPlaylist *MediaPlaylist::verseList(DataProvider *data, Recitation *recitati
 }
 
 MediaPlaylist *MediaPlaylist::chapterList(DataProvider *data, Recitation *recitation,
-					  Downloader *downloader, int chapter, QObject *parent) {
+					  Downloader *downloader, uint chapter, QObject *parent) {
 
   MediaPlaylist *list = new MediaPlaylist(data, recitation, downloader, parent);
 
@@ -266,7 +272,7 @@ void MediaPlaylist::download() {
     return;
   }
 
-  m_reply = m_downloader->get(m.alternateUrl());
+  m_reply = m_downloader->get(m_recitation->downloadUrl(m));
 
   QObject::connect(m_reply, SIGNAL(sslErrors(const QList<QSslError>&)), m_reply,
 		   SLOT(ignoreSslErrors()));
@@ -278,7 +284,7 @@ void MediaPlaylist::replyFinished() {
 
   if (m_reply->error() != QNetworkReply::NoError || data.isEmpty()) {
     if (m_reply->error() != QNetworkReply::NoError) {
-      qWarning() << "Error" << m_reply->errorString() << "downloading" << m_reply->url();
+      qmlInfo(this) << "Error downloading: " << m_reply->url() << " : " << m_reply->errorString();
     }
 
     m_queue.clear();
@@ -290,9 +296,12 @@ void MediaPlaylist::replyFinished() {
 
   const Media& media = m_queue.dequeue();
   if (!media.setData(data)) {
+    qmlInfo(this) << "Failed to write data for " << m_reply->url();
+
     m_queue.clear();
     m_reply->deleteLater();
     m_reply = 0;
+
     emit mediaAvailable(Media::error());
     return;
   }

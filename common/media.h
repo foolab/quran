@@ -18,14 +18,13 @@
 #ifndef MEDIA_H
 #define MEDIA_H
 
-#include <QUrl>
+#include <QByteArray>
 
 class Recitation;
 
 class Media {
 public:
-  Media(Recitation *recitation, int chapter, int verse, int index,
-	const QUrl& url, const QUrl& alternateUrl = QUrl());
+  Media(Recitation *recitation, int chapter, int verse, int index);
   virtual ~Media();
 
   static Media error();
@@ -34,8 +33,6 @@ public:
   int chapter() const;
   int verse() const;
   int index() const;
-  QUrl url() const;
-  QUrl alternateUrl() const;
   QByteArray data() const;
   bool setData(const QByteArray& data) const;
 
@@ -47,8 +44,6 @@ private:
   int m_chapter;
   int m_verse;
   int m_index;
-  QUrl m_url;
-  QUrl m_alternateUrl;
 };
 
 #endif /* MEDIA_H */

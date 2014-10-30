@@ -21,9 +21,7 @@
 #include <QAbstractListModel>
 
 class Settings;
-class DataProvider;
 class Recitation;
-class Downloader;
 class MediaPlayer;
 
 class Recitations : public QAbstractListModel {
@@ -31,8 +29,6 @@ class Recitations : public QAbstractListModel {
 
   Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
   Q_PROPERTY(Settings *settings READ settings WRITE setSettings NOTIFY settingsChanged);
-  Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
-  Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
   Q_PROPERTY(MediaPlayer *player READ player WRITE setPlayer NOTIFY playerChanged);
 
   enum {
@@ -45,12 +41,6 @@ public:
 
   Settings *settings() const;
   void setSettings(Settings *settings);
-
-  DataProvider *data() const;
-  void setData(DataProvider *data);
-
-  Downloader *downloader() const;
-  void setDownloader(Downloader *downloader);
 
   int installedCount() const;
 
@@ -68,8 +58,6 @@ public slots:
 signals:
   void installedCountChanged();
   void settingsChanged();
-  void downloaderChanged();
-  void dataChanged();
   void playerChanged();
   void refreshed();
 
@@ -78,8 +66,6 @@ private:
   int lookup(const QString& id);
 
   Settings *m_settings;
-  DataProvider *m_data;
-  Downloader *m_downloader;
   MediaPlayer *m_player;
 
   QList<Recitation *> m_recitations;
