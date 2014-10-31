@@ -15,31 +15,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ORIENTATION_H
-#define ORIENTATION_H
+#ifndef ANDROID_SUPPORT_H
+#define ANDROID_SUPPORT_H
 
 #include <QObject>
 
-class Orientation : public QObject {
+class AndroidSupport : public QObject {
   Q_OBJECT
-  Q_PROPERTY(OrientationDirection orientation
-	     READ orientation
-	     WRITE setOrientation
-	     NOTIFY orientationChanged);
-  Q_ENUMS(OrientationDirection);
+  Q_PROPERTY(Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged);
+  Q_ENUMS(Orientation);
 
 public:
   typedef enum {
     OrientationAll = -1,
     OrientationLandscape = 0,
     OrientationPortrait = 1,
-  } OrientationDirection;
+  } Orientation;
 
-  Orientation(QObject *parent = 0);
-  ~Orientation();
+  AndroidSupport(QObject *parent = 0);
+  ~AndroidSupport();
 
-  OrientationDirection orientation() const;
-  void setOrientation(const OrientationDirection& orientation);
+  Orientation orientation() const;
+  void setOrientation(const Orientation& orientation);
 
 public slots:
   void applyOrientation();
@@ -48,7 +45,7 @@ signals:
   void orientationChanged();
 
 private:
-  OrientationDirection m_orientation;
+  Orientation m_orientation;
 };
 
-#endif /* ORIENTATION_H */
+#endif /* ANDROID_SUPPORT_H */

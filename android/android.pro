@@ -15,8 +15,8 @@ DEFINES += DATA_DIR=\\\"/usr/share/harbour-quran/\\\"
 DEFINES += ANDROID=1
 
 RESOURCES += android.qrc ../icons/icons.qrc ../qml/qml.qrc
-SOURCES += fsmonitor.cpp audiopolicy.cpp application.cpp orientation.cpp
-HEADERS += fsmonitor.h audiopolicy.h application.h orientation.h
+SOURCES += fsmonitor.cpp audiopolicy.cpp application.cpp androidsupport.cpp
+HEADERS += fsmonitor.h audiopolicy.h application.h androidsupport.h
 
 LIBS += -Llibav/libavformat/ -lavformat \
         -Llibav/libavcodec/ -lavcodec \

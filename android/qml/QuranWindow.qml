@@ -15,9 +15,8 @@ Ctrls.ApplicationWindow {
     property string __pageTitle
 
     visible: true
-
-    Orientation {
-        orientation: settings.orientation == 1 ? Orientation.OrientationPortrait : settings.orientation == 2 ? Orientation.OrientationLandscape : Orientation.OrientationAll
+    AndroidSupport {
+        orientation: settings.orientation == 1 ? AndroidSupport.OrientationPortrait : settings.orientation == 2 ? AndroidSupport.OrientationLandscape : AndroidSupport.OrientationAll
         Component.onCompleted: applyOrientation()
     }
 

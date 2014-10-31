@@ -15,7 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "orientation.h"
+#include "androidsupport.h"
 #include <QtAndroid>
 
 // Taken from ActivityInfo
@@ -23,21 +23,21 @@
 #define SCREEN_ORIENTATION_LANDSCAPE    0
 #define SCREEN_ORIENTATION_PORTRAIT     1
 
-Orientation::Orientation(QObject *parent) :
+AndroidSupport::AndroidSupport(QObject *parent) :
   QObject(parent),
   m_orientation(OrientationAll) {
 
 }
 
-Orientation::~Orientation() {
+AndroidSupport::~AndroidSupport() {
 
 }
 
-Orientation::OrientationDirection Orientation::orientation() const {
+AndroidSupport::Orientation AndroidSupport::orientation() const {
   return m_orientation;
 }
 
-void Orientation::setOrientation(const Orientation::OrientationDirection& orientation) {
+void AndroidSupport::setOrientation(const AndroidSupport::Orientation& orientation) {
   if (orientation != m_orientation) {
     m_orientation = orientation;
 
@@ -47,7 +47,7 @@ void Orientation::setOrientation(const Orientation::OrientationDirection& orient
   }
 }
 
-void Orientation::applyOrientation() {
+void AndroidSupport::applyOrientation() {
   QAndroidJniObject activity = QtAndroid::androidActivity();
   activity.callMethod<void>("setRequestedOrientation", "(I)V", (jint)m_orientation);
 }
