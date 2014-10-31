@@ -20,17 +20,17 @@
 import QtQuick 2.0
 
 MouseArea {
-        property alias icon: image
-        property bool highlight: pressed && containsMouse
-        width: quranTheme.toolButtonSize
-        height: width
-        anchors.verticalCenter: parent ? parent.verticalCenter : undefined
+    property alias icon: image
+    property bool highlight: pressed && containsMouse
+    width: quranTheme.toolButtonSize
+    height: width
+    anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
-        Image {
-                id: image
-                width: parent.width * 0.65
-                height: parent.height * 0.65
-                anchors.centerIn: parent
-                opacity: parent.enabled ? 1.0 : 0.5
-        }
+    Image {
+        id: image
+        width: parent.width * 0.65
+        height: parent.height * 0.65
+        anchors.centerIn: parent
+        opacity: parent.enabled ? 1.0 : 0.5
+    }
 }
