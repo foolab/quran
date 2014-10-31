@@ -25,6 +25,7 @@ class Translations;
 class Downloader;
 class QNetworkReply;
 class QTemporaryFile;
+class TranslationInfo;
 
 class Translation : public QObject {
   Q_OBJECT
@@ -48,8 +49,7 @@ public:
     Error,
   };
 
-  Translation(int tid, const QString& id,
-	      const QString& name, int language, Translations *parent = 0);
+  Translation(TranslationInfo *info, Translations *parent = 0);
   ~Translation();
 
   void setDownloader(Downloader *downloader);
@@ -90,21 +90,27 @@ private:
   bool readData();
   bool install();
 
+  TranslationInfo *m_info;
   Translations *m_translations;
   Downloader *m_downloader;
   QNetworkReply *m_reply;
   QTemporaryFile *m_file;
-  Status m_status;
-  const int m_tid;
+
   qint64 m_size;
   qint64 m_progress;
-  const QString m_name;
-  const int m_language;
-  const QString m_id;
   bool m_loaded;
 
   quint64 m_offset;
   QList<QPair<off_t, size_t> > m_offsets;
+};
+
+class TranslationInfo {
+public:
+  Translation::Status m_status;
+  int m_tid;
+  QString m_name;
+  int m_language;
+  QString m_uuid;
 };
 
 #endif /* TRANSLATION_H */

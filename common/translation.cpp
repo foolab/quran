@@ -28,26 +28,22 @@
 #include <QDeclarativeInfo>
 #endif
 
-Translation::Translation(int tid, const QString& id, const QString& name, int language,
-			 Translations *parent) :
+Translation::Translation(TranslationInfo *info, Translations *parent) :
   QObject(parent),
+  m_info(info),
   m_translations(parent),
   m_downloader(0),
   m_reply(0),
   m_file(0),
-  m_status(None),
-  m_tid(tid),
   m_size(0),
   m_progress(0),
-  m_name(name),
-  m_language(language),
-  m_id(id),
   m_loaded(false) {
 
 }
 
 Translation::~Translation() {
-
+  delete m_info;
+  m_info = 0;
 }
 
 bool Translation::isLoaded() const {
@@ -66,19 +62,19 @@ void Translation::setDownloader(Downloader *downloader) {
 }
 
 int Translation::tid() const {
-  return m_tid;
+  return m_info->m_tid;
 }
 
 QString Translation::uuid() const {
-  return m_id;
+  return m_info->m_uuid;
 }
 
 QString Translation::name() const {
-  return m_name;
+  return m_info->m_name;
 }
 
 QString Translation::language() const {
-  return QLocale::languageToString(static_cast<QLocale::Language>(m_language));
+  return QLocale::languageToString(static_cast<QLocale::Language>(m_info->m_language));
 }
 
 qint64 Translation::downloadProgress() const {
@@ -86,14 +82,14 @@ qint64 Translation::downloadProgress() const {
 }
 
 void Translation::setStatus(Translation::Status status) {
-  if (m_status != status) {
-    m_status = status;
+  if (m_info->m_status != status) {
+    m_info->m_status = status;
     emit statusChanged();
   }
 }
 
 Translation::Status Translation::status() const {
-  return m_status;
+  return m_info->m_status;
 }
 
 qint64 Translation::downloadSize() const {
@@ -112,7 +108,7 @@ bool Translation::startDownload() {
 
   m_file = file;
 
-  QString url = QString("http://tanzil.net/trans/?transID=%1&type=txt").arg(m_id);
+  QString url = QString("http://tanzil.net/trans/?transID=%1&type=txt").arg(m_info->m_uuid);
   m_reply = m_downloader->get(url);
   m_reply->setParent(this);
 
@@ -261,8 +257,8 @@ bool Translation::readData() {
 }
 
 bool Translation::install() {
-  QString index = m_translations->indexPath(m_tid);
-  QString data = m_translations->dataPath(m_tid);
+  QString index = m_translations->indexPath(m_info->m_tid);
+  QString data = m_translations->dataPath(m_info->m_tid);
 
   if (!m_file->rename(data)) {
     m_file->remove();

@@ -118,10 +118,14 @@ void Translations::refresh() {
 
   // Let's get all translations:
   for (int x = 0; x < TRANSLATIONS_LEN; x++) {
-    Translation *t = new Translation(x, QString::fromUtf8(Ts[x].id),
-				     QString::fromUtf8(Ts[x].name),
-				     Ts[x].language,
-				     this);
+    TranslationInfo *info = new TranslationInfo;
+    info->m_tid = x;
+    info->m_name = QString::fromUtf8(Ts[x].name);
+    info->m_status = Translation::None;
+    info->m_language = Ts[x].language;
+    info->m_uuid = QString::fromUtf8(Ts[x].id);
+
+    Translation *t = new Translation(info, this);
     QObject::connect(t, SIGNAL(statusChanged()), this, SLOT(translationStatusChanged()));
     t->setDownloader(m_downloader);
     translations << t;
