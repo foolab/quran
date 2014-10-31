@@ -89,12 +89,12 @@ Ctrls.ApplicationWindow {
                         anchors.top: parent.top
                         anchors.horizontalCenter: parent.horizontalCenter
                         spacing: quranTheme.spacing
-                        children: pageStack.currentItem.toolBar
+                        children: pageStack.currentItem ? pageStack.currentItem.toolBar : 0
                 }
 
                 MenuButton {
                         anchors.right: parent.right
-                        menu: pageStack.currentItem.menu
+                        menu: pageStack.currentItem ? pageStack.currentItem.menu : null
                 }
         }
 

@@ -63,7 +63,7 @@ QuranPage {
         },
         NumberLabel {
             width: quranTheme.toolButtonSize
-            height: parent.height
+            height: parent ? parent.height : width
             number: settings.pageNumber + 1
             onClicked: pushAnimated(Qt.resolvedUrl("IndexPage.qml"))
             onPressAndHold: pushAnimated(Qt.resolvedUrl("PageSelectionPage.qml"))

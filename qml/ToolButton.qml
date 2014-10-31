@@ -24,7 +24,7 @@ MouseArea {
         property bool highlight: pressed && containsMouse
         width: quranTheme.toolButtonSize
         height: width
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
         Image {
                 id: image
