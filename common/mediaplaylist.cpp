@@ -239,6 +239,7 @@ MediaPlaylist *MediaPlaylist::verseList(DataProvider *data, Recitation *recitati
 
   int chapter, verse;
   Bookmarks::deserialize(serialized, chapter, verse);
+
   MediaPlaylist *list = new MediaPlaylist(data, recitation, downloader, parent);
 
   list->playVerse(chapter, verse);

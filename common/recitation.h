@@ -25,6 +25,7 @@
 class Media;
 class RecitationInfo;
 class QIODevice;
+class QuaZip;
 
 class Recitation : public QObject {
   Q_OBJECT
@@ -96,6 +97,7 @@ private:
 
   RecitationInfo *m_info;
   bool m_loaded;
+  QuaZip *m_zip;
 };
 
 class RecitationInfo {
