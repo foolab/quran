@@ -147,11 +147,4 @@ QuranWindow {
     QuranNotificationBanner {
         id: banner
     }
-/*
-// TODO:
-        Connections {
-                target: _recitations
-                onError: { playerError.text = msg; playerError.show(); }
-        }
-*/
 }
