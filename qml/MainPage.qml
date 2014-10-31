@@ -22,10 +22,7 @@ QuranPage {
         LayoutMirroring.childrenInherit: false
         highlightFollowsCurrentItem: true
         highlightMoveDuration: 1
-        // This is a workaround for Android and desktop.
-        // If we set the delegate in the beginning then the view creates all the pages
-        // and app startup becomes slow.
-        delegate: view.width == parent.width && view.width > 0 ? quranPageDelegate : null
+        delegate: quranPageDelegate
         currentIndex: settings.pageNumber
         onCurrentIndexChanged: {
             if (currentIndex != -1) {

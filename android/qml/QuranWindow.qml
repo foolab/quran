@@ -6,7 +6,7 @@ import QuranAndroid 1.0
 Ctrls.ApplicationWindow {
         id: rootWindow
         property alias pageStack: stack
-        property alias initialPage: stack.initialItem
+        property Component initialPage
 
         // These are for the desktop
         width: 550
@@ -101,6 +101,24 @@ Ctrls.ApplicationWindow {
         Ctrls.StackView {
                 id: stack
                 anchors.fill: parent
+
+                // HACK: Something is really strange here. Initially StackView is created
+                // with 0 as width and a negative height. Assigning the MainPage directly
+                // to StackView initialItem leads to our main ListView creating all of
+                // its delegates thus slowing down application startup.
+                // It's also strange that if we push the component directly then we have the
+                // same issue. Thus we create the the object ourselves and pass the proper
+                // width and height to make sure ListView behaves and we push that created
+                // object which makes everybody happy!
+
+                property bool __done: width > 0 && height > 0
+                on__DoneChanged: {
+                    if (__done) {
+                        var obj = rootWindow.initialPage.createObject(stack,
+                            {width: stack.width, height: stack.height})
+                        push(obj)
+                    }
+                }
 
                 // focus is needed for back key navigation
                 focus: true
