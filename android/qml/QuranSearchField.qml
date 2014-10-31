@@ -3,16 +3,16 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2
 
 TextField {
-        property bool enterKeyEnabled: true
-        property string enterKeyText
-        property bool enableSoftwareInputPanel
+    property bool enterKeyEnabled: true
+    property string enterKeyText
+    property bool enableSoftwareInputPanel
 
-        signal enterKeyClicked
+    signal enterKeyClicked
 
-        horizontalAlignment: TextInput.AlignHCenter
+    horizontalAlignment: TextInput.AlignHCenter
 
-//        EnterKey.onClicked: enterKeyClicked()
-//        EnterKey.enabled: enterKeyEnabled
-//        EnterKey.text: enterKeyText
+//    EnterKey.onClicked: enterKeyClicked()
+//    EnterKey.enabled: enterKeyEnabled
+//    EnterKey.text: enterKeyText
 }
 //TODO:
