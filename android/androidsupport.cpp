@@ -19,12 +19,51 @@
 #include <QtAndroid>
 #include <QDebug>
 #include <QAndroidJniEnvironment>
+#include <QPointer>
+#include "audiopolicy.h"
 
 static jobject m_obj = 0;
 static jclass m_class = 0;
 static jmethodID m_portrait = 0;
 static jmethodID m_landscape = 0;
 static jmethodID m_unlock = 0;
+static jmethodID m_acquire = 0;
+static jmethodID m_release = 0;
+QPointer<AudioPolicy> m_audio;
+
+static void audioFocusAcquired(JNIEnv *env, jobject objectOrClass) {
+  Q_UNUSED(env);
+  Q_UNUSED(objectOrClass);
+
+  if (m_audio) {
+    QMetaObject::invokeMethod(m_audio, "acquired", Qt::QueuedConnection);
+  }
+}
+
+static void audioFocusDenied(JNIEnv *env, jobject objectOrClass) {
+  Q_UNUSED(env);
+  Q_UNUSED(objectOrClass);
+
+  if (m_audio) {
+    QMetaObject::invokeMethod(m_audio, "denied", Qt::QueuedConnection);
+  }
+}
+
+static void audioFocusLost(JNIEnv *env, jobject objectOrClass) {
+  Q_UNUSED(env);
+  Q_UNUSED(objectOrClass);
+
+  if (m_audio) {
+    QMetaObject::invokeMethod(m_audio, "lost", Qt::QueuedConnection);
+  }
+}
+
+static void audioFocusReleased(JNIEnv *env, jobject objectOrClass) {
+  Q_UNUSED(env);
+  Q_UNUSED(objectOrClass);
+
+  // We don't care
+}
 
 AndroidSupport::AndroidSupport(QObject *parent) :
   QObject(parent),
@@ -66,6 +105,19 @@ void AndroidSupport::applyOrientation() {
     env->CallVoidMethod(m_obj, m_landscape, NULL);
     return;
   }
+}
+
+void AndroidSupport::acquireAudioFocus(AudioPolicy *audio) {
+  QAndroidJniEnvironment env;
+  m_audio = audio;
+
+  env->CallVoidMethod(m_obj, m_acquire, NULL);
+}
+
+void AndroidSupport::releaseAudioFocus() {
+  QAndroidJniEnvironment env;
+
+  env->CallVoidMethod(m_obj, m_release, NULL);
 }
 
 extern "C" {
@@ -117,6 +169,30 @@ extern "C" {
       qCritical() << "Cannot find unlockOrientation";
       return -1;
     }
+
+    m_acquire = env->GetMethodID(m_class, "acquireAudioFocus", "()V");
+    if (!m_acquire) {
+      qCritical() << "Cannot find acquireAudioFocus";
+      return -1;
+    }
+
+    m_release = env->GetMethodID(m_class, "releaseAudioFocus", "()V");
+    if (!m_release) {
+      qCritical() << "Cannot find releaseAudioFocus";
+      return -1;
+    }
+
+    JNINativeMethod methods[] = {
+      {"audioFocusAcquired", "()V", reinterpret_cast<void *>(audioFocusAcquired)},
+      {"audioFocusDenied", "()V", reinterpret_cast<void *>(audioFocusDenied)},
+      {"audioFocusLost", "()V", reinterpret_cast<void *>(audioFocusLost)},
+      {"audioFocusReleased", "()V", reinterpret_cast<void *>(audioFocusReleased)}};
+
+      if (env->RegisterNatives(m_class, methods,
+			       sizeof(methods) / sizeof(methods[0])) != JNI_OK) {
+	qCritical() << "Failed to register native methods";
+	return -1;
+      }
 
     return JNI_VERSION_1_6;
   }

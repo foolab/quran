@@ -20,6 +20,8 @@
 
 #include <QObject>
 
+class AudioPolicy;
+
 class AndroidSupport : public QObject {
   Q_OBJECT
   Q_PROPERTY(Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged);
@@ -38,8 +40,12 @@ public:
   Orientation orientation() const;
   void setOrientation(const Orientation& orientation);
 
+  static void acquireAudioFocus(AudioPolicy *audio);
+  static void releaseAudioFocus();
+
 public slots:
   void applyOrientation();
+  void registerNativeFunctions();
 
 signals:
   void orientationChanged();
