@@ -23,7 +23,6 @@
 #include "translations.h"
 #include "downloader.h"
 #include "fsmonitor.h"
-#include "search.h"
 #include "recitations.h"
 #include "phoneflipcontrol.h"
 #include "application.h"
