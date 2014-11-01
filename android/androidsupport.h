@@ -45,7 +45,6 @@ public:
 
 public slots:
   void applyOrientation();
-  void registerNativeFunctions();
 
 signals:
   void orientationChanged();
