@@ -53,6 +53,9 @@ pushd android
 make install INSTALL_ROOT=../apk
 popd
 
+mkdir -p apk/assets
+cp data/search.db apk/assets/
+
 /mnt/4/android/android-sdk-linux/tools//android update project --path apk \
     --target android-19 --name Quran
 
