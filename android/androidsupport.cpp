@@ -20,6 +20,7 @@
 #include <QDebug>
 #include <QAndroidJniEnvironment>
 
+static jobject m_obj = 0;
 static jclass m_class = 0;
 static jmethodID m_portrait = 0;
 static jmethodID m_landscape = 0;
@@ -54,15 +55,15 @@ void AndroidSupport::applyOrientation() {
 
   switch (m_orientation) {
   case OrientationAll:
-    env->CallStaticVoidMethod(m_class, m_unlock, NULL);
+    env->CallVoidMethod(m_obj, m_unlock, NULL);
     break;
 
   case OrientationPortrait:
-    env->CallStaticVoidMethod(m_class, m_portrait, NULL);
+    env->CallVoidMethod(m_obj, m_portrait, NULL);
     break;
 
   case OrientationLandscape:
-    env->CallStaticVoidMethod(m_class, m_landscape, NULL);
+    env->CallVoidMethod(m_obj, m_landscape, NULL);
     return;
   }
 }
@@ -84,19 +85,34 @@ extern "C" {
       return -1;
     }
 
-    m_portrait = env->GetStaticMethodID(m_class, "lockOrientationPortrait", "()V");
+    jmethodID ctor = env->GetMethodID(m_class, "<init>", "()V");
+    if (!ctor) {
+      qCritical() << "Cannot fint AndroidSupport constructor";
+      return -1;
+    }
+
+    jobject obj = env->NewObject(m_class, ctor);
+    if (!obj) {
+      qCritical() << "Failed to create AndroidSupport";
+      return -1;
+    }
+
+    m_obj = env->NewGlobalRef(obj);
+    env->DeleteLocalRef(obj);
+
+    m_portrait = env->GetMethodID(m_class, "lockOrientationPortrait", "()V");
     if (!m_portrait) {
       qCritical() << "Cannot find lockOrientationPortrait";
       return -1;
     }
 
-    m_landscape = env->GetStaticMethodID(m_class, "lockOrientationLandscape", "()V");
+    m_landscape = env->GetMethodID(m_class, "lockOrientationLandscape", "()V");
     if (!m_landscape) {
       qCritical() << "Cannot find lockOrientationLandscape";
       return -1;
     }
 
-    m_unlock = env->GetStaticMethodID(m_class, "unlockOrientation", "()V");
+    m_unlock = env->GetMethodID(m_class, "unlockOrientation", "()V");
     if (!m_unlock) {
       qCritical() << "Cannot find unlockOrientation";
       return -1;

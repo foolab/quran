@@ -1,21 +1,26 @@
 package org.foolab.quran;
 
 import android.content.pm.ActivityInfo;
+import android.util.Log;
 
 public class AndroidSupport {
-    public static void unlockOrientation() {
+    AndroidSupport() {
+
+    }
+
+    public void unlockOrientation() {
 	setOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
-    public static void lockOrientationPortrait() {
+    public void lockOrientationPortrait() {
 	setOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
-    public static void lockOrientationLandscape() {
+    public void lockOrientationLandscape() {
 	setOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
-    private static void setOrientation(final int o) {
+    private void setOrientation(final int o) {
 	org.qtproject.qt5.android.QtNative.activity().runOnUiThread(new Runnable() {
 		@Override
 		public void run() {
