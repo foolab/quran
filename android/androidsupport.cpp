@@ -17,11 +17,13 @@
 
 #include "androidsupport.h"
 #include <QtAndroid>
+#include <QDebug>
+#include <QAndroidJniEnvironment>
 
-// Taken from ActivityInfo
-#define SCREEN_ORIENTATION_UNSPECIFIED  -1
-#define SCREEN_ORIENTATION_LANDSCAPE    0
-#define SCREEN_ORIENTATION_PORTRAIT     1
+static jclass m_class = 0;
+static jmethodID m_portrait = 0;
+static jmethodID m_landscape = 0;
+static jmethodID m_unlock = 0;
 
 AndroidSupport::AndroidSupport(QObject *parent) :
   QObject(parent),
@@ -48,6 +50,58 @@ void AndroidSupport::setOrientation(const AndroidSupport::Orientation& orientati
 }
 
 void AndroidSupport::applyOrientation() {
-  QAndroidJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("setRequestedOrientation", "(I)V", (jint)m_orientation);
+  QAndroidJniEnvironment env;
+
+  switch (m_orientation) {
+  case OrientationAll:
+    env->CallStaticVoidMethod(m_class, m_unlock, NULL);
+    break;
+
+  case OrientationPortrait:
+    env->CallStaticVoidMethod(m_class, m_portrait, NULL);
+    break;
+
+  case OrientationLandscape:
+    env->CallStaticVoidMethod(m_class, m_landscape, NULL);
+    return;
+  }
+}
+
+extern "C" {
+  JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+    Q_UNUSED(reserved);
+
+    JNIEnv* env;
+
+    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
+      qCritical() << "Can't get JNI enviroument";
+      return -1;
+    }
+
+    m_class = env->FindClass("org/foolab/quran/AndroidSupport");
+    if (m_class == 0) {
+      qCritical() << "AndroidSupport class not found";
+      return -1;
+    }
+
+    m_portrait = env->GetStaticMethodID(m_class, "lockOrientationPortrait", "()V");
+    if (!m_portrait) {
+      qCritical() << "Cannot find lockOrientationPortrait";
+      return -1;
+    }
+
+    m_landscape = env->GetStaticMethodID(m_class, "lockOrientationLandscape", "()V");
+    if (!m_landscape) {
+      qCritical() << "Cannot find lockOrientationLandscape";
+      return -1;
+    }
+
+    m_unlock = env->GetStaticMethodID(m_class, "unlockOrientation", "()V");
+    if (!m_unlock) {
+      qCritical() << "Cannot find unlockOrientation";
+      return -1;
+    }
+
+    return JNI_VERSION_1_6;
+  }
 }

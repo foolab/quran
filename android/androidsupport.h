@@ -27,9 +27,9 @@ class AndroidSupport : public QObject {
 
 public:
   typedef enum {
-    OrientationAll = -1,
-    OrientationLandscape = 0,
-    OrientationPortrait = 1,
+    OrientationAll = 0,
+    OrientationLandscape = 1,
+    OrientationPortrait = 2,
   } Orientation;
 
   AndroidSupport(QObject *parent = 0);
