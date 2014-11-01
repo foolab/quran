@@ -13,6 +13,7 @@ QuranPage {
         id: flick
         anchors.fill: parent
         contentHeight: col.height
+
         anchors {
             topMargin: quranTheme.marginMedium
             bottomMargin: quranTheme.marginMedium
@@ -38,8 +39,8 @@ QuranPage {
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
                 source: "qrc:/logo.png"
-                width: 160
-                height: 160
+                width: Math.min(aboutPage.width, aboutPage.height) / 4
+                height: width
             }
 
             QuranLabel {
