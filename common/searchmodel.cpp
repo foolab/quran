@@ -19,7 +19,14 @@
 #include <sqlite3.h>
 #include <QDebug>
 
+#ifdef ANDROID
+#include "sqlite-ndk/sources/sqlite3ndk.h"
+#define DB_PATH "search.db"
+#define VFS SQLITE_NDK_VFS_NAME
+#else
 #define DB_PATH DATA_DIR "/data/search.db"
+#define VFS NULL
+#endif
 
 #define MATCH_PART_QUERY "SELECT chapter, verse FROM search WHERE text LIKE ?1 ORDER BY chapter, verse ASC;"
 
@@ -87,7 +94,7 @@ void SearchModel::setQuery(const QString& query, bool matchWholeWords) {
 
   int err = SQLITE_OK;
   if (!d_ptr->db) {
-    err = sqlite3_open_v2(DB_PATH, &d_ptr->db, SQLITE_OPEN_READONLY, NULL);
+    err = sqlite3_open_v2(DB_PATH, &d_ptr->db, SQLITE_OPEN_READONLY, VFS);
   }
 
   if (!d_ptr->db) {

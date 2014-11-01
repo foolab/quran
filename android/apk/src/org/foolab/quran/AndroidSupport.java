@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.PowerManager.WakeLock;
 import android.os.PowerManager;
+import android.content.res.AssetManager;
 
 public class AndroidSupport implements AudioManager.OnAudioFocusChangeListener {
     private static String TAG = "org.foolab.quran";
@@ -21,6 +22,7 @@ public class AndroidSupport implements AudioManager.OnAudioFocusChangeListener {
 	mAudioManager = (AudioManager)mActivity.getSystemService(Context.AUDIO_SERVICE);
 	mPowerManager = (PowerManager)mActivity.getSystemService(Context.POWER_SERVICE);
 	mLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+	storeAssetManager(mActivity.getAssets());
     }
 
     public void unlockOrientation() {
@@ -92,4 +94,5 @@ public class AndroidSupport implements AudioManager.OnAudioFocusChangeListener {
     native void audioFocusDenied();
     native void audioFocusLost();
     native void audioFocusReleased();
+    native void storeAssetManager(AssetManager assetManager);
 }

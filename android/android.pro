@@ -15,8 +15,16 @@ DEFINES += DATA_DIR=\\\"/usr/share/harbour-quran/\\\"
 DEFINES += ANDROID=1
 
 RESOURCES += android.qrc ../icons/icons.qrc ../qml/qml.qrc
-SOURCES += fsmonitor.cpp audiopolicy.cpp application.cpp androidsupport.cpp
-HEADERS += fsmonitor.h audiopolicy.h application.h androidsupport.h
+SOURCES += fsmonitor.cpp \
+           audiopolicy.cpp \
+           application.cpp \
+           androidsupport.cpp \
+           sqlite-ndk/sources/sqlite3ndk.cpp
+HEADERS += fsmonitor.h \
+           audiopolicy.h \
+           application.h \
+           androidsupport.h \
+           sqlite-ndk/sources/sqlite3ndk.h
 
 LIBS += -Llibav/libavformat/ -lavformat \
         -Llibav/libavcodec/ -lavcodec \
@@ -24,7 +32,8 @@ LIBS += -Llibav/libavformat/ -lavformat \
         -Llibav/libavfilter/ -lavfilter \
         -Llibav/libavresample/ -lavresample \
         -Lsqlite/ -lsqlite3 \
-        -Lquazip/quazip/ -lquazip
+        -Lquazip/quazip/ -lquazip \
+        -landroid
 
 ANDROID_EXTRA_LIBS = android/libav/libavutil/libavutil.so \
                      android/libav/libavcodec/libavcodec.so \

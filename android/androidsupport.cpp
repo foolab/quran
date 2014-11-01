@@ -21,7 +21,10 @@
 #include <QAndroidJniEnvironment>
 #include <QPointer>
 #include "audiopolicy.h"
+#include <android/asset_manager_jni.h>
+#include "sqlite-ndk/sources/sqlite3ndk.h"
 
+AAssetManager *m_assets = 0;
 static jobject m_obj = 0;
 static jclass m_class = 0;
 static jmethodID m_portrait = 0;
@@ -63,6 +66,13 @@ static void audioFocusReleased(JNIEnv *env, jobject objectOrClass) {
   Q_UNUSED(objectOrClass);
 
   // We don't care
+}
+
+static void storeAssetManager(JNIEnv *env, jobject objectOrClass, jobject assetManager) {
+  Q_UNUSED(objectOrClass);
+
+  m_assets = AAssetManager_fromJava(env, env->NewGlobalRef(assetManager));
+  sqlite3_ndk_init(m_assets);
 }
 
 AndroidSupport::AndroidSupport(QObject *parent) :
@@ -137,6 +147,20 @@ extern "C" {
       return -1;
     }
 
+    JNINativeMethod methods[] = {
+      {"audioFocusAcquired", "()V", reinterpret_cast<void *>(audioFocusAcquired)},
+      {"audioFocusDenied", "()V", reinterpret_cast<void *>(audioFocusDenied)},
+      {"audioFocusLost", "()V", reinterpret_cast<void *>(audioFocusLost)},
+      {"audioFocusReleased", "()V", reinterpret_cast<void *>(audioFocusReleased)},
+      {"storeAssetManager", "(Landroid/content/res/AssetManager;)V", reinterpret_cast<void *>(storeAssetManager)},
+    };
+
+    if (env->RegisterNatives(m_class, methods,
+			     sizeof(methods) / sizeof(methods[0])) != JNI_OK) {
+      qCritical() << "Failed to register native methods";
+      return -1;
+    }
+
     jmethodID ctor = env->GetMethodID(m_class, "<init>", "()V");
     if (!ctor) {
       qCritical() << "Cannot fint AndroidSupport constructor";
@@ -181,18 +205,6 @@ extern "C" {
       qCritical() << "Cannot find releaseAudioFocus";
       return -1;
     }
-
-    JNINativeMethod methods[] = {
-      {"audioFocusAcquired", "()V", reinterpret_cast<void *>(audioFocusAcquired)},
-      {"audioFocusDenied", "()V", reinterpret_cast<void *>(audioFocusDenied)},
-      {"audioFocusLost", "()V", reinterpret_cast<void *>(audioFocusLost)},
-      {"audioFocusReleased", "()V", reinterpret_cast<void *>(audioFocusReleased)}};
-
-      if (env->RegisterNatives(m_class, methods,
-			       sizeof(methods) / sizeof(methods[0])) != JNI_OK) {
-	qCritical() << "Failed to register native methods";
-	return -1;
-      }
 
     return JNI_VERSION_1_6;
   }
