@@ -3,7 +3,21 @@ import QtQuick 2.0
 import Quran 1.0
 
 QuranPage {
+    menu: pageMenu
+
+    QuranPageMenu {
+        id: pageMenu
+        view: view
+        actions: [
+            MenuAction {
+                text: qsTr("Manage recitations")
+                onClicked: pushAnimated(Qt.resolvedUrl("RecitationAddPage.qml"))
+            }
+        ]
+    }
+
     QuranListView {
+        id: view
         anchors.fill: parent
 
         section {
