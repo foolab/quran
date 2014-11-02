@@ -55,7 +55,7 @@ QuranPage {
                     anchors.horizontalCenter: parent.horizontalCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.family: settings.fontFamily
-                    font.pixelSize: settings.fontSize
+                    font.pixelSize: textSizeSlider.value
                     color: quranTheme.textColor
 
                     Component.onCompleted: populate();
@@ -79,6 +79,7 @@ QuranPage {
             }
 
             QuranSlider {
+                id: textSizeSlider
                 width: parent.width
                 label: qsTr("Text size")
                 minimumValue: quranTheme.minimumFontSize
@@ -86,10 +87,17 @@ QuranPage {
                 valueText: value
                 stepSize: 1
                 value: settings.fontSize
-                onValueChanged: settings.fontSize = value
+            }
+
+            Binding {
+                target: settings
+                value: textSizeSlider.value
+                property: "fontSize"
+                when: !textSizeSlider.pressed
             }
 
             QuranSlider {
+                id: translationTextSizeSlider
                 width: parent.width
                 label: qsTr("Translation text size");
                 minimumValue: quranTheme.minimumTranslationFontSize
@@ -97,7 +105,13 @@ QuranPage {
                 valueText: value
                 stepSize: 1
                 value: settings.translationFontSize
-                onValueChanged: settings.translationFontSize = value
+            }
+
+            Binding {
+                target: settings
+                value: translationTextSizeSlider.value
+                property: "translationFontSize"
+                when: !translationTextSizeSlider.pressed
             }
 
             QuranTextSwitch {

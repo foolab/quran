@@ -9,6 +9,7 @@ Column {
         property alias stepSize: slider.stepSize
         property alias valueText: slider.valueIndicatorText
         property alias label: textLabel.text
+        property alias pressed: slider.pressed
 
         Label {
                 id: textLabel

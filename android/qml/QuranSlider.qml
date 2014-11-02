@@ -11,6 +11,7 @@ Column {
     property alias stepSize: slider.stepSize
     property bool valueText //: slider.tickmarksEnabled //TODO: Not supported
     property alias label: textLabel.text
+    property alias pressed: slider.pressed
 
     QuranLabel {
         id: textLabel
