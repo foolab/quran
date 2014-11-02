@@ -7,7 +7,6 @@ Column {
         property alias minimumValue: slider.minimumValue
         property alias maximumValue: slider.maximumValue
         property alias stepSize: slider.stepSize
-        property alias valueText: slider.valueIndicatorText
         property alias label: textLabel.text
         property alias pressed: slider.pressed
 
@@ -22,6 +21,5 @@ Column {
         Slider {
                 id: slider
                 width: parent.width * 0.9
-                valueIndicatorVisible: true
         }
 }

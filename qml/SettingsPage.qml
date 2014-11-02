@@ -84,7 +84,6 @@ QuranPage {
                 label: qsTr("Text size")
                 minimumValue: quranTheme.minimumFontSize
                 maximumValue: quranTheme.maximumFontSize
-                valueText: value
                 stepSize: 1
                 value: settings.fontSize
             }
@@ -102,7 +101,6 @@ QuranPage {
                 label: qsTr("Translation text size");
                 minimumValue: quranTheme.minimumTranslationFontSize
                 maximumValue: quranTheme.maximumTranslationFontSize
-                valueText: value
                 stepSize: 1
                 value: settings.translationFontSize
             }
