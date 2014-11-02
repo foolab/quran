@@ -32,6 +32,18 @@ Item {
             return
         }
 
+        var enabledActions = 0
+        for (var x = 0; x < actions.length; x++) {
+            if (actions[x].visible == true) {
+                enabledActions++
+                break
+            }
+        }
+
+        if (enabledActions == 0) {
+            return
+        }
+
         if (!_menu) {
             _menu = _menuComponent.createObject(item)
         }
