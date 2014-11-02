@@ -178,9 +178,11 @@ void Recitations::refresh() {
 }
 
 bool Recitations::loadRecitation(const QString& id) {
+  Recitation *old = m_player->recitation();
+
   if (id.isEmpty()) {
-    if (Recitation *r = m_player->recitation()) {
-      r->setLoaded(false);
+    if (old) {
+      old->setLoaded(false);
     }
 
     m_player->setRecitation(0);
@@ -202,6 +204,10 @@ bool Recitations::loadRecitation(const QString& id) {
   }
 
   if (m_recitations[x]->status() == Recitation::Installed) {
+    if (old) {
+      old->setLoaded(false);
+    }
+
     m_player->setRecitation(m_recitations[x]);
     m_recitations[x]->setLoaded(true);
     return true;
