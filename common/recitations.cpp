@@ -37,6 +37,7 @@ Recitations::Recitations(QObject *parent)
   QHash<int, QByteArray> roles;
 
   roles[RecitationRole] = "recitation";
+  roles[OnlineRole] = "online";
 
   setRoleNames(roles);
 }
@@ -245,6 +246,9 @@ QVariant Recitations::data(const QModelIndex& index, int role) const {
     QObject *recitation = m_recitations[index.row()];
 
     switch (role) {
+    case OnlineRole:
+      return dynamic_cast<Recitation *>(recitation)->type() == Recitation::Online ? "online" : "offline";
+
     case RecitationRole:
 #ifdef QT_VERSION_5
       QQmlEngine::setObjectOwnership(recitation, QQmlEngine::CppOwnership);

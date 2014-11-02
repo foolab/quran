@@ -33,6 +33,7 @@ class Recitations : public QAbstractListModel {
 
   enum {
     RecitationRole = Qt::UserRole,
+    OnlineRole = Qt::UserRole + 1,
   };
 
 public:

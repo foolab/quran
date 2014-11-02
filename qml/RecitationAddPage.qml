@@ -7,6 +7,24 @@ QuranPage {
         id: view
         anchors.fill: parent
         model: _recitations
+
+        section {
+            property: "online"
+            delegate: QuranLabel {
+                anchors {
+                    right: parent.right
+                    rightMargin: quranTheme.marginMedium
+                    left: parent.left
+                    leftMargin: quranTheme.marginMedium
+                }
+
+                color: quranTheme.highlightColor
+                height: quranTheme.itemSizeSmall
+                text: section == "online" ? qsTr("Online recitations") : qsTr("Offline recitations")
+                verticalAlignment: Text.AlignVCenter
+            }
+        }
+
         delegate: ListDelegate {
             id: item
 
