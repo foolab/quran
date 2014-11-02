@@ -3,7 +3,21 @@ import QtQuick 2.0
 import Quran 1.0
 
 QuranPage {
+    menu: pageMenu
+
+    QuranPageMenu {
+        id: pageMenu
+        view: flick
+        actions: [
+            MenuAction {
+                text: qsTr("Manage translations")
+                onClicked: pushAnimated(Qt.resolvedUrl("TranslationAddPage.qml"))
+            }
+        ]
+    }
+
     QuranListView {
+        id: view
         anchors.fill: parent
 
         header: QuranPageHeader {
