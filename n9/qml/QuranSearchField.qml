@@ -3,18 +3,18 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 
 TextField {
-        id: field
+    id: field
 
-        property bool enterKeyEnabled: true
-        property string enterKeyText
+    property bool enterKeyEnabled: true
+    property string enterKeyText
 
-        signal enterKeyClicked
+    signal enterKeyClicked
 
-        platformSipAttributes: SipAttributes {
-                actionKeyHighlighted: true
-                actionKeyLabel: field.enterKeyText
-                actionKeyEnabled: field.enterKeyEnabled
-        }
+    platformSipAttributes: SipAttributes {
+        actionKeyHighlighted: true
+        actionKeyLabel: field.enterKeyText
+        actionKeyEnabled: field.enterKeyEnabled
+    }
 
-        Keys.onReturnPressed: enterKeyClicked()
+    Keys.onReturnPressed: enterKeyClicked()
 }
