@@ -8,7 +8,8 @@ Ctrls.ApplicationWindow {
     property alias pageStack: stack
     property Component initialPage
 
-    // These are for the desktop
+    // We need to set a size otherwise we end up creating all the delegates
+    // upon startup
     width: 550
     height: 700
 

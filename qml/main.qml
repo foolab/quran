@@ -37,7 +37,6 @@ QuranWindow {
 
     PhoneFlipControl {
         id: flipControl
-// TODO:
         active: settings.flipToStopRecitation && audioPlayer.playing
         onFlipped: audioPlayer.stop()
     }
