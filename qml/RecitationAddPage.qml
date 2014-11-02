@@ -49,6 +49,7 @@ QuranPage {
                 QuranLabel {
                     id: label
                     text: qsTr("%1 %2").arg(recitation.name).arg(recitation.quality)
+                    color: quranTheme.primaryColor
                     truncateText: true
                     anchors {
                         top: parent.top

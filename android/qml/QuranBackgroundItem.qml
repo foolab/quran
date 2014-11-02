@@ -3,9 +3,9 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2
 
 MouseArea {
-        id: mouse
-        Rectangle {
-                anchors.fill: parent
-                color: mouse.pressed ? "lightgray" : quranTheme.backgroundColor
-        }
+    id: mouse
+    Rectangle {
+        anchors.fill: parent
+        color: mouse.pressed ? "gray" : quranTheme.backgroundColor
+    }
 }

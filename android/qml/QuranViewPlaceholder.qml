@@ -2,19 +2,20 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.2
 
-Label {
-        property string title
-        text: title
+QuranLabel {
+    property string title
+    text: title
 
-        horizontalAlignment: Text.AlignHCenter
+    horizontalAlignment: Text.AlignHCenter
 
-        anchors {
-                verticalCenter: parent.verticalCenter
-                right: parent.right
-                left: parent.left
-                rightMargin: quranTheme.marginMedium
-                leftMargin: quranTheme.marginMedium
-        }
+    anchors {
+        verticalCenter: parent.verticalCenter
+        right: parent.right
+        left: parent.left
+        rightMargin: quranTheme.marginMedium
+        leftMargin: quranTheme.marginMedium
+    }
 
-        visible: parent.count == 0
+    visible: parent.count == 0
+    color: quranTheme.primaryColor
 }

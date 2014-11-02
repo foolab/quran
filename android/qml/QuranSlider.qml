@@ -12,7 +12,7 @@ Column {
     property bool valueText //: slider.tickmarksEnabled //TODO: Not supported
     property alias label: textLabel.text
 
-    Label {
+    QuranLabel {
         id: textLabel
 
         anchors {
@@ -24,6 +24,7 @@ Column {
 
         font.bold: true
         font.pixelSize: quranTheme.fontSizeSmall
+        color: quranTheme.primaryColor
     }
 
     Slider {

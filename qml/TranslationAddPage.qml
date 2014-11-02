@@ -78,6 +78,7 @@ QuranPage {
                 QuranLabel {
                     id: label
                     text: translation.name
+                    color: quranTheme.primaryColor
                     truncateText: true
                     anchors {
                         top: parent.top

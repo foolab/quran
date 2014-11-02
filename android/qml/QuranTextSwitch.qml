@@ -26,6 +26,7 @@ Item {
 
         verticalAlignment: Text.AlignVCenter
         font.bold: true
+        color: quranTheme.primaryColor
     }
 
     Switch {
