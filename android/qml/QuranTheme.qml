@@ -18,7 +18,7 @@ Item {
     property color translationTextColor: textColor
     property color buttonNormalColor: inNightMode ? "white" : "black"
 
-    property color buttonHighlightColor: "blue"
+    property color buttonHighlightColor: highlightColor
 
     property int marginSmall: Screen.height / 100
     property int marginMedium: Screen.height / 80
@@ -32,7 +32,7 @@ Item {
     property int itemSizeSmall: Screen.height / 12
     property int itemSizeLarge: Screen.height / 10
     property int characterKeySize: 60
-    property color highlightColor: "blue"
+    property color highlightColor: "gray"
 
     property color statusError: "red"
     property color statusDownloading: "yellow"
