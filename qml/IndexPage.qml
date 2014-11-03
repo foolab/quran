@@ -154,7 +154,6 @@ QuranPage {
     Component {
         id: pageComponent
         Item {
-            anchors.fill: parent
 
             Column {
                 width: parent.width
