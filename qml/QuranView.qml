@@ -160,7 +160,7 @@ QuranListView {
 
                     ToolButton {
                         icon.source: highlight ? "image://icon/play.png?" + quranTheme.buttonHighlightColor : "image://icon/play.png?" + quranTheme.buttonNormalColor
-                        visible: settings.recitationMode != 0 && _recitations.installedCount > 0
+                        visible: settings.recitationMode != 0 && recitations.installedCount > 0
                         onClicked: playAudio(MediaPlayer.PlayVerse, checker.bookmark)
                     }
                 }

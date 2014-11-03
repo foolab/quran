@@ -6,7 +6,7 @@ QuranPage {
     QuranListView {
         id: view
         anchors.fill: parent
-        model: _recitations
+        model: recitations
 
         section {
             property: "online"

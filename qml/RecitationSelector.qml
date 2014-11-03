@@ -42,14 +42,14 @@ QuranPage {
             title: qsTr("Choose recitation")
         }
 
-        model: _recitations
+        model: recitations
 
         delegate: ListDelegate {
             id: item
             visible: recitation.status == Recitation.Installed
 
             onClicked: {
-                if (_recitations.loadRecitation(recitation.uuid)) {
+                if (recitations.loadRecitation(recitation.uuid)) {
                     settings.defaultRecitation = recitation.uuid
                     popPage()
                 } else {

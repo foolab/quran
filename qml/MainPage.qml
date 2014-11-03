@@ -54,7 +54,7 @@ QuranPage {
             icon.source: highlight ? "image://icon/reciter.png?" + quranTheme.buttonHighlightColor : "image://icon/reciter.png?" + quranTheme.buttonNormalColor
             onClicked: pushAnimated(Qt.resolvedUrl("RecitationSelector.qml"))
 // TODO:
-            enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
+            enabled: settings.recitationMode != 0 && recitations.installedCount > 0
         },
         ToolButton {
             icon.source: highlight ? "image://icon/translation.png?" + quranTheme.buttonHighlightColor : "image://icon/translation.png?" + quranTheme.buttonNormalColor
@@ -70,7 +70,7 @@ QuranPage {
         },
         ToolButton {
             icon.source: highlight ? "image://icon/play.png?" + quranTheme.buttonHighlightColor : "image://icon/play.png?" + quranTheme.buttonNormalColor
-            enabled: settings.recitationMode != 0 && _recitations.installedCount > 0
+            enabled: settings.recitationMode != 0 && recitations.installedCount > 0
             onClicked: playAudio(MediaPlayer.PlayPage, settings.pageNumber)
         },
         ToolButton {

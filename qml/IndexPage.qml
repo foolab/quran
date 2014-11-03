@@ -96,7 +96,7 @@ QuranPage {
                 number: index
                 text: _data.fullSuraName(index)
                 highlight: ListView.isCurrentItem
-                showPlay: settings.recitationMode != 0 && _recitations.installedCount > 0
+                showPlay: settings.recitationMode != 0 && recitations.installedCount > 0
                 onClicked: {
                     pagePosition.setPosition(index, 0)
                     popPage()
@@ -133,7 +133,7 @@ QuranPage {
             delegate: IndexDelegate {
                 number: index
                 text: _data.partName(index)
-                showPlay: settings.recitationMode != 0 && _recitations.installedCount > 0
+                showPlay: settings.recitationMode != 0 && recitations.installedCount > 0
                 showMore: false
                 highlight: ListView.isCurrentItem
 

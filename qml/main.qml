@@ -67,7 +67,7 @@ QuranWindow {
     }
 
     Recitations {
-        id: _recitations
+        id: recitations
         player: audioPlayer
         settings: settings
 
