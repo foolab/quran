@@ -23,7 +23,7 @@ QuranWindow {
     }
 
     Translations {
-        id: _translations
+        id: translations
         settings: settings
         downloader: _downloader
         data: _data
@@ -87,7 +87,7 @@ QuranWindow {
         onAvailableChanged: {
             if (!fsmon.available) {
                 // TODO: show banner
-                _translations.stopDownloads();
+                translations.stopDownloads();
             }
         }
     }

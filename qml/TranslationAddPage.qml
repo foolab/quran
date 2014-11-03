@@ -6,7 +6,7 @@ QuranPage {
     QuranListView {
         id: view
         anchors.fill: parent
-        model: _translations
+        model: translations
 
         section {
             property: "language"
@@ -56,7 +56,7 @@ QuranPage {
             DeleteItem {
                 id: deleter
                 onConfirmed: {
-                    if (!_translations.removeTranslation(translation.uuid)) {
+                    if (!translations.removeTranslation(translation.uuid)) {
                         banner.showMessage("Failed to remove translation")
                     }
                 }

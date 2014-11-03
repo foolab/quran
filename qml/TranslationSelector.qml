@@ -25,14 +25,14 @@ QuranPage {
             title: qsTr("Choose translation")
         }
 
-        model: _translations
+        model: translations
 
         delegate: ListDelegate {
             id: item
             visible: translation.status == Translation.Installed
 
             onClicked: {
-                if (_translations.loadTranslation(translation.uuid)) {
+                if (translations.loadTranslation(translation.uuid)) {
                     settings.defaultTranslation = translation.uuid
                     popPage()
                 } else {
