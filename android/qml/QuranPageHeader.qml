@@ -7,9 +7,6 @@ Item {
     property string title
     property Item page
 
-    // HACK: Set the height just to leave a small margin at the top of all pages
-    height: quranTheme.itemSizeSmall / 4
-
     Component.onCompleted: {
         var p = parent
         while (p) {
