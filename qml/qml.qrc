@@ -12,8 +12,6 @@
     <file alias="qml/Keyboard.qml">Keyboard.qml</file>
     <file alias="qml/CharacterKey.qml">CharacterKey.qml</file>
     <file alias="qml/NumberLabel.qml">NumberLabel.qml</file>
-    <file alias="qml/PageSelectionPage.qml">PageSelectionPage.qml</file>
-    <file alias="qml/PartSelectionPage.qml">PartSelectionPage.qml</file>
     <file alias="qml/VerseSelectionPage.qml">VerseSelectionPage.qml</file>
     <file alias="qml/QuranTranslationLabel.qml">QuranTranslationLabel.qml</file>
     <file alias="qml/QuranVerseLabel.qml">QuranVerseLabel.qml</file>

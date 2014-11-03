@@ -66,7 +66,6 @@ QuranPage {
             height: parent ? parent.height : width
             number: settings.pageNumber + 1
             onClicked: pushAnimated(Qt.resolvedUrl("IndexPage.qml"))
-            onPressAndHold: pushAnimated(Qt.resolvedUrl("PageSelectionPage.qml"))
             color: highlight ? quranTheme.highlightColor : quranTheme.textColor
         },
         ToolButton {
