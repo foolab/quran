@@ -36,7 +36,7 @@ QuranPage {
         width: parent.width
         Repeater {
             model: tabs
-            delegate: MouseArea {
+            delegate: QuranBackgroundItem {
                 width: parent.width / 3
                 height: quranTheme.itemSizeSmall
                 onClicked: mainView.currentIndex = index
