@@ -13,6 +13,7 @@ TextField {
     horizontalAlignment: TextInput.AlignHCenter
     height: quranTheme.itemSizeSmall
     Keys.onReturnPressed: enterKeyClicked()
+    textColor: quranTheme.primaryColor
 
     style: Component {
         TextFieldStyle {
