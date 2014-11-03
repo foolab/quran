@@ -1,5 +1,6 @@
 // -*- qml -*-
 import Sailfish.Silica 1.0
+import QtQuick 2.0
 
 TextField {
     property bool enterKeyEnabled: true
