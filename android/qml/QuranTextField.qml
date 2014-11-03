@@ -1,6 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.2
 import QtQuick.Controls 1.2
+import QtQuick.Controls.Styles 1.2
 
 TextField {
     id: field
@@ -13,8 +14,21 @@ TextField {
     height: quranTheme.itemSizeSmall
     Keys.onReturnPressed: enterKeyClicked()
 
+    style: Component {
+        TextFieldStyle {
+            placeholderTextColor: quranTheme.highlightColor
+
+            background: Rectangle {
+                anchors.fill: parent
+                radius: control.heighteight * 0.16
+                border.color: control.activeFocus ? quranTheme.highlightColor : quranTheme.primaryColor
+                color: quranTheme.backgroundColor
+            }
+        }
+    }
+
+//TODO:
 //    EnterKey.onClicked: enterKeyClicked()
 //    EnterKey.enabled: enterKeyEnabled
 //    EnterKey.text: enterKeyText
 }
-//TODO:
