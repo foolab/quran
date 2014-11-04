@@ -7,7 +7,7 @@ QuranPage {
 
     QuranPageMenu {
         id: pageMenu
-        view: flick
+        view: view
         actions: [
             MenuAction {
                 text: qsTr("Manage translations")
