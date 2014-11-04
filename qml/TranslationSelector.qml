@@ -25,11 +25,12 @@ QuranPage {
             title: qsTr("Choose translation")
         }
 
-        model: translations
+        model: InstalledFilterModel {
+            Component.onCompleted: init(translations, "status", Translation.Installed, "translation")
+        }
 
         delegate: ListDelegate {
             id: item
-            visible: translation.status == Translation.Installed
 
             onClicked: {
                 if (translations.loadTranslation(translation.uuid)) {
@@ -41,7 +42,6 @@ QuranPage {
             }
 
             QuranLabel {
-                visible: item.visible
                 width: parent.width
                 height: item.visible ? quranTheme.itemSizeLarge : 0
                 truncateText: true

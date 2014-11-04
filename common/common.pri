@@ -20,7 +20,7 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            index.cpp recitations.cpp recitation.cpp mediaplaylist.cpp \
            main.cpp phoneflipcontrol.cpp mediaplayer.cpp iconprovider.cpp \
            media.cpp audiooutput.cpp mediadecoder.cpp bookmarksmodel.cpp \
-           bookmarkitem.cpp mediaresampler.cpp searchmodel.cpp
+           bookmarkitem.cpp mediaresampler.cpp searchmodel.cpp models.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h quranviewmodel.h \
            position.h aboutdata.h textsupplier.h trans-meta.h recite-meta.h \
@@ -28,7 +28,7 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h qu
            index.h recitations.h recitation.h mediaplaylist.h \
            phoneflipcontrol.h mediaplayer.h iconprovider.h \
            media.h audiooutput.h mediadecoder.h bookmarksmodel.h \
-           bookmarkitem.h mediaresampler.h searchmodel.h
+           bookmarkitem.h mediaresampler.h searchmodel.h models.h
 
 !android {
 SOURCES += pulse.cpp

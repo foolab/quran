@@ -42,11 +42,12 @@ QuranPage {
             title: qsTr("Choose recitation")
         }
 
-        model: recitations
+        model: InstalledFilterModel {
+            Component.onCompleted: init(recitations, "status", Recitation.Installed, "recitation")
+        }
 
         delegate: ListDelegate {
             id: item
-            visible: recitation.status == Recitation.Installed
 
             onClicked: {
                 if (recitations.loadRecitation(recitation.uuid)) {
@@ -58,9 +59,8 @@ QuranPage {
             }
 
             QuranLabel {
-                visible: item.visible
                 width: parent.width
-                height: item.visible ? quranTheme.itemSizeLarge : 0
+                height: quranTheme.itemSizeLarge
                 truncateText: true
                 text: qsTr("%1 %2").arg(recitation.name).arg(recitation.quality)
                 verticalAlignment: Text.AlignVCenter
