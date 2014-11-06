@@ -37,14 +37,33 @@ QuranPage {
             }
         }
 
+        QuranViewPlaceholder {
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: parent.left
+                leftMargin: quranTheme.marginMedium
+                right: parent.right
+                rightMargin: quranTheme.marginMedium
+            }
+
+            enabled: recitations.installedCount == 0 || settings.recitationMode == 0
+            text: settings.recitationMode == 0 ?
+                qsTr("Enable recitations from application settings.") :
+                qsTr("Enable recitations by selecting 'Manage recitations' from the menu.")
+        }
+
         header: QuranPageHeader {
             width: parent.width
             title: qsTr("Choose recitation")
         }
 
-        model: InstalledFilterModel {
+        InstalledFilterModel {
+            id: recitationsModel
             Component.onCompleted: init(recitations, "status", Recitation.Installed, "recitation")
         }
+
+
+        model: settings.recitationMode != 0 ? recitationsModel : 0
 
         delegate: ListDelegate {
             id: item

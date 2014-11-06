@@ -53,8 +53,6 @@ QuranPage {
         ToolButton {
             icon.source: highlight ? "image://icon/reciter.png?" + quranTheme.buttonHighlightColor : "image://icon/reciter.png?" + quranTheme.buttonNormalColor
             onClicked: pushAnimated(Qt.resolvedUrl("RecitationSelector.qml"))
-// TODO:
-            enabled: settings.recitationMode != 0 && recitations.installedCount > 0
         },
         ToolButton {
             icon.source: highlight ? "image://icon/translation.png?" + quranTheme.buttonHighlightColor : "image://icon/translation.png?" + quranTheme.buttonNormalColor
