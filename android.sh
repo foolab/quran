@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+QT_VERSION=5.3
+
 export ANDROID_NDK_ROOT=/mnt/4/android/android-ndk-r10b
 export ANDROID_SDK_ROOT=/mnt/4/android/android-sdk-linux/
 export TOOLCHAIN=$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.8/prebuilt/linux-x86/bin/
@@ -40,12 +42,12 @@ make
 popd
 
 pushd android/quazip
-/mnt/4/android/qt5.3/5.3/android_armv7/bin/qmake ../../quazip
+/mnt/4/android/qt$QT_VERSION/$QT_VERSION/android_armv7/bin/qmake ../../quazip
 make
 popd
 
 pushd android
-/mnt/4/android/qt5.3/5.3/android_armv7/bin/qmake
+/mnt/4/android/qt$QT_VERSION/$QT_VERSION/android_armv7/bin/qmake
 make
 popd
 
@@ -59,7 +61,7 @@ cp data/search.db apk/assets/
 /mnt/4/android/android-sdk-linux/tools//android update project --path apk \
     --target android-19 --name Quran
 
-/mnt/4/android/qt5.3/5.3/android_armv7/bin/androiddeployqt \
+/mnt/4/android/qt$QT_VERSION/$QT_VERSION/android_armv7/bin/androiddeployqt \
     --input android/android-libQuran.so-deployment-settings.json \
     --output apk \
     --deployment bundled \
