@@ -1,6 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.2
 import QtQuick.Controls 1.2
+import QtQuick.Controls.Styles 1.2
 
 Column {
     id: column
@@ -35,6 +36,10 @@ Column {
             right: parent.right
             leftMargin: quranTheme.marginSmall
             rightMargin: quranTheme.marginSmall
+        }
+
+        style: SliderStyle {
+            // This will give us the base style not the Android one
         }
 
         height: quranTheme.itemSizeSmall

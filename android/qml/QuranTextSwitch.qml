@@ -1,6 +1,7 @@
 // -*- qml -*-
 import QtQuick 2.2
 import QtQuick.Controls 1.2
+import QtQuick.Controls.Styles 1.2
 
 Item {
     property alias checked: textSwitch.checked
@@ -36,6 +37,10 @@ Item {
             top: parent.top
             bottom: parent.bottom
             right: parent.right
+        }
+
+        style: SwitchStyle {
+            // This will give us the base style not the Android one
         }
     }
 }

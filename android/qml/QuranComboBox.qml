@@ -34,7 +34,7 @@ Column {
 
                 background: Rectangle {
                     anchors.fill: parent
-                    color: control.pressed ? quranTheme.highlightColor : quranTheme.backgroundColor
+                    color: control.pressed ?  quranTheme.inNightMode ? "#191919" : "#e5e5e5" : quranTheme.backgroundColor
                 }
 
                 label: QuranLabel {
