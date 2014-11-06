@@ -57,7 +57,6 @@ QuranPage {
         ToolButton {
             icon.source: highlight ? "image://icon/translation.png?" + quranTheme.buttonHighlightColor : "image://icon/translation.png?" + quranTheme.buttonNormalColor
             onClicked: pushAnimated(Qt.resolvedUrl("TranslationSelector.qml"))
-            enabled: translations.installedCount > 0
         },
         NumberLabel {
             width: quranTheme.toolButtonSize
