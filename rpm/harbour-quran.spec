@@ -27,7 +27,7 @@ Requires:  mapplauncherd-booster-silica-qt5
  favorites to easily navigate to them later.
 
 %define __provides_exclude_from ^%{_datadir}/harbour-quran/lib/.*$
-%define __requires_exclude ^libsqlite3.so.0|libavresample.so.1|libavformat.so.54|libavfilter.so.3|libavcodec.so.54|libavutil.so.52|libquazip.so.1|libaudioresource-qt.so.2|libdbus-glib-1.so.2|libdbus-qeventloop-qt5.so.1|libresource.so.0|libresourceqt5.so.1$
+%define __requires_exclude ^libsqlite3.so.0|libavresample.so.2|libavformat.so.56|libavfilter.so.5|libavcodec.so.56|libavutil.so.54|libquazip.so.1|libaudioresource-qt.so.2|libdbus-glib-1.so.2|libdbus-qeventloop-qt5.so.1|libresource.so.0|libresourceqt5.so.1$
 
 %prep
 %setup -q
