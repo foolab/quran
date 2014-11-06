@@ -16,6 +16,8 @@ export CFLAGS=--sysroot=$SYSROOT
 export CPPFLAGS=--sysroot=$SYSROOT
 export CXXFLAGS=--sysroot=$SYSROOT
 
+rm -rf apk
+
 mkdir -p android/libav
 mkdir -p android/sqlite
 mkdir -p android/quazip
