@@ -10,7 +10,7 @@ override_dh_auto_build:
 	cd n9 && ../build-libav.sh --prefix=/opt/n9-quran/ --enable-shared --disable-static
 	cd n9 && ../build_sqlite.sh --prefix=/opt/n9-quran/
 	mkdir -p n9/quazip
-	cd n9/quazip && qmake ../../quazip PREFIX=/opt/n9-quran/ && make
+	cd n9/quazip && qmake ../../quazip CONFIG+=staticlib PREFIX=/opt/n9-quran/ && make
 	cd n9 && qmake && make
 
 override_dh_auto_install:
@@ -21,6 +21,7 @@ override_dh_auto_install:
 
 	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/lib/*.so
 	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/lib/*.la
+	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/lib/*.a
 	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/lib/pkgconfig/
 	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/include/
 	rm -rf $$(pwd)/debian/n9-quran/opt/n9-quran/share/
