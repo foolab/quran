@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-QT_VERSION=5.3
+QT_VERSION=5.4
 
 export ANDROID_NDK_ROOT=/mnt/4/android/android-ndk-r10b
 export ANDROID_SDK_ROOT=/mnt/4/android/android-sdk-linux/
