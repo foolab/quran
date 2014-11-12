@@ -11,7 +11,7 @@ include(../common/common.pri)
 
 INCLUDEPATH += libav/
 
-DEFINES += DATA_DIR=\\\"/usr/share/harbour-quran/\\\"
+DEFINES += DATA_DIR=\\\"assets:/\\\"
 DEFINES += ANDROID=1
 
 RESOURCES += android.qrc ../icons/icons.qrc ../qml/qml.qrc

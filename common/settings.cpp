@@ -35,7 +35,7 @@
 #define DEFAULT_NIGHT_MODE         false
 #define DEFAULT_THEME              "blue"
 
-#define FONT_FAMILY                "Simplified Naskh"
+#define FONT_FAMILY                "Amiri Quran"
 
 #define MIN_TRANSLATION_FONT_SIZE  FONT_MIN_SIZE
 #define MAX_TRANSLATION_FONT_SIZE  FONT_MAX_SIZE

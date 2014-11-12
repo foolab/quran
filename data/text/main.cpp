@@ -29,6 +29,7 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include "index.h"
+#include <unistd.h>
 
 struct Sura {
   QString name;

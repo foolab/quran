@@ -1,6 +1,6 @@
 data/search.db opt/n9-quran/data/
 debian/n9-quran.png usr/share/themes/base/meegotouch/icons/
-data/SimplifiedNaskh.ttf opt/n9-quran/fonts/
+data/amiri-quran.ttf opt/n9-quran/fonts/
 data/amiri-regular.ttf opt/n9-quran/fonts/
 data/fonts.conf opt/n9-quran/fonts/
 debian/n9-quran.desktop usr/share/applications/

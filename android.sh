@@ -57,8 +57,10 @@ pushd android
 make install INSTALL_ROOT=../apk
 popd
 
-mkdir -p apk/assets
+mkdir -p apk/assets/fonts/
 cp data/search.db apk/assets/
+cp data/amiri-regular.ttf apk/assets/fonts/
+cp data/amiri-quran.ttf apk/assets/fonts/
 
 /mnt/4/android/android-sdk-linux/tools//android update project --path apk \
     --target android-19 --name Quran

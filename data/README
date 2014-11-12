@@ -5,6 +5,4 @@ Logo:
 
 Font:
 =====
-Created by Khaled Hosny <khaledhosny@eglug.org> based on the Scheherazade font.
-Modified by me to work around the ancient libfontconfig version in Maemo5 by filling
-the arabic presentation forms block (U+FE80-U+FEFC) with dummy glyphs (Khaled's idea).
+Amiri font from http://www.amirifont.org/ by Khaled Hosny <khaledhosny@eglug.org>

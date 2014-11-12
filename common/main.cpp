@@ -46,14 +46,19 @@ extern "C" {
 #include <fontconfig/fontconfig.h>
 #endif
 
-#define FONTS_DIR         DATA_DIR"/fonts/"
+#define FONTS_DIR         DATA_DIR"fonts"
 #define FONTS_CONF        FONTS_DIR"/fonts.conf"
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
   Application app(argc, argv);
 
-  QFontDatabase::addApplicationFont(FONTS_DIR"/amiri-regular.ttf");
-  QFontDatabase::addApplicationFont(FONTS_DIR"/SimplifiedNaskh.ttf");
+  if (QFontDatabase::addApplicationFont(FONTS_DIR"/amiri-regular.ttf") == -1) {
+    qCritical() << "Failed to load amiri-regular.ttf";
+  }
+
+  if (QFontDatabase::addApplicationFont(FONTS_DIR"/amiri-quran.ttf") == -1) {
+    qCritical() << "Failed to load amiri-quran.ttf";
+  }
 
 #ifndef ANDROID
   FcConfig *conf = FcConfigGetCurrent();

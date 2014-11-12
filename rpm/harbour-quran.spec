@@ -75,7 +75,7 @@ mkdir -p %{buildroot}/%{_datadir}/harbour-quran/data/
 cp data/search.db %{buildroot}/%{_datadir}/harbour-quran/data/
 
 mkdir -p %{buildroot}/%{_datadir}/harbour-quran/fonts/
-cp -a data/SimplifiedNaskh.ttf %{buildroot}/%{_datadir}/harbour-quran/fonts/
+cp -a data/amiri-quran.ttf %{buildroot}/%{_datadir}/harbour-quran/fonts/
 cp -a data/amiri-regular.ttf %{buildroot}/%{_datadir}/harbour-quran/fonts/
 cp -a data/fonts.conf %{buildroot}/%{_datadir}/harbour-quran/fonts/
 
@@ -109,6 +109,6 @@ cp /usr/lib/libdbus-qeventloop-qt5.so.1.0.0 %{buildroot}/%{_datadir}/harbour-qur
 %{_datadir}/icons/hicolor/86x86/apps/harbour-quran.png
 %{_datadir}/harbour-quran/lib/*.so.*
 %{_datadir}/harbour-quran/data/search.db
-%{_datadir}/harbour-quran/fonts/SimplifiedNaskh.ttf
+%{_datadir}/harbour-quran/fonts/amiri-quran.ttf
 %{_datadir}/harbour-quran/fonts/amiri-regular.ttf
 %{_datadir}/harbour-quran/fonts/fonts.conf
