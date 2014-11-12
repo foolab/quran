@@ -52,57 +52,37 @@ QuranListView {
     Component {
         id: chapterDelegate
 
-        Item {
-            height: rect.height
+        Column {
+            width: parent.width
+
             Rectangle {
-                id: rect
+                width: parent.width
+                height: 5
                 color: quranTheme.chapterBorder
-                height: childRect.height + 10
+            }
 
-                anchors {
-                    left: parent ? parent.left : undefined
-                    right: parent ? parent.right : undefined
-                    rightMargin: quranTheme.marginSmall
-                    leftMargin: quranTheme.marginSmall
+            Rectangle {
+                width: parent.width
+                height: label.height
+                color: quranTheme.chapterBackground
+
+                QuranLabel {
+                    id: label
+                    width: parent.width
+                    font.family: settings.fontFamily
+                    font.pixelSize: settings.fontSize
+                    color: quranTheme.titleColor
+                    horizontalAlignment: Text.AlignHCenter
+                    text: qsTr("%1%2%3").arg(_data.fullSuraName(_chapter))
+                        .arg(_data.hasBasmala(_chapter) ? "\n" : "")
+                        .arg(_data.hasBasmala(_chapter) ? _data.basmala : "")
                 }
+            }
 
-                Rectangle {
-                    id: childRect
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                    }
-
-                    height: column.height
-                    y: 5
-                    color: quranTheme.chapterBackground
-
-                    Column {
-                        id: column
-                        width: parent.width
-
-                        QuranLabel {
-                            id: title
-                            width: parent.width
-                            font.family: settings.fontFamily
-                            font.pixelSize: settings.fontSize
-                            color: quranTheme.titleColor
-                            horizontalAlignment: Text.AlignHCenter
-                            text: _data.fullSuraName(_chapter);
-                        }
-
-                        QuranLabel {
-                            id: subtitle
-                            font.family: settings.fontFamily
-                            font.pixelSize: settings.fontSize
-                            width: parent.width
-                            horizontalAlignment: Text.AlignHCenter
-                            color: quranTheme.subtitleColor
-                            text: _data.hasBasmala(_chapter) ? _data.basmala : ""
-                            visible: text != ""
-                        }
-                    }
-                }
+            Rectangle {
+                width: parent.width
+                height: 5
+                color: quranTheme.chapterBorder
             }
         }
     }
