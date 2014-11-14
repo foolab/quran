@@ -21,14 +21,6 @@ QuranPage {
         anchors.fill: parent
 
         QuranViewPlaceholder {
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: parent.left
-                leftMargin: quranTheme.marginMedium
-                right: parent.right
-                rightMargin: quranTheme.marginMedium
-            }
-
             enabled: translations.installedCount > 0
             text: qsTr("Install translations by selecting 'Manage translations' from the menu.")
         }

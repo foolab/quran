@@ -38,14 +38,6 @@ QuranPage {
         }
 
         QuranViewPlaceholder {
-            anchors {
-                verticalCenter: parent.verticalCenter
-                left: parent.left
-                leftMargin: quranTheme.marginMedium
-                right: parent.right
-                rightMargin: quranTheme.marginMedium
-            }
-
             enabled: recitations.installedCount == 0 || settings.recitationMode == 0
             text: settings.recitationMode == 0 ?
                 qsTr("Enable recitations from application settings.") :
