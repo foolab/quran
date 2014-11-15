@@ -12,7 +12,6 @@ Item {
     property color backgroundColor: inNightMode ? "black" : "white"
     property color textColor: inNightMode ? "white" : "black"
     property color titleColor: textColor
-    property color subtitleColor: textColor
     property color verseColor: textColor
     property color recitationHighlightColor: "red"
     property color translationTextColor: textColor
