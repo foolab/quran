@@ -207,7 +207,16 @@ bool Translations::removeTranslation(const QString& id) {
 
   if (QFile(index).remove() && QFile(data).remove()) {
     t->setStatus(Translation::None);
-    emit installedCountChanged();
+    int idx = m_translations.indexOf(t);
+
+    if (idx != -1) {
+      reportChanges(idx, idx);
+    } else {
+      // I doubt this could ever happen
+      qmlInfo(this) << "Unknown translation installed";
+      emit installedCountChanged();
+    }
+
     return true;
   }
 
@@ -295,11 +304,23 @@ QVariant Translations::data(const QModelIndex& index, int role) const {
 void Translations::translationStatusChanged() {
   if (Translation *t = dynamic_cast<Translation *>(sender())) {
     if (t->status() == Translation::Installed) {
-      emit installedCountChanged();
+      int idx = m_translations.indexOf(t);
+      if (idx != -1) {
+	reportChanges(idx, idx);
+      } else {
+	// I doubt this could ever happen
+	qmlInfo(this) << "Unknown translation";
+	emit installedCountChanged();
+      }
     } else if (t->status() == Translation::Error) {
       emit downloadError(t->name());
     }
   }
+}
+
+void Translations::reportChanges(int from, int to) {
+  emit QAbstractItemModel::dataChanged(index(from, 0), index(to, 0));
+  emit installedCountChanged();
 }
 
 #ifdef QT_VERSION_5

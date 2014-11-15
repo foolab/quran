@@ -165,8 +165,8 @@ void Recitations::refresh() {
   }
 
   foreach (Recitation *r, recitations) {
-    QObject::connect(r, SIGNAL(enabled()), this, SIGNAL(installedCountChanged()));
-    QObject::connect(r, SIGNAL(disabled()), this, SIGNAL(installedCountChanged()));
+    QObject::connect(r, SIGNAL(enabled()), this, SLOT(reportChanges()));
+    QObject::connect(r, SIGNAL(disabled()), this, SLOT(reportChanges()));
   }
 
   beginInsertRows(QModelIndex(), 0, recitations.size() - 1);
@@ -269,6 +269,20 @@ QVariant Recitations::data(const QModelIndex& index, int role) const {
   }
 
   return QVariant();
+}
+
+void Recitations::reportChanges() {
+  if (Recitation *r = dynamic_cast<Recitation *>(sender())) {
+    int idx = m_recitations.indexOf(r);
+    if (idx != -1) {
+      emit QAbstractItemModel::dataChanged(index(idx, 0), index(idx, 0));
+    } else {
+      // I doubt this could ever happen
+      qmlInfo(this) << "Unknown recitation";
+    }
+
+    emit installedCountChanged();
+  }
 }
 
 #ifdef QT_VERSION_5

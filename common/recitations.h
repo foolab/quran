@@ -62,6 +62,9 @@ signals:
   void playerChanged();
   void refreshed();
 
+private slots:
+  void reportChanges();
+
 private:
   void clear();
   int lookup(const QString& id);

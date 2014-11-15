@@ -80,6 +80,7 @@ private:
   int lookup(const QString& id);
   QString translationId(int tid) const;
   void clear();
+  void reportChanges(int from, int to);
 
   QList<Translation *> m_translations;
   Downloader *m_downloader;
