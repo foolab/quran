@@ -42,7 +42,7 @@ QuranPage {
                 MenuAction {
                     text: qsTr("Disable")
                     onClicked: {
-                        if (!recitation.enable()) {
+                        if (!recitation.disable()) {
                             banner.showMessage("Failed to disable recitation")
                         }
                     }
