@@ -24,7 +24,7 @@ QuranWindow {
 
     Translations {
         id: translations
-        settings: settings
+        dir: settings.translationsDir
         downloader: _downloader
         data: _data
         Component.onCompleted: {

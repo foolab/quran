@@ -21,7 +21,6 @@
 #include <QAbstractListModel>
 
 class Downloader;
-class Settings;
 class DataProvider;
 class Translation;
 
@@ -29,7 +28,7 @@ class Translations : public QAbstractListModel {
   Q_OBJECT
 
   Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
-  Q_PROPERTY(Settings *settings READ settings WRITE setSettings NOTIFY settingsChanged);
+  Q_PROPERTY(QString dir READ dir WRITE setDir NOTIFY dirChanged);
   Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
   Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
 
@@ -44,8 +43,8 @@ public:
 
   int installedCount() const;
 
-  Settings *settings() const;
-  void setSettings(Settings *settings);
+  QString dir() const;
+  void setDir(const QString& dir);
 
   Downloader *downloader() const;
   void setDownloader(Downloader *downloader);
@@ -67,7 +66,7 @@ public slots:
 
 signals:
   void installedCountChanged();
-  void settingsChanged();
+  void dirChanged();
   void downloaderChanged();
   void dataChanged();
   void refreshed();
@@ -85,7 +84,7 @@ private:
   QList<Translation *> m_translations;
   Downloader *m_downloader;
 
-  Settings *m_settings;
+  QString m_dir;
   DataProvider *m_data;
 
 #ifdef QT_VERSION_5

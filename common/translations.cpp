@@ -18,7 +18,6 @@
 #include "translations.h"
 #include "trans-meta.h"
 #include "translation.h"
-#include "settings.h"
 #include "dataprovider.h"
 #include "textprovider.h"
 #ifdef QT_VERSION_5
@@ -39,7 +38,6 @@
 Translations::Translations(QObject *parent) :
   QAbstractListModel(parent),
   m_downloader(0),
-  m_settings(0),
   m_data(0) {
 
   QHash<int, QByteArray> roles;
@@ -77,15 +75,14 @@ void Translations::clear() {
   emit installedCountChanged();
 }
 
-
-Settings *Translations::settings() const {
-  return m_settings;
+QString Translations::dir() const {
+  return m_dir;
 }
 
-void Translations::setSettings(Settings *settings) {
-  if (m_settings != settings) {
-    m_settings = settings;
-    emit settingsChanged();
+void Translations::setDir(const QString& dir) {
+  if (m_dir != dir) {
+    m_dir = dir;
+    emit dirChanged();
   }
 }
 
@@ -132,7 +129,7 @@ void Translations::refresh() {
   }
 
   // Now check which ones are installed
-  QDir dir(m_settings->translationsDir());
+  QDir dir(m_dir);
   dir.mkpath(".");
 
   QStringList list =
@@ -183,12 +180,12 @@ int Translations::lookup(const QString& id) {
 }
 
 QString Translations::indexPath(int tid) const {
-  return QString("%1%2%3%4").arg(m_settings->translationsDir()).arg(QDir::separator())
+  return QString("%1%2%3%4").arg(m_dir).arg(QDir::separator())
     .arg(translationId(tid)).arg(INDEX_SUFFIX);
 }
 
 QString Translations::dataPath(int tid) const {
-  return QString("%1%2%3%4").arg(m_settings->translationsDir()).arg(QDir::separator())
+  return QString("%1%2%3%4").arg(m_dir).arg(QDir::separator())
     .arg(translationId(tid)).arg(DATA_SUFFIX);
 }
 
