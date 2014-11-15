@@ -163,7 +163,6 @@ QuranPage {
                 text: qsTr("Enable recitations")
                 checked: settings.recitationMode == 1
                 onCheckedChanged: settings.recitationMode = checked ? 1 : 0
-                enabled: recitations.installedCount > 0
             }
 
             QuranTextSwitch {
