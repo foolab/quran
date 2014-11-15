@@ -118,10 +118,6 @@ QString Settings::translationsDir() const {
   return dataDir() + "/translations/";
 }
 
-QString Settings::recitationsSubDir() const {
-  return ".n9-quran/recitations/";
-}
-
 QString Settings::fontFamily() const {
   return FONT_FAMILY;
 }

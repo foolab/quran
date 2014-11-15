@@ -52,7 +52,6 @@ class Settings : public QObject {
   Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged);
   Q_PROPERTY(QString recitationsDir READ recitationsDir CONSTANT);
   Q_PROPERTY(QString translationsDir READ translationsDir CONSTANT);
-  Q_PROPERTY(QString recitationsSubDir READ recitationsSubDir CONSTANT);
 
 public:
   Settings(QObject *parent = 0);
@@ -114,7 +113,6 @@ public:
 
   QString recitationsDir() const;
   QString translationsDir() const;
-  QString recitationsSubDir() const;
 
 public slots:
   void reset();
