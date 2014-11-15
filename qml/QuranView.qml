@@ -124,8 +124,6 @@ QuranListView {
 
             QuranTranslationLabel {
                 id: translation
-                chapter: _chapter
-                verse: _verse
                 textSupplier: supplier
             }
         }
