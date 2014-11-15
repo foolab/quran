@@ -17,7 +17,6 @@
 
 #include "recitations.h"
 #include "recitation.h"
-#include "settings.h"
 #include "recite-meta.h"
 #ifdef QT_VERSION_5
 #include <QQmlInfo>
@@ -31,7 +30,6 @@
 
 Recitations::Recitations(QObject *parent)
   : QAbstractListModel(parent),
-    m_settings(0),
     m_player(0) {
 
   QHash<int, QByteArray> roles;
@@ -65,14 +63,14 @@ void Recitations::clear() {
   emit installedCountChanged();
 }
 
-Settings *Recitations::settings() const {
-  return m_settings;
+QString Recitations::dir() const {
+  return m_dir;
 }
 
-void Recitations::setSettings(Settings *settings) {
-  if (m_settings != settings) {
-    m_settings = settings;
-    emit settingsChanged();
+void Recitations::setDir(const QString& dir) {
+  if (m_dir != dir) {
+    m_dir = dir;
+    emit dirChanged();
   }
 }
 
@@ -101,21 +99,21 @@ void Recitations::refresh() {
     info->m_name = QString::fromUtf8(Rs[x].translated_name);
     info->m_quality = QString::fromUtf8(Rs[x].quality);
     info->m_dir =
-      QString("%1%2%3%2").arg(m_settings->recitationsDir()).arg(QDir::separator()).arg(info->m_uuid);
+      QString("%1%2%3%2").arg(m_dir).arg(QDir::separator()).arg(info->m_uuid);
     info->m_url = QString::fromUtf8(Rs[x].url);
     info->m_status = Recitation::None;
 
     recitations << new Recitation(info, this);
   }
 
-  QDir dir(m_settings->recitationsDir());
+  QDir dir(m_dir);
   dir.mkpath(".");
 
   QStringList entries(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
 
   foreach (const QString& entry, entries) {
     QString recitationDir =
-      QString("%1%2%3%2").arg(m_settings->recitationsDir()).arg(QDir::separator()).arg(entry);
+      QString("%1%2%3%2").arg(m_dir).arg(QDir::separator()).arg(entry);
     QString id = entry;
 
     RecitationInfo *info = Recitation::guessType(recitationDir);
@@ -149,7 +147,7 @@ void Recitations::refresh() {
   entries = dir.entryList(QStringList() << "*.zip", QDir::Files | QDir::NoDotAndDotDot);
   foreach (const QString& entry, entries) {
     QString recitationDir =
-      QString("%1%2%3").arg(m_settings->recitationsDir()).arg(QDir::separator()).arg(entry);
+      QString("%1%2%3").arg(m_dir).arg(QDir::separator()).arg(entry);
     QString id = entry;
 
     RecitationInfo *info = Recitation::guessType(recitationDir);

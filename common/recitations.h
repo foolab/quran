@@ -20,7 +20,6 @@
 
 #include <QAbstractListModel>
 
-class Settings;
 class Recitation;
 class MediaPlayer;
 
@@ -28,7 +27,7 @@ class Recitations : public QAbstractListModel {
   Q_OBJECT
 
   Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
-  Q_PROPERTY(Settings *settings READ settings WRITE setSettings NOTIFY settingsChanged);
+  Q_PROPERTY(QString dir READ dir WRITE setDir NOTIFY dirChanged);
   Q_PROPERTY(MediaPlayer *player READ player WRITE setPlayer NOTIFY playerChanged);
 
   enum {
@@ -40,8 +39,8 @@ public:
   Recitations(QObject *parent = 0);
   ~Recitations();
 
-  Settings *settings() const;
-  void setSettings(Settings *settings);
+  QString dir() const;
+  void setDir(const QString& dir);
 
   int installedCount() const;
 
@@ -58,7 +57,7 @@ public slots:
 
 signals:
   void installedCountChanged();
-  void settingsChanged();
+  void dirChanged();
   void playerChanged();
   void refreshed();
 
@@ -69,7 +68,7 @@ private:
   void clear();
   int lookup(const QString& id);
 
-  Settings *m_settings;
+  QString m_dir;
   MediaPlayer *m_player;
 
   QList<Recitation *> m_recitations;

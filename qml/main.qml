@@ -69,7 +69,7 @@ QuranWindow {
     Recitations {
         id: recitations
         player: audioPlayer
-        settings: settings
+        dir: settings.recitationsDir
 
         Component.onCompleted: {
             refresh()
