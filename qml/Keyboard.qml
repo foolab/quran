@@ -59,7 +59,7 @@ Column {
         CharacterKey { caption: "ز"; width: parent.width / 11 }
         CharacterKey { caption: "ظ"; width: parent.width / 11 }
         CharacterKey { caption: "ط"; width: parent.width / 11 }
-        ToolButton { icon.source: quranTheme.keyboardBackspace; width: 2 * (parent.width / 11); onClicked: keyboard.backspaceClicked() }
+        ToolButton { icon.source: quranTheme.keyboardBackspace; width: 2 * (parent.width / 11); height: parent.width / 11; onClicked: keyboard.backspaceClicked() }
     }
 
     Row {
@@ -72,6 +72,6 @@ Column {
         CharacterKey { caption: "ئ"; width: parent.width / 11 }
         CharacterKey { caption: "ؤ"; width: parent.width / 11 }
         CharacterKey { caption: " "; width: 4 * (parent.width / 11) }
-        ToolButton { icon.source: quranTheme.keyboardEnter; width: 2 * (parent.width / 11); onClicked: keyboard.enterClicked() }
+        ToolButton { icon.source: quranTheme.keyboardEnter; width: 2 * (parent.width / 11); height: parent.width / 11; onClicked: keyboard.enterClicked() }
     }
 }
