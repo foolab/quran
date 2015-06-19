@@ -39,7 +39,7 @@ make
 popd
 
 pushd sailfish
-../build-libav.sh --prefix=%{_datadir}/harbour-quran/ --enable-shared --disable-static
+../build-libav.sh --prefix=%{_datadir}/harbour-quran/ --enable-shared --disable-static --disable-yasm
 ../build_sqlite.sh --prefix=%{_datadir}/harbour-quran/
 
 mkdir quazip
