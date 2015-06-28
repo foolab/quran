@@ -10,7 +10,7 @@ android:LIBS += -lOpenSLES
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/ ../libav/ ../sqlite/ ../quazip/quazip/
 
-DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.6.5\\\"
+DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.6.6\\\"
 
 equals(QT_MAJOR_VERSION, 5): DEFINES += QT_VERSION_5
 
