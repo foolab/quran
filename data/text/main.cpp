@@ -518,7 +518,7 @@ bool output() {
     const Offset& o = offsets.at(x);
 
     QMap<QString, QVariant> meta;
-    meta.insert("size", o.len);
+    meta.insert("size", QVariant::fromValue(o.len));
 
     if (!Index::write(o.idx, o.index, meta)) {
       qCritical() << "Failed to write index";
