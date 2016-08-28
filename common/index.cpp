@@ -46,7 +46,7 @@ bool Index::write(const QString& path, const QList<QPair<off_t, size_t> >& offse
     s.setArrayIndex(x);
     qlonglong off = offsets.at(x).first;
     s.setValue("offset", off);
-    s.setValue("len", offsets.at(x).second);
+    s.setValue("len", QVariant::fromValue(offsets.at(x).second));
   }
 
   s.endArray();
