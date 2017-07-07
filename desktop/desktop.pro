@@ -14,7 +14,7 @@ DEFINES += DATA_DIR=\\\"/usr/share/quran/\\\"
 DEFINES += DESKTOP=1
 
 RESOURCES += ../android/android.qrc ../icons/icons.qrc ../qml/qml.qrc
-SOURCES += fsmonitor.cpp audiopolicy.cpp application.cpp
-HEADERS += fsmonitor.h audiopolicy.h application.h
+SOURCES += fsmonitor.cpp audiopolicy.cpp application.cpp mockandroidsupport.cpp
+HEADERS += fsmonitor.h audiopolicy.h application.h mockandroidsupport.h
 
 LIBS += -lquazip-qt5 -lavformat -lavcodec -lavutil -lavresample
