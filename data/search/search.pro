@@ -1,14 +1,11 @@
-TEMPLATE = app
-TARGET = search
-DEPENDPATH += .
-INCLUDEPATH += .
+include(../../common.pri)
 
-QT = core
+TARGET = search
 
 SOURCES += main.cpp
 
-DEPENDPATH += . ../../common/ ../../sqlite/
-INCLUDEPATH += . ../../common/ ../../sqlite/
+DEPENDPATH += . ../../sqlite/
+INCLUDEPATH += . ../../sqlite/
 
 CONFIG += link_pkgconfig
 PKGCONFIG += sqlite3

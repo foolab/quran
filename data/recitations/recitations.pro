@@ -1,13 +1,8 @@
-TEMPLATE = app
-TARGET = recitations
-DEPENDPATH += .
-INCLUDEPATH += .
+include(../../common.pri)
 
-QT = core
+TARGET = recitations
 
 SOURCES += main.cpp
-
-DEPENDPATH += .
 
 QMAKE_POST_LINK += ./recitations recite.ini > ../recite-meta.h
 

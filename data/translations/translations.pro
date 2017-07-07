@@ -1,13 +1,8 @@
-TEMPLATE = app
-TARGET = translations
-DEPENDPATH += .
-INCLUDEPATH += .
+include(../../common.pri)
 
-QT = core
+TARGET = translations
 
 SOURCES += main.cpp
-
-DEPENDPATH += .
 
 QMAKE_POST_LINK += ./translations trans.ini > ../trans-meta.h
 
