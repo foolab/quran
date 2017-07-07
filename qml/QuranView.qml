@@ -73,8 +73,8 @@ QuranListView {
             id: column
 
             anchors {
-                left: parent.left
-                right: parent.right
+                left: parent ? parent.left : undefined
+                right: parent ? parent.right : undefined
                 rightMargin: quranTheme.marginSmall
                 leftMargin: quranTheme.marginSmall
             }
