@@ -23,6 +23,7 @@
 #ifdef QT_VERSION_5
 #include <QStandardPaths>
 #endif
+#include <QDataStream>
 
 #define DEFAULT_TEXT_TYPE          0
 #define DEFAULT_FONT_SIZE          36
