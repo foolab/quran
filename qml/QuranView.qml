@@ -38,7 +38,7 @@ QuranListView {
 
     model: QuranViewModel {
         data: _data
-        page: index
+        page: view.page
     }
 
     delegate: Loader {
