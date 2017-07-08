@@ -18,10 +18,6 @@
 #include "dataprovider.h"
 #include "metadata.h"
 #include <QString>
-#include <QDir>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
 #include <QDebug>
 #include "textprovider.h"
 
