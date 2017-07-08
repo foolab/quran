@@ -1,5 +1,3 @@
-include(../../common.pri)
-
 TARGET = search
 
 SOURCES += main.cpp
@@ -10,6 +8,8 @@ INCLUDEPATH += . ../../sqlite/
 CONFIG += link_pkgconfig
 PKGCONFIG += sqlite3
 
-QMAKE_POST_LINK += ./search quran-simple-clean.xml ../search.db
+POST_COMMAND = ./search quran-simple-clean.xml search.db && mv search.db ../
 
-QMAKE_CLEAN += ../search.db
+POST_OUT = ../search.db
+
+include(../../common.pri)

@@ -1,9 +1,9 @@
-include(../../common.pri)
-
 TARGET = recitations
 
 SOURCES += main.cpp
 
-QMAKE_POST_LINK += ./recitations recite.ini > ../recite-meta.h
+POST_COMMAND = ./recitations recite.ini > recite-meta.h && mv recite-meta.h ../
 
-QMAKE_CLEAN += ../recite-meta.h
+POST_OUT = ../recite-meta.h
+
+include(../../common.pri)
