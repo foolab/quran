@@ -32,14 +32,12 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h metadata.h qu
            media.h audiooutput.h mediadecoder.h bookmarksmodel.h \
            bookmarkitem.h mediaresampler.h searchmodel.h models.h
 
-!android {
-SOURCES += pulse.cpp
-HEADERS += pulse.h
-}
-
 android {
 SOURCES += sles.cpp
 HEADERS += sles.h
+} else {
+SOURCES += pulse.cpp
+HEADERS += pulse.h
 }
 
 target.path = /usr/bin/
