@@ -1,8 +1,6 @@
 TEMPLATE = app
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-  QMAKE_CXXFLAGS += -std=c++11
-}
+CONFIG += c++11
 
 QT += network
 CONFIG += mobility link_pkgconfig
