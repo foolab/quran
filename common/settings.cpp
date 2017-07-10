@@ -49,10 +49,7 @@
 #define DEFAULT_RECITATION_MODE             0
 Q_DECLARE_METATYPE(QList<uint>);
 
-#if defined(HARMATTAN)
-#define USER_DIR "/home/user/MyDocs/.n9-quran/"
-#define CONF_FILE "quran.conf"
-#elif defined(SAILFISH)
+#if defined(SAILFISH)
 #define CONF_FILE "harbour-quran.conf"
 #elif defined(ANDROID)
 #define CONF_FILE "android-quran.conf"
@@ -70,11 +67,7 @@ Settings::Settings(QObject *parent) : QObject(parent) {
   qRegisterMetaType<QList<uint> >("QList<uint>");
   qRegisterMetaTypeStreamOperators<QList<uint> >("QList<uint>");
 
-#if defined(HARMATTAN)
-  m_settings = new QSettings(QString("%1%2.config%2%3")
-			     .arg(QDir::homePath()).arg(QDir::separator()).arg(CONF_FILE),
-			     QSettings::IniFormat);
-#elif defined(SAILFISH)
+#if defined(SAILFISH)
   m_settings = new QSettings(QString("%1%2harbour-quran%2%3")
 			     .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
 			     .arg(QDir::separator()).arg(CONF_FILE),
@@ -102,8 +95,6 @@ QString Settings::dataDir() const {
   return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/org.foolab.quran/";
 #elif defined(SAILFISH)
   return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-quran/";
-#elif defined(HARMATTAN)
-  return USER_DIR;
 #elif defined(QT_VERSION_5)
   return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/quran/";
 #else

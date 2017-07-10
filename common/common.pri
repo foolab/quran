@@ -5,7 +5,6 @@ CONFIG += c++11
 QT += network
 CONFIG += mobility link_pkgconfig
 MOBILITY = sensors
-harmattan:MOBILITY += multimedia
 !android:PKGCONFIG += libpulse fontconfig
 android:LIBS += -lOpenSLES
 
