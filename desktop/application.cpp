@@ -25,7 +25,7 @@
 Application::Application(int& argc, char **argv) {
   m_app = new QGuiApplication(argc, argv);
 
-  m_app->setApplicationName("harbour-quran");
+  m_app->setApplicationName("quran");
   m_app->setApplicationDisplayName(QObject::tr("Holy Quran"));
   m_engine = new QQmlApplicationEngine;
 }
