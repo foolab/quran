@@ -15,6 +15,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QtQml>
 #include "settings.h"
 #include "dataprovider.h"
 #include "bookmarks.h"
@@ -31,7 +32,6 @@
 #include "bookmarkitem.h"
 #include "quranviewmodel.h"
 #include "searchmodel.h"
-#include "iconprovider.h"
 #include "textsupplier.h"
 #include "translation.h"
 #include "recitation.h"
@@ -51,6 +51,8 @@ extern "C" {
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
   Application app(argc, argv);
+
+  app.init();
 
   if (QFontDatabase::addApplicationFont(FONTS_DIR"/amiri-regular.ttf") == -1) {
     qCritical() << "Failed to load amiri-regular.ttf";
@@ -90,10 +92,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 					  "Use Translations to obtain a Translation");
   qmlRegisterUncreatableType<Recitation>("Quran", 1, 0, "Recitation",
 					  "Use Recitations to obtain a Recitation");
-
-  app.registerQmlTypes();
-
-  app.addImageProvider(QLatin1String("icon"), new IconProvider);
 
   if (!app.load(QUrl("qrc:/qml/main.qml"))) {
     return 1;

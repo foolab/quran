@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,27 +18,15 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <QtQuick>
+#include "coreapplication.h"
 
-class QUrl;
-class QGuiApplication;
-class QQmlApplicationEngine;
-class IconProvider;
-class QLatin1String;
-
-class Application {
+class Application : public CoreApplication {
 public:
   Application(int& argc, char **argv);
   ~Application();
 
-  void registerQmlTypes();
-  void addImageProvider(const QLatin1String& id, IconProvider *provider);
-  bool load(const QUrl& url);
-  int exec();
-
-private:
-  QGuiApplication *m_app;
-  QQmlApplicationEngine *m_engine;
+protected:
+  void registerQmlTypes() override;
 };
 
 #endif /* APPLICATION_H */

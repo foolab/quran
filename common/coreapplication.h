@@ -15,18 +15,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#ifndef CORE_APPLICATION_H
+#define CORE_APPLICATION_H
 
-#include "coreapplication.h"
+class QGuiApplication;
+class QQuickView;
+class QUrl;
 
-class Application : public CoreApplication {
+class CoreApplication {
 public:
-  Application(int& argc, char **argv);
-  ~Application();
+  CoreApplication();
+  virtual ~CoreApplication();
+
+  void init();
+
+  bool load(const QUrl& url);
+
+  int exec();
 
 protected:
-  void registerQmlTypes() override;
+  void setApplication(QGuiApplication *app, const char *name);
+    void setView(QQuickView *view);
+  virtual void registerQmlTypes() = 0;
+
+private:
+  QGuiApplication *m_app;
+  QQuickView *m_view;
 };
 
-#endif /* APPLICATION_H */
+#endif /* CORE_APPLICATION_H */

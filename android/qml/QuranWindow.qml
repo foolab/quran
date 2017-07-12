@@ -3,7 +3,7 @@ import QtQuick 2.2
 import QtQuick.Controls 1.2 as Ctrls
 import QuranAndroid 1.0
 
-Ctrls.ApplicationWindow {
+Item {
     id: rootWindow
     property alias pageStack: stack
     property Component initialPage
@@ -21,10 +21,15 @@ Ctrls.ApplicationWindow {
         Component.onCompleted: applyOrientation()
     }
 
-    toolBar: Ctrls.ToolBar {
+    Ctrls.ToolBar {
         id: title
         height: quranTheme.toolBarHeight
-        width: parent.width
+
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
 
         Rectangle {
             anchors.fill: parent
@@ -100,7 +105,13 @@ Ctrls.ApplicationWindow {
 
     Ctrls.StackView {
         id: stack
-        anchors.fill: parent
+        clip: true
+        anchors {
+            top: title.bottom
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
 
         // HACK: Something is really strange here. Initially StackView is created
         // with 0 as width and a negative height. Assigning the MainPage directly
