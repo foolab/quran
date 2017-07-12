@@ -1,10 +1,41 @@
 #!/bin/bash
 set -e
 
-QT_VERSION=5.4
+ANT_ARG=debug
 
-export ANDROID_NDK_ROOT=/mnt/4/android/android-ndk-r10b
-export ANDROID_SDK_ROOT=/mnt/4/android/android-sdk-linux/
+show_help() {
+    echo "Usage: $0 <installd|installr|debug|release>"
+    exit 1
+}
+
+if [ $# -gt 0 ]; then
+    case $1 in
+	help)
+	    show_help
+	    ;;
+	installd)
+	    ANT_ARG=installd
+	    ;;
+	installr)
+	    ANT_ARG=installr
+	    ;;
+	debug)
+	    ANT_ARG=debug
+	    ;;
+	release)
+	    ANT_ARG=release
+	    ;;
+	*)
+	    show_help
+	    ;;
+    esac
+fi
+
+QT_VERSION=5.5
+QT_DIR=/home/mohammed/mnt/4/android/qt$QT_VERSION/$QT_VERSION/
+
+export ANDROID_NDK_ROOT=/home/mohammed/mnt/4/android/android-ndk-r10b
+export ANDROID_SDK_ROOT=/home/mohammed/mnt/4/android/android-sdk-linux/
 export TOOLCHAIN=$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.8/prebuilt/linux-x86/bin/
 export SYSROOT=$ANDROID_NDK_ROOT/platforms/android-9/arch-arm/
 export CC=$TOOLCHAIN/arm-linux-androideabi-gcc
@@ -15,6 +46,7 @@ export LD=$TOOLCHAIN/arm-linux-androideabi-ld
 export CFLAGS=--sysroot=$SYSROOT
 export CPPFLAGS=--sysroot=$SYSROOT
 export CXXFLAGS=--sysroot=$SYSROOT
+export PKG_CONFIG_PATH=$PWD/android/sqlite
 
 rm -rf apk
 
@@ -44,12 +76,12 @@ make
 popd
 
 pushd android/quazip
-/mnt/4/android/qt$QT_VERSION/$QT_VERSION/android_armv7/bin/qmake ../../quazip
+$QT_DIR/android_armv7/bin/qmake ../../quazip
 make
 popd
 
 pushd android
-/mnt/4/android/qt$QT_VERSION/$QT_VERSION/android_armv7/bin/qmake
+$QT_DIR/android_armv7/bin/qmake
 make
 popd
 
@@ -62,15 +94,15 @@ cp data/search.db apk/assets/
 cp data/amiri-regular.ttf apk/assets/fonts/
 cp data/amiri-quran.ttf apk/assets/fonts/
 
-/mnt/4/android/android-sdk-linux/tools//android update project --path apk \
+$ANDROID_SDK_ROOT/tools//android update project --path apk \
     --target android-19 --name Quran
 
-/mnt/4/android/qt$QT_VERSION/$QT_VERSION/android_armv7/bin/androiddeployqt \
+$QT_DIR/android_armv7/bin/androiddeployqt \
     --input android/android-libQuran.so-deployment-settings.json \
     --output apk \
     --deployment bundled \
     --verbose
 
 pushd apk
-ant installd
+ant $ANT_ARG
 popd
