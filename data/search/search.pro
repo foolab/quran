@@ -1,3 +1,5 @@
+QT_CONFIG -= no-pkg-config
+
 TARGET = search
 
 SOURCES += main.cpp
