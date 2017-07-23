@@ -4,7 +4,7 @@ import Quran 1.0
 
 QuranPage {
     id: quranPage
-    menu: view.currentItem ? view.currentItem.menu : null
+    menu: mainView.currentItem ? mainView.currentItem.menu : null
 
     Rectangle {
         anchors.fill: parent
@@ -12,7 +12,7 @@ QuranPage {
     }
 
     QuranListView {
-        id: view
+        id: mainView
         anchors.fill: parent
         model: _data.pageCount
         orientation: ListView.Horizontal
@@ -38,7 +38,7 @@ QuranPage {
             property alias menu: pageMenu
             QuranPageMenu {
                 id: pageMenu
-                view: view
+                view: mainView
                 actions: [
                     MenuAction { text: qsTr("About"); onClicked: { pushAnimated(Qt.resolvedUrl("AboutPage.qml")) } },
                     MenuAction { text: qsTr("Settings"); onClicked: { pushAnimated(Qt.resolvedUrl("SettingsPage.qml")) } },
