@@ -84,7 +84,7 @@ int DataProvider::firstSuraForPage(int page) {
   return (&Pages[page])->sura;
 }
 
-int DataProvider::verseCount() const {
+int DataProvider::chapterCount() const {
   return MAX_CHAPTER + 1;
 }
 

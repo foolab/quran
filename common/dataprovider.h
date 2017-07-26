@@ -32,7 +32,7 @@ class DataProvider : public QObject {
   Q_PROPERTY(QString basmala READ basmala NOTIFY basmalaChanged);
   Q_PROPERTY(int pageCount READ pageCount CONSTANT);
   Q_PROPERTY(int partCount READ partCount CONSTANT);
-  Q_PROPERTY(int verseCount READ verseCount CONSTANT);
+  Q_PROPERTY(int chapterCount READ chapterCount CONSTANT);
 
 public:
   DataProvider(QObject *parent = 0);
@@ -41,7 +41,7 @@ public:
   int pageCount() const;
   int partCount() const;
   Q_INVOKABLE QStringList surasForPage(int page);
-  int verseCount() const;
+  int chapterCount() const;
   Q_INVOKABLE QString suraName(int sura);
   Q_INVOKABLE QString fullSuraName(int sura);
   Q_INVOKABLE QString translatedSuraName(int sura);

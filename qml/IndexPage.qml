@@ -84,7 +84,7 @@ QuranPage {
         QuranListView {
             id: chapterView
             clip: true
-            model: _data.verseCount
+            model: _data.chapterCount
             highlightFollowsCurrentItem: false
             currentIndex: _data.firstSuraForPage(settings.pageNumber)
 
