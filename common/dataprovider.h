@@ -42,7 +42,6 @@ public:
   int partCount() const;
   Q_INVOKABLE QStringList surasForPage(int page);
   int chapterCount() const;
-  Q_INVOKABLE QString suraName(int sura);
   Q_INVOKABLE QString fullSuraName(int sura);
   Q_INVOKABLE QString translatedSuraName(int sura);
   Q_INVOKABLE QString transliteratedSuraName(int sura);
@@ -96,6 +95,8 @@ signals:
   void secondaryTextProviderChanged();
 
 private:
+  QString suraName(int sura);
+
   int m_index;
   TextProvider *m_data;
   TextProvider *m_secondary;
