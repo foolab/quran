@@ -52,13 +52,18 @@ QuranListView {
     Component {
         id: chapterDelegate
         BorderLabel {
+            ChapterInfo {
+                id: info
+                chapter: _chapter
+            }
+
             horizontalAlignment: Text.AlignHCenter
             borderColor: quranTheme.chapterBorder
             backgroundColor: quranTheme.chapterBackground
             textColor: quranTheme.titleColor
-            text:  qsTr("%1%2%3").arg(_data.fullSuraName(_chapter))
-                .arg(_data.hasBasmala(_chapter) ? "\n" : "")
-                .arg(_data.hasBasmala(_chapter) ? _data.basmala : "")
+            text:  qsTr("%1%2%3").arg(info.fullName)
+                .arg(info.hasBasmala ? "\n" : "")
+                .arg(info.hasBasmala ? _data.basmala : "")
             font {
                 family: settings.fontFamily
                 pixelSize: settings.fontSize

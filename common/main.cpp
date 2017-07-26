@@ -37,6 +37,7 @@
 #include "recitation.h"
 #include "mediaplayer.h"
 #include "models.h"
+#include "chapterinfo.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -88,6 +89,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<TextSupplier>("Quran", 1, 0, "TextSupplier");
   qmlRegisterType<MediaPlayer>("Quran", 1, 0, "MediaPlayer");
   qmlRegisterType<InstalledFilterModel>("Quran", 1, 0, "InstalledFilterModel");
+  qmlRegisterType<DeclarativeChapterInfo>("Quran", 1, 0, "ChapterInfo");
   qmlRegisterUncreatableType<Translation>("Quran", 1, 0, "Translation",
 					  "Use Translations to obtain a Translation");
   qmlRegisterUncreatableType<Recitation>("Quran", 1, 0, "Recitation",

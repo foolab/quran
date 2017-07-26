@@ -455,21 +455,6 @@ bool output() {
   puts("");
   printf("#define PREFIX \"%s\"\n", encode(prefix).toLatin1().data());
   puts("");
-  puts("struct _Sura {");
-  puts("  int index;");
-  puts("  int length;");
-  puts("  int page;");
-  puts("  const char *name;");
-  puts("  const char *translation;");
-  puts("  const char *transliteration;");
-  puts("} Suras[] = {");
-  for (int x = 0; x < suras.size(); x++) {
-    const Sura& s = suras.at(x);
-    printf("  {%i, %i, %i, \"%s\", \"%s\", \"%s\"},\n", s.index, s.ayas, s.page, encode(s.name).toLatin1().data(), encode(s.translation).toLatin1().data(), encode(s.transliteration).toLatin1().data());
-  }
-  puts("};");
-
-  puts("");
 
   puts("struct _Part {");
   puts("  int index;");
@@ -537,16 +522,6 @@ bool output() {
     printf("{\"%s\", \"%s\", %i, \"%s\"},\n",
 	   encode(":/text/" + o.name).toLatin1().data(), encode(o.id).toLatin1().data(),
 	   o.len, encode(":/text/" + QFileInfo(o.idx).fileName()).toLatin1().data());
-  }
-  puts("};");
-
-  puts("");
-
-  puts("int Offsets[] = {");
-  off_t total = 0;
-  for (int x = 0; x < suras.size(); x++) {
-    printf("  %li,\n", total);
-    total += suras[x].ayas;
   }
   puts("};");
 

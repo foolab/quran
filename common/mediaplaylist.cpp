@@ -28,6 +28,7 @@
 #else
 #include <QDeclarativeInfo>
 #endif
+#include "chapterinfo.h"
 
 MediaPlaylist::MediaPlaylist(DataProvider *data, Recitation *recitation,
 			     Downloader *downloader, QObject *parent) :
@@ -59,9 +60,7 @@ void MediaPlaylist::playPage(int page) {
 
   foreach (const Fragment& f, frags) {
     if (f.start() == 0) {
-      Sura s = m_data->sura(f.sura());
-
-      if (s.hasBasmala()) {
+      if (ChapterInfo(f.sura()).hasBasmala()) {
 	addMedia(Media(m_recitation, 1, 1, index++));
       }
     }
@@ -80,15 +79,14 @@ void MediaPlaylist::playChapter(int chapter) {
   m_mode = PlayChapter;
   m_playingId = chapter;
 
-  Sura s = m_data->sura(chapter);
-
   int index = 0;
 
-  if (s.hasBasmala()) {
+  ChapterInfo info(chapter);
+  if (info.hasBasmala()) {
     addMedia(Media(m_recitation, 1, 1, index++));
   }
 
-  for (int x = 0; x < s.size(); x++) {
+  for (int x = 0; x < info.length(); x++) {
     addMedia(Media(m_recitation, chapter + 1, x + 1, index++));
   }
 }
@@ -118,9 +116,7 @@ void MediaPlaylist::playPart(int part) {
 
   foreach (const Fragment& frag, frags) {
     if (frag.start() == 0) {
-      Sura s = m_data->sura(frag.sura());
-
-      if (s.hasBasmala()) {
+      if (ChapterInfo(frag.sura()).hasBasmala()) {
 	addMedia(Media(m_recitation, 1, 1, index++));
       }
     }

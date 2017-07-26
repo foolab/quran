@@ -24,7 +24,7 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            main.cpp phoneflipcontrol.cpp mediaplayer.cpp iconprovider.cpp \
            media.cpp audiooutput.cpp mediadecoder.cpp bookmarksmodel.cpp \
            bookmarkitem.cpp mediaresampler.cpp searchmodel.cpp models.cpp \
-           coreapplication.cpp
+           coreapplication.cpp chapterinfo.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmodel.h \
            position.h aboutdata.h textsupplier.h \
@@ -33,7 +33,7 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmode
            phoneflipcontrol.h mediaplayer.h iconprovider.h \
            media.h audiooutput.h mediadecoder.h bookmarksmodel.h \
            bookmarkitem.h mediaresampler.h searchmodel.h models.h \
-           coreapplication.h \
+           coreapplication.h chapterinfo.h \
            $$GENERATED
 
 android {

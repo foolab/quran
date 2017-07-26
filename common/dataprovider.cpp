@@ -20,6 +20,7 @@
 #include <QString>
 #include <QDebug>
 #include "textprovider.h"
+#include "chapterinfo.h"
 
 #define MIN_CHAPTER 0
 #define MAX_CHAPTER 113
@@ -74,7 +75,7 @@ QStringList DataProvider::surasForPage(int page) {
   }
 
   for (int x = 0; x < suras.size(); x++) {
-    ret.append(sura(suras.at(x)).name());
+    ret.append(ChapterInfo(suras.at(x)).name());
   }
 
   return ret;
@@ -88,28 +89,8 @@ int DataProvider::chapterCount() const {
   return MAX_CHAPTER + 1;
 }
 
-QString DataProvider::suraName(int sura) {
-  return QString::fromUtf8(Suras[sura].name);
-}
-
-QString DataProvider::fullSuraName(int sura) {
-  return QString("%1 %2").arg(prefix()).arg(suraName(sura));
-}
-
-QString DataProvider::translatedSuraName(int sura) {
-  return QString::fromUtf8(Suras[sura].translation);
-}
-
-QString DataProvider::transliteratedSuraName(int sura) {
-  return QString::fromUtf8(Suras[sura].transliteration);
-}
-
-int DataProvider::pageNumberForSura(int sura) {
-  return Suras[sura].page;
-}
-
 int DataProvider::pageNumberForSuraAndAya(int sura, int aya) {
-  int page = Suras[sura].page;
+  int page = ChapterInfo(sura).page();
   _Page *p = &Pages[page];
 
   for (int x = p->firstFragment; x <= MAX_FRAG; x++) {
@@ -154,9 +135,7 @@ QString DataProvider::text(int sura, int aya) const {
     return QString();
   }
 
-  off_t index = Offsets[sura];
-
-  return m_data->text(aya, index);
+  return m_data->text(aya, ChapterInfo(sura).offset());
 }
 
 QStringList DataProvider::text(const Fragment& frag) const {
@@ -181,8 +160,7 @@ QStringList DataProvider::secondaryText(const Fragment& frag) const {
   QStringList ret;
 
   for (int x = frag.start(); x < frag.size() + frag.start(); x++) {
-    off_t index = Offsets[frag.sura()];
-    ret << m_secondary->text(x, index);
+    ret << m_secondary->text(x, ChapterInfo(frag.sura()).offset());
   }
 
   return ret;
@@ -193,8 +171,7 @@ QString DataProvider::secondaryText(int sura, int aya) {
     return QString();
   }
 
-  off_t index = Offsets[sura];
-  return m_secondary->text(aya, index);
+  return m_secondary->text(aya, ChapterInfo(sura).offset());
 }
 
 QStringList DataProvider::availableTexts() const {
@@ -242,24 +219,20 @@ bool DataProvider::setTextType(int index) {
   return true;
 }
 
-Sura DataProvider::sura(int index) const {
-  return Sura(CLAMP(MIN_CHAPTER, index, MAX_CHAPTER));
-}
-
 Page DataProvider::pageFromIndex(int index) const {
   return Page(CLAMP(MIN_PAGE, index, MAX_PAGE));
 }
 
 Page DataProvider::pageForSura(int sura) const {
-  return Page(Suras[CLAMP(MIN_CHAPTER, sura, MAX_CHAPTER)].page);
+  return Page(ChapterInfo(CLAMP(MIN_CHAPTER, sura, MAX_CHAPTER)).page());
 }
 
 Page DataProvider::page(int sura, int aya) const {
   sura = CLAMP(MIN_CHAPTER, sura, MAX_CHAPTER);
 
-  aya = CLAMP(0, aya, Suras[sura].length - 1);
+  aya = CLAMP(0, aya, ChapterInfo(sura).length() - 1);
 
-  int page = Suras[sura].page;
+  int page = ChapterInfo(sura).page();
 
   int result = -1;
 
@@ -308,10 +281,6 @@ void DataProvider::setSecondaryText(TextProvider *text) {
   }
 }
 
-bool DataProvider::hasBasmala(int sura) {
-  return !(sura == 0 || sura == 8);
-}
-
 int DataProvider::pageNumberForPart(int part) {
   part = qBound(MIN_PART, part, MAX_PART);
 
@@ -336,7 +305,7 @@ int DataProvider::suraSize(int sura) {
     return 0;
   }
 
-  return Suras[sura].length;
+  return ChapterInfo(sura).length();
 }
 
 
@@ -366,28 +335,4 @@ int Fragment::start() const {
 
 int Fragment::size() const {
   return Fragments[m_index].size;
-}
-
-Sura::Sura(int index) : m_index(index) {
-
-}
-
-Sura::~Sura() {
-
-}
-
-QString Sura::name() const {
-  return QString::fromUtf8(Suras[m_index].name);
-}
-
-bool Sura::hasBasmala() const {
-  return !(m_index == 0 || m_index == 8);
-}
-
-int Sura::size() const {
-  return Suras[m_index].length;
-}
-
-int Sura::index() const {
-  return m_index;
 }

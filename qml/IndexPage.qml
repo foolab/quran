@@ -93,8 +93,12 @@ QuranPage {
             Component.onCompleted: repositionView(chapterView)
 
             delegate: IndexDelegate {
+                ChapterInfo {
+                    id: info
+                    chapter: index
+                }
                 number: index
-                text: _data.fullSuraName(index)
+                text: info.fullName
                 highlight: ListView.isCurrentItem
                 showPlay: settings.recitationMode != 0 && recitations.installedCount > 0
                 onClicked: {

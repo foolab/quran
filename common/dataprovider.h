@@ -24,8 +24,8 @@
 
 class Page;
 class Fragment;
-class Sura;
 class TextProvider;
+class ChapterInfo;
 
 class DataProvider : public QObject {
   Q_OBJECT
@@ -42,10 +42,6 @@ public:
   int partCount() const;
   Q_INVOKABLE QStringList surasForPage(int page);
   int chapterCount() const;
-  Q_INVOKABLE QString fullSuraName(int sura);
-  Q_INVOKABLE QString translatedSuraName(int sura);
-  Q_INVOKABLE QString transliteratedSuraName(int sura);
-  Q_INVOKABLE int pageNumberForSura(int sura);
   Q_INVOKABLE int pageNumberForSuraAndAya(int sura, int aya);
   Q_INVOKABLE QString partNameForPage(int page);
   Q_INVOKABLE QString partName(int part);
@@ -58,15 +54,11 @@ public:
   Q_INVOKABLE bool setTextType(int index);
   Q_INVOKABLE int textType() const;
 
-  Q_INVOKABLE bool hasBasmala(int sura);
-
   Page pageFromIndex(int index) const;
 
   Page pageForSura(int sura) const;
 
   Page page(int sura, int aya) const;
-
-  Sura sura(int index) const;
 
   QString basmala() const;
 
@@ -95,8 +87,6 @@ signals:
   void secondaryTextProviderChanged();
 
 private:
-  QString suraName(int sura);
-
   int m_index;
   TextProvider *m_data;
   TextProvider *m_secondary;
@@ -132,26 +122,6 @@ private:
   Fragment(int index) : m_index(index) {}
 
   int m_index;
-};
-
-class Sura {
-public:
-  ~Sura();
-
-  QString name() const;
-
-  bool hasBasmala() const;
-
-  int size() const;
-
-  int index() const;
-
-private:
-  friend class DataProvider;
-
-  Sura(int index);
-
-  const int m_index;
 };
 
 #endif /* DATA_PROVIDER_H */
