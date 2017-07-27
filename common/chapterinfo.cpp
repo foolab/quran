@@ -158,7 +158,7 @@ ChapterInfo::~ChapterInfo() {
 }
 
 void ChapterInfo::init(int index) {
-  Q_ASSERT(index >= 0 && index <= 114);
+  Q_ASSERT(index >= 0 && index <= 113);
 
   m_chapter = &Chapters[index];
 }
