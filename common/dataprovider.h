@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,6 @@ public:
   int chapterCount() const;
   Q_INVOKABLE int pageNumberForSuraAndAya(int sura, int aya);
   Q_INVOKABLE QString partNameForPage(int page);
-  Q_INVOKABLE QString partName(int part);
 
   Q_INVOKABLE int firstSuraForPage(int page);
 

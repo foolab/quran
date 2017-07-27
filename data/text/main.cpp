@@ -456,18 +456,6 @@ bool output() {
   printf("#define PREFIX \"%s\"\n", encode(prefix).toLatin1().data());
   puts("");
 
-  puts("struct _Part {");
-  puts("  int index;");
-  puts("  const char *name;");
-  puts("} Parts[] = {");
-  for (int x = 0; x < parts.size(); x++) {
-    const Part& p = parts.at(x);
-    printf("  {%i, \"%s\"},\n", p.index, encode(p.name).toLatin1().data());
-  }
-  puts("};");
-
-  puts("");
-
   puts("struct _Page {");
   puts("  int index;");
   puts("  int sura;");

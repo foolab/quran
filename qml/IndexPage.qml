@@ -135,8 +135,12 @@ QuranPage {
             Component.onCompleted: repositionView(partView)
 
             delegate: IndexDelegate {
+                PartInfo {
+                    id: info
+                    part: index
+                }
                 number: index
-                text: _data.partName(index)
+                text: info.name
                 showPlay: settings.recitationMode != 0 && recitations.installedCount > 0
                 showMore: false
                 highlight: ListView.isCurrentItem

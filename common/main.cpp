@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@
 #include "mediaplayer.h"
 #include "models.h"
 #include "chapterinfo.h"
+#include "partinfo.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -90,6 +91,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<MediaPlayer>("Quran", 1, 0, "MediaPlayer");
   qmlRegisterType<InstalledFilterModel>("Quran", 1, 0, "InstalledFilterModel");
   qmlRegisterType<DeclarativeChapterInfo>("Quran", 1, 0, "ChapterInfo");
+  qmlRegisterType<DeclarativePartInfo>("Quran", 1, 0, "PartInfo");
   qmlRegisterUncreatableType<Translation>("Quran", 1, 0, "Translation",
 					  "Use Translations to obtain a Translation");
   qmlRegisterUncreatableType<Recitation>("Quran", 1, 0, "Recitation",

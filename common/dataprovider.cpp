@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include <QDebug>
 #include "textprovider.h"
 #include "chapterinfo.h"
+#include "partinfo.h"
 
 #define MIN_CHAPTER 0
 #define MAX_CHAPTER 113
@@ -107,11 +108,7 @@ int DataProvider::pageNumberForSuraAndAya(int sura, int aya) {
 QString DataProvider::partNameForPage(int page) {
   _Page *p = &Pages[page];
 
-  return QString::fromUtf8(Parts[p->part].name);
-}
-
-QString DataProvider::partName(int part) {
-  return QString::fromUtf8(Parts[part].name);
+  return PartInfo(p->part).name();
 }
 
 QString DataProvider::basmala() const {
