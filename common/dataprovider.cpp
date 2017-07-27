@@ -114,20 +114,12 @@ QString DataProvider::partName(int part) {
   return QString::fromUtf8(Parts[part].name);
 }
 
-bool DataProvider::hasPage(int page) const {
-  return page >= MIN_PAGE && page <= MAX_PAGE;
-}
-
 QString DataProvider::basmala() const {
   if (!m_data) {
     return QString();
   }
 
   return text(0, 0);
-}
-
-QString DataProvider::prefix() const {
-  return QString::fromUtf8(PREFIX);
 }
 
 QString DataProvider::text(int sura, int aya) const {
@@ -138,50 +130,12 @@ QString DataProvider::text(int sura, int aya) const {
   return m_data->text(aya, ChapterInfo(sura).offset());
 }
 
-QStringList DataProvider::text(const Fragment& frag) const {
-  if (!m_data) {
-    return QStringList();
-  }
-
-  QStringList ret;
-
-  for (int x = frag.start(); x < frag.size() + frag.start(); x++) {
-    ret.append(text(frag.sura(), x));
-  }
-
-  return ret;
-}
-
-QStringList DataProvider::secondaryText(const Fragment& frag) const {
-  if (!m_secondary) {
-    return QStringList();
-  }
-
-  QStringList ret;
-
-  for (int x = frag.start(); x < frag.size() + frag.start(); x++) {
-    ret << m_secondary->text(x, ChapterInfo(frag.sura()).offset());
-  }
-
-  return ret;
-}
-
 QString DataProvider::secondaryText(int sura, int aya) {
   if (!m_secondary) {
     return QString();
   }
 
   return m_secondary->text(aya, ChapterInfo(sura).offset());
-}
-
-QStringList DataProvider::availableTexts() const {
-  QStringList texts;
-
-  for (int x = MIN_TEXT; x <= MAX_TEXT; x++) {
-    texts.append(QString::fromUtf8(Texts[x].id));
-  }
-
-  return texts;
 }
 
 int DataProvider::textType() const {

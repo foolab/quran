@@ -48,9 +48,6 @@ public:
 
   Q_INVOKABLE int firstSuraForPage(int page);
 
-  Q_INVOKABLE bool hasPage(int page) const;
-
-  QStringList availableTexts() const;
   Q_INVOKABLE bool setTextType(int index);
   Q_INVOKABLE int textType() const;
 
@@ -62,12 +59,8 @@ public:
 
   QString basmala() const;
 
-  QString prefix() const;
-
   QString text(int sura, int aya) const;
 
-  QStringList text(const Fragment& frag) const;
-  QStringList secondaryText(const Fragment& frag) const;
   QString secondaryText(int sura, int aya);
 
   void setSecondaryText(TextProvider *text);
