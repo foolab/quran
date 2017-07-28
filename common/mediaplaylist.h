@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include <QObject>
 #include <QQueue>
 
-class DataProvider;
 class Recitation;
 class Media;
 class Recitation;
@@ -32,14 +31,14 @@ class MediaPlaylist : public QObject {
   Q_OBJECT
 
 public:
-  static MediaPlaylist *partList(DataProvider *data, Recitation *recitation,
+  static MediaPlaylist *partList(Recitation *recitation,
 				 Downloader *downloader, uint part, QObject *parent = 0);
-  static MediaPlaylist *pageList(DataProvider *data, Recitation *recitation,
+  static MediaPlaylist *pageList(Recitation *recitation,
 				 Downloader *downloader, uint page, QObject *parent = 0);
-  static MediaPlaylist *verseList(DataProvider *data, Recitation *recitation,
+  static MediaPlaylist *verseList(Recitation *recitation,
 				  Downloader *downloader, uint serialized,
 				  QObject *parent = 0);
-  static MediaPlaylist *chapterList(DataProvider *data, Recitation *recitation,
+  static MediaPlaylist *chapterList(Recitation *recitation,
 				    Downloader *downloader, uint chapter, QObject *parent = 0);
 
   ~MediaPlaylist();
@@ -60,7 +59,7 @@ private slots:
   void replyFinished();
 
 private:
-  MediaPlaylist(DataProvider *data, Recitation *recitation,
+  MediaPlaylist(Recitation *recitation,
 		Downloader *downloader, QObject *parent = 0);
 
   void playPage(int page);
@@ -79,7 +78,6 @@ private:
     PlayPart,
   };
 
-  DataProvider *m_data;
   Recitation *m_recitation;
   Downloader *m_downloader;
 

@@ -51,7 +51,6 @@ QuranWindow {
     MediaPlayer {
         id: audioPlayer
         downloader: _downloader
-        data: _data
         onError: banner.showMessage(qsTr("Failed to play recitation"))
 
         onPositionChanged: {
@@ -98,33 +97,20 @@ QuranWindow {
 
     Component.onCompleted: _data.setTextType(settings.textType)
 
-    QtObject {
+    PagePosition {
         id: pagePosition
-
-        property int sura: -1
-        property int aya: -1
-
         signal changed
 
-        function isValid() {
-            return sura != -1 && aya != -1
+        function setPosition(chapter, verse) {
+            pagePosition.chapter = chapter
+            pagePosition.verse = verse
+            settings.pageNumber = pagePosition.page
+            // We cannot depend on the pageChanged() signal because it will
+            // be emitted after we set the chapter and verse but before we assign
+            // the pageNumber above so our delegates will miss it because the actual
+            // page change will happen after the reaction to pageChanged completes
+            pagePosition.changed()
         }
-
-        function reset() {
-            sura = -1
-            aya = -1
-        }
-
-        function setPosition(sura, aya) {
-            pagePosition.sura = sura
-            pagePosition.aya = aya
-            settings.pageNumber = _data.pageNumberForSuraAndAya(sura, aya)
-            changed()
-        }
-
-//                onSuraChanged: console.log("Sura " + sura);
-//                onAyaChanged: console.log("Aya " + aya);
-//                onYChanged: console.log("Y " + y);
     }
 
     QtObject {

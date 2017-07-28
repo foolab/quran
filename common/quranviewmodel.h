@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,14 +21,12 @@
 #include <QAbstractListModel>
 #include <QMultiMap>
 
-class DataProvider;
 class QuranViewModelData;
 
 class QuranViewModel : public QAbstractListModel {
   Q_OBJECT
 
   Q_PROPERTY(int page READ page WRITE setPage NOTIFY pageChanged);
-  Q_PROPERTY(DataProvider * data READ data WRITE setData NOTIFY dataChanged);
   Q_ENUMS(Type);
 
 public:
@@ -45,9 +43,6 @@ public:
     Title,
     Verse,
   } Type;
-
-  void setData(DataProvider *data);
-  DataProvider *data() const;
 
   void setPage(int page);
   int page() const;
@@ -82,8 +77,6 @@ private:
 #endif
 
   int m_page;
-  DataProvider *m_data;
-
   QList<Info> m_info;
 };
 

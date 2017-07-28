@@ -1,13 +1,18 @@
 // -*- qml -*-
 import QtQuick 2.0
+import Quran 1.0
 
 QuranPage {
     id: page
     property int chapter
+    ChapterInfo {
+        id: info
+        chapter: page.chapter
+    }
 
     QuranGridView {
         id: grid
-        model: _data.suraSize(page.chapter)
+        model: info.length
         cellWidth: grid.width / 7
         cellHeight: cellWidth
 

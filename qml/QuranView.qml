@@ -16,28 +16,36 @@ QuranListView {
     // Needed to make flicking reliable with SilicaFlickable
     pressDelay: 0
 
+    PageInfo {
+        id: info
+        page: index
+    }
+
     header: Item {
         width: parent.width
         height: Math.max(verse.height, part.height)
+        PartInfo {
+            id: partInfo
+            part: info.part
+        }
 
         SuraList {
             id: verse
             anchors.left: parent.left
             anchors.leftMargin: quranTheme.marginSmall
-            suras: _data.surasForPage(page)
+            suras: info.chapters
         }
 
         QuranLabel {
             id: part
             anchors.right: parent.right
             anchors.rightMargin: quranTheme.marginSmall
-            text: _data.partNameForPage(page)
+            text: partInfo.name
             color: quranTheme.textColor
         }
     }
 
     model: QuranViewModel {
-        data: _data
         page: view.page
     }
 
@@ -140,13 +148,13 @@ QuranListView {
     }
 
     function scrollRequest() {
-        if (!pagePosition.isValid() ||
-            index != _data.pageNumberForSuraAndAya(pagePosition.sura, pagePosition.aya)) {
+        if (!pagePosition.isValid ||
+            index != pagePosition.page) {
             // Not for us.
             return;
         }
 
-        var target = view.model.findIndex(pagePosition.sura, pagePosition.aya)
+        var target = view.model.findIndex(pagePosition.chapter, pagePosition.verse)
         if (target != -1) {
             view.currentIndex = target
         }

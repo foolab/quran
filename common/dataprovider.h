@@ -18,14 +18,9 @@
 #ifndef DATA_PROVIDER_H
 #define DATA_PROVIDER_H
 
-#include <QList>
-#include <QStringList>
 #include <QObject>
 
-class Page;
-class Fragment;
 class TextProvider;
-class ChapterInfo;
 
 class DataProvider : public QObject {
   Q_OBJECT
@@ -40,21 +35,10 @@ public:
 
   int pageCount() const;
   int partCount() const;
-  Q_INVOKABLE QStringList surasForPage(int page);
   int chapterCount() const;
-  Q_INVOKABLE int pageNumberForSuraAndAya(int sura, int aya);
-  Q_INVOKABLE QString partNameForPage(int page);
-
-  Q_INVOKABLE int firstSuraForPage(int page);
 
   Q_INVOKABLE bool setTextType(int index);
   Q_INVOKABLE int textType() const;
-
-  Page pageFromIndex(int index) const;
-
-  Page pageForSura(int sura) const;
-
-  Page page(int sura, int aya) const;
 
   QString basmala() const;
 
@@ -66,13 +50,6 @@ public:
 
   TextProvider *secondaryTextProvider() const;
 
-  Q_INVOKABLE int pageNumberForPart(int part);
-  Q_INVOKABLE int partNumberForPage(int page);
-
-  Q_INVOKABLE int suraSize(int sura);
-
-  QList<Fragment> fragmentsForPart(int part);
-
 signals:
   void basmalaChanged();
   void textTypeChanged();
@@ -82,38 +59,6 @@ private:
   int m_index;
   TextProvider *m_data;
   TextProvider *m_secondary;
-};
-
-class Page {
-public:
-  int index() const { return m_index; }
-
-  QList<Fragment> fragments();
-
-private:
-  friend class DataProvider;
-
-  Page(int index) : m_index(index) {}
-
-  const int m_index;
-};
-
-class Fragment {
-public:
-  int index() const { return m_index; }
-
-  int sura() const;
-
-  int start() const;
-
-  int size() const;
-
-private:
-  friend class Page;
-
-  Fragment(int index) : m_index(index) {}
-
-  int m_index;
 };
 
 #endif /* DATA_PROVIDER_H */

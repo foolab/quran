@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@
 
 MediaPlayer::MediaPlayer(QObject *parent) :
   QObject(parent),
-  m_data(0),
   m_list(0),
   m_decoder(0),
   m_policy(0),
@@ -115,17 +114,6 @@ void MediaPlayer::setDownloader(Downloader *downloader) {
   }
 }
 
-DataProvider *MediaPlayer::data() const {
-  return m_data;
-}
-
-void MediaPlayer::setData(DataProvider *data) {
-  if (m_data != data) {
-    m_data = data;
-    emit dataChanged();
-  }
-}
-
 bool MediaPlayer::play(const PlayType& type, uint id) {
   stop();
 
@@ -136,19 +124,19 @@ bool MediaPlayer::play(const PlayType& type, uint id) {
 
   switch (type) {
   case PlayVerse:
-    m_list = MediaPlaylist::verseList(m_data, m_recitation, m_downloader, id, this);
+    m_list = MediaPlaylist::verseList(m_recitation, m_downloader, id, this);
     break;
 
   case PlayPage:
-    m_list = MediaPlaylist::pageList(m_data, m_recitation, m_downloader, id, this);
+    m_list = MediaPlaylist::pageList(m_recitation, m_downloader, id, this);
     break;
 
   case PlayChapter:
-    m_list = MediaPlaylist::chapterList(m_data, m_recitation, m_downloader, id, this);
+    m_list = MediaPlaylist::chapterList(m_recitation, m_downloader, id, this);
     break;
 
   case PlayPart:
-    m_list = MediaPlaylist::partList(m_data, m_recitation, m_downloader, id, this);
+    m_list = MediaPlaylist::partList(m_recitation, m_downloader, id, this);
     break;
 
   default:

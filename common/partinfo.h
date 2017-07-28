@@ -29,6 +29,8 @@ public:
   virtual ~PartInfo();
 
   int index() const;
+  int firstPage() const;
+  int numberOfPages() const;
   QString name() const;
 
 protected:
@@ -39,6 +41,7 @@ protected:
 class DeclarativePartInfo : public QObject, public PartInfo {
   Q_OBJECT
   Q_PROPERTY(int part READ part WRITE setPart NOTIFY partChanged);
+  Q_PROPERTY(int firstPage READ firstPage NOTIFY partChanged);
   Q_PROPERTY(QString name READ name NOTIFY partChanged);
 
 public:

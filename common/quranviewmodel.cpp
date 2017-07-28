@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,13 +16,12 @@
  */
 
 #include "quranviewmodel.h"
-#include "dataprovider.h"
+#include "pageinfo.h"
 #include <QDebug>
 
 QuranViewModel::QuranViewModel(QObject *parent)
   : QAbstractListModel(parent),
-    m_page(-1),
-    m_data(0) {
+    m_page(-1) {
 
   QHash<int, QByteArray> roles;
   roles[ChapterRole] = "chapter";
@@ -36,28 +35,13 @@ QuranViewModel::~QuranViewModel() {
 
 }
 
-void QuranViewModel::setData(DataProvider *data) {
-  if (m_data != data) {
-    m_data = data;
-    emit dataChanged();
-  }
-
-  if (m_data && m_page != -1) {
-    populate();
-  }
-}
-
-DataProvider *QuranViewModel::data() const {
-  return m_data;
-}
-
 void QuranViewModel::setPage(int page) {
   if (m_page != page) {
     m_page = page;
     emit pageChanged();
   }
 
-  if (m_data && m_page != -1) {
+  if (m_page != -1) {
     populate();
   }
 }
@@ -103,16 +87,16 @@ void QuranViewModel::populate() {
 
   QList<Info> info;
 
-  QList<Fragment> frags = m_data->pageFromIndex(m_page).fragments();
-  foreach(const Fragment& frag, frags) {
-    for (int x = frag.start(); x < frag.start() + frag.size(); x++) {
+  QList<FragmentInfo> frags = PageInfo(m_page).fragments();
+  for (const FragmentInfo& frag : frags) {
+    for (int x = frag.start(); x < frag.start() + frag.length(); x++) {
       if (x == 0) {
 	// Each chapter has a title.
 	// The delegate will take care of showing it.
-	info << Info(frag.sura(), -1, Title);
+	info << Info(frag.chapter(), -1, Title);
       }
 
-      info << Info(frag.sura(), x, Verse);
+      info << Info(frag.chapter(), x, Verse);
     }
   }
 

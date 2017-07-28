@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 
 #include <QObject>
 
-class DataProvider;
 class MediaPlaylist;
 class Media;
 class MediaDecoder;
@@ -34,7 +33,6 @@ class MediaPlayer : public QObject {
 
   Q_ENUMS(PlayType);
 
-  Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
   Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
   Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged);
 
@@ -54,9 +52,6 @@ public:
 
   Downloader *downloader() const;
   void setDownloader(Downloader *downloader);
-
-  DataProvider *data() const;
-  void setData(DataProvider *data);
 
   Q_INVOKABLE bool play(const PlayType& type, uint id);
 
@@ -80,7 +75,6 @@ private slots:
   void audioPositionChanged(int index);
 
 private:
-  DataProvider *m_data;
   MediaPlaylist *m_list;
   MediaDecoder* m_decoder;
   AudioPolicy *m_policy;

@@ -39,6 +39,8 @@
 #include "models.h"
 #include "chapterinfo.h"
 #include "partinfo.h"
+#include "pageinfo.h"
+#include "pageposition.h"
 
 extern "C" {
 #include <libavcodec/avcodec.h>
@@ -92,6 +94,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<InstalledFilterModel>("Quran", 1, 0, "InstalledFilterModel");
   qmlRegisterType<DeclarativeChapterInfo>("Quran", 1, 0, "ChapterInfo");
   qmlRegisterType<DeclarativePartInfo>("Quran", 1, 0, "PartInfo");
+  qmlRegisterType<DeclarativePageInfo>("Quran", 1, 0, "PageInfo");
+  qmlRegisterType<PagePosition>("Quran", 1, 0, "PagePosition");
+
   qmlRegisterUncreatableType<Translation>("Quran", 1, 0, "Translation",
 					  "Use Translations to obtain a Translation");
   qmlRegisterUncreatableType<Recitation>("Quran", 1, 0, "Recitation",

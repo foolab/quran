@@ -441,17 +441,20 @@ bool output() {
 
   prefix.append(QChar(0x633)).append(QChar(0x648)).append(QChar(0x631)).append(QChar(0x629));
 
-  puts("#ifndef META_DATA_H");
-  puts("#define META_DATA_H");
+  puts("#ifndef TEXT_META_H");
+  puts("#define TEXT_META_H");
   puts("");
   puts("// Automatically generated file. Do not edit!");
   puts("// Command:");
   printf("// %s\n", QCoreApplication::arguments().join(" ").toUtf8().data());
   puts("");
+#if 0
   printf("#define MIN_FRAG %i\n", frags.first().index);
   printf("#define MAX_FRAG %i\n", frags.last().index);
+#endif
   printf("#define MIN_TEXT %i\n", 0);
   printf("#define MAX_TEXT %i\n", offsets.size() - 1);
+#if 0
   puts("");
   printf("#define PREFIX \"%s\"\n", encode(prefix).toLatin1().data());
   puts("");
@@ -511,7 +514,7 @@ bool output() {
     printf("  {%i, %i, %i, %i, %i},\n", f.index, f.sura, f.page, f.start, f.size);
   }
   puts("};");
-
+#endif
   puts("");
 
   for (int x = 0; x < offsets.size(); x++) {
@@ -541,7 +544,7 @@ bool output() {
   puts("};");
 
   puts("");
-
+#if 0
   puts("int Offsets[] = {");
   off_t total = 0;
   for (int x = 0; x < suras.size(); x++) {
@@ -549,10 +552,10 @@ bool output() {
     total += suras[x].ayas;
   }
   puts("};");
-
+#endif
   puts("");
 
-  puts("#endif /* META_DATA_H */");
+  puts("#endif /* TEXT_META_H */");
 
   return true;
 }

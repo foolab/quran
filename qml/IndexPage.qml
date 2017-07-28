@@ -82,12 +82,16 @@ QuranPage {
         id: chapterComponent
 
         QuranListView {
+            PageInfo {
+                id: info
+                page: settings.pageNumber
+            }
+
             id: chapterView
             clip: true
             model: _data.chapterCount
             highlightFollowsCurrentItem: false
-            currentIndex: _data.firstSuraForPage(settings.pageNumber)
-
+            currentIndex: info.firstChapter
             onWidthChanged: repositionView(chapterView)
             onHeightChanged: repositionView(chapterView)
             Component.onCompleted: repositionView(chapterView)
@@ -123,12 +127,17 @@ QuranPage {
         id: partComponent
 
         QuranListView {
+            PageInfo {
+                id: pageInfo
+                page: settings.pageNumber
+            }
+
             id: partView
             clip: true
             model: _data.partCount
             anchors.fill: parent
             highlightFollowsCurrentItem: false
-            currentIndex: _data.partNumberForPage(settings.pageNumber)
+            currentIndex: pageInfo.part
 
             onWidthChanged: repositionView(partView)
             onHeightChanged: repositionView(partView)
@@ -146,12 +155,12 @@ QuranPage {
                 highlight: ListView.isCurrentItem
 
                 onClicked: {
-                    settings.pageNumber = _data.pageNumberForPart(index)
+                    settings.pageNumber = info.firstPage
                     popPage()
                 }
 
                 onPlayClicked: {
-                    settings.pageNumber = _data.pageNumberForPart(index)
+                    settings.pageNumber = info.firstPage
                     playAudio(MediaPlayer.PlayPart, index)
                     popPage()
                 }

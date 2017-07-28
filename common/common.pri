@@ -15,7 +15,7 @@ DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.6.6\\\"
 
 equals(QT_MAJOR_VERSION, 5): DEFINES += QT_VERSION_5
 
-GENERATED = ../data/metadata.h ../data/trans-meta.h ../data/recite-meta.h
+GENERATED = ../data/text-meta.h ../data/trans-meta.h ../data/recite-meta.h
 
 SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quranviewmodel.cpp \
            position.cpp aboutdata.cpp textsupplier.cpp \
@@ -24,7 +24,8 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            main.cpp phoneflipcontrol.cpp mediaplayer.cpp iconprovider.cpp \
            media.cpp audiooutput.cpp mediadecoder.cpp bookmarksmodel.cpp \
            bookmarkitem.cpp mediaresampler.cpp searchmodel.cpp models.cpp \
-           coreapplication.cpp chapterinfo.cpp partinfo.cpp
+           coreapplication.cpp metadata.cpp chapterinfo.cpp partinfo.cpp pageinfo.cpp \
+           pageposition.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmodel.h \
            position.h aboutdata.h textsupplier.h \
@@ -33,7 +34,8 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmode
            phoneflipcontrol.h mediaplayer.h iconprovider.h \
            media.h audiooutput.h mediadecoder.h bookmarksmodel.h \
            bookmarkitem.h mediaresampler.h searchmodel.h models.h \
-           coreapplication.h chapterinfo.h partinfo.h \
+           coreapplication.h metadata.h chapterinfo.h partinfo.h pageinfo.h \
+           pageposition.h \
            $$GENERATED
 
 android {

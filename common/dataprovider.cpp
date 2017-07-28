@@ -19,16 +19,13 @@
 #include "metadata.h"
 #include <QString>
 #include <QDebug>
+#include "metadata.h"
+#include "text-meta.h"
+
 #include "textprovider.h"
 #include "chapterinfo.h"
 #include "partinfo.h"
-
-#define MIN_CHAPTER 0
-#define MAX_CHAPTER 113
-#define MIN_PAGE 0
-#define MAX_PAGE 603
-#define MIN_PART 0
-#define MAX_PART 29
+#include "pageinfo.h"
 
 #define CLAMP(min, x, max) qMax(qMin(x, max), min)
 
@@ -61,54 +58,8 @@ int DataProvider::partCount() const {
   return MAX_PART + 1;
 }
 
-QStringList DataProvider::surasForPage(int page) {
-  QList<Fragment> frags = pageFromIndex(page).fragments();
-
-  QList<int> suras;
-
-  QStringList ret;
-
-  for (int x = 0; x < frags.size(); x++) {
-    int sura = frags.at(x).sura();
-    if (suras.indexOf(sura) == -1) {
-      suras.append(sura);
-    }
-  }
-
-  for (int x = 0; x < suras.size(); x++) {
-    ret.append(ChapterInfo(suras.at(x)).name());
-  }
-
-  return ret;
-}
-
-int DataProvider::firstSuraForPage(int page) {
-  return (&Pages[page])->sura;
-}
-
 int DataProvider::chapterCount() const {
   return MAX_CHAPTER + 1;
-}
-
-int DataProvider::pageNumberForSuraAndAya(int sura, int aya) {
-  int page = ChapterInfo(sura).page();
-  _Page *p = &Pages[page];
-
-  for (int x = p->firstFragment; x <= MAX_FRAG; x++) {
-    _Fragment *f = &Fragments[x];
-    if (f->sura == sura && f->start <= aya && f->start + f->size > aya) {
-      return f->page;
-    }
-  }
-
-  // We shouldn't reach this but you never know!
-  return p->index;
-}
-
-QString DataProvider::partNameForPage(int page) {
-  _Page *p = &Pages[page];
-
-  return PartInfo(p->part).name();
 }
 
 QString DataProvider::basmala() const {
@@ -170,56 +121,6 @@ bool DataProvider::setTextType(int index) {
   return true;
 }
 
-Page DataProvider::pageFromIndex(int index) const {
-  return Page(CLAMP(MIN_PAGE, index, MAX_PAGE));
-}
-
-Page DataProvider::pageForSura(int sura) const {
-  return Page(ChapterInfo(CLAMP(MIN_CHAPTER, sura, MAX_CHAPTER)).page());
-}
-
-Page DataProvider::page(int sura, int aya) const {
-  sura = CLAMP(MIN_CHAPTER, sura, MAX_CHAPTER);
-
-  aya = CLAMP(0, aya, ChapterInfo(sura).length() - 1);
-
-  int page = ChapterInfo(sura).page();
-
-  int result = -1;
-
-  for (int x = page; x <= MAX_PAGE; x++) {
-    _Page *p = &Pages[x];
-    if (p->sura != sura) {
-      break;
-    }
-
-    result = x;
-
-    if (p->aya >= aya) {
-      break;
-    }
-  }
-
-  if (result == -1) {
-    // Heck :(
-    return pageForSura(sura);
-  }
-
-  return Page(result);
-}
-
-QList<Fragment> Page::fragments() {
-  QList<Fragment> frags;
-
-  _Page *p = &Pages[m_index];
-
-  for (int x = p->firstFragment; x < p->firstFragment + p->fragments; x++) {
-    frags << Fragment(CLAMP(MIN_FRAG, x, MAX_FRAG));
-  }
-
-  return frags;
-}
-
 TextProvider *DataProvider::secondaryTextProvider() const {
   return m_secondary;
 }
@@ -230,60 +131,4 @@ void DataProvider::setSecondaryText(TextProvider *text) {
     m_secondary = text;
     emit secondaryTextProviderChanged();
   }
-}
-
-int DataProvider::pageNumberForPart(int part) {
-  part = qBound(MIN_PART, part, MAX_PART);
-
-  for (int x = 0; x <= MAX_PAGE; x++) {
-    if (Pages[x].part == part) {
-      return x;
-    }
-  }
-
-  // Heck!
-  return 0;
-}
-
-int DataProvider::partNumberForPage(int page) {
-  page = qBound(MIN_PAGE, page, MAX_PAGE);
-
-  return Pages[page].part;
-}
-
-int DataProvider::suraSize(int sura) {
-  if (sura < 0 || sura > 113) {
-    return 0;
-  }
-
-  return ChapterInfo(sura).length();
-}
-
-
-QList<Fragment> DataProvider::fragmentsForPart(int part) {
-  QList<Fragment> frags;
-
-  for (int x = 0; x <= MAX_PAGE; x++) {
-    if (Pages[x].part == part) {
-      frags += pageFromIndex(x).fragments();
-    }
-    else if (!frags.isEmpty()) {
-      // We filled our list already
-      break;
-    }
-  }
-
-  return frags;
-}
-
-int Fragment::sura() const {
-  return Fragments[m_index].sura;
-}
-
-int Fragment::start() const {
-  return Fragments[m_index].start;
-}
-
-int Fragment::size() const {
-  return Fragments[m_index].size;
 }
