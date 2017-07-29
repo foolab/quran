@@ -18,7 +18,7 @@ equals(QT_MAJOR_VERSION, 5): DEFINES += QT_VERSION_5
 GENERATED = ../data/text-meta.h ../data/trans-meta.h ../data/recite-meta.h
 
 SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quranviewmodel.cpp \
-           position.cpp aboutdata.cpp textsupplier.cpp \
+           aboutdata.cpp textsupplier.cpp \
            translations.cpp translation.cpp downloader.cpp textprovider.cpp \
            index.cpp recitations.cpp recitation.cpp mediaplaylist.cpp \
            main.cpp phoneflipcontrol.cpp mediaplayer.cpp iconprovider.cpp \
@@ -28,7 +28,7 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            pageposition.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmodel.h \
-           position.h aboutdata.h textsupplier.h \
+           aboutdata.h textsupplier.h \
            translations.h translation.h downloader.h textprovider.h \
            index.h recitations.h recitation.h mediaplaylist.h \
            phoneflipcontrol.h mediaplayer.h iconprovider.h \
