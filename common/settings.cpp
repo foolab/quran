@@ -24,13 +24,14 @@
 #include <QStandardPaths>
 #endif
 #include <QDataStream>
+#include <QMetaEnum>
 
 #define DEFAULT_TEXT_TYPE          0
 #define DEFAULT_FONT_SIZE          36
 #define DEFAULT_NUMBER_FORMAT      0
 #define DEFAULT_PAGE_NUMBER        0
 #define DEFAULT_FULL_SCREEN        false
-#define DEFAULT_ORIENTATION        1
+#define DEFAULT_ORIENTATION        Settings::OrientationPortrait
 #define DEFAULT_TRANSLATIONS_HIDDEN   false
 #define DEFAULT_FLIP_TO_STOP_RECITATION       true
 #define DEFAULT_NIGHT_MODE         false
@@ -57,13 +58,8 @@ Q_DECLARE_METATYPE(QList<uint>);
 #define CONF_FILE "quran.conf"
 #endif
 
-/*!
- * Orientations:
- * 0 = Automatic
- * 1 = Portrait
- * 2 = Landscape
- */
-Settings::Settings(QObject *parent) : QObject(parent) {
+Settings::Settings(QObject *parent) :
+  QObject(parent) {
   qRegisterMetaType<QList<uint> >("QList<uint>");
   qRegisterMetaTypeStreamOperators<QList<uint> >("QList<uint>");
 
@@ -181,16 +177,30 @@ bool Settings::fullScreen() const {
   return m_settings->value("General/fullScreen", DEFAULT_FULL_SCREEN).toBool();
 }
 
-void Settings::setOrientation(int orientation) {
-  int o = qBound(0, orientation, 2);
-  if (Settings::orientation() != o) {
-    m_settings->setValue("General/orientation", o);
+void Settings::setOrientation(Orientation orientation) {
+  if (Settings::orientation() != orientation) {
+    const QMetaObject &mo = Settings::staticMetaObject;
+    int index = mo.indexOfEnumerator("Orientation");
+    QMetaEnum metaEnum = mo.enumerator(index);
+    QString value = metaEnum.valueToKey(orientation);
+
+    m_settings->setValue("General/orientation", value);
     emit orientationChanged();
   }
 }
 
-int Settings::orientation() const {
-  return qBound(0, m_settings->value("General/orientation", DEFAULT_ORIENTATION).toInt(), 2);
+Settings::Orientation Settings::orientation() const {
+  QString value = m_settings->value("General/orientation").toString();
+  const QMetaObject &mo = Settings::staticMetaObject;
+  int index = mo.indexOfEnumerator("Orientation");
+  QMetaEnum metaEnum = mo.enumerator(index);
+  bool ok = false;
+  int orientation = metaEnum.keyToValue(value.toLatin1().constData(), &ok);
+  if (!ok) {
+    return DEFAULT_ORIENTATION;
+  }
+
+  return static_cast<Settings::Orientation>(orientation);
 }
 
 void Settings::setTranslationsHidden(bool hidden) {

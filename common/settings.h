@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ class Settings : public QObject {
 
   Q_PROPERTY(QString version READ version CONSTANT);
   Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged);
-  Q_PROPERTY(int orientation READ orientation WRITE setOrientation NOTIFY orientationChanged);
+  Q_PROPERTY(Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged);
   Q_PROPERTY(bool translationsHidden READ areTranslationsHidden WRITE setTranslationsHidden NOTIFY translationsHiddenChanged);
   Q_PROPERTY(QString defaultTranslation READ defaultTranslation WRITE setDefaultTranslation NOTIFY defaultTranslationChanged);
 
@@ -52,8 +52,14 @@ class Settings : public QObject {
   Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged);
   Q_PROPERTY(QString recitationsDir READ recitationsDir CONSTANT);
   Q_PROPERTY(QString translationsDir READ translationsDir CONSTANT);
+  Q_ENUMS(Orientation);
 
 public:
+  typedef enum {
+    OrientationAutomatic = 0,
+    OrientationPortrait = 1,
+    OrientationLandscape = 2,
+  } Orientation;
   Settings(QObject *parent = 0);
   ~Settings();
 
@@ -81,8 +87,8 @@ public:
   void setFullScreen(bool fs);
   bool fullScreen() const;
 
-  void setOrientation(int orientation);
-  int orientation() const;
+  void setOrientation(Orientation orientation);
+  Orientation orientation() const;
 
   void setTranslationsHidden(bool hidden);
   bool areTranslationsHidden() const;
