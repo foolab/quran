@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -195,13 +195,13 @@ int Settings::orientation() const {
 
 void Settings::setTranslationsHidden(bool hidden) {
   if (areTranslationsHidden() != hidden) {
-    m_settings->setValue("translationsHidden", hidden);
+    m_settings->setValue("General/translationsHidden", hidden);
     emit translationsHiddenChanged();
   }
 }
 
 bool Settings::areTranslationsHidden() const {
-  return m_settings->value("translationsHidden", DEFAULT_TRANSLATIONS_HIDDEN).toBool();
+  return m_settings->value("General/translationsHidden", DEFAULT_TRANSLATIONS_HIDDEN).toBool();
 }
 
 void Settings::setDefaultTranslation(const QString& id) {
