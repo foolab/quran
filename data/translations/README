@@ -1,11 +1,2 @@
-Download the translations from:
+Download the translations and generate trans.ini via gen.py
 http://tanzil.net/trans/
-
-wget -c http://tanzil.net/trans/
-grep download\(this index.html |sed -e 's/.*tanzil.net\/trans\///g' | cut -d \" -f 1 | cut -d / -f 2 | while read t; do wget -c http://tanzil.net/trans/?transID=$t\&type=zekr; done
-
-rm index.html
-
-for i in *; do mv $i `echo $i | cut -d = -f 2 | cut -d \& -f 1`.zip; done
-
-run python gen.py *.zip > trans.ini
