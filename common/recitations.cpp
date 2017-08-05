@@ -22,6 +22,7 @@
 #include <QQmlEngine>
 #include <QDir>
 #include "mediaplayer.h"
+#include <algorithm>
 
 Recitations::Recitations(QObject *parent)
   : QAbstractListModel(parent),
@@ -80,7 +81,7 @@ void Recitations::refresh() {
   QList<Recitation *> recitations;
 
   // Create entries for all our known recitations
-  for (int x = 0; x < RECITATIONS_LEN; x++) {
+  for (uint x = 0; x < Rs.size(); x++) {
     RecitationInfo *info = new RecitationInfo;
     info->m_type = Recitation::Online,
     info->m_id = x;
@@ -206,7 +207,7 @@ bool Recitations::loadRecitation(const QString& id) {
 }
 
 int Recitations::lookup(const QString& id) {
-  for (int x = 0; x < RECITATIONS_LEN; x++) {
+  for (uint x = 0; x < Rs.size(); x++) {
     if (QLatin1String(Rs[x].id) == id) {
       return x;
     }
@@ -216,14 +217,9 @@ int Recitations::lookup(const QString& id) {
 }
 
 int Recitations::installedCount() const {
-  int count = 0;
-  foreach (Recitation *r, m_recitations) {
-    if (r->status() == Recitation::Installed) {
-      ++count;
-    }
-  }
-
-  return count;
+  return std::count_if(m_recitations.constBegin(),
+		m_recitations.constEnd(),
+		[](const Recitation *r) {return r->status() == Recitation::Installed;});
 }
 
 int Recitations::rowCount(const QModelIndex& parent) const {

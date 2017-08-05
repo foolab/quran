@@ -43,8 +43,9 @@ int main(int argc, char *argv[]) {
   puts("// Command:");
   printf("// %s\n", app.arguments().join(" ").toLatin1().data());
   puts("");
-
-  printf("#define RECITATIONS_LEN %d\n", groups.size());
+  puts("#include <array>");
+  puts("");
+  printf("#define _RECITATIONS_LEN %d\n", groups.size());
   puts("");
 
   puts("struct _Recitation {");
@@ -54,8 +55,9 @@ int main(int argc, char *argv[]) {
   puts("  const char *quality;");
   puts("  const char *url;");
   puts("  int language;");
-  puts("} Rs[] = {");
-
+  puts("};");
+  puts("");
+  puts("static const std::array<const _Recitation, _RECITATIONS_LEN> Rs = {{");
   foreach (const QString& group, groups) {
     s.beginGroup(group);
     QString id = group;
@@ -84,7 +86,7 @@ int main(int argc, char *argv[]) {
     s.endGroup();
   }
 
-  puts("};");
+  puts("}};");
 
   puts("");
   puts("#endif /* RECITE_META_H */");
