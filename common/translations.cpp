@@ -16,7 +16,6 @@
  */
 
 #include "translations.h"
-#include "trans-meta.h"
 #include "translation.h"
 #include "dataprovider.h"
 #include "textprovider.h"
@@ -24,6 +23,7 @@
 #include <QQmlEngine>
 #include <QDir>
 #include <algorithm>
+#include <QSettings>
 
 #define INDEX_SUFFIX ".idx"
 #define DATA_SUFFIX ".txt"
@@ -103,19 +103,26 @@ void Translations::refresh() {
 
   QList<Translation *> translations;
 
-  // Let's get all translations:
-  for (uint x = 0; x < Ts.size(); x++) {
+  QSettings s(":/data/translations.ini", QSettings::IniFormat);
+  s.setIniCodec("UTF-8");
+
+  for (const QString& id : s.childGroups()) {
+    s.beginGroup(id);
+    QLocale locale(s.value("language").toString());
+
     TranslationInfo *info = new TranslationInfo;
-    info->m_tid = x;
-    info->m_name = QString::fromUtf8(Ts[x].name);
+    info->m_tid = translations.size();
+    info->m_name = s.value("localizedName").toString();
     info->m_status = Translation::None;
-    info->m_language = Ts[x].language;
-    info->m_uuid = QString::fromUtf8(Ts[x].id);
+    info->m_language = locale.language() == QLocale::C ? QLocale::English : locale.language();
+    info->m_uuid = s.value("id").toString();
 
     Translation *t = new Translation(info, this);
-    QObject::connect(t, SIGNAL(statusChanged()), this, SLOT(translationStatusChanged()));
     t->setDownloader(m_downloader);
+
     translations << t;
+
+    s.endGroup();
   }
 
   // Now check which ones are installed
@@ -126,13 +133,21 @@ void Translations::refresh() {
     dir.entryList(QStringList() << INDEX_FILTER, QDir::Files | QDir::NoDotAndDotDot, QDir::Name);
 
   foreach (const QString& file, list) {
-    int tid = lookup(QFileInfo(file).completeBaseName());
+    int tid = lookup(QFileInfo(file).completeBaseName(), translations);
     if (tid == -1) {
       qmlInfo(this) << "Unknown translation " << file;
       continue;
     }
 
     translations[tid]->setStatus(Translation::Installed);
+  }
+
+  // We do the signal connection at the end.
+  // If we do it before checking installed ones then statusChanged() will be emitted
+  // if we set any to installed. This will trigger a call to translationStatusChanged()
+  // Which will report an ugly "Unknown translation" because m_translations is empty.
+  for (Translation *t : translations) {
+    QObject::connect(t, SIGNAL(statusChanged()), this, SLOT(translationStatusChanged()));
   }
 
   beginInsertRows(QModelIndex(), 0, translations.size() - 1);
@@ -150,17 +165,15 @@ int Translations::installedCount() const {
 }
 
 QString Translations::translationId(int tid) const {
-  return QString::fromUtf8(Ts[tid].id);
+  return m_translations[tid]->uuid();
 }
 
-int Translations::lookup(const QString& id) {
-  for (uint x = 0; x < Ts.size(); x++) {
-    if (QLatin1String(Ts[x].id) == id) {
-      return x;
-    }
-  }
+int Translations::lookup(const QString& id, const QList<Translation *>& translations) {
+  auto iter = std::find_if(translations.constBegin(),
+			   translations.constEnd(),
+			   [&id](const Translation *t) {return t->uuid() == id;});
 
-  return -1;
+  return iter == translations.constEnd() ? -1 : (*iter)->tid();
 }
 
 QString Translations::indexPath(int tid) const {
@@ -174,7 +187,7 @@ QString Translations::dataPath(int tid) const {
 }
 
 bool Translations::removeTranslation(const QString& id) {
-  int tid = lookup(id);
+  int tid = lookup(id, m_translations);
   if (tid == -1) {
     qmlInfo(this) << "Unknown translation " << id;
     return false;
@@ -215,7 +228,7 @@ bool Translations::loadTranslation(const QString& id) {
     return true;
   }
 
-  int tid = lookup(id);
+  int tid = lookup(id, m_translations);
   if (tid == -1) {
     qmlInfo(this) << "Unknown translation " << id;
     return false;

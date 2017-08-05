@@ -4,5 +4,6 @@
     <file alias="text/quran-simple-enhanced.idx">quran-simple-enhanced.idx</file>
     <file alias="text/quran.xml">text/quran.xml</file>
     <file alias="text/quran-simple-enhanced.xml">text/quran-simple-enhanced.xml</file>
+    <file alias="/data/translations.ini">translations/trans.ini</file>
 </qresource>
 </RCC>

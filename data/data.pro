@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = text translations search recitations
+SUBDIRS = text search recitations

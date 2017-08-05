@@ -13,7 +13,7 @@ INCLUDEPATH += . ../data/ ../common/ ../libav/ ../sqlite/ ../quazip/quazip/
 
 DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.6.6\\\"
 
-GENERATED = ../data/text-meta.h ../data/trans-meta.h ../data/recite-meta.h
+GENERATED = ../data/text-meta.h ../data/recite-meta.h
 
 SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quranviewmodel.cpp \
            aboutdata.cpp textsupplier.cpp \

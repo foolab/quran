@@ -76,7 +76,7 @@ private slots:
   void translationStatusChanged();
 
 private:
-  int lookup(const QString& id);
+  int lookup(const QString& id, const QList<Translation *>& translations);
   QString translationId(int tid) const;
   void clear();
   void reportChanges(int from, int to);
