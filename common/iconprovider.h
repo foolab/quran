@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,17 +18,9 @@
 #ifndef ICON_PROVIDER_H
 #define ICON_PROVIDER_H
 
-#ifdef QT_VERSION_5
 #include <QQuickImageProvider>
-#else
-#include <QDeclarativeImageProvider>
-#endif /* QT_VERSION_5 */
 
-#ifdef QT_VERSION_5
 class IconProvider : public QQuickImageProvider {
-#else
-class IconProvider : public QDeclarativeImageProvider {
-#endif /* QT_VERSION_5 */
 public:
   IconProvider();
   ~IconProvider();

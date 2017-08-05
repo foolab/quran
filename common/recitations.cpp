@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,8 @@
 #include "recitations.h"
 #include "recitation.h"
 #include "recite-meta.h"
-#ifdef QT_VERSION_5
 #include <QQmlInfo>
 #include <QQmlEngine>
-#else
-#include <QDeclarativeInfo>
-#include <QDeclarativeEngine>
-#endif
 #include <QDir>
 #include "mediaplayer.h"
 
@@ -32,12 +27,6 @@ Recitations::Recitations(QObject *parent)
   : QAbstractListModel(parent),
     m_player(0) {
 
-  QHash<int, QByteArray> roles;
-
-  roles[RecitationRole] = "recitation";
-  roles[OnlineRole] = "online";
-
-  setRoleNames(roles);
 }
 
 Recitations::~Recitations() {
@@ -254,11 +243,7 @@ QVariant Recitations::data(const QModelIndex& index, int role) const {
       return dynamic_cast<Recitation *>(recitation)->type() == Recitation::Online ? "online" : "offline";
 
     case RecitationRole:
-#ifdef QT_VERSION_5
       QQmlEngine::setObjectOwnership(recitation, QQmlEngine::CppOwnership);
-#else
-      QDeclarativeEngine::setObjectOwnership(recitation, QDeclarativeEngine::CppOwnership);
-#endif
       return QVariant::fromValue<QObject *>(recitation);
 
     default:
@@ -283,12 +268,10 @@ void Recitations::reportChanges() {
   }
 }
 
-#ifdef QT_VERSION_5
 QHash<int, QByteArray> Recitations::roleNames() const {
-  return m_roles;
-}
+  QHash<int, QByteArray> roles;
+  roles[RecitationRole] = "recitation";
+  roles[OnlineRole] = "online";
 
-void Recitations::setRoleNames(const QHash<int, QByteArray>& roles) {
-  m_roles = roles;
+  return roles;
 }
-#endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,13 +41,8 @@ public:
 };
 
 SearchModel::SearchModel(QObject *parent) :
-QAbstractListModel(parent), d_ptr(new SearchModelPrivate) {
+  QAbstractListModel(parent), d_ptr(new SearchModelPrivate) {
 
-  QHash<int, QByteArray> roles;
-  roles[ChapterRole] = "chapter";
-  roles[VerseRole] = "verse";
-
-  setRoleNames(roles);
 }
 
 SearchModel::~SearchModel() {
@@ -187,12 +182,11 @@ void SearchModel::setResults(const QList<QPair<int, int> >& results) {
   }
 }
 
-#ifdef QT_VERSION_5
 QHash<int, QByteArray> SearchModel::roleNames() const {
-  return m_roles;
-}
 
-void SearchModel::setRoleNames(const QHash<int, QByteArray>& roles) {
-  m_roles = roles;
+  QHash<int, QByteArray> roles;
+  roles[ChapterRole] = "chapter";
+  roles[VerseRole] = "verse";
+
+  return roles;
 }
-#endif

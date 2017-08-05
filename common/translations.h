@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,18 +80,13 @@ private:
   QString translationId(int tid) const;
   void clear();
   void reportChanges(int from, int to);
+  QHash<int, QByteArray> roleNames() const;
 
   QList<Translation *> m_translations;
   Downloader *m_downloader;
 
   QString m_dir;
   DataProvider *m_data;
-
-#ifdef QT_VERSION_5
-  QHash<int, QByteArray> roleNames() const;
-  void setRoleNames(const QHash<int, QByteArray>& roles);
-  QHash<int, QByteArray> m_roles;
-#endif
 };
 
 #endif /* TRANSLATIONS_H */

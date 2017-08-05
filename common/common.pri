@@ -13,8 +13,6 @@ INCLUDEPATH += . ../data/ ../common/ ../libav/ ../sqlite/ ../quazip/quazip/
 
 DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.6.6\\\"
 
-equals(QT_MAJOR_VERSION, 5): DEFINES += QT_VERSION_5
-
 GENERATED = ../data/text-meta.h ../data/trans-meta.h ../data/recite-meta.h
 
 SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quranviewmodel.cpp \

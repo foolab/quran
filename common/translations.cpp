@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,8 @@
 #include "translation.h"
 #include "dataprovider.h"
 #include "textprovider.h"
-#ifdef QT_VERSION_5
 #include <QQmlInfo>
 #include <QQmlEngine>
-#else
-#include <QDeclarativeInfo>
-#include <QDeclarativeEngine>
-#endif
 #include <QDir>
 
 #define INDEX_SUFFIX ".idx"
@@ -40,12 +35,6 @@ Translations::Translations(QObject *parent) :
   m_downloader(0),
   m_data(0) {
 
-  QHash<int, QByteArray> roles;
-
-  roles[TranslationRole] = "translation";
-  roles[LanguageRole] = "language";
-
-  setRoleNames(roles);
 }
 
 Translations::~Translations() {
@@ -282,12 +271,9 @@ QVariant Translations::data(const QModelIndex& index, int role) const {
     switch (role) {
     case LanguageRole:
       return dynamic_cast<Translation *>(translation)->language();
+
     case TranslationRole:
-#ifdef QT_VERSION_5
       QQmlEngine::setObjectOwnership(translation, QQmlEngine::CppOwnership);
-#else
-      QDeclarativeEngine::setObjectOwnership(translation, QDeclarativeEngine::CppOwnership);
-#endif
       return QVariant::fromValue<QObject *>(translation);
 
     default:
@@ -320,12 +306,10 @@ void Translations::reportChanges(int from, int to) {
   emit installedCountChanged();
 }
 
-#ifdef QT_VERSION_5
 QHash<int, QByteArray> Translations::roleNames() const {
-  return m_roles;
-}
+  QHash<int, QByteArray> roles;
+  roles[TranslationRole] = "translation";
+  roles[LanguageRole] = "language";
 
-void Translations::setRoleNames(const QHash<int, QByteArray>& roles) {
-  m_roles = roles;
+  return roles;
 }
-#endif

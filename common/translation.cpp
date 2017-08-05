@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,11 +22,7 @@
 #include <QTemporaryFile>
 #include <QNetworkReply>
 #include "index.h"
-#ifdef QT_VERSION_5
 #include <QQmlInfo>
-#else
-#include <QDeclarativeInfo>
-#endif
 
 Translation::Translation(TranslationInfo *info, Translations *parent) :
   QObject(parent),

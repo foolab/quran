@@ -20,9 +20,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QFontDatabase>
-#ifdef QT_VERSION_5
 #include <QStandardPaths>
-#endif
 #include <QDataStream>
 #include <QMetaEnum>
 
@@ -91,7 +89,7 @@ QString Settings::dataDir() const {
   return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/org.foolab.quran/";
 #elif defined(SAILFISH)
   return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/harbour-quran/";
-#elif defined(QT_VERSION_5)
+#elif defined(DESKTOP)
   return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/quran/";
 #else
 #error "I don't know of a data path for this platform"

@@ -24,11 +24,7 @@
 #include "mediadecoder.h"
 #include "audiooutput.h"
 #include "audiopolicy.h"
-#ifdef QT_VERSION_5
 #include <QQmlInfo>
-#else
-#include <QDeclarativeInfo>
-#endif
 
 MediaPlayer::MediaPlayer(QObject *parent) :
   QObject(parent),

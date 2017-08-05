@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,12 +23,6 @@ BookmarksModel::BookmarksModel(QObject *parent) :
   QAbstractListModel(parent),
   m_bookmarks(0) {
 
-  QHash<int, QByteArray> roles;
-  roles[IdRole] = "bookmark";
-  roles[ChapterRole] = "chapter";
-  roles[VerseRole] = "verse";
-
-  setRoleNames(roles);
 }
 
 BookmarksModel::~BookmarksModel() {
@@ -127,12 +121,11 @@ void BookmarksModel::setIds(const QList<uint>& ids) {
   }
 }
 
-#ifdef QT_VERSION_5
 QHash<int, QByteArray> BookmarksModel::roleNames() const {
-  return m_roles;
-}
+  QHash<int, QByteArray> roles;
+  roles[IdRole] = "bookmark";
+  roles[ChapterRole] = "chapter";
+  roles[VerseRole] = "verse";
 
-void BookmarksModel::setRoleNames(const QHash<int, QByteArray>& roles) {
-  m_roles = roles;
+  return roles;
 }
-#endif

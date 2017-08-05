@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,17 +67,12 @@ private slots:
 private:
   void clear();
   int lookup(const QString& id);
+  QHash<int, QByteArray> roleNames() const;
 
   QString m_dir;
   MediaPlayer *m_player;
 
   QList<Recitation *> m_recitations;
-
-#ifdef QT_VERSION_5
-  QHash<int, QByteArray> roleNames() const;
-  void setRoleNames(const QHash<int, QByteArray>& roles);
-  QHash<int, QByteArray> m_roles;
-#endif
 };
 
 #endif /* RECITATIONS_H */

@@ -70,11 +70,7 @@ private:
     QuranViewModel::Type m_type;
   };
 
-#ifdef QT_VERSION_5
   QHash<int, QByteArray> roleNames() const;
-  void setRoleNames(const QHash<int, QByteArray>& roles);
-  QHash<int, QByteArray> m_roles;
-#endif
 
   int m_page;
   QList<Info> m_info;

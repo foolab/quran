@@ -22,11 +22,7 @@
 #include "downloader.h"
 #include <QNetworkReply>
 #include "bookmarks.h"
-#ifdef QT_VERSION_5
 #include <QQmlInfo>
-#else
-#include <QDeclarativeInfo>
-#endif
 #include "chapterinfo.h"
 #include "pageinfo.h"
 #include "partinfo.h"

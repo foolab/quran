@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,11 +25,8 @@
  * https://together.jolla.com/question/44325/iconbutton-how-to-use-own-icons-with-highlight/
  */
 IconProvider::IconProvider() :
-#ifdef QT_VERSION_5
   QQuickImageProvider(QQuickImageProvider::Pixmap) {
-#else
-  QDeclarativeImageProvider(QDeclarativeImageProvider::Pixmap) {
-#endif
+
 }
 
 IconProvider::~IconProvider() {

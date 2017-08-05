@@ -23,12 +23,6 @@ QuranViewModel::QuranViewModel(QObject *parent)
   : QAbstractListModel(parent),
     m_page(-1) {
 
-  QHash<int, QByteArray> roles;
-  roles[ChapterRole] = "chapter";
-  roles[VerseRole] = "verse";
-  roles[TypeRole] = "type";
-
-  setRoleNames(roles);
 }
 
 QuranViewModel::~QuranViewModel() {
@@ -126,12 +120,11 @@ int QuranViewModel::findIndex(int chapter, int verse) {
   return -1;
 }
 
-#ifdef QT_VERSION_5
 QHash<int, QByteArray> QuranViewModel::roleNames() const {
-  return m_roles;
-}
+  QHash<int, QByteArray> roles;
+  roles[ChapterRole] = "chapter";
+  roles[VerseRole] = "verse";
+  roles[TypeRole] = "type";
 
-void QuranViewModel::setRoleNames(const QHash<int, QByteArray>& roles) {
-  m_roles = roles;
+  return roles;
 }
-#endif
