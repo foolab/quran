@@ -24,7 +24,7 @@ Menu {
     property list<MenuAction> actions
     property variant view
 
-    Instantiator  {
+    Instantiator {
         function reverse(m) {
             var l = m.length
             var out = []
