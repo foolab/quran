@@ -111,7 +111,6 @@ void Translations::refresh() {
     QLocale locale(s.value("language").toString());
 
     TranslationInfo *info = new TranslationInfo;
-    info->m_tid = translations.size();
     info->m_name = s.value("localizedName").toString();
     info->m_status = Translation::None;
     info->m_language = locale.language() == QLocale::C ? QLocale::English : locale.language();
@@ -133,13 +132,13 @@ void Translations::refresh() {
     dir.entryList(QStringList() << INDEX_FILTER, QDir::Files | QDir::NoDotAndDotDot, QDir::Name);
 
   foreach (const QString& file, list) {
-    int tid = lookup(QFileInfo(file).completeBaseName(), translations);
-    if (tid == -1) {
+    Translation *t = lookup(QFileInfo(file).completeBaseName(), translations);
+    if (!t) {
       qmlInfo(this) << "Unknown translation " << file;
       continue;
     }
 
-    translations[tid]->setStatus(Translation::Installed);
+    t->setStatus(Translation::Installed);
   }
 
   // We do the signal connection at the end.
@@ -164,40 +163,35 @@ int Translations::installedCount() const {
 		[](const Translation *t) {return t->status() == Translation::Installed;});
 }
 
-QString Translations::translationId(int tid) const {
-  return m_translations[tid]->uuid();
-}
-
-int Translations::lookup(const QString& id, const QList<Translation *>& translations) {
+Translation *Translations::lookup(const QString& id, const QList<Translation *>& translations) {
   auto iter = std::find_if(translations.constBegin(),
 			   translations.constEnd(),
 			   [&id](const Translation *t) {return t->uuid() == id;});
 
-  return iter == translations.constEnd() ? -1 : (*iter)->tid();
+  return iter == translations.constEnd() ? nullptr : (*iter);
 }
 
-QString Translations::indexPath(int tid) const {
+QString Translations::indexPath(const QString& id) const {
   return QString("%1%2%3%4").arg(m_dir).arg(QDir::separator())
-    .arg(translationId(tid)).arg(INDEX_SUFFIX);
+    .arg(id).arg(INDEX_SUFFIX);
 }
 
-QString Translations::dataPath(int tid) const {
+QString Translations::dataPath(const QString& id) const {
   return QString("%1%2%3%4").arg(m_dir).arg(QDir::separator())
-    .arg(translationId(tid)).arg(DATA_SUFFIX);
+    .arg(id).arg(DATA_SUFFIX);
 }
 
 bool Translations::removeTranslation(const QString& id) {
-  int tid = lookup(id, m_translations);
-  if (tid == -1) {
+  Translation *t = lookup(id, m_translations);
+  if (!t) {
     qmlInfo(this) << "Unknown translation " << id;
     return false;
   }
 
-  Translation *t = m_translations[tid];
   t->stopDownload();
 
-  QString index = indexPath(tid);
-  QString data = dataPath(tid);
+  QString index = indexPath(t->uuid());
+  QString data = dataPath(t->uuid());
 
   if (QFile(index).remove() && QFile(data).remove()) {
     t->setStatus(Translation::None);
@@ -221,43 +215,45 @@ bool Translations::loadTranslation(const QString& id) {
   if (id.isEmpty()) {
     TextProvider *p = m_data->secondaryTextProvider();
     if (p) {
-      m_translations[p->id()]->setLoaded(false);
+      lookup(p->uuid(), m_translations)->setLoaded(false);
     }
 
     m_data->setSecondaryText(0);
     return true;
   }
 
-  int tid = lookup(id, m_translations);
-  if (tid == -1) {
+  Translation *t = lookup(id, m_translations);
+  if (!t) {
     qmlInfo(this) << "Unknown translation " << id;
     return false;
   }
 
-  Translation *t = m_translations[tid];
   if (t->status() != Translation::Installed) {
     qmlInfo(this) << "Translation " << id << " is not installed";
     return false;
   }
 
   TextProvider *p = m_data->secondaryTextProvider();
-  if (p && p->id() == tid) {
+  if (p && p->uuid() == t->uuid()) {
     return true;
   }
 
-  p = new TextProvider(tid, dataPath(tid), indexPath(tid));
+  p = new TextProvider(-1, t->uuid(), dataPath(t->uuid()), indexPath(t->uuid()));
   if (!p->load()) {
-    qmlInfo(this) << "Failed to load translation " << tid;
+    qmlInfo(this) << "Failed to load translation " << t->uuid();
     delete p;
     return false;
   }
 
   TextProvider *old = m_data->secondaryTextProvider();
   if (old) {
-    m_translations[old->id()]->setLoaded(false);
+    Translation *ot = lookup(old->uuid(), m_translations);
+    if (ot) {
+      ot->setLoaded(false);
+    }
   }
 
-  m_translations[tid]->setLoaded(true);
+  t->setLoaded(true);
 
   m_data->setSecondaryText(p);
 

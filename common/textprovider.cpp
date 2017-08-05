@@ -29,16 +29,19 @@ public:
   char *ptr;
   off_t size;
   int id;
+  QString uuid;
   QFile *file;
 };
 
-TextProvider::TextProvider(int id, const QString& dataFile, const QString& indexFile)
+TextProvider::TextProvider(int id, const QString& uuid,
+			   const QString& dataFile, const QString& indexFile)
   : d_ptr(new TextProviderPrivate) {
   d_ptr->size = 0;
   d_ptr->ptr = 0;
   d_ptr->index = indexFile;
   d_ptr->data = dataFile;
   d_ptr->id = id;
+  d_ptr->uuid = uuid;
   d_ptr->file = new QFile(dataFile);
 }
 
@@ -51,6 +54,10 @@ TextProvider::~TextProvider() {
 
 int TextProvider::id() const {
   return d_ptr->id;
+}
+
+QString TextProvider::uuid() const {
+  return d_ptr->uuid;
 }
 
 bool TextProvider::load() {

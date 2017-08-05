@@ -55,8 +55,8 @@ public:
   Q_INVOKABLE bool loadTranslation(const QString& id);
   Q_INVOKABLE bool removeTranslation(const QString& id);
 
-  QString indexPath(int tid) const;
-  QString dataPath(int tid) const;
+  QString indexPath(const QString& id) const;
+  QString dataPath(const QString& id) const;
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const;
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -76,8 +76,7 @@ private slots:
   void translationStatusChanged();
 
 private:
-  int lookup(const QString& id, const QList<Translation *>& translations);
-  QString translationId(int tid) const;
+  Translation *lookup(const QString& id, const QList<Translation *>& translations);
   void clear();
   void reportChanges(int from, int to);
   QHash<int, QByteArray> roleNames() const;

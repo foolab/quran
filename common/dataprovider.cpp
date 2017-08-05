@@ -102,7 +102,7 @@ bool DataProvider::setTextType(int index) {
   QString data = Texts[index].name;
   QString idx = Texts[index].idx;
 
-  TextProvider *p = new TextProvider(index, data, idx);
+  TextProvider *p = new TextProvider(index, QString(), data, idx);
   if (!p->load()) {
     delete p;
     return false;

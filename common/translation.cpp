@@ -57,10 +57,6 @@ void Translation::setDownloader(Downloader *downloader) {
   m_downloader = downloader;
 }
 
-int Translation::tid() const {
-  return m_info->m_tid;
-}
-
 QString Translation::uuid() const {
   return m_info->m_uuid;
 }
@@ -253,8 +249,8 @@ bool Translation::readData() {
 }
 
 bool Translation::install() {
-  QString index = m_translations->indexPath(m_info->m_tid);
-  QString data = m_translations->dataPath(m_info->m_tid);
+  QString index = m_translations->indexPath(uuid());
+  QString data = m_translations->dataPath(uuid());
 
   if (!m_file->rename(data)) {
     m_file->remove();

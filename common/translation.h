@@ -32,7 +32,6 @@ class Translation : public QObject {
 
   Q_ENUMS(Status);
 
-  Q_PROPERTY(int tid READ tid CONSTANT);
   Q_PROPERTY(QString uuid READ uuid CONSTANT);
   Q_PROPERTY(QString name READ name CONSTANT);
   Q_PROPERTY(QString language READ language CONSTANT);
@@ -54,7 +53,6 @@ public:
 
   void setDownloader(Downloader *downloader);
 
-  int tid() const;
   QString uuid() const;
   QString name() const;
   QString language() const;
@@ -107,7 +105,6 @@ private:
 class TranslationInfo {
 public:
   Translation::Status m_status;
-  int m_tid;
   QString m_name;
   int m_language;
   QString m_uuid;
