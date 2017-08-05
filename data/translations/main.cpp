@@ -43,8 +43,9 @@ int main(int argc, char *argv[]) {
   puts("// Command:");
   printf("// %s\n", app.arguments().join(" ").toLatin1().data());
   puts("");
-
-  printf("#define TRANSLATIONS_LEN %d\n", groups.size());
+  puts("#include <array>");
+  puts("");
+  printf("#define _TRANSLATIONS_LEN %d\n", groups.size());
   puts("");
 
   puts("struct _Translation {");
@@ -53,9 +54,9 @@ int main(int argc, char *argv[]) {
   puts("  const char *file;");
   puts("  int language;");
   puts("  int rtl;");
-  puts("} Ts[] = {");
-
-
+  puts("};");
+  puts("");
+  puts("static const std::array<const _Translation, _TRANSLATIONS_LEN> Ts = {{");
   foreach (const QString& group, groups) {
     s.beginGroup(group);
 
@@ -83,7 +84,7 @@ int main(int argc, char *argv[]) {
     s.endGroup();
   }
 
-  puts("};");
+  puts("}};");
 
   puts("");
   puts("#endif /* TRANS_META_H */");

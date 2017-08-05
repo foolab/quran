@@ -23,6 +23,7 @@
 #include <QQmlInfo>
 #include <QQmlEngine>
 #include <QDir>
+#include <algorithm>
 
 #define INDEX_SUFFIX ".idx"
 #define DATA_SUFFIX ".txt"
@@ -103,7 +104,7 @@ void Translations::refresh() {
   QList<Translation *> translations;
 
   // Let's get all translations:
-  for (int x = 0; x < TRANSLATIONS_LEN; x++) {
+  for (uint x = 0; x < Ts.size(); x++) {
     TranslationInfo *info = new TranslationInfo;
     info->m_tid = x;
     info->m_name = QString::fromUtf8(Ts[x].name);
@@ -143,15 +144,9 @@ void Translations::refresh() {
 }
 
 int Translations::installedCount() const {
-  int count = 0;
-
-  foreach (Translation *t, m_translations) {
-    if (t->status() == Translation::Installed) {
-      count++;
-    }
-  }
-
-  return count;
+  return std::count_if(m_translations.constBegin(),
+		m_translations.constEnd(),
+		[](const Translation *t) {return t->status() == Translation::Installed;});
 }
 
 QString Translations::translationId(int tid) const {
@@ -159,7 +154,7 @@ QString Translations::translationId(int tid) const {
 }
 
 int Translations::lookup(const QString& id) {
-  for (int x = 0; x < TRANSLATIONS_LEN; x++) {
+  for (uint x = 0; x < Ts.size(); x++) {
     if (QLatin1String(Ts[x].id) == id) {
       return x;
     }
