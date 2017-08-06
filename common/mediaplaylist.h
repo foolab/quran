@@ -25,7 +25,7 @@ class Recitation;
 class Media;
 class Recitation;
 class Downloader;
-class QNetworkReply;
+class Download;
 
 class MediaPlaylist : public QObject {
   Q_OBJECT
@@ -88,7 +88,7 @@ private:
 
   int m_playingId;
 
-  QNetworkReply *m_reply;
+  Download *m_download;
 };
 
 #endif /* MEDIA_PLAYLIST_H */

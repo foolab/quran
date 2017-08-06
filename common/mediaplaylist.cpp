@@ -33,7 +33,7 @@ MediaPlaylist::MediaPlaylist(Recitation *recitation,
   m_recitation(recitation),
   m_downloader(downloader),
   m_playingId(-1),
-  m_reply(0) {
+  m_download(0) {
 
 }
 
@@ -195,9 +195,9 @@ void MediaPlaylist::start() {
 }
 
 void MediaPlaylist::stop() {
-  if (m_reply) {
-    delete m_reply;
-    m_reply = 0;
+  if (m_download) {
+    delete m_download;
+    m_download = 0;
   }
 
   m_queue.clear();
@@ -269,40 +269,45 @@ void MediaPlaylist::download() {
     return;
   }
 
-  m_reply = m_downloader->get(m_recitation->downloadUrl(m));
+  m_download = m_downloader->get(m_recitation->downloadUrl(m));
 
-  QObject::connect(m_reply, SIGNAL(finished()), this, SLOT(replyFinished()));
+  QObject::connect(m_download, SIGNAL(finished()), this, SLOT(replyFinished()));
 }
 
 void MediaPlaylist::replyFinished() {
-  QByteArray data = m_reply->readAll();
+  QByteArray data = m_download->reply()->readAll();
+  bool error = m_download->reply()->error() != QNetworkReply::NoError;
 
-  if (m_reply->error() != QNetworkReply::NoError || data.isEmpty()) {
-    if (m_reply->error() != QNetworkReply::NoError) {
-      qmlInfo(this) << "Error downloading: " << m_reply->url() << " : " << m_reply->errorString();
+  if (error || data.isEmpty()) {
+    if (error) {
+      qmlInfo(this) << "Error downloading: "
+		    << m_download->reply()->url()
+		    << " : "
+		    << m_download->reply()->errorString();
     }
 
     m_queue.clear();
-    m_reply->deleteLater();
-    m_reply = 0;
+    m_download->deleteLater();
+    m_download = 0;
     emit mediaAvailable(Media::error());
     return;
   }
 
   const Media& media = m_queue.dequeue();
   if (!media.setData(data)) {
-    qmlInfo(this) << "Failed to write data for " << m_reply->url();
+    qmlInfo(this) << "Failed to write data for "
+		  << m_download->reply()->url();
 
     m_queue.clear();
-    m_reply->deleteLater();
-    m_reply = 0;
+    m_download->deleteLater();
+    m_download = 0;
 
     emit mediaAvailable(Media::error());
     return;
   }
 
-  m_reply->deleteLater();
-  m_reply = 0;
+  m_download->deleteLater();
+  m_download = 0;
 
   emit mediaAvailable(media);
 

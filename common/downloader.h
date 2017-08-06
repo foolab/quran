@@ -21,6 +21,7 @@
 #include <QNetworkAccessManager>
 
 class QUrl;
+class Download;
 
 class Downloader : public QNetworkAccessManager {
   Q_OBJECT
@@ -29,8 +30,34 @@ public:
   Downloader(QObject *parent = 0);
   ~Downloader();
 
-  QNetworkReply *get(const QString& url);
-  QNetworkReply *get(const QUrl& url);
+  Download *get(const QString& url);
+  Download *get(const QUrl& url);
+};
+
+class Download : public QObject {
+  Q_OBJECT
+
+public:
+  Download(QNetworkReply *reply, QObject *parent = 0);
+  ~Download();
+
+  QNetworkReply *reply() const;
+  void stop();
+  qint64 progress() const;
+  qint64 size() const;
+
+signals:
+  void progressChanged();
+  void sizeChanged();
+  void finished();
+
+private slots:
+  void handleDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+
+private:
+  qint64 m_size;
+  qint64 m_progress;
+  QNetworkReply *m_reply;
 };
 
 #endif /* DOWNLOADER_H */

@@ -23,9 +23,9 @@
 
 class Translations;
 class Downloader;
-class QNetworkReply;
-class QTemporaryFile;
+class Download;
 class TranslationInfo;
+class QTemporaryFile;
 
 class Translation : public QObject {
   Q_OBJECT
@@ -79,25 +79,20 @@ signals:
   void installed();
 
 private slots:
-  void replyDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
   void replyFinished();
 
 private:
-  bool readData();
-  bool install();
+  bool readData(QTemporaryFile& file);
+  bool install(QTemporaryFile& file);
   void replyError();
 
   TranslationInfo *m_info;
   Translations *m_translations;
   Downloader *m_downloader;
-  QNetworkReply *m_reply;
-  QTemporaryFile *m_file;
+  Download *m_download;
 
-  qint64 m_size;
-  qint64 m_progress;
   bool m_loaded;
 
-  quint64 m_offset;
   QList<QPair<off_t, size_t> > m_offsets;
 };
 

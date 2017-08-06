@@ -29,14 +29,78 @@ Downloader::~Downloader() {
 
 }
 
-QNetworkReply *Downloader::get(const QString& url) {
+Download *Downloader::get(const QString& url) {
   return get(QUrl::fromEncoded(url.toUtf8()));
 }
 
-QNetworkReply *Downloader::get(const QUrl& url) {
+Download *Downloader::get(const QUrl& url) {
   QNetworkReply *reply = QNetworkAccessManager::get(QNetworkRequest(url));
-  QObject::connect(reply, SIGNAL(sslErrors(const QList<QSslError>&)), reply,
+
+  return new Download(reply);
+}
+
+Download::Download(QNetworkReply *reply, QObject *parent) :
+  QObject(parent),
+  m_size(0),
+  m_progress(0),
+  m_reply(reply) {
+
+  QObject::connect(m_reply, SIGNAL(sslErrors(const QList<QSslError>&)), m_reply,
 		   SLOT(ignoreSslErrors()));
 
-  return reply;
+  QObject::connect(m_reply, &QNetworkReply::finished, this, &Download::finished);
+
+  QObject::connect(m_reply, &QNetworkReply::downloadProgress,
+		   this, &Download::handleDownloadProgress);
+}
+
+Download::~Download() {
+  stop();
+}
+
+void Download::stop() {
+  if (m_reply) {
+    QObject::disconnect(m_reply, 0, this, 0);
+    m_reply->deleteLater();
+    m_reply = 0;
+  }
+}
+
+void Download::handleDownloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
+  if (bytesTotal == -1) {
+    // We can try to get it from the HTTP content length header
+    QVariant val = m_reply->header(QNetworkRequest::ContentLengthHeader);
+    if (!val.isValid()) {
+      // HACK: Let's hardcode an arbitrary value (3MB).
+      bytesTotal = 1024 * 1024 * 3;
+    } else {
+      bytesTotal = val.value<qint64>();
+    }
+  }
+
+  if (bytesTotal < bytesReceived) {
+    bytesTotal = bytesReceived;
+  }
+
+  if (bytesTotal != m_size) {
+    m_size = bytesTotal;
+    emit sizeChanged();
+  }
+
+  if (bytesReceived != m_progress) {
+    m_progress = bytesReceived;
+    emit progressChanged();
+  }
+}
+
+QNetworkReply *Download::reply() const {
+  return m_reply;
+}
+
+qint64 Download::progress() const {
+  return m_progress;
+}
+
+qint64 Download::size() const {
+  return m_size;
 }
