@@ -81,7 +81,6 @@ signals:
 private slots:
   void replyDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
   void replyFinished();
-  void replyReadyRead();
 
 private:
   bool readData();

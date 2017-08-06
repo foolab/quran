@@ -111,8 +111,6 @@ bool Translation::startDownload() {
 		   this, SLOT(replyDownloadProgress(qint64, qint64)));
   QObject::connect(m_reply, SIGNAL(finished()),
 		   this, SLOT(replyFinished()));
-  QObject::connect(m_reply, SIGNAL(readyRead()),
-		   this, SLOT(replyReadyRead()));
 
   setStatus(Translation::Downloading);
 
@@ -197,16 +195,6 @@ void Translation::replyFinished() {
 
     // Emit this after we set the status because Translations object depends on that
     emit installed();
-  }
-}
-
-void Translation::replyReadyRead() {
-  if (!m_reply || !m_file) {
-    return;
-  }
-
-  if (!readData()) {
-    replyError();
   }
 }
 
