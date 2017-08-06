@@ -80,13 +80,13 @@ signals:
 
 private slots:
   void replyDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-  void replyError();
   void replyFinished();
   void replyReadyRead();
 
 private:
   bool readData();
   bool install();
+  void replyError();
 
   TranslationInfo *m_info;
   Translations *m_translations;

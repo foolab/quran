@@ -109,8 +109,6 @@ bool Translation::startDownload() {
 
   QObject::connect(m_reply, SIGNAL(downloadProgress(qint64, qint64)),
 		   this, SLOT(replyDownloadProgress(qint64, qint64)));
-  QObject::connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)),
-		   this, SLOT(replyError()));
   QObject::connect(m_reply, SIGNAL(finished()),
 		   this, SLOT(replyFinished()));
   QObject::connect(m_reply, SIGNAL(readyRead()),
@@ -186,16 +184,9 @@ void Translation::replyFinished() {
     return;
   }
 
-  if (m_reply->error() != QNetworkReply::NoError) {
+  if (m_reply->error() != QNetworkReply::NoError || !readData() || !install()) {
     replyError();
-  }
-  else if (!readData()) {
-    replyError();
-  }
-  else if (!install()) {
-    replyError();
-  }
-  else {
+  } else {
     delete m_file;
     m_file = 0;
 
