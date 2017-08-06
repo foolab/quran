@@ -43,9 +43,8 @@ Translations::~Translations() {
 }
 
 void Translations::clear() {
-  foreach (Translation *t, m_translations) {
-    t->stopDownload();
-  }
+  std::for_each(m_translations.constBegin(), m_translations.constEnd(),
+		[](Translation *t) {t->stopDownload();});
 
   loadTranslation(QString());
 
@@ -129,9 +128,16 @@ void Translations::refresh() {
 
     // We do the signal connection at the end.
     // If we do it before checking installed ones then statusChanged() will be emitted
-    // if we set any to installed. This will trigger a call to translationStatusChanged()
+    // if we set any to installed. This will trigger a call to reportChanges()
     // Which will report an ugly "Unknown translation" because m_translations is empty.
-    QObject::connect(t, SIGNAL(statusChanged()), this, SLOT(translationStatusChanged()));
+    QObject::connect(t, &Translation::statusChanged,
+		     [t, this]() {
+		       if (t->status() == Translation::Installed) {
+			 reportChanges(t);
+		       } else if (t->status() == Translation::Error) {
+			 emit downloadError(t->name());
+		       }
+		     });
   }
 
   beginInsertRows(QModelIndex(), 0, translations.size() - 1);
@@ -180,16 +186,7 @@ bool Translations::removeTranslation(const QString& id) {
 
   if (QFile(index).remove() && QFile(data).remove()) {
     t->setStatus(Translation::None);
-    int idx = m_translations.indexOf(t);
-
-    if (idx != -1) {
-      reportChanges(idx, idx);
-    } else {
-      // I doubt this could ever happen
-      qmlInfo(this) << "Unknown translation installed";
-      emit installedCountChanged();
-    }
-
+    reportChanges(t);
     return true;
   }
 
@@ -273,25 +270,8 @@ QVariant Translations::data(const QModelIndex& index, int role) const {
   return QVariant();
 }
 
-void Translations::translationStatusChanged() {
-  if (Translation *t = dynamic_cast<Translation *>(sender())) {
-    if (t->status() == Translation::Installed) {
-      int idx = m_translations.indexOf(t);
-      if (idx != -1) {
-	reportChanges(idx, idx);
-      } else {
-	// I doubt this could ever happen
-	qmlInfo(this) << "Unknown translation";
-	emit installedCountChanged();
-      }
-    } else if (t->status() == Translation::Error) {
-      emit downloadError(t->name());
-    }
-  }
-}
-
-void Translations::reportChanges(int from, int to) {
-  emit QAbstractItemModel::dataChanged(index(from, 0), index(to, 0));
+void Translations::reportChanges(int idx) {
+  emit QAbstractItemModel::dataChanged(index(idx, 0), index(idx, 0));
   emit installedCountChanged();
 }
 
@@ -308,4 +288,16 @@ bool Translations::isInstalled(Translation *t) {
   QFileInfo data(dataPath(t->uuid()));
 
   return index.size() > 0 && index.isReadable() && data.size() > 0 && data.isReadable();
+}
+
+void Translations::reportChanges(Translation *t) {
+  int idx = m_translations.indexOf(t);
+
+  if (idx != -1) {
+    reportChanges(idx);
+  } else {
+    // I doubt this could ever happen
+    qmlInfo(this) << "Unknown translation installed";
+    emit installedCountChanged();
+  }
 }

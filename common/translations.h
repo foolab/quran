@@ -72,15 +72,13 @@ signals:
   void refreshed();
   void downloadError(const QString& name);
 
-private slots:
-  void translationStatusChanged();
-
 private:
   Translation *lookup(const QString& id, const QList<Translation *>& translations);
   void clear();
-  void reportChanges(int from, int to);
+  void reportChanges(int idx);
   QHash<int, QByteArray> roleNames() const;
   bool isInstalled(Translation *t);
+  void reportChanges(Translation *t);
 
   QList<Translation *> m_translations;
   Downloader *m_downloader;
