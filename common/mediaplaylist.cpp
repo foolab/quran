@@ -271,8 +271,6 @@ void MediaPlaylist::download() {
 
   m_reply = m_downloader->get(m_recitation->downloadUrl(m));
 
-  QObject::connect(m_reply, SIGNAL(sslErrors(const QList<QSslError>&)), m_reply,
-		   SLOT(ignoreSslErrors()));
   QObject::connect(m_reply, SIGNAL(finished()), this, SLOT(replyFinished()));
 }
 

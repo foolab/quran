@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,10 @@
 #include "downloader.h"
 #include <QUrl>
 #include <QNetworkRequest>
+#include <QNetworkReply>
 
-Downloader::Downloader(QObject *parent) : QNetworkAccessManager(parent) {
+Downloader::Downloader(QObject *parent) :
+  QNetworkAccessManager(parent) {
 
 }
 
@@ -32,5 +34,9 @@ QNetworkReply *Downloader::get(const QString& url) {
 }
 
 QNetworkReply *Downloader::get(const QUrl& url) {
-  return QNetworkAccessManager::get(QNetworkRequest(url));
+  QNetworkReply *reply = QNetworkAccessManager::get(QNetworkRequest(url));
+  QObject::connect(reply, SIGNAL(sslErrors(const QList<QSslError>&)), reply,
+		   SLOT(ignoreSslErrors()));
+
+  return reply;
 }
