@@ -119,33 +119,18 @@ void Translations::refresh() {
     Translation *t = new Translation(info, this);
     t->setDownloader(m_downloader);
 
+    if (isInstalled(t)) {
+      t->setStatus(Translation::Installed);
+    }
+
     translations << t;
 
     s.endGroup();
-  }
 
-  // Now check which ones are installed
-  QDir dir(m_dir);
-  dir.mkpath(".");
-
-  QStringList list =
-    dir.entryList(QStringList() << INDEX_FILTER, QDir::Files | QDir::NoDotAndDotDot, QDir::Name);
-
-  foreach (const QString& file, list) {
-    Translation *t = lookup(QFileInfo(file).completeBaseName(), translations);
-    if (!t) {
-      qmlInfo(this) << "Unknown translation " << file;
-      continue;
-    }
-
-    t->setStatus(Translation::Installed);
-  }
-
-  // We do the signal connection at the end.
-  // If we do it before checking installed ones then statusChanged() will be emitted
-  // if we set any to installed. This will trigger a call to translationStatusChanged()
-  // Which will report an ugly "Unknown translation" because m_translations is empty.
-  for (Translation *t : translations) {
+    // We do the signal connection at the end.
+    // If we do it before checking installed ones then statusChanged() will be emitted
+    // if we set any to installed. This will trigger a call to translationStatusChanged()
+    // Which will report an ugly "Unknown translation" because m_translations is empty.
     QObject::connect(t, SIGNAL(statusChanged()), this, SLOT(translationStatusChanged()));
   }
 
@@ -316,4 +301,11 @@ QHash<int, QByteArray> Translations::roleNames() const {
   roles[LanguageRole] = "language";
 
   return roles;
+}
+
+bool Translations::isInstalled(Translation *t) {
+  QFileInfo index(indexPath(t->uuid()));
+  QFileInfo data(dataPath(t->uuid()));
+
+  return index.size() > 0 && index.isReadable() && data.size() > 0 && data.isReadable();
 }

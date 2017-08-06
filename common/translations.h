@@ -80,6 +80,7 @@ private:
   void clear();
   void reportChanges(int from, int to);
   QHash<int, QByteArray> roleNames() const;
+  bool isInstalled(Translation *t);
 
   QList<Translation *> m_translations;
   Downloader *m_downloader;
