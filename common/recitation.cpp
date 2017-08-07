@@ -178,10 +178,6 @@ RecitationInfo *Recitation::parseZekr(QIODevice *dev, const Type& type) {
   return info;
 }
 
-int Recitation::rid() const {
-  return m_info->m_id;
-}
-
 QString Recitation::uuid() const {
   return m_info->m_uuid;
 }

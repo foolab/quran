@@ -66,7 +66,7 @@ private slots:
 
 private:
   void clear();
-  int lookup(const QString& id);
+  static Recitation *lookup(const QString& id, const QList<Recitation *>& recitations);
   QHash<int, QByteArray> roleNames() const;
 
   QString m_dir;

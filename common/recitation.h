@@ -32,7 +32,6 @@ class Recitation : public QObject {
 
   Q_ENUMS(Type Status);
 
-  Q_PROPERTY(int rid READ rid CONSTANT);
   Q_PROPERTY(QString name READ name CONSTANT);
   Q_PROPERTY(QString uuid READ uuid CONSTANT);
   Q_PROPERTY(QString quality READ quality CONSTANT);
@@ -75,7 +74,6 @@ public:
     Q_INVOKABLE bool remove();
   */
 
-  int rid() const;
   QString uuid() const;
   QString name() const;
   QString quality() const;
@@ -108,7 +106,6 @@ public:
   QString m_dir;
   QString m_subdir;
   QUrl m_url;
-  int m_id;
   Recitation::Type m_type;
   Recitation::Status m_status;
 };

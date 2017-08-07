@@ -17,7 +17,7 @@
 
 #include "recitations.h"
 #include "recitation.h"
-#include "recite-meta.h"
+#include <QSettings>
 #include <QQmlInfo>
 #include <QQmlEngine>
 #include <QDir>
@@ -80,20 +80,26 @@ void Recitations::refresh() {
 
   QList<Recitation *> recitations;
 
+  QSettings s(":/data/recitations.ini", QSettings::IniFormat);
+  s.setIniCodec("UTF-8");
+
   // Create entries for all our known recitations
-  for (uint x = 0; x < Rs.size(); x++) {
+  for (const QString& id : s.childGroups()) {
+    s.beginGroup(id);
+
     RecitationInfo *info = new RecitationInfo;
-    info->m_type = Recitation::Online,
-    info->m_id = x;
-    info->m_uuid = QString::fromUtf8(Rs[x].id);
-    info->m_name = QString::fromUtf8(Rs[x].translated_name);
-    info->m_quality = QString::fromUtf8(Rs[x].quality);
+    info->m_type = Recitation::Online;
+    info->m_uuid = id;
+    info->m_name = s.value("reciterArabic").toString();
+    info->m_quality = s.value("quality").toString();
     info->m_dir =
       QString("%1%2%3%2").arg(m_dir).arg(QDir::separator()).arg(info->m_uuid);
-    info->m_url = QString::fromUtf8(Rs[x].url);
+    info->m_url = s.value("audioUrl").toString();
     info->m_status = Recitation::None;
 
     recitations << new Recitation(info, this);
+
+    s.endGroup();
   }
 
   QDir dir(m_dir);
@@ -116,20 +122,18 @@ void Recitations::refresh() {
 
     // If it's an online recitation and we know about it then update the existing
     if (info->m_type == Recitation::Online) {
-      int x = lookup(info->m_uuid);
-      if (x == -1) {
+      Recitation *r = lookup(info->m_uuid, recitations);
+      if (!r) {
 	// That is strange but we will just load it.
-	info->m_id = recitations.size();
 	recitations << new Recitation(info, this);
-	recitations[info->m_id]->setStatus(Recitation::Installed);
+	recitations.last()->setStatus(Recitation::Installed);
       } else {
-	recitations[x]->setStatus(Recitation::Installed);
+	r->setStatus(Recitation::Installed);
 	delete info;
       }
     } else {
-      info->m_id = recitations.size();
       recitations << new Recitation(info, this);
-      recitations[info->m_id]->setStatus(Recitation::Installed);
+      recitations.last()->setStatus(Recitation::Installed);
     }
   }
 
@@ -147,12 +151,11 @@ void Recitations::refresh() {
     }
 
     info->m_uuid = id;
-    info->m_id = recitations.size();
     recitations << new Recitation(info, this);
-    recitations[info->m_id]->setStatus(Recitation::Installed);
+    recitations.last()->setStatus(Recitation::Installed);
   }
 
-  foreach (Recitation *r, recitations) {
+  for (Recitation *r : recitations) {
     QObject::connect(r, SIGNAL(enabled()), this, SLOT(reportChanges()));
     QObject::connect(r, SIGNAL(disabled()), this, SLOT(reportChanges()));
   }
@@ -177,27 +180,20 @@ bool Recitations::loadRecitation(const QString& id) {
     return true;
   }
 
-  int x = -1;
-  // lookup() checks built ins only
-  foreach (Recitation *r, m_recitations) {
-    if (r->uuid() == id) {
-      x = r->rid();
-      break;
-    }
-  }
+  Recitation *r = lookup(id, m_recitations);
 
-  if (x == -1) {
+  if (!r) {
     qmlInfo(this) << "Unknown recitation " << id;
     return false;
   }
 
-  if (m_recitations[x]->status() == Recitation::Installed) {
+  if (r->status() == Recitation::Installed) {
     if (old) {
       old->setLoaded(false);
     }
 
-    m_player->setRecitation(m_recitations[x]);
-    m_recitations[x]->setLoaded(true);
+    m_player->setRecitation(r);
+    r->setLoaded(true);
     return true;
   }
 
@@ -206,14 +202,11 @@ bool Recitations::loadRecitation(const QString& id) {
   return false;
 }
 
-int Recitations::lookup(const QString& id) {
-  for (uint x = 0; x < Rs.size(); x++) {
-    if (QLatin1String(Rs[x].id) == id) {
-      return x;
-    }
-  }
+Recitation *Recitations::lookup(const QString& id, const QList<Recitation *>& recitations) {
+  auto iter = std::find_if(recitations.constBegin(), recitations.constEnd(),
+			   [&id](const Recitation *r) {return r->uuid() == id;});
 
-  return -1;
+  return iter == recitations.constEnd() ? nullptr : (*iter);
 }
 
 int Recitations::installedCount() const {
