@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   viewBox="0 0 100 100"
+   id="svg2"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="options_icon.svg"
+   inkscape:export-filename="/home/mohammed/scratchbox/quran/quran/icons/settings.png"
+   inkscape:export-xdpi="45.514706"
+   inkscape:export-ydpi="45.514706">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1024"
+     inkscape:window-height="683"
+     id="namedview6"
+     showgrid="false"
+     inkscape:zoom="2.2078906"
+     inkscape:cx="-38.236439"
+     inkscape:cy="104.35052"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <path
+     d="m 50.007288,15.611985 c -1.982754,0 -3.928451,0.178316 -5.819351,0.500586 l -0.922934,9.777296 c -1.955596,0.545118 -3.806483,1.307329 -5.537739,2.283958 l -7.555902,-6.241696 c -3.191424,2.259207 -5.985182,5.036739 -8.244114,8.2283 l 6.257303,7.555901 c -0.97546,1.729195 -1.754564,3.584757 -2.299565,5.537741 l -9.760795,0.928159 c -0.322401,1.890694 -0.500518,3.836391 -0.500518,5.837088 0,1.986742 0.177017,3.924738 0.500587,5.819282 l 9.761482,0.923003 c 0.545029,1.952984 1.324174,3.808546 2.299566,5.53774 l -6.241697,7.555902 c 2.254807,3.182829 5.030002,5.973562 8.212487,8.228301 l 7.571715,-6.257372 c 1.732357,0.977454 3.580768,1.754219 5.53774,2.299565 l 0.922934,9.777296 c 1.8909,0.322311 3.836597,0.48498 5.819351,0.48498 1.982685,0 3.912774,-0.162669 5.803675,-0.48498 l 0.922933,-9.777296 c 1.957041,-0.545346 3.805384,-1.322111 5.537741,-2.299565 l 7.571714,6.257372 c 3.182761,-2.254876 5.957956,-5.04561 8.212488,-8.228301 l -6.241696,-7.555902 c 0.975461,-1.729194 1.754563,-3.584756 2.299564,-5.53774 L 83.87574,55.8386 c 0.32357,-1.894544 0.500587,-3.83254 0.500587,-5.819282 0,-1.983372 -0.178118,-3.927899 -0.500587,-5.81935 l -9.761483,-0.922934 c -0.545028,-1.952983 -1.324173,-3.808545 -2.299564,-5.53774 l 6.257303,-7.555902 c -2.258864,-3.191698 -5.052622,-5.969162 -8.244114,-8.2283 l -7.555901,6.241696 C 60.540723,27.220159 58.689837,26.457969 56.73424,25.91283 l -0.922934,-9.777296 c -1.8909,-0.32227 -3.82099,-0.500586 -5.803674,-0.500586 z m 0,21.290591 c 7.230014,0 13.078103,5.863215 13.078103,13.093229 0,7.230015 -5.847607,13.09323 -13.078103,13.09323 -7.230014,0 -13.093229,-5.863215 -13.093229,-13.09323 0,-7.230014 5.863215,-13.093229 13.093229,-13.093229 z"
+     id="path4"
+     inkscape:connector-curvature="0" />
+  <circle
+     style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3.81188059;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     id="path9492"
+     inkscape:export-filename="/mnt/5/scratchbox/users/mohammed/home/mohammed/quran/sailfish/quran/icons/stop.png"
+     inkscape:export-xdpi="86.706749"
+     inkscape:export-ydpi="86.706749"
+     cx="50"
+     cy="50"
+     r="45.55125" />
+</svg>
