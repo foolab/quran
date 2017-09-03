@@ -187,6 +187,23 @@ QuranPage {
                 checked: settings.flipToStopRecitation
                 onCheckedChanged: settings.flipToStopRecitation = checked
             }
+
+            QuranBackgroundItem {
+                width: parent.width
+                height: quranTheme.itemSizeSmall
+                onClicked: pushAnimated(Qt.resolvedUrl("AboutPage.qml"))
+                QuranLabel {
+                    anchors {
+                        left: parent.left
+                        leftMargin: quranTheme.marginSmall
+                        right: parent.right
+                        top: parent.top
+                        bottom: parent.bottom
+                    }
+                    text: qsTr("About")
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
         }
     }
 }
