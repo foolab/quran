@@ -31,12 +31,12 @@ if [ $# -gt 0 ]; then
     esac
 fi
 
-QT_VERSION=5.5
+QT_VERSION=5.9.1
 QT_DIR=/home/mohammed/mnt/4/android/qt$QT_VERSION/$QT_VERSION/
 
-export ANDROID_NDK_ROOT=/home/mohammed/mnt/4/android/android-ndk-r10b
+export ANDROID_NDK_ROOT=/home/mohammed/mnt/4/android/android-ndk-r15c/
 export ANDROID_SDK_ROOT=/home/mohammed/mnt/4/android/android-sdk-linux/
-export TOOLCHAIN=$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.8/prebuilt/linux-x86/bin/
+export TOOLCHAIN=$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/
 export SYSROOT=$ANDROID_NDK_ROOT/platforms/android-9/arch-arm/
 export CC=$TOOLCHAIN/arm-linux-androideabi-gcc
 export CXX=$TOOLCHAIN/arm-linux-androideabi-g++
