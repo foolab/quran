@@ -6,4 +6,4 @@ POST_COMMAND = ./translations trans.ini > trans-meta.h && mv trans-meta.h ../
 
 POST_OUT = ../trans-meta.h
 
-include(../../common.pri)
+include(../data.pri)

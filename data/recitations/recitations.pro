@@ -6,4 +6,4 @@ POST_COMMAND = ./recitations recite.ini > recite-meta.h && mv recite-meta.h ../
 
 POST_OUT = ../recite-meta.h
 
-include(../../common.pri)
+include(../data.pri)
