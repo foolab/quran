@@ -9,7 +9,9 @@ MOBILITY = sensors
 android:LIBS += -lOpenSLES
 
 DEPENDPATH += . ../data/ ../common/
-INCLUDEPATH += . ../data/ ../common/ ../libav/ ../sqlite/ ../quazip/quazip/
+INCLUDEPATH += . ../data/ ../common/ ../libav/
+
+!desktop:INCLUDEPATH += ../sqlite/ ../quazip/quazip/
 
 DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.6.6\\\"
 
