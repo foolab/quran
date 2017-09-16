@@ -38,12 +38,14 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmode
            pageposition.h \
            $$GENERATED
 
-android {
-SOURCES += sles.cpp
-HEADERS += sles.h
-} else {
-SOURCES += pulse.cpp
-HEADERS += pulse.h
+sles {
+  SOURCES += sles.cpp
+  HEADERS += sles.h
+}
+
+pulse {
+  SOURCES += pulse.cpp
+  HEADERS += pulse.h
 }
 
 target.path = /usr/bin/

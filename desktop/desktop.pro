@@ -4,7 +4,7 @@ TARGET = quran
 
 QT += qml quick sensors
 
-CONFIG += link_pkgconfig desktop
+CONFIG += link_pkgconfig desktop pulse
 PKGCONFIG += sqlite3
 
 # Has to be after android keyword in config

@@ -4,7 +4,7 @@ TARGET = harbour-quran
 
 QT += qml quick
 
-CONFIG += link_pkgconfig sailfish
+CONFIG += link_pkgconfig sailfish pulse
 
 # Has to be after sailfish keyword in config
 include(../common/common.pri)

@@ -4,7 +4,7 @@ TARGET = Quran
 
 QT += qml quick sensors androidextras
 
-CONFIG += android
+CONFIG += android sles
 
 # Has to be after android keyword in config
 include(../common/common.pri)
