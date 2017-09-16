@@ -57,9 +57,13 @@ PRE_TARGETDEPS += gen
 
 gen.depends = gen_text gen_search gen_recitations gen_translations
 
-gen_text.commands = cd ../data/text/ && $$QMAKE_QMAKE && make gen
-gen_search.commands = cd ../data/search/ && $$QMAKE_QMAKE && make gen
-gen_recitations.commands = cd ../data/recitations/ && $$QMAKE_QMAKE && make gen
-gen_translations.commands = cd ../data/translations/ && $$QMAKE_QMAKE && make gen
+defineReplace(build_dep) {
+  return(cd ../data/$$1/ && $$QMAKE_QMAKE && make gen)
+}
+
+gen_text.commands = $$build_dep(text)
+gen_search.commands = $$build_dep(search)
+gen_recitations.commands = $$build_dep(recitations)
+gen_translations.commands = $$build_dep(translations)
 
 QMAKE_EXTRA_TARGETS += gen gen_text gen_search gen_recitations gen_translations
