@@ -60,7 +60,8 @@ PRE_TARGETDEPS += gen
 gen.depends = gen_text gen_search gen_recitations gen_translations
 
 defineReplace(build_dep) {
-  return(cd ../data/$$1/ && $$QMAKE_QMAKE && make gen)
+  android:QMAKE_ARGS=QMAKE_PKG_CONFIG=pkg-config
+  return(cd ../data/$$1/ && $$QMAKE_QMAKE $$QMAKE_ARGS && make gen)
 }
 
 gen_text.commands = $$build_dep(text)
