@@ -23,7 +23,7 @@
 #include <cstring>
 
 Pulse::Pulse(AudioOutput *parent) :
-  QObject(parent),
+  AudioOutputInterface(parent),
   m_audio(parent),
   m_loop(0),
   m_ctx(0),

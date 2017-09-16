@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,13 +22,12 @@
 #include <QMutex>
 #include "audiooutput.h"
 
-class AudioOutput;
 class Engine;
 class Mix;
 class Sink;
 typedef const struct SLAndroidSimpleBufferQueueItf_ * const * SLAndroidSimpleBufferQueueItf;
 
-class Sles : public QObject {
+class Sles : public AudioOutputInterface {
   Q_OBJECT
 
 public:
@@ -41,11 +40,6 @@ public:
   void start();
 
   bool isRunning();
-
-signals:
-  void error();
-  void finished();
-  void positionChanged(int index);
 
 private slots:
   void drainAndFinish();

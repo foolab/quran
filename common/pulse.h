@@ -23,9 +23,7 @@
 #include <pulse/pulseaudio.h>
 #include "audiooutput.h"
 
-class AudioOutput;
-
-class Pulse : public QObject {
+class Pulse : public AudioOutputInterface {
   Q_OBJECT
 
 public:
@@ -38,11 +36,6 @@ public:
   void start();
 
   bool isRunning();
-
-signals:
-  void error();
-  void finished();
-  void positionChanged(int index);
 
 private slots:
   void drainAndFinish();

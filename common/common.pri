@@ -41,11 +41,13 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmode
 sles {
   SOURCES += sles.cpp
   HEADERS += sles.h
+  DEFINES += SLES
 }
 
 pulse {
   SOURCES += pulse.cpp
   HEADERS += pulse.h
+  DEFINES += PULSE
 }
 
 target.path = /usr/bin/

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
  */
 
 #include "audiooutput.h"
-#ifndef ANDROID
-#include "pulse.h"
-#else
+#if defined(SLES)
 #include "sles.h"
+#elif defined(PULSE)
+#include "pulse.h"
 #endif
 #include <QDebug>
 
@@ -54,7 +54,7 @@ bool AudioOutput::start() {
     m_out = new Sles(this);
 #endif
     QObject::connect(m_out, SIGNAL(positionChanged(int)),
-		     this, SLOT(pulsePositionChanged(int)), Qt::QueuedConnection);
+		     this, SLOT(audioPositionChanged(int)), Qt::QueuedConnection);
 
     QObject::connect(m_out, SIGNAL(finished()), this, SIGNAL(finished()));
     QObject::connect(m_out, SIGNAL(error()), this, SIGNAL(error()));
@@ -104,7 +104,7 @@ AudioBuffer AudioOutput::buffer() {
   return b;
 }
 
-void AudioOutput::pulsePositionChanged(int index) {
+void AudioOutput::audioPositionChanged(int index) {
   if (m_out) {
     emit positionChanged(index);
   }

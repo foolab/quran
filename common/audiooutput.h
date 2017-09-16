@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,11 +23,25 @@
 #include <QWaitCondition>
 #include "media.h"
 
-#ifndef ANDROID
-class Pulse;
-#else
-class Sles;
-#endif
+class AudioOutputInterface : public QObject {
+  Q_OBJECT
+
+public:
+  virtual ~AudioOutputInterface() {}
+  virtual bool isRunning() = 0;
+  virtual bool connect() = 0;
+  virtual void start() = 0;
+  virtual void stop() = 0;
+
+protected:
+  AudioOutputInterface(QObject *parent = 0) :
+    QObject(parent) {}
+
+signals:
+  void error();
+  void finished();
+  void positionChanged(int index);
+};
 
 class AudioBuffer {
 public:
@@ -57,18 +71,14 @@ signals:
   void positionChanged(int index);
 
 private slots:
-  void pulsePositionChanged(int index);
+  void audioPositionChanged(int index);
 
 private:
   QMutex m_mutex;
   QWaitCondition m_cond;
   QList<AudioBuffer> m_buffers;
 
-#ifndef ANDROID
-  Pulse *m_out;
-#else
-  Sles *m_out;
-#endif
+  AudioOutputInterface *m_out;
 };
 
 #endif /* AUDIO_OUTPUT_H */
