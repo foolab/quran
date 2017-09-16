@@ -31,7 +31,7 @@ LIBS += -Llibav/libavformat/ -lavformat \
         -Llibav/libavutil/ -lavutil \
         -Llibav/libavfilter/ -lavfilter \
         -Llibav/libavresample/ -lavresample \
-        -Lsqlite/ -lsqlite3 \
+        -Lsqlite/.libs/ -lsqlite3 \
         -Lquazip/quazip/ -lquazip \
         -landroid
 
