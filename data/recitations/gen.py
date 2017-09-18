@@ -25,7 +25,10 @@ def fileInfo(file):
     for line in f.readlines():
         (key, value) = fix(line)
         if key != None:
-            inf[key] = value
+            if key == "audio.onlineUrl":
+                inf[key] = value[0:value.rfind("/")]
+            else:
+                inf[key] = value
 
     return inf
 
