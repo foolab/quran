@@ -181,6 +181,7 @@ void Alsa::run() {
       QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
     }
 
+    emit positionChanged(buffer.media.index());
 
     while (m_running &&
 	   buffer.data.size()) {
