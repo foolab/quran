@@ -20,6 +20,8 @@
 #include "sles.h"
 #elif defined(PULSE)
 #include "pulse.h"
+#elif defined(ALSA)
+#include "alsa.h"
 #endif
 #include <QDebug>
 
@@ -48,10 +50,12 @@ void AudioOutput::stop() {
 
 bool AudioOutput::start() {
   if (!m_out) {
-#ifndef ANDROID
+#if defined(PULSE)
     m_out = new Pulse(this);
-#else
+#elif defined(SLES)
     m_out = new Sles(this);
+#elif defined(ALSA)
+    m_out = new Alsa(this);
 #endif
     QObject::connect(m_out, SIGNAL(positionChanged(int)),
 		     this, SLOT(audioPositionChanged(int)), Qt::QueuedConnection);

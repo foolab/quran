@@ -50,6 +50,12 @@ pulse {
   DEFINES += PULSE
 }
 
+alsa {
+  SOURCES += alsa.cpp
+  HEADERS += alsa.h
+  DEFINES += ALSA
+}
+
 target.path = /usr/bin/
 
 INSTALLS += target
