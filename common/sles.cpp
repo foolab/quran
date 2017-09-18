@@ -283,7 +283,7 @@ bool Sles::isRunning() {
 }
 
 void Sles::writeData() {
-  // Can be called from the GUI thread or a pulseaudio thread.
+  // Can be called from the GUI thread or a sles thread.
   if (m_stop) {
     return;
   }
