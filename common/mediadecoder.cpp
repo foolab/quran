@@ -265,6 +265,13 @@ AVFormatContext *MediaDecoder::context(const QByteArray& data) {
 
   buff = (unsigned char *)av_malloc(4096);
   io = avio_alloc_context(buff, 4096, 0, b, read_qbuffer, NULL, seek_qbuffer);
+  if (!io) {
+    goto error_and_out;
+  }
+
+  // Now that we have a AVIOContext, we will free its buffer
+  // member when we free it in case of an error
+  buff = NULL;
 
   ctx = avformat_alloc_context();
   ctx->pb = io;
@@ -299,6 +306,10 @@ AVFormatContext *MediaDecoder::context(const QByteArray& data) {
 
   if (buff) {
     av_free(buff);
+  }
+
+  if (io && io->buffer) {
+    av_free(io->buffer);
   }
 
   if (io) {
