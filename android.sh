@@ -50,21 +50,8 @@ export PKG_CONFIG_PATH=$PWD/android/sqlite
 
 rm -rf apk
 
-mkdir -p android/libav
 mkdir -p android/sqlite
 mkdir -p android/quazip
-
-pushd android/libav
-../../libav/configure --disable-programs --disable-doc  --disable-avdevice --disable-swscale \
-    --disable-network  --disable-everything --enable-sram --enable-bsf=mp3_header_decompress \
-    --enable-demuxer=mp3 --enable-decoder=mp3 --enable-pic --disable-static --enable-shared \
-    --enable-cross-compile --sysroot=$SYSROOT --target-os=android --arch=arm \
-    --cross-prefix=$TOOLCHAIN/arm-linux-androideabi- \
-    --extra-cflags="-march=armv7-a -mfloat-abi=softfp" \
-    --extra-ldflags="-Wl,--fix-cortex-a8"
-
-make
-popd
 
 pushd android/sqlite
 FLAGS="-DSQLITE_ENABLE_FTS4=1 $CFLAGS" \

@@ -6,10 +6,16 @@ QT += qml quick sensors androidextras
 
 CONFIG += android sles
 
+LIBAV_EXTRA_COMPILE_FLAGS += --enable-cross-compile \
+                            --sysroot=$$(SYSROOT) \
+                            --target-os=android \
+                            --arch=arm \
+                            --cross-prefix=$$(TOOLCHAIN)/arm-linux-androideabi- \
+                            --extra-cflags=\"-march=armv7-a -mfloat-abi=softfp\" \
+                            --extra-ldflags=\"-Wl,--fix-cortex-a8\"
+
 # Has to be after android keyword in config
 include(../common/common.pri)
-
-INCLUDEPATH += libav/
 
 DEFINES += DATA_DIR=\\\"assets:/\\\"
 DEFINES += ANDROID=1
@@ -26,21 +32,11 @@ HEADERS += fsmonitor.h \
            androidsupport.h \
            sqlite-ndk/sources/sqlite3ndk.h
 
-LIBS += -Llibav/libavformat/ -lavformat \
-        -Llibav/libavcodec/ -lavcodec \
-        -Llibav/libavutil/ -lavutil \
-        -Llibav/libavfilter/ -lavfilter \
-        -Llibav/libavresample/ -lavresample \
-        -Lsqlite/.libs/ -lsqlite3 \
+LIBS += -Lsqlite/.libs/ -lsqlite3 \
         -Lquazip/quazip/ -lquazip \
         -landroid
 
-ANDROID_EXTRA_LIBS = android/libav/libavutil/libavutil.so \
-                     android/libav/libavcodec/libavcodec.so \
-                     android/libav/libavformat/libavformat.so \
-                     android/libav/libavfilter/libavfilter.so \
-                     android/libav/libavresample/libavresample.so \
-                     android/sqlite/.libs/libsqlite3.so \
+ANDROID_EXTRA_LIBS = android/sqlite/.libs/libsqlite3.so \
                      android/quazip/quazip/libquazip.so
 
 ANDROID_PACKAGE_SOURCE_DIR = android/apk

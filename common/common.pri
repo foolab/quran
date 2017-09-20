@@ -1,3 +1,5 @@
+include(libav.pri)
+
 TEMPLATE = app
 
 CONFIG += c++11
@@ -9,7 +11,7 @@ MOBILITY = sensors
 android:LIBS += -lOpenSLES
 
 DEPENDPATH += . ../data/ ../common/
-INCLUDEPATH += . ../data/ ../common/ ../libav/
+INCLUDEPATH += . ../data/ ../common/
 
 !desktop:INCLUDEPATH += ../sqlite/ ../quazip/quazip/
 
