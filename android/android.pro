@@ -33,10 +33,8 @@ HEADERS += fsmonitor.h \
            sqlite-ndk/sources/sqlite3ndk.h
 
 LIBS += -Lsqlite/.libs/ -lsqlite3 \
-        -Lquazip/quazip/ -lquazip \
         -landroid
 
-ANDROID_EXTRA_LIBS = android/sqlite/.libs/libsqlite3.so \
-                     android/quazip/quazip/libquazip.so
+ANDROID_EXTRA_LIBS = android/sqlite/.libs/libsqlite3.so
 
 ANDROID_PACKAGE_SOURCE_DIR = android/apk

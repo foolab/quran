@@ -51,7 +51,6 @@ export PKG_CONFIG_PATH=$PWD/android/sqlite
 rm -rf apk
 
 mkdir -p android/sqlite
-mkdir -p android/quazip
 
 pushd android/sqlite
 FLAGS="-DSQLITE_ENABLE_FTS4=1 $CFLAGS" \
@@ -59,11 +58,6 @@ FLAGS="-DSQLITE_ENABLE_FTS4=1 $CFLAGS" \
     --enable-threadsafe=no --enable-shared=yes --enable-static=no --enable-dynamic-extensions=no \
     --host=arm-linux-androideabi --with-sysroot=$SYSROOT
 sed -e 's/\$soname/libsqlite.so/' -i libtool
-make
-popd
-
-pushd android/quazip
-$QT_DIR/android_armv7/bin/qmake ../../quazip
 make
 popd
 
