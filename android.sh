@@ -53,7 +53,7 @@ rm -rf apk
 mkdir -p android/sqlite
 
 pushd android/sqlite
-FLAGS="-DSQLITE_ENABLE_FTS4=1 $CFLAGS" \
+CFLAGS="-DSQLITE_ENABLE_FTS4=1 $CFLAGS" \
     ../../sqlite/configure --enable-readline=no \
     --enable-threadsafe=no --enable-shared=yes --enable-static=no --enable-dynamic-extensions=no \
     --host=arm-linux-androideabi --with-sysroot=$SYSROOT
