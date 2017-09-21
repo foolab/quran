@@ -34,32 +34,16 @@ fi
 QT_VERSION=5.9.1
 QT_DIR=/home/mohammed/mnt/4/android/qt$QT_VERSION/$QT_VERSION/
 
+# Needed for Qt
 export ANDROID_NDK_ROOT=/home/mohammed/mnt/4/android/android-ndk-r15c/
 export ANDROID_SDK_ROOT=/home/mohammed/mnt/4/android/android-sdk-linux/
+
 export TOOLCHAIN=$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/
 export SYSROOT=$ANDROID_NDK_ROOT/platforms/android-9/arch-arm/
-export CC=$TOOLCHAIN/arm-linux-androideabi-gcc
-export CXX=$TOOLCHAIN/arm-linux-androideabi-g++
-export NM=$TOOLCHAIN/arm-linux-androideabi-nm
-export AR=$TOOLCHAIN/arm-linux-androideabi-ar
-export LD=$TOOLCHAIN/arm-linux-androideabi-ld
 export CFLAGS=--sysroot=$SYSROOT
-export CPPFLAGS=--sysroot=$SYSROOT
-export CXXFLAGS=--sysroot=$SYSROOT
-export PKG_CONFIG_PATH=$PWD/android/sqlite
+export PATH=$TOOLCHAIN:$PATH
 
 rm -rf apk
-
-mkdir -p android/sqlite
-
-pushd android/sqlite
-CFLAGS="-DSQLITE_ENABLE_FTS4=1 $CFLAGS" \
-    ../../sqlite/configure --enable-readline=no \
-    --enable-threadsafe=no --enable-shared=yes --enable-static=no --enable-dynamic-extensions=no \
-    --host=arm-linux-androideabi --with-sysroot=$SYSROOT
-sed -e 's/\$soname/libsqlite.so/' -i libtool
-make
-popd
 
 pushd android
 $QT_DIR/android_armv7/bin/qmake

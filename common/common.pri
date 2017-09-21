@@ -1,4 +1,5 @@
 include(libav.pri)
+include(sqlite.pri)
 include(../quazip/quazip/quazip.pri)
 
 LIBS += -lz
@@ -15,8 +16,6 @@ android:LIBS += -lOpenSLES
 
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/
-
-!desktop:INCLUDEPATH += ../sqlite/
 
 DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.6.6\\\"
 

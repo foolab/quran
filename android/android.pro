@@ -6,6 +6,9 @@ QT += qml quick sensors androidextras
 
 CONFIG += android sles
 
+SQLITE_EXTRA_COMPILE_FLAGS += --host=arm-linux-androideabi \
+                              --with-sysroot=$$(SYSROOT)
+
 LIBAV_EXTRA_COMPILE_FLAGS += --enable-cross-compile \
                             --sysroot=$$(SYSROOT) \
                             --target-os=android \
@@ -32,9 +35,6 @@ HEADERS += fsmonitor.h \
            androidsupport.h \
            sqlite-ndk/sources/sqlite3ndk.h
 
-LIBS += -Lsqlite/.libs/ -lsqlite3 \
-        -landroid
-
-ANDROID_EXTRA_LIBS = android/sqlite/.libs/libsqlite3.so
+LIBS += -landroid
 
 ANDROID_PACKAGE_SOURCE_DIR = android/apk
