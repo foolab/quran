@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 Mohammed Sameer <msameer@foolab.org>. All rights reserved.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <QCoreApplication>
 #include <QXmlStreamReader>
 #include <QDebug>
@@ -25,12 +24,12 @@
 
 #define QUERY "insert into search values(?1, ?2, ?3);"
 
-class Sura {
+class Chapter {
 public:
   int index;
-  QStringList ayat;
+  QStringList verses;
 };
-QList<Sura> suras;
+QList<Chapter> chapters;
 
 bool read(const QString& in) {
   QFile f(in);
@@ -53,13 +52,11 @@ bool read(const QString& in) {
 	return false;
       }
 
-      Sura sura;
-      sura.index = attrs.value("index").toString().toInt() - 1;
+      Chapter chapter;
+      chapter.index = attrs.value("index").toString().toInt() - 1;
 
-      suras << sura;
+      chapters << chapter;
     }
-
-
     else if (reader.isStartElement() && reader.name() == "aya") {
       QXmlStreamAttributes attrs(reader.attributes());
 
@@ -68,7 +65,7 @@ bool read(const QString& in) {
 	return false;
       }
 
-      suras.last().ayat.append(attrs.value("text").toString().trimmed());
+      chapters.last().verses.append(attrs.value("text").toString().trimmed());
     }
   }
 
@@ -102,10 +99,8 @@ bool write(const QString& out) {
 
   QByteArray s(QUERY);
 
-  for (int x = 0; x < suras.size(); x++) {
-    //    qCritical() << "Chapter" << x;
-
-    for (int i = 0; i < suras[x].ayat.size(); i++) {
+  for (int x = 0; x < chapters.size(); x++) {
+    for (int i = 0; i < chapters[x].verses.size(); i++) {
 
       sqlite3_stmt *stmt = NULL;
 
@@ -121,14 +116,14 @@ bool write(const QString& out) {
 	return false;
       }
 
-      int sura = x;
-      int aya = i;
-      QString text = suras[x].ayat[i];
+      int chapter = x;
+      int verse = i;
+      QString text = chapters[x].verses[i];
 
       QByteArray t(text.toUtf8());
 
-      if (sqlite3_bind_int(stmt, 1, sura) != SQLITE_OK ||
-	  sqlite3_bind_int(stmt, 2, aya) != SQLITE_OK ||
+      if (sqlite3_bind_int(stmt, 1, chapter) != SQLITE_OK ||
+	  sqlite3_bind_int(stmt, 2, verse) != SQLITE_OK ||
 	  sqlite3_bind_text(stmt, 3, t.constData(), t.size(), SQLITE_STATIC)
 	  != SQLITE_OK) {
 	qCritical() << "Failed to bind statement" << sqlite3_errmsg(db);
