@@ -21,6 +21,7 @@
 #include <QFile>
 #include <QStringList>
 #include <sqlite3.h>
+#include "normalize.h"
 
 #define QUERY "insert into search values(?1, ?2, ?3);"
 
@@ -65,7 +66,7 @@ bool read(const QString& in) {
 	return false;
       }
 
-      chapters.last().verses.append(attrs.value("text").toString().trimmed());
+      chapters.last().verses.append(Normalize::normalize(attrs.value("text").toString().trimmed()));
     }
   }
 

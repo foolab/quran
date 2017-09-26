@@ -18,6 +18,7 @@
 #include "searchmodel.h"
 #include <sqlite3.h>
 #include <QDebug>
+#include "normalize.h"
 
 #ifdef ANDROID
 #include "sqlite-ndk/sources/sqlite3ndk.h"
@@ -115,10 +116,10 @@ void SearchModel::setQuery(const QString& query, bool matchWholeWords) {
 
   QByteArray q;
   if (matchWholeWords) {
-    q = query.toUtf8();
+    q = Normalize::normalize(query).toUtf8();
   }
   else {
-    q = "%" + query.toUtf8() + "%";
+    q = "%" + Normalize::normalize(query).toUtf8() + "%";
   }
 
   err = sqlite3_bind_text(stmt, 1, q.constData(), q.size(), SQLITE_STATIC);

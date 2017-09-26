@@ -2,11 +2,13 @@ QT_CONFIG -= no-pkg-config
 
 TARGET = search
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+           ../../common/normalize.cpp
 
 # We depend on system sqlite
 #DEPENDPATH += . ../../sqlite/
-#INCLUDEPATH += . ../../sqlite/
+INCLUDEPATH += . ../../common/
+#../../sqlite/
 
 CONFIG += link_pkgconfig
 PKGCONFIG += sqlite3
