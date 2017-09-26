@@ -89,7 +89,7 @@ bool write(const QString& out) {
     return false;
   }
 
-  if (sqlite3_exec(db, "CREATE VIRTUAL TABLE search USING fts4(chapter int, verse int, text TEXT);",
+  if (sqlite3_exec(db, "CREATE VIRTUAL TABLE search USING fts4(chapter int, verse int, text TEXT, notindexed=chapter, notindexed=verse);",
 		   NULL, NULL, NULL) != SQLITE_OK) {
     qCritical() << "Failed to create table" << sqlite3_errmsg(db);
     return false;
