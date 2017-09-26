@@ -29,7 +29,7 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            media.cpp audiooutput.cpp mediadecoder.cpp bookmarksmodel.cpp \
            bookmarkitem.cpp mediaresampler.cpp searchmodel.cpp models.cpp \
            coreapplication.cpp metadata.cpp chapterinfo.cpp partinfo.cpp pageinfo.cpp \
-           pageposition.cpp
+           pageposition.cpp normalize.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmodel.h \
            aboutdata.h textsupplier.h \
