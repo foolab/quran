@@ -16,7 +16,7 @@
  */
 
 #include "searchmodel.h"
-#include <sqlite3.h>
+#include "sqlite3.h"
 #include <QDebug>
 #include "normalize.h"
 
