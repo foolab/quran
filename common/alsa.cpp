@@ -185,8 +185,8 @@ void Alsa::run() {
 
     while (m_running &&
 	   buffer.data.size()) {
-      int err = snd_pcm_wait(m_device->handle(), 100);
-      qWarning() << err;
+      snd_pcm_wait(m_device->handle(), 100);
+
       snd_pcm_sframes_t frames = snd_pcm_avail(m_device->handle());
       ssize_t size =
 	qMin((ssize_t)buffer.data.size(), snd_pcm_frames_to_bytes(m_device->handle(), frames));
