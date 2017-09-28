@@ -1,15 +1,15 @@
-DEPENDPATH += ../sqlite/ sqlite/
-INCLUDEPATH += ../sqlite/ sqlite/
+DEPENDPATH += $$SQLITE_SRC_PATH/
+INCLUDEPATH += $$SQLITE_SRC_PATH
 
 PRE_TARGETDEPS += sqlite/.libs/libsqlite3.a
 QMAKE_EXTRA_TARGETS += sqlite/.libs/libsqlite3.a
 
 SQLITE_EXTRA_COMPILE_FLAGS +=
 
-sqlite/.libs/libsqlite3.a.depends = ../sqlite/configure
+sqlite/.libs/libsqlite3.a.depends = $$SQLITE_SRC_PATH/configure
 sqlite/.libs/libsqlite3.a.commands = mkdir -p sqlite/ && cd sqlite && \
                       CFLAGS=\"$$(CFLAGS) -DSQLITE_ENABLE_FTS4=1\" \
-		      ../../sqlite/configure \
+		      ../$$SQLITE_SRC_PATH/configure \
 		      --enable-readline=no \
 		      --enable-threadsafe=no \
 		      --enable-shared=no \

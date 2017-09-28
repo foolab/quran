@@ -1,5 +1,8 @@
 include(libav.pri)
+
+SQLITE_SRC_PATH=../sqlite
 include(sqlite.pri)
+
 include(../quazip/quazip/quazip.pri)
 
 LIBS += -lz
