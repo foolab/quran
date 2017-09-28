@@ -5,7 +5,7 @@ TARGET = quran
 QT += qml quick sensors
 
 CONFIG += link_pkgconfig desktop alsa
-PKGCONFIG += sqlite3 alsa
+PKGCONFIG += alsa
 
 # Has to be after android keyword in config
 include(../common/common.pri)
