@@ -14,8 +14,10 @@ CONFIG += c++11
 QT += network
 CONFIG += mobility link_pkgconfig
 MOBILITY = sensors
-!android:PKGCONFIG += libpulse fontconfig
-android:LIBS += -lOpenSLES
+!android:PKGCONFIG += fontconfig
+alsa:PKGCONFIG += alsa
+pulse:PKGCONFIG += libpulse
+sles:LIBS += -lOpenSLES
 
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/
