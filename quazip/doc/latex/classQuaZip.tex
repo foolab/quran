@@ -302,6 +302,8 @@ Argument {\itshape io\-Api} specifies I\-O function set for Z\-I\-P/\-U\-N\-Z\-I
 
 \begin{DoxyNote}{Note}
 If the zip64 support is needed, the io\-Api argument {\itshape must} be N\-U\-L\-L because due to the backwards compatibility issues it can be used to provide a 32-\/bit A\-P\-I only.
+
+If the \doxyref{no-\/auto-\/close}{p.}{classQuaZip_a54bfc924762774ccf9f99be075ba7b0e} feature is used, then the {\itshape io\-Api} argument {\itshape should} be N\-U\-L\-L because the old A\-P\-I doesn't support the 'fake close' operation, causing slight memory leaks and other possible troubles (like closing the output device in case when an error occurs during opening).
 \end{DoxyNote}
 In short\-: just forget about the {\itshape io\-Api} argument and you'll be fine. 
 
@@ -309,7 +311,7 @@ References is\-Open(), md\-Add, md\-Append, md\-Create, md\-Unzip, Qua\-Zip\-Pri
 
 
 
-Referenced by Jl\-Compress\-::compress\-Dir(), Jl\-Compress\-::compress\-File(), Jl\-Compress\-::compress\-Files(), Jl\-Compress\-::extract\-Dir(), Jl\-Compress\-::extract\-File(), Jl\-Compress\-::extract\-Files(), Jl\-Compress\-::get\-File\-List(), and Qua\-Zip\-File\-::open().
+Referenced by Jl\-Compress\-::compress\-Dir(), Jl\-Compress\-::compress\-File(), Jl\-Compress\-::compress\-Files(), and Qua\-Zip\-File\-::open().
 
 \index{Qua\-Zip@{Qua\-Zip}!close@{close}}
 \index{close@{close}!QuaZip@{Qua\-Zip}}
@@ -334,7 +336,7 @@ References md\-Add, md\-Append, md\-Create, md\-Not\-Open, md\-Unzip, Qua\-Zip\-
 
 
 
-Referenced by Qua\-Zip\-File\-::close(), Jl\-Compress\-::compress\-Dir(), Jl\-Compress\-::compress\-File(), Jl\-Compress\-::compress\-Files(), Jl\-Compress\-::extract\-Dir(), Jl\-Compress\-::extract\-File(), Jl\-Compress\-::extract\-Files(), Jl\-Compress\-::get\-File\-List(), Qua\-Zip\-File\-::open(), and $\sim$\-Qua\-Zip().
+Referenced by Qua\-Zip\-File\-::close(), Jl\-Compress\-::compress\-Dir(), Jl\-Compress\-::compress\-File(), Jl\-Compress\-::compress\-Files(), Qua\-Zip\-File\-::open(), and $\sim$\-Qua\-Zip().
 
 \index{Qua\-Zip@{Qua\-Zip}!set\-File\-Name\-Codec@{set\-File\-Name\-Codec}}
 \index{set\-File\-Name\-Codec@{set\-File\-Name\-Codec}!QuaZip@{Qua\-Zip}}
@@ -358,7 +360,7 @@ This is necessary to access files in the Z\-I\-P archive created under Windows w
 
 Sets the codec used to encode/decode file names inside archive. 
 
-This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.\-Equivalent to calling set\-File\-Name\-Codec(Q\-Text\-Codec\-::codec\-For\-Name(codec\-Name)); \index{Qua\-Zip@{Qua\-Zip}!set\-Comment\-Codec@{set\-Comment\-Codec}}
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. Equivalent to calling set\-File\-Name\-Codec(\-Q\-Text\-Codec\-::codec\-For\-Name(codec\-Name)); \index{Qua\-Zip@{Qua\-Zip}!set\-Comment\-Codec@{set\-Comment\-Codec}}
 \index{set\-Comment\-Codec@{set\-Comment\-Codec}!QuaZip@{Qua\-Zip}}
 \subsubsection[{set\-Comment\-Codec}]{\setlength{\rightskip}{0pt plus 5cm}void Qua\-Zip\-::set\-Comment\-Codec (
 \begin{DoxyParamCaption}
@@ -380,7 +382,7 @@ This codec defaults to locale codec, which is probably ok. \index{Qua\-Zip@{Qua\
 
 Sets the codec used to encode/decode comments inside archive. 
 
-This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.\-Equivalent to calling set\-Comment\-Codec(Q\-Text\-Codec\-::codec\-For\-Name(codec\-Name)); \index{Qua\-Zip@{Qua\-Zip}!get\-Zip\-Name@{get\-Zip\-Name}}
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. Equivalent to calling set\-Comment\-Codec(\-Q\-Text\-Codec\-::codec\-For\-Name(codec\-Name)); \index{Qua\-Zip@{Qua\-Zip}!get\-Zip\-Name@{get\-Zip\-Name}}
 \index{get\-Zip\-Name@{get\-Zip\-Name}!QuaZip@{Qua\-Zip}}
 \subsubsection[{get\-Zip\-Name}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String Qua\-Zip\-::get\-Zip\-Name (
 \begin{DoxyParamCaption}
@@ -467,7 +469,7 @@ Returns {\ttfamily U\-N\-Z\-\_\-\-O\-K} if the last operation was successful.
 
 Error code resets to {\ttfamily U\-N\-Z\-\_\-\-O\-K} every time you call any function that accesses something inside Z\-I\-P archive, even if it is {\ttfamily const} (like \doxyref{get\-Entries\-Count()}{p.}{classQuaZip_a2ea4bd1fca948637c35c2d2752bb5a80}). \doxyref{open()}{p.}{classQuaZip_abfa4e6018b2964a3d10a4c54e5ab3962} and \doxyref{close()}{p.}{classQuaZip_a7a4323b73e12f3b4470109f200728f9f} calls reset error code too. See documentation for the specific functions for details on error detection. 
 
-Referenced by Qua\-Zip\-File\-::close(), Jl\-Compress\-::compress\-Dir(), Jl\-Compress\-::compress\-File(), Jl\-Compress\-::compress\-Files(), Jl\-Compress\-::extract\-Dir(), Jl\-Compress\-::extract\-File(), Jl\-Compress\-::extract\-Files(), Qua\-Zip\-File\-::get\-Actual\-File\-Name(), Qua\-Zip\-File\-::get\-File\-Info(), Jl\-Compress\-::get\-File\-List(), and Qua\-Zip\-File\-::open().
+Referenced by Qua\-Zip\-File\-::close(), Jl\-Compress\-::compress\-Dir(), Jl\-Compress\-::compress\-File(), Jl\-Compress\-::compress\-Files(), Qua\-Zip\-File\-::get\-Actual\-File\-Name(), Qua\-Zip\-File\-::get\-File\-Info(), and Qua\-Zip\-File\-::open().
 
 \index{Qua\-Zip@{Qua\-Zip}!get\-Entries\-Count@{get\-Entries\-Count}}
 \index{get\-Entries\-Count@{get\-Entries\-Count}!QuaZip@{Qua\-Zip}}
@@ -515,10 +517,6 @@ Returns {\ttfamily true} on success, {\ttfamily false} otherwise. Call \doxyref{
 
 References md\-Unzip, and Qua\-Zip\-Private\-::unz\-File\-\_\-f.
 
-
-
-Referenced by Jl\-Compress\-::extract\-Dir(), and Jl\-Compress\-::get\-File\-List().
-
 \index{Qua\-Zip@{Qua\-Zip}!go\-To\-Next\-File@{go\-To\-Next\-File}}
 \index{go\-To\-Next\-File@{go\-To\-Next\-File}!QuaZip@{Qua\-Zip}}
 \subsubsection[{go\-To\-Next\-File}]{\setlength{\rightskip}{0pt plus 5cm}bool Qua\-Zip\-::go\-To\-Next\-File (
@@ -552,7 +550,7 @@ References md\-Unzip, and Qua\-Zip\-Private\-::unz\-File\-\_\-f.
 
 
 
-Referenced by Jl\-Compress\-::extract\-Dir(), Jl\-Compress\-::get\-File\-List(), and set\-Current\-File().
+Referenced by set\-Current\-File().
 
 \index{Qua\-Zip@{Qua\-Zip}!set\-Current\-File@{set\-Current\-File}}
 \index{set\-Current\-File@{set\-Current\-File}!QuaZip@{Qua\-Zip}}
@@ -571,6 +569,8 @@ Returns {\ttfamily true} if successful, {\ttfamily false} otherwise. Argument {\
 This is not a wrapper to unz\-Locate\-File() function. That is because I had to implement locale-\/specific case-\/insensitive comparison.
 
 Here are the differences from the original implementation\-:
+
+
 \begin{DoxyItemize}
 \item If the file was not found, error code is {\ttfamily U\-N\-Z\-\_\-\-O\-K}, not {\ttfamily U\-N\-Z\-\_\-\-E\-N\-D\-\_\-\-O\-F\-\_\-\-L\-I\-S\-T\-\_\-\-O\-F\-\_\-\-F\-I\-L\-E} (see also \doxyref{go\-To\-Next\-File()}{p.}{classQuaZip_aee6779b6cd338420c2e8c5655fa8ba97}).
 \item If this function fails, it unsets the current file rather than resetting it back to what it was before the call.
@@ -627,7 +627,7 @@ References Qua\-Zip\-File\-Info64\-::to\-Qua\-Zip\-File\-Info().
 
 
 
-Referenced by Qua\-Zip\-File\-::get\-File\-Info(), and Jl\-Compress\-::get\-File\-List().
+Referenced by Qua\-Zip\-File\-::get\-File\-Info().
 
 \index{Qua\-Zip@{Qua\-Zip}!get\-Current\-File\-Info@{get\-Current\-File\-Info}}
 \index{get\-Current\-File\-Info@{get\-Current\-File\-Info}!QuaZip@{Qua\-Zip}}
@@ -640,7 +640,9 @@ Referenced by Qua\-Zip\-File\-::get\-File\-Info(), and Jl\-Compress\-::get\-File
 
 Retrieves information about the current file. 
 
-This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. This function supports zip64. If the archive doesn't use zip64, it is completely equivalent to get\-Current\-File\-Info(\-Qua\-Zip\-File\-Info$\ast$ info) except for the argument type.
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+
+This function supports zip64. If the archive doesn't use zip64, it is completely equivalent to get\-Current\-File\-Info(\-Qua\-Zip\-File\-Info$\ast$ info) except for the argument type.
 
 \begin{DoxySeeAlso}{See Also}
 
@@ -668,7 +670,7 @@ References has\-Current\-File(), is\-Open(), M\-A\-X\-\_\-\-F\-I\-L\-E\-\_\-\-N\
 
 
 
-Referenced by Jl\-Compress\-::extract\-Dir(), Qua\-Zip\-File\-::get\-Actual\-File\-Name(), and set\-Current\-File().
+Referenced by Qua\-Zip\-File\-::get\-Actual\-File\-Name(), and set\-Current\-File().
 
 \index{Qua\-Zip@{Qua\-Zip}!get\-Unz\-File@{get\-Unz\-File}}
 \index{get\-Unz\-File@{get\-Unz\-File}!QuaZip@{Qua\-Zip}}
@@ -732,13 +734,15 @@ Setting this flag affects all the \doxyref{Qua\-Zip\-File}{p.}{classQuaZipFile} 
 
 The data descriptor writing mode is enabled by default.
 
+Note that if the Z\-I\-P archive is written into a Q\-I\-O\-Device for which Q\-I\-O\-Device\-::is\-Sequential() returns {\ttfamily true}, then the data descriptor is mandatory and will be written even if this flag is set to false.
+
 
 \begin{DoxyParams}{Parameters}
 {\em enabled} & If {\ttfamily true}, enable local descriptor writing, disable it otherwise.\\
 \hline
 \end{DoxyParams}
 \begin{DoxySeeAlso}{See Also}
-Qua\-Zip\-File\-::set\-Data\-Descriptor\-Writing\-Enabled() 
+Qua\-Zip\-File\-::is\-Data\-Descriptor\-Writing\-Enabled() 
 \end{DoxySeeAlso}
 \index{Qua\-Zip@{Qua\-Zip}!is\-Data\-Descriptor\-Writing\-Enabled@{is\-Data\-Descriptor\-Writing\-Enabled}}
 \index{is\-Data\-Descriptor\-Writing\-Enabled@{is\-Data\-Descriptor\-Writing\-Enabled}!QuaZip@{Qua\-Zip}}
@@ -807,7 +811,9 @@ This function doesn't support zip64, but will still work with zip64 archives, co
 
 Returns information list about all files inside the archive. 
 
-This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. This function supports zip64.
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+
+This function supports zip64.
 
 \begin{DoxySeeAlso}{See Also}
 \doxyref{get\-File\-Name\-List()}{p.}{classQuaZip_abb38d8b4c9c4ae0728b48caae9dd82de} 
@@ -929,7 +935,7 @@ Referenced by set\-Default\-File\-Name\-Codec().
 \item[{const char $\ast$}]{codec\-Name}
 \end{DoxyParamCaption}
 )\hspace{0.3cm}{\ttfamily [static]}}\label{classQuaZip_a694af3c0ab076fab7bf619952f6fbfea}
-This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.\-Equivalent to calling set\-Deflt\-File\-Name\-Codec(Q\-Text\-Codec\-::codec\-For\-Name(codec\-Name)). 
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. Equivalent to calling set\-Deflt\-File\-Name\-Codec(\-Q\-Text\-Codec\-::codec\-For\-Name(codec\-Name)). 
 
 References set\-Default\-File\-Name\-Codec().
 

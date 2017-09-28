@@ -48,7 +48,13 @@ Q\-I\-O\-Device $\ast$ {\bf get\-Io\-Device} () const \label{classQuaZIODevice_a
 \begin{DoxyCompactList}\small\item\em Returns the underlying device. \end{DoxyCompactList}\item 
 virtual bool {\bf is\-Sequential} () const \label{classQuaZIODevice_af2697f58c228741d3715801bf48a9a8b}
 
-\begin{DoxyCompactList}\small\item\em Returns true. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Returns true. \end{DoxyCompactList}\item 
+virtual bool {\bf at\-End} () const \label{classQuaZIODevice_ae727c48089ca1b161323ec8423a653ab}
+
+\begin{DoxyCompactList}\small\item\em Returns true iff the end of the compressed stream is reached. \end{DoxyCompactList}\item 
+virtual qint64 {\bf bytes\-Available} () const \label{classQuaZIODevice_ac18b45c3d7009c8d231b13fe994ebcb9}
+
+\begin{DoxyCompactList}\small\item\em Returns the number of the bytes buffered. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 

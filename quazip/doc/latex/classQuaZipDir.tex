@@ -99,6 +99,8 @@ Provides Z\-I\-P archive navigation.
 This class is modelled after Q\-Dir, and is designed to provide similar features for Z\-I\-P archives.
 
 The only significant difference from Q\-Dir is that the root path is not '/', but an empty string since that's how the file paths are stored in the archive. However, \doxyref{Qua\-Zip\-Dir}{p.}{classQuaZipDir} understands the paths starting with '/'. It is important in a few places\-:
+
+
 \begin{DoxyItemize}
 \item In the \doxyref{cd()}{p.}{classQuaZipDir_aa829afc0243f1d307302f1167edecc7b} function.
 \item In the constructor.
@@ -226,7 +228,9 @@ Referenced by entry\-Info\-List().
 
 Returns the list of the entries in the directory. 
 
-This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. The same as entry\-Info\-List(Q\-String\-List(), filters, sort). 
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+
+The same as entry\-Info\-List(\-Q\-String\-List(), filters, sort). 
 
 References entry\-Info\-List().
 
@@ -268,7 +272,9 @@ Referenced by entry\-Info\-List64().
 
 Returns the list of the entries in the directory with zip64 support. 
 
-This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. The same as entry\-Info\-List64(Q\-String\-List(), filters, sort). 
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+
+The same as entry\-Info\-List64(\-Q\-String\-List(), filters, sort). 
 
 References entry\-Info\-List64().
 
@@ -301,7 +307,9 @@ Referenced by count(), entry\-List(), exists(), and operator[$\,$]().
 
 Returns the list of the entry names in the directory. 
 
-This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. The same as entry\-List(Q\-String\-List(), filters, sort). 
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+
+The same as entry\-List(\-Q\-String\-List(), filters, sort). 
 
 References entry\-List().
 

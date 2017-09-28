@@ -5,7 +5,7 @@ This file is part of QuaZIP test suite.
 
 QuaZIP is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
+the Free Software Foundation, either version 2.1 of the License, or
 (at your option) any later version.
 
 QuaZIP is distributed in the hope that it will be useful,
@@ -33,6 +33,8 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 #ifdef QUAZIP_TEST_QSAVEFILE
 #include <QSaveFile>
 #endif
+#include <QTcpServer>
+#include <QTcpSocket>
 #include <QTextCodec>
 
 #include <QtTest/QtTest>
@@ -372,12 +374,68 @@ void TestQuaZip::setAutoClose()
 #ifdef QUAZIP_TEST_QSAVEFILE
 void TestQuaZip::saveFileBug()
 {
+    QDir curDir;
+    QString zipName = "testSaveFile.zip";
+    if (curDir.exists(zipName)) {
+        if (!curDir.remove(zipName)) {
+            QFAIL("Can't remove testSaveFile.zip");
+        }
+    }
     QuaZip zip;
-    QSaveFile saveFile("testSaveFile.zip");
+    QSaveFile saveFile(zipName);
     zip.setIoDevice(&saveFile);
     QCOMPARE(zip.getIoDevice(), &saveFile);
     zip.open(QuaZip::mdCreate);
     zip.close();
     QVERIFY(QFileInfo(saveFile.fileName()).exists());
+    curDir.remove(saveFile.fileName());
 }
 #endif
+
+void TestQuaZip::testSequential()
+{
+    QTcpServer server;
+    QVERIFY(server.listen(QHostAddress(QHostAddress::LocalHost)));
+    quint16 port = server.serverPort();
+    QTcpSocket socket;
+    socket.connectToHost(QHostAddress(QHostAddress::LocalHost), port);
+    QVERIFY(socket.waitForConnected());
+    QVERIFY(server.waitForNewConnection(30000));
+    QTcpSocket *client = server.nextPendingConnection();
+    QuaZip zip(&socket);
+    zip.setAutoClose(false);
+    QVERIFY(zip.open(QuaZip::mdCreate));
+    QVERIFY(socket.isOpen());
+    QuaZipFile zipFile(&zip);
+    QuaZipNewInfo info("test.txt");
+    QVERIFY(zipFile.open(QIODevice::WriteOnly, info, NULL, 0, 0));
+    QCOMPARE(zipFile.write("test"), static_cast<qint64>(4));
+    zipFile.close();
+    zip.close();
+    QVERIFY(socket.isOpen());
+    socket.disconnectFromHost();
+    QVERIFY(socket.waitForDisconnected());
+    QVERIFY(client->waitForReadyRead());
+    QByteArray received = client->readAll();
+#ifdef QUAZIP_QZTEST_QUAZIP_DEBUG_SOCKET
+    QFile debug("testSequential.zip");
+    debug.open(QIODevice::WriteOnly);
+    debug.write(received);
+    debug.close();
+#endif
+    client->close();
+    QBuffer buffer(&received);
+    QuaZip receivedZip(&buffer);
+    QVERIFY(receivedZip.open(QuaZip::mdUnzip));
+    QVERIFY(receivedZip.goToFirstFile());
+    QuaZipFileInfo64 receivedInfo;
+    QVERIFY(receivedZip.getCurrentFileInfo(&receivedInfo));
+    QCOMPARE(receivedInfo.name, QString::fromLatin1("test.txt"));
+    QCOMPARE(receivedInfo.uncompressedSize, static_cast<quint64>(4));
+    QuaZipFile receivedFile(&receivedZip);
+    QVERIFY(receivedFile.open(QIODevice::ReadOnly));
+    QByteArray receivedText = receivedFile.readAll();
+    QCOMPARE(receivedText, QByteArray("test"));
+    receivedFile.close();
+    receivedZip.close();
+}
