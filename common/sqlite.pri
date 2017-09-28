@@ -1,13 +1,13 @@
 DEPENDPATH += ../sqlite/ sqlite/
 INCLUDEPATH += ../sqlite/ sqlite/
 
-PRE_TARGETDEPS += sqlite_build
-QMAKE_EXTRA_TARGETS += sqlite_build
+PRE_TARGETDEPS += sqlite/.libs/libsqlite3.a
+QMAKE_EXTRA_TARGETS += sqlite/.libs/libsqlite3.a
 
 SQLITE_EXTRA_COMPILE_FLAGS +=
 
-sqlite_build.depends = ../sqlite/configure
-sqlite_build.commands = mkdir -p sqlite/ && cd sqlite && \
+sqlite/.libs/libsqlite3.a.depends = ../sqlite/configure
+sqlite/.libs/libsqlite3.a.commands = mkdir -p sqlite/ && cd sqlite && \
                       CFLAGS=\"$$(CFLAGS) -DSQLITE_ENABLE_FTS4=1\" \
 		      ../../sqlite/configure \
 		      --enable-readline=no \
@@ -16,7 +16,7 @@ sqlite_build.commands = mkdir -p sqlite/ && cd sqlite && \
 		      --enable-static=yes \
 		      --enable-dynamic-extensions=no \
 		      $$SQLITE_EXTRA_COMPILE_FLAGS \
-		      && make && cd .. && touch sqlite_build
+		      && make
 
 LIBS += sqlite/.libs/libsqlite3.a
 
