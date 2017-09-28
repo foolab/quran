@@ -20,7 +20,7 @@ sqlite/.libs/libsqlite3.a.commands = mkdir -p sqlite/ && cd sqlite && \
 
 LIBS += sqlite/.libs/libsqlite3.a
 
-sqliteclean.commands = rm -rf sqlite sqlite_build
+sqliteclean.commands = rm -rf sqlite
 clean.depends += sqliteclean
 distclean.depends += sqliteclean
 
