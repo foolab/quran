@@ -68,7 +68,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
 #ifndef ANDROID
   FcConfig *conf = FcConfigGetCurrent();
-  FcConfigParseAndLoad(conf,  reinterpret_cast<const FcChar8 *>(FONTS_CONF), 1);
+  if (!FcConfigParseAndLoad(conf,  reinterpret_cast<const FcChar8 *>(FONTS_CONF), 1)) {
+    qWarning() << "Failed to parse font configuration";
+  }
   FcConfigSetCurrent(conf);
 #endif
 
