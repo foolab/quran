@@ -74,7 +74,7 @@ QMAKE_RESOURCE_FLAGS += -no-compress
 
 PRE_TARGETDEPS += gen
 
-gen.depends = gen_text gen_search gen_recitations gen_translations
+gen.depends = gen_text gen_search
 
 defineReplace(build_dep) {
   android:QMAKE_ARGS=QMAKE_PKG_CONFIG=pkg-config
@@ -83,7 +83,5 @@ defineReplace(build_dep) {
 
 gen_text.commands = $$build_dep(text)
 gen_search.commands = $$build_dep(search)
-gen_recitations.commands = $$build_dep(recitations)
-gen_translations.commands = $$build_dep(translations)
 
-QMAKE_EXTRA_TARGETS += gen gen_text gen_search gen_recitations gen_translations
+QMAKE_EXTRA_TARGETS += gen gen_text gen_search
