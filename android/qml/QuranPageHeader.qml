@@ -29,7 +29,7 @@ Item {
         while (p) {
             if (p.hasOwnProperty("__pageTitle")) {
                 item.page = p
-                p.__pageTitle = item.title
+                p.__pageTitle = Qt.binding(function() { return item.title; })
             }
 
             p = p.parent
