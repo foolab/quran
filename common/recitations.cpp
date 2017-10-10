@@ -128,7 +128,7 @@ void Recitations::refresh() {
 	recitations << new Recitation(info, this);
 	recitations.last()->setStatus(Recitation::Installed);
       } else {
-	r->setStatus(Recitation::Installed);
+	r->setStatus(info->m_status);
 	delete info;
       }
     } else {
