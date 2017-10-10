@@ -47,28 +47,15 @@ QuranPage {
             property real _height: translation.status == Translation.Downloading ? quranTheme.itemSizeLarge + quranTheme.itemSizeSmall : quranTheme.itemSizeLarge
             contentHeight: _height
 
-            actions: [
-                MenuAction {
-                    text: qsTr("Download")
-                    onClicked: {
-                        if (!translation.startDownload()) {
-                            banner.showMessage("Failed to download translation")
-                        }
+            function _toggleTranslation() {
+                if (translation.status != Translation.Installed) {
+                    if (!translation.startDownload()) {
+                        banner.showMessage("Failed to download translation")
                     }
-
-                    visible: translation.status == Translation.None || translation.status == Translation.Error
-                },
-                MenuAction {
-                    text: qsTr("Stop")
-                    onClicked: translation.stopDownload()
-                    visible: translation.status == Translation.Downloading
-                },
-                MenuAction {
-                    text: qsTr("Remove")
-                    onClicked: deleter.confirm(item, qsTr("Removing"), qsTr("Remove translation?"))
-                    visible: translation.status == Translation.Installed
+                } else {
+                    deleter.confirm(item, qsTr("Removing"), qsTr("Remove translation?"))
                 }
-            ]
+            }
 
             DeleteItem {
                 id: deleter
@@ -79,34 +66,13 @@ QuranPage {
                 }
             }
 
-            Item {
-                width: parent.width
+            QuranTextSwitch {
+                id: _switch
                 height: quranTheme.itemSizeLarge
-
-                QuranStatusIndicator {
-                    id: indicator
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    isInstalled: translation.status == Translation.Installed
-                    downloading: translation.status == Translation.Downloading
-                    error: translation.status == Translation.Error
-                }
-
-                QuranLabel {
-                    id: label
-                    text: translation.name
-                    color: quranTheme.primaryColor
-                    truncateText: true
-                    anchors {
-                        top: parent.top
-                        bottom: parent.bottom
-                        right: indicator.left
-                        rightMargin: quranTheme.marginSmall
-                        left: parent.left
-                    }
-
-                    verticalAlignment: Text.AlignVCenter
-                }
+                text: translation.name
+                checked: translation.status == Translation.Installed
+                checkable: false
+                onClicked: _toggleTranslation()
             }
 
             QuranProgressBar {
