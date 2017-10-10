@@ -17,11 +17,11 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Controls 1.2
+import QtQuick.Controls 2.2
 
 Item {
-    property alias minimumValue: progress.minimumValue
-    property alias maximumValue: progress.maximumValue
+    property alias minimumValue: progress.from
+    property alias maximumValue: progress.to
     property alias value: progress.value
 
     ProgressBar {

@@ -17,15 +17,14 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Controls 1.2
-import QtQuick.Controls.Styles 1.2
+import QtQuick.Controls 2.2
 
 Column {
     id: column
 
     property int value
-    property alias minimumValue: slider.minimumValue
-    property alias maximumValue: slider.maximumValue
+    property alias minimumValue: slider.from
+    property alias maximumValue: slider.to
     property alias stepSize: slider.stepSize
     property alias label: textLabel.text
     property alias pressed: slider.pressed
@@ -53,10 +52,6 @@ Column {
             right: parent.right
             leftMargin: quranTheme.marginSmall
             rightMargin: quranTheme.marginSmall
-        }
-
-        style: SliderStyle {
-            // This will give us the base style not the Android one
         }
 
         height: quranTheme.itemSizeSmall

@@ -17,32 +17,33 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Controls 1.2
-import QtQuick.Controls.Styles 1.2
+import QtQuick.Controls 2.2
 
 TextField {
-    id: field
+    id: control
     property bool enterKeyEnabled: true
     property string enterKeyText
 
     signal enterKeyClicked
 
-    horizontalAlignment: TextInput.AlignHCenter
     height: quranTheme.itemSizeSmall
     Keys.onReturnPressed: enterKeyClicked()
-    textColor: quranTheme.primaryColor
+    color: quranTheme.primaryColor
 
-    style: Component {
-        TextFieldStyle {
-            placeholderTextColor: quranTheme.highlightColor
-
-            background: Rectangle {
-                anchors.fill: parent
-                radius: control.heighteight * 0.16
-                border.color: control.activeFocus ? quranTheme.highlightColor : quranTheme.primaryColor
-                color: quranTheme.backgroundColor
+    Component.onCompleted: {
+        // I cannot find a way to change the color of the placeholder text except by this hack
+        for (var x = 0; x < children.length; x++) {
+            if (children[x].text == control.placeholderText) {
+                children[x].color = Qt.binding(function() { return quranTheme.highlightColor })
             }
         }
+    }
+
+    background: Rectangle {
+        anchors.fill: parent
+        radius: control.height * 0.16
+        border.color: control.activeFocus ? quranTheme.highlightColor : quranTheme.primaryColor
+        color: quranTheme.backgroundColor
     }
 
 //TODO:

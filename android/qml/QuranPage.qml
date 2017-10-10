@@ -17,7 +17,7 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Controls 1.2
+import QtQuick.Controls 2.2
 
 Item {
     id: page
@@ -42,20 +42,8 @@ Item {
         return props2
     }
 
-    function replaceAnimated(page, props) {
-        return pageStack.push(combine(page, props, {immediate: false, replace: true}))
-    }
-
-    function replaceImmediate(page, props) {
-        return pageStack.push(combine(page, props, {immediate: true, replace: true}))
-    }
-
     function pushAnimated(page, props) {
-        return pageStack.push(combine(page, props, {immediate: false}))
-    }
-
-    function pushImmediate(page, props) {
-        return pageStack.push(combine(page, props, {immediate: true}))
+        return pageStack.push(page, props, StackView.PushTransition)
     }
 
     function popPage() {

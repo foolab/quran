@@ -17,24 +17,32 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Controls 1.2
-
+import QtQuick.Controls 2.2
+// TODO: hide disabled items
+// TODO: make sure item and menu are visible
 Item {
     id: item
     property list<MenuAction> actions
     property QtObject _menu
     property Item container
-    property int menuHeight: 0
+    property int menuHeight: _menu && _menu.visible ? _menu.height : 0
 
     property Component _menuComponent: Component {
         Menu {
             id: menu
+            closePolicy: Popup.CloseOnPressOutsideParent
+            x: container.x
+            y: container.height - menu.height
+            width: container.width
+            property Flickable _flickable: null
+
             Instantiator {
                 model: topItem.actions
                 delegate: MenuItem {
-                    text: modelData.text
+                    text: visible ? modelData.text : ''
                     visible: modelData.visible === true
                     onTriggered: modelData.clicked()
+                    width: container.width
                 }
 
                 onObjectAdded: menu.insertItem(index, object)
@@ -68,6 +76,6 @@ Item {
             _menu = _menuComponent.createObject(item)
         }
 
-        _menu.popup()
+        _menu.open()
     }
 }

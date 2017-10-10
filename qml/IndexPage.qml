@@ -207,6 +207,7 @@ QuranPage {
 
                 QuranTextField {
                     anchors.horizontalCenter: parent.horizontalCenter
+                    horizontalAlignment: TextInput.AlignHCenter
                     text: settings.pageNumber + 1
                     width: parent.width / 2
                     focus: true

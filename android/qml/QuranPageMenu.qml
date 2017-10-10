@@ -17,12 +17,14 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Controls 1.2
+import QtQuick.Controls 2.2
 
 Menu {
     id: menu
     property list<MenuAction> actions
     property variant view
+    x: parent.width - width
+    modal: true
 
     Instantiator {
         function reverse(m) {

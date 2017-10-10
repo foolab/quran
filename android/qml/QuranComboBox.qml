@@ -17,8 +17,7 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Controls 1.2
-import QtQuick.Controls.Styles 1.2
+import QtQuick.Controls 2.2
 
 Column {
     property list<MenuAction> actions
@@ -45,29 +44,31 @@ Column {
     ComboBox {
         id: combo
 
-        style: Component {
-            ComboBoxStyle {
-                id: comboStyle
-
-                background: Rectangle {
-                    anchors.fill: parent
-                    color: control.pressed ?  quranTheme.inNightMode ? "#191919" : "#e5e5e5" : quranTheme.backgroundColor
+        background: Rectangle {
+            function _color() {
+                if (combo.pressed) {
+                    return quranTheme.inNightMode ? "#191919" : "#e5e5e5"
+                } else {
+                    return quranTheme.backgroundColor
                 }
+            }
 
-                label: QuranLabel {
-                    text: control.currentText
-                    color: quranTheme.primaryColor
-                    verticalAlignment: Text.AlignVCenter
-                    renderType: comboStyle.renderType
-                    anchors {
-                        top: parent.top
-                        bottom: parent.bottom
-                        left: parent.left
-                        leftMargin: quranTheme.marginMedium
-                        right: parent.right
-                        rightMargin: quranTheme.marginMedium
-                    }
-                }
+            anchors.fill: parent
+            color: _color()
+        }
+
+        contentItem: QuranLabel {
+            text: combo.displayText
+            color: quranTheme.primaryColor
+            verticalAlignment: Text.AlignVCenter
+            renderType: Text.NativeRendering
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+                leftMargin: quranTheme.marginMedium
+                right: parent.right
+                rightMargin: quranTheme.marginMedium
             }
         }
 

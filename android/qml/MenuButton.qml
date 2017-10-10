@@ -26,7 +26,7 @@ ToolButton {
 
     onClicked: {
         if (menu) {
-            menu.popup()
+            menu.open()
         }
     }
 

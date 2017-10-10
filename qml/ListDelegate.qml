@@ -39,7 +39,6 @@ QuranBackgroundItem {
 
         anchors {
             top: parent.top
-
             left: parent.left
             leftMargin: quranTheme.marginMedium
             right: parent.right
