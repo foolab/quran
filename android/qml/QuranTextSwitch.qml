@@ -22,7 +22,6 @@ import QtQuick.Controls 2.2
 Item {
     property alias checked: textSwitch.checked
     property alias text: label.text
-    property alias font: label.font
     property alias checkable: textSwitch.checkable
     signal clicked()
 
@@ -45,7 +44,6 @@ Item {
         }
 
         verticalAlignment: Text.AlignVCenter
-        font.bold: true
         color: quranTheme.primaryColor
     }
 

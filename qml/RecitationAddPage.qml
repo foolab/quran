@@ -59,7 +59,6 @@ QuranPage {
             QuranTextSwitch {
                 id: _switch
                 height: quranTheme.itemSizeLarge
-                font.bold: false
                 text: qsTr("%1 %2").arg(recitation.name).arg(recitation.quality)
                 checked: recitation.status == Recitation.Installed
                 checkable: false

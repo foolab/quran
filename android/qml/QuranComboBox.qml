@@ -36,7 +36,6 @@ Column {
             rightMargin: quranTheme.marginSmall
         }
 
-        font.bold: true
         font.pixelSize: quranTheme.fontSizeSmall
         color: quranTheme.primaryColor
     }
