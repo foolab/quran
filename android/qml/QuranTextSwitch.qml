@@ -23,6 +23,8 @@ Item {
     property alias checked: textSwitch.checked
     property alias text: label.text
     property alias font: label.font
+    property alias checkable: textSwitch.checkable
+    signal clicked()
 
     anchors {
         left: parent.left
@@ -49,6 +51,7 @@ Item {
 
     Switch {
         id: textSwitch
+        onClicked: parent.clicked()
 
         anchors {
             top: parent.top

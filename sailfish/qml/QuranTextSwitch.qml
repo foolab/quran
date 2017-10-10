@@ -19,5 +19,5 @@
 import Sailfish.Silica 1.0
 
 TextSwitch {
-
+    property alias checkable: automaticCheck
 }

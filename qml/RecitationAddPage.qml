@@ -45,15 +45,13 @@ QuranPage {
         delegate: ListDelegate {
             id: item
             function _toggleRecitation() {
-                if (_switch.checked) {
+                if (recitation.status != Recitation.Installed) {
                     if (!recitation.enable()) {
                         banner.showMessage("Failed to enable recitation")
-                        _switch.checked = false
                     }
                 } else {
                     if (!recitation.disable()) {
                         banner.showMessage("Failed to disable recitation")
-                        _switch.checked = true
                     }
                 }
             }
@@ -64,13 +62,8 @@ QuranPage {
                 font.bold: false
                 text: qsTr("%1 %2").arg(recitation.name).arg(recitation.quality)
                 checked: recitation.status == Recitation.Installed
-                property bool _completed: false
-                Component.onCompleted: _completed = true
-                Connections {
-                    target: _switch
-                    onCheckedChanged: _toggleRecitation()
-                    enabled: _switch._completed
-                }
+                checkable: false
+                onClicked: _toggleRecitation()
             }
         }
 
