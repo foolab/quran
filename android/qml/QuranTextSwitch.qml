@@ -22,6 +22,7 @@ import QtQuick.Controls 2.2
 Item {
     property alias checked: textSwitch.checked
     property alias text: label.text
+    property alias font: label.font
 
     anchors {
         left: parent.left

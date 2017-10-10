@@ -44,57 +44,32 @@ QuranPage {
 
         delegate: ListDelegate {
             id: item
-
-            actions: [
-                MenuAction {
-                    text: qsTr("Enable")
-                    onClicked: {
-                        if (!recitation.enable()) {
-                            banner.showMessage("Failed to enable recitation")
-                        }
+            function _toggleRecitation() {
+                if (_switch.checked) {
+                    if (!recitation.enable()) {
+                        banner.showMessage("Failed to enable recitation")
+                        _switch.checked = false
                     }
-
-                    visible: recitation.type == Recitation.Online && recitation.status != Recitation.Installed
-                },
-                MenuAction {
-                    text: qsTr("Disable")
-                    onClicked: {
-                        if (!recitation.disable()) {
-                            banner.showMessage("Failed to disable recitation")
-                        }
+                } else {
+                    if (!recitation.disable()) {
+                        banner.showMessage("Failed to disable recitation")
+                        _switch.checked = true
                     }
-
-                    visible: recitation.type == Recitation.Online && recitation.status == Recitation.Installed
                 }
-            ]
+            }
 
-            Item {
-                width: parent.width
+            QuranTextSwitch {
+                id: _switch
                 height: quranTheme.itemSizeLarge
-
-                QuranStatusIndicator {
-                    id: indicator
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    isInstalled: recitation.status == Recitation.Installed
-                    downloading: false
-                    error: false
-                }
-
-                QuranLabel {
-                    id: label
-                    text: qsTr("%1 %2").arg(recitation.name).arg(recitation.quality)
-                    color: quranTheme.primaryColor
-                    truncateText: true
-                    anchors {
-                        top: parent.top
-                        bottom: parent.bottom
-                        right: indicator.left
-                        rightMargin: quranTheme.marginSmall
-                        left: parent.left
-                    }
-
-                    verticalAlignment: Text.AlignVCenter
+                font.bold: false
+                text: qsTr("%1 %2").arg(recitation.name).arg(recitation.quality)
+                checked: recitation.status == Recitation.Installed
+                property bool _completed: false
+                Component.onCompleted: _completed = true
+                Connections {
+                    target: _switch
+                    onCheckedChanged: _toggleRecitation()
+                    enabled: _switch._completed
                 }
             }
         }
