@@ -27,20 +27,8 @@ Page {
     property alias toolBar: toolBarItem.children
     allowedOrientations: settings.orientation == 1 ? Orientation.Portrait | Orientation.PortraitInverted : settings.orientation == 2 ? Orientation.Landscape | Orientation.LandscapeInverted : Orientation.All
 
-    function replaceAnimated(page, props) {
-        return pageStack.replace(page, props, PageStackAction.Animated)
-    }
-
-    function replaceImmediate(page, props) {
-        return pageStack.replace(page, props, PageStackAction.Immediate)
-    }
-
     function pushAnimated(page, props) {
         return pageStack.push(page, props, PageStackAction.Animated)
-    }
-
-    function pushImmediate(page, props) {
-        return pageStack.push(page, props, PageStackAction.Immediate)
     }
 
     function popPage() {
