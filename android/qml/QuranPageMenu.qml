@@ -26,6 +26,14 @@ Menu {
     x: parent.width - width
     y: parent.height - menu.height
     modal: true
+    // StackView has the focus and it handles the android back key navigation
+    // It will lose focus when the menu is opened. We need to restore the focus
+    // again otherwise a back key press will quit the application
+    onVisibleChanged: {
+        if (!visible) {
+            root.pageStack.focus = true
+        }
+    }
 
     Instantiator {
         function reverse(m) {
