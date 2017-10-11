@@ -21,6 +21,8 @@ import QtQuick.Controls 2.2
 
 Switch {
     id: control
+    checkable: true
+    property bool automaticCheck: true
     // We want the indicator on the right
     LayoutMirroring.enabled: true
 

@@ -71,8 +71,8 @@ QuranPage {
                 height: quranTheme.itemSizeLarge
                 text: translation.name
                 checked: translation.status == Translation.Installed
-                checkable: false
                 onClicked: _toggleTranslation()
+                automaticCheck: false
             }
 
             QuranProgressBar {

@@ -61,8 +61,8 @@ QuranPage {
                 height: quranTheme.itemSizeLarge
                 text: qsTr("%1 %2").arg(recitation.name).arg(recitation.quality)
                 checked: recitation.status == Recitation.Installed
-                checkable: false
                 onClicked: _toggleRecitation()
+                automaticCheck: false
             }
         }
 
