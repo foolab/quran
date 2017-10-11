@@ -2,6 +2,7 @@
 <RCC version="1.0">
     <qresource prefix="/icons">
       <file>reciter.png</file>
+      <file>recitation-settings.png</file>
       <file>play.png</file>
       <file>stop.png</file>
       <file>translation.png</file>

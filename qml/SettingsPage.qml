@@ -34,6 +34,7 @@ QuranPage {
         actions: [
             MenuAction {
                 text: qsTr("Manage recitations")
+                icon: "image://icon/recitation-settings.png"
                 onClicked: pushAnimated(Qt.resolvedUrl("RecitationAddPage.qml"))
             },
             MenuAction {
