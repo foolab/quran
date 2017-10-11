@@ -105,6 +105,7 @@ Item {
         Component {
             id: toolTemplate
             ToolButton {
+                anchors.verticalCenter: parent.verticalCenter
                 property MenuAction _action
                 property url iconUrl
                 property url _normal: iconUrl + "?" + quranTheme.buttonNormalColor
@@ -130,7 +131,12 @@ Item {
 
         Row {
             id: toolsContainer
-            anchors.right: parent.right
+            spacing: quranTheme.spacing
+            anchors {
+                right: parent.right
+                top: parent.top
+                bottom: parent.bottom
+            }
         }
     }
 
