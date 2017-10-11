@@ -29,26 +29,57 @@ ListDelegate {
         popPage()
     }
 
-    QuranLabel {
-        id: label
+    DeleteItem {
+        id: deleter
+        onConfirmed: verseBookmark.toggle()
+    }
+
+    BookmarkItem {
+        id: verseBookmark
+        bookmarks: _bookmarks
+        bookmark: _bookmarks.serialize(chapter, verse)
+    }
+
+    Row {
         width: parent.width
+        QuranLabel {
+            id: label
+            width: parent.width - button.width
 
-        TextSupplier {
-            id: supplier
-            chapter: _chapter
-            verse: _verse
-            data: _data
+            TextSupplier {
+                id: supplier
+                chapter: _chapter
+                verse: _verse
+                data: _data
+            }
+
+            NumberFormatter {
+                id: formatter
+                format: settings.numberFormat
+                number: verse + 1
+            }
+
+            font.family: settings.fontFamily
+            text: qsTr("(%1) %2").arg(formatter.formattedNumber).arg(supplier.primaryText)
+            horizontalAlignment: Text.AlignRight
+            color: quranTheme.primaryColor
         }
 
-        NumberFormatter {
-            id: formatter
-            format: settings.numberFormat
-            number: verse + 1
-        }
+        ToolButton {
+            id: button
+            anchors {
+                top: parent.top
+                verticalCenter: undefined
+            }
 
-        font.family: settings.fontFamily
-        text: qsTr("(%1) %2").arg(formatter.formattedNumber).arg(supplier.primaryText)
-        horizontalAlignment: Text.AlignRight
-        color: quranTheme.primaryColor
+            icon.source: verseBookmark.isBookmarked ? highlight ? "image://icon/favorite-selected.png?" + quranTheme.buttonHighlightColor : "image://icon/favorite-selected.png?" + quranTheme.buttonNormalColor : highlight ? "image://icon/favorite-unselected.png?" + quranTheme.buttonHighlightColor : "image://icon/favorite-unselected.png?" + quranTheme.buttonNormalColor
+            onClicked: {
+                if (verseBookmark.isBookmarked) {
+                    deleter.confirm(item, qsTr("Removing"), qsTr("Remove item?"))
+                } else {
+                    verseBookmark.toggle()
+                }
+            }
+        }
     }
 }

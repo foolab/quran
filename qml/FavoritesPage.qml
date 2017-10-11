@@ -41,22 +41,10 @@ QuranPage {
 
     Component {
         id: favoritesPageDelegate
-
         VerseDelegate {
             id: item
             _chapter: chapter
             _verse: verse
-            actions: [
-                MenuAction {
-                    text: qsTr("Remove")
-                    onClicked: deleter.confirm(item, qsTr("Removing"), qsTr("Remove item?"))
-                }
-            ]
-
-            DeleteItem {
-                id: deleter
-                onConfirmed: _bookmarks.remove(bookmark)
-            }
         }
     }
 

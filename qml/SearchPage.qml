@@ -100,29 +100,6 @@ QuranPage {
             id: item
             _chapter: chapter
             _verse: verse
-            BookmarkItem {
-                id: verseBookmark
-                bookmarks: _bookmarks
-                bookmark: _bookmarks.serialize(chapter, verse)
-            }
-
-            DeleteItem {
-                id: deleter
-                onConfirmed: verseBookmark.toggle()
-            }
-
-            actions: [
-                MenuAction {
-                    text: qsTr("Add to favorites")
-                    visible: !verseBookmark.isBookmarked
-                    onClicked: verseBookmark.toggle()
-                },
-                MenuAction {
-                    text: qsTr("Remove from favorites")
-                    visible: verseBookmark.isBookmarked
-                    onClicked: deleter.confirm(item, qsTr("Removing"), qsTr("Remove item?"))
-                }
-            ]
         }
     }
 
