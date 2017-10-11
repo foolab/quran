@@ -22,6 +22,7 @@ QtObject {
     property string text
     signal clicked
     property bool visible: true
+    property url icon
 
     // Workaround: needed for Harmattan's default SelectionDialog delegate
     property string name: text

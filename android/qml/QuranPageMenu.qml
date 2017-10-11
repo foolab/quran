@@ -24,6 +24,7 @@ Menu {
     property list<MenuAction> actions
     property variant view
     x: parent.width - width
+    y: parent.height - menu.height
     modal: true
 
     Instantiator {

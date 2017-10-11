@@ -41,7 +41,7 @@ Item {
     Ctrls.ToolBar {
         id: title
         height: quranTheme.toolBarHeight
-
+        visible: stack.depth > 1
         anchors {
             top: parent.top
             left: parent.left
@@ -101,6 +101,50 @@ Item {
             }
         }
 
+        property var actions: pageStack.currentItem.menu ? pageStack.currentItem.menu.actions : null
+        Component {
+            id: toolTemplate
+            ToolButton {
+                property MenuAction _action
+            }
+        }
+
+        onActionsChanged: {
+            if (stack.depth > 1 && actions != null && actions.length > 0) {
+                for (var x = 0; x < actions.length; x++) {
+                    var obj = toolTemplate.createObject(toolsContainer,
+                        {"_action": actions[x],
+                         "icon.source": actions[x].icon})
+                    obj.clicked.connect(function() { obj._action.clicked() })
+                }
+            } else {
+                for (var x = 0; x < toolsContainer.children.length; x++) {
+                    toolsContainer.children[x].destroy()
+                }
+            }
+        }
+
+        Row {
+            id: toolsContainer
+            anchors.right: parent.right
+        }
+    }
+
+    Ctrls.ToolBar {
+        id: toolBar
+        height: visible ? quranTheme.toolBarHeight : 0
+        visible: stack.depth == 1
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            color: quranTheme.backgroundColor
+        }
+
         Behavior on height {
             PropertyAnimation { duration: 200 }
         }
@@ -124,8 +168,8 @@ Item {
         id: stack
         clip: true
         anchors {
-            top: title.bottom
-            bottom: parent.bottom
+            top: stack.depth == 1 ? parent.top : title.bottom
+            bottom: stack.depth == 1 ? toolBar.top : parent.bottom
             left: parent.left
             right: parent.right
         }
