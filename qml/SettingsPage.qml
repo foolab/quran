@@ -33,10 +33,6 @@ QuranPage {
         view: flick
         actions: [
             MenuAction {
-                text: qsTr("Reset")
-                onClicked: deleter.confirm(qsTr("Resetting"), qsTr("Reset settings?"))
-            },
-            MenuAction {
                 text: qsTr("Manage recitations")
                 onClicked: pushAnimated(Qt.resolvedUrl("RecitationAddPage.qml"))
             },
@@ -186,6 +182,23 @@ QuranPage {
                 text: qsTr("Flip phone to stop recitation")
                 checked: settings.flipToStopRecitation
                 onCheckedChanged: settings.flipToStopRecitation = checked
+            }
+
+            QuranBackgroundItem {
+                width: parent.width
+                height: quranTheme.itemSizeSmall
+                onClicked: deleter.confirm(qsTr("Resetting"), qsTr("Reset settings?"))
+                QuranLabel {
+                    anchors {
+                        left: parent.left
+                        leftMargin: quranTheme.marginSmall
+                        right: parent.right
+                        top: parent.top
+                        bottom: parent.bottom
+                    }
+                    text: qsTr("Reset settings")
+                    verticalAlignment: Text.AlignVCenter
+                }
             }
 
             QuranBackgroundItem {

@@ -54,6 +54,7 @@ QuranPage {
         actions: [
             MenuAction {
                 text: qsTr("Clear")
+                icon: "image://icon/clear.png"
                 onClicked: popup.confirm(qsTr("Clearing"), qsTr("Clear all favorites?"))
             }
         ]

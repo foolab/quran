@@ -106,6 +106,10 @@ Item {
             id: toolTemplate
             ToolButton {
                 property MenuAction _action
+                property url iconUrl
+                property url _normal: iconUrl + "?" + quranTheme.buttonNormalColor
+                property url _highlight: iconUrl + "?" + quranTheme.buttonHighlightColor
+                icon.source: highlight ? _highlight : _normal
             }
         }
 
@@ -114,7 +118,7 @@ Item {
                 for (var x = 0; x < actions.length; x++) {
                     var obj = toolTemplate.createObject(toolsContainer,
                         {"_action": actions[x],
-                         "icon.source": actions[x].icon})
+                         "iconUrl": actions[x].icon})
                     obj.clicked.connect(function() { obj._action.clicked() })
                 }
             } else {
