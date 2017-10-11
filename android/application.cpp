@@ -21,6 +21,7 @@
 #include "androidsupport.h"
 
 Application::Application(int& argc, char **argv) {
+  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   setApplication(new QGuiApplication(argc, argv), "quran");
   setView(new QQuickView);
 }
