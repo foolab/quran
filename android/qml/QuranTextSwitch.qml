@@ -19,11 +19,10 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.2
 
-Item {
-    property alias checked: textSwitch.checked
-    property alias text: label.text
-    property alias checkable: textSwitch.checkable
-    signal clicked()
+Switch {
+    id: control
+    // We want the indicator on the right
+    LayoutMirroring.enabled: true
 
     anchors {
         left: parent.left
@@ -34,27 +33,12 @@ Item {
 
     height: quranTheme.itemSizeSmall
 
-    QuranLabel {
+    contentItem: QuranLabel {
         id: label
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            right: textSwitch.left
-            left: parent.left
-        }
-
+        leftPadding: 0
+        rightPadding: control.indicator.width + control.spacing
+        text: control.text
         verticalAlignment: Text.AlignVCenter
         color: quranTheme.primaryColor
-    }
-
-    Switch {
-        id: textSwitch
-        onClicked: parent.clicked()
-
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            right: parent.right
-        }
     }
 }
