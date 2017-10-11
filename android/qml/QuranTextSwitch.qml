@@ -43,4 +43,10 @@ Switch {
         verticalAlignment: Text.AlignVCenter
         color: quranTheme.primaryColor
     }
+
+    MouseArea {
+        anchors.fill: parent
+        enabled: !parent.automaticCheck
+        onClicked: parent.clicked()
+    }
 }
