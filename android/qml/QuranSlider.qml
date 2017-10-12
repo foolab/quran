@@ -55,5 +55,6 @@ Column {
 
         height: quranTheme.itemSizeSmall
         stepSize: 1.0
+        snapMode: Slider.SnapAlways
     }
 }
