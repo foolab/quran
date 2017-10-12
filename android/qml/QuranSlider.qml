@@ -22,7 +22,7 @@ import QtQuick.Controls 2.2
 Column {
     id: column
 
-    property int value
+    property alias value: slider.value
     property alias minimumValue: slider.from
     property alias maximumValue: slider.to
     property alias stepSize: slider.stepSize
@@ -55,19 +55,5 @@ Column {
 
         height: quranTheme.itemSizeSmall
         stepSize: 1.0
-
-        property bool _completed: false
-
-        // This is a hack because Slider likes to reset its value on creation
-        Component.onCompleted: {
-            slider.value = column.value
-            _completed = true
-        }
-
-        onValueChanged: {
-            if (_completed) {
-                column.value = value
-            }
-        }
     }
 }
