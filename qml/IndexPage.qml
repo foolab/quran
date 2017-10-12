@@ -74,6 +74,7 @@ QuranPage {
 
     QuranListView {
         id: mainView
+        clip: true
         anchors {
             top: tabSelector.bottom
             bottom: parent.bottom
@@ -105,7 +106,6 @@ QuranPage {
             }
 
             id: chapterView
-            clip: true
             model: _data.chapterCount
             highlightFollowsCurrentItem: false
             currentIndex: info.firstChapter
@@ -150,7 +150,6 @@ QuranPage {
             }
 
             id: partView
-            clip: true
             model: _data.partCount
             anchors.fill: parent
             highlightFollowsCurrentItem: false
@@ -188,7 +187,6 @@ QuranPage {
     Component {
         id: pageComponent
         Item {
-
             Column {
                 width: parent.width
                 anchors.centerIn: parent
