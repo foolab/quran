@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg171762"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="minus.svg"
+   inkscape:export-filename="/home/mohammed/scratchbox/quran/quran/icons/minus.png"
+   inkscape:export-xdpi="16.431929"
+   inkscape:export-ydpi="16.431929">
+  <defs
+     id="defs171756" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.65214844"
+     inkscape:cx="111.72207"
+     inkscape:cy="560"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1024"
+     inkscape:window-height="683"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata171759">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#000000;stroke:none;stroke-width:1.85492575"
+       d="m 105,111.40149 c -20.496929,0 -37.09851,16.60158 -37.09851,37.09851 0,20.49693 16.601581,37.09851 37.09851,37.09851 20.49693,0 37.09851,-16.60158 37.09851,-37.09851 0,-20.49693 -16.60158,-37.09851 -37.09851,-37.09851 z m 0,7.4197 c 16.36045,0 29.67881,13.31836 29.67881,29.67881 0,16.36045 -13.31836,29.6788 -29.67881,29.6788 -16.360446,0 -29.678809,-13.31835 -29.678809,-29.6788 0,-16.36045 13.318363,-29.67881 29.678809,-29.67881 z"
+       id="path257612"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.84399998;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect257616"
+       width="37.747887"
+       height="7.6580324"
+       x="86.126053"
+       y="144.67099" />
+  </g>
+</svg>

@@ -16,5 +16,7 @@
       <file>settings.png</file>
       <file>menu.png</file>
       <file>clear.png</file>
+      <file>plus.png</file>
+      <file>minus.png</file>
     </qresource>
 </RCC>
