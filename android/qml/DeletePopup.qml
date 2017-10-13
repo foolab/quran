@@ -17,32 +17,63 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Dialogs 1.2
+import QtQuick.Controls 2.2
 
-Item {
-    id: item
-    property QtObject dialog
-
+Popup {
+    id: dialog
     signal confirmed
-    property string _question
+    property string title
 
-    Component {
-        id: dialogComponent
+    modal: true
+    focus: true
 
-        MessageDialog {
-            text: item._question
-            standardButtons: StandardButton.Ok | StandardButton.Cancel
-            onAccepted: item.confirmed()
+    width: parent.width
+    x: parent.x
+    y: parent.height - height - quranTheme.marginMedium
+
+    enter: Transition {
+        NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 100 }
+    }
+
+    exit: Transition {
+        NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 100 }
+    }
+
+    contentItem: Column {
+        id: column
+        width: parent.width
+        spacing: quranTheme.spacing
+
+        QuranLabel {
+            id: label
+            width: parent.width
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            text: dialog.title
+            font.pixelSize: quranTheme.fontSizeLarge
+        }
+
+        Row {
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: quranTheme.spacing
+
+            QuranButton {
+                text: qsTr("No")
+                onClicked: dialog.close()
+            }
+
+            QuranButton {
+                text: qsTr("Yes")
+                onClicked: {
+                    dialog.close()
+                    dialog.confirmed()
+                }
+            }
         }
     }
 
     function confirm(message, question) {
-        item._question = question
-
-        if (item.dialog == null) {
-            item.dialog = dialogComponent.createObject(item)
-        }
-
-        item.dialog.open()
+        dialog.title = question
+        dialog.open()
     }
 }
