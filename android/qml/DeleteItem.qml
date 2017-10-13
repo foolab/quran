@@ -17,32 +17,77 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Dialogs 1.2
+import QtQuick.Controls 2.2
 
 Item {
     id: item
-    property QtObject dialog
+    width: parent.width
+    height: 0
 
     signal confirmed
-    property string _question
 
     Component {
-        id: dialogComponent
+        id: component
 
-        MessageDialog {
-            text: item._question
-            standardButtons: StandardButton.Ok | StandardButton.Cancel
-            onAccepted: item.confirmed()
+        Popup {
+            id: dialog
+            property string title
+            x: 0
+            y: 0
+            modal: true
+            focus: true
+            width: parent.width
+            height: parent.height
+
+            enter: Transition {
+                NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 100 }
+            }
+
+            exit: Transition {
+                NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 100 }
+            }
+
+            Row {
+                spacing: quranTheme.spacing
+                width: parent.width
+                height: parent.height
+
+                QuranLabel {
+                    width: parent.width - 2 * (quranTheme.spacing + quranTheme.itemSizeSmall)
+                    height: parent.height
+                    text: dialog.title
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                QuranButton {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: quranTheme.itemSizeSmall
+                    height: quranTheme.itemSizeSmall
+                    text: qsTr("No")
+                    onClicked: {
+                        dialog.close()
+                        dialog.destroy(100)
+                    }
+                }
+
+                QuranButton {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: quranTheme.itemSizeSmall
+                    height: quranTheme.itemSizeSmall
+                    text: qsTr("Yes")
+                    onClicked: {
+                        dialog.close()
+                        item.confirmed()
+                        dialog.destroy(100)
+                    }
+                }
+            }
         }
     }
 
     function confirm(parentItem, message, question) {
-        item._question = question
-
-        if (item.dialog == null) {
-            item.dialog = dialogComponent.createObject(item)
-        }
-
-        item.dialog.open()
+        var obj = component.createObject(parentItem, {"title": question})
+        obj.open()
     }
 }
