@@ -189,6 +189,7 @@ QuranPage {
         Item {
             Column {
                 width: parent.width
+                spacing: quranTheme.spacing
                 anchors.centerIn: parent
                 QuranLabel {
                     anchors {
@@ -204,6 +205,7 @@ QuranPage {
                 }
 
                 QuranTextField {
+                    id: label
                     anchors.horizontalCenter: parent.horizontalCenter
                     horizontalAlignment: TextInput.AlignHCenter
                     text: settings.pageNumber + 1
@@ -217,11 +219,54 @@ QuranPage {
                         family: quranTheme.fontFamilyHeading
                     }
 
+                    onTextChanged: slider.value = parseInt(text)
                     enterKeyEnabled: acceptableInput
                     enterKeyText: qsTr("Go!")
                     onEnterKeyClicked: {
                         if (acceptableInput) {
                             settings.pageNumber = text - 1
+                            popPage()
+                        }
+                    }
+                }
+
+                Row {
+                    width: parent.width
+                    spacing: quranTheme.spacing
+                    ToolButton {
+                        id: minus
+                        anchors.verticalCenter: parent.verticalCenter
+                        icon.source: highlight ? "image://icon/minus.png?" + quranTheme.buttonHighlightColor : "image://icon/minus.png?" + quranTheme.buttonNormalColor
+                        enabled: parseInt(slider.value) > slider.minimumValue
+                        onClicked: slider.value = parseInt(slider.value) - 1
+                    }
+
+                    QuranSlider {
+                        id: slider
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width - plus.width - minus.width - (2 * parent.spacing)
+                        minimumValue: 1
+                        maximumValue: _data.pageCount
+                        value: settings.pageNumber + 1
+                        onValueChanged: label.text = parseInt(value)
+                    }
+
+                    ToolButton {
+                        id: plus
+                        anchors.verticalCenter: parent.verticalCenter
+                        icon.source: highlight ? "image://icon/plus.png?" + quranTheme.buttonHighlightColor : "image://icon/plus.png?" + quranTheme.buttonNormalColor
+                        enabled: parseInt(slider.value) < slider.maximumValue
+                        onClicked: slider.value = parseInt(slider.value) + 1
+                    }
+                }
+
+                QuranButton {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    enabled: label.acceptableInput
+                    text: qsTr("Go")
+                    onClicked: {
+                        if (label.acceptableInput) {
+                            settings.pageNumber = label.text - 1
                             popPage()
                         }
                     }
