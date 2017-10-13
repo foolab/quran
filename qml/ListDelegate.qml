@@ -22,7 +22,7 @@ QuranBackgroundItem {
     id: topItem
     default property alias content: item.data
     width: ListView.view.width
-    height: contentHeight
+    height: Math.max(contentHeight, quranTheme.itemSizeSmall)
     property alias contentHeight: item.height
 
     Column {
