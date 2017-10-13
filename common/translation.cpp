@@ -189,6 +189,10 @@ bool Translation::install(QTemporaryFile& file) {
   QString index = m_translations->indexPath(uuid());
   QString data = m_translations->dataPath(uuid());
 
+  // Just in case we have any stall files (Observed it once on my desktop)
+  QFile::remove(index);
+  QFile::remove(data);
+
   if (!file.rename(data)) {
     qmlInfo(this) << "Failed to rename file" << file.errorString();
     file.remove();
