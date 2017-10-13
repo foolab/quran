@@ -46,7 +46,9 @@ QuranPage {
             id: item
 
             function _toggleTranslation() {
-                if (translation.status != Translation.Installed) {
+                if (translation.status == Translation.Downloading) {
+                    translation.stopDownload()
+                } else if (translation.status != Translation.Installed) {
                     if (!translation.startDownload()) {
                         banner.showMessage("Failed to download translation")
                     }
