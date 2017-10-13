@@ -55,7 +55,6 @@ Item {
     property color statusDownloading: "yellow"
     property color statusInstalled: "green"
 
-    property bool needsKeyboard: true
     property string keyboardEnter: "image://theme/icon-m-enter"
     property string keyboardBackspace: "image://theme/icon-m-backspace"
 

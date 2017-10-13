@@ -55,7 +55,6 @@ QtObject {
     property color statusDownloading: Theme.highlightColor
     property color statusInstalled: Theme.primaryColor
 
-    property bool needsKeyboard: true
     property string keyboardEnter: "image://theme/icon-m-enter"
     property string keyboardBackspace: "image://theme/icon-m-backspace"
 
