@@ -26,7 +26,7 @@ Button {
     background: Rectangle {
         anchors.fill: parent
         color: control.down ? quranTheme.inNightMode ? "#191919" : "#e5e5e5" : quranTheme.backgroundColor
-        border.width: 2
+        border.width: quranTheme.itemSizeDecorative
         border.color: control.pressed ? quranTheme.primaryColor : quranTheme.highlightColor
         radius: border.width * 2
         implicitWidth: quranTheme.itemSizeLarge * 2

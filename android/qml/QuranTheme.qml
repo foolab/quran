@@ -36,6 +36,7 @@ Item {
 
     property color buttonHighlightColor: highlightColor
 
+    property int itemSizeDecorative: 2
     property int marginSmall: Screen.height / 100
     property int marginMedium: Screen.height / 80
     property int spacing: Screen.height / 50

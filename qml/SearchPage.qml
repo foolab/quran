@@ -137,7 +137,7 @@ QuranPage {
         smooth: true
         border {
             color: quranTheme.keyboardPreviewTextColor
-            width: 1
+            width: quranTheme.itemSizeDecorative
         }
 
         anchors {

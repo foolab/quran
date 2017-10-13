@@ -36,6 +36,7 @@ QtObject {
 
     property color buttonHighlightColor: Theme.highlightColor
 
+    property int itemSizeDecorative: 2
     property int marginSmall: 10
     property int marginMedium: 16
     property int spacing: 20

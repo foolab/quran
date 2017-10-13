@@ -24,7 +24,6 @@ Column {
     property color borderColor
     property color backgroundColor
     property alias textColor: label.color
-    property real borderHeight: 5
     property alias text: label.text
     property alias font: label.font
     property alias horizontalAlignment: label.horizontalAlignment
@@ -38,7 +37,7 @@ Column {
 
     Rectangle {
         width: parent.width
-        height: column.borderHeight
+        height: quranTheme.itemSizeDecorative
         color: column.borderColor
     }
 
@@ -55,7 +54,7 @@ Column {
 
     Rectangle {
         width: parent.width
-        height: column.borderHeight
+        height: quranTheme.itemSizeDecorative
         color: column.borderColor
     }
 }
