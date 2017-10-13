@@ -85,6 +85,7 @@ private:
   bool readData(QTemporaryFile& file);
   bool install(QTemporaryFile& file);
   void replyError();
+  void clearDownload();
 
   TranslationInfo *m_info;
   Translations *m_translations;

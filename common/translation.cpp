@@ -112,8 +112,7 @@ void Translation::stopDownload() {
   }
 
   m_download->stop();
-  m_download->deleteLater();
-  m_download = 0;
+  clearDownload();
 
   setStatus(Translation::None);
 }
@@ -128,8 +127,7 @@ void Translation::replyError() {
 		<< " "
 		<< m_download->reply()->errorString();
 
-  m_download->deleteLater();
-  m_download = 0;
+  clearDownload();
 
   setStatus(Translation::Error);
 }
@@ -147,8 +145,7 @@ void Translation::replyFinished() {
   QTemporaryFile file;
   if (!file.open()) {
     qmlInfo(this) << "Failed to open temporary file" << file.errorString();
-    m_download->deleteLater();
-    m_download = 0;
+    clearDownload();
     setStatus(Translation::Error);
     return;
   }
@@ -156,9 +153,7 @@ void Translation::replyFinished() {
   if (!readData(file) || !install(file)) {
     replyError();
   } else {
-    m_download->deleteLater();
-    m_download = 0;
-
+    clearDownload();
     setStatus(Translation::Installed);
 
     // Emit this after we set the status because Translations object depends on that
@@ -212,4 +207,13 @@ bool Translation::install(QTemporaryFile& file) {
   file.setAutoRemove(false);
 
   return true;
+}
+
+void Translation::clearDownload() {
+  m_download->deleteLater();
+  m_download = 0;
+
+  // And we need to reset those properties
+  emit downloadSizeChanged();
+  emit downloadProgressChanged();
 }
