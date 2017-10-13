@@ -19,17 +19,13 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.2
 
-Item {
-    property alias minimumValue: progress.from
-    property alias maximumValue: progress.to
-    property alias value: progress.value
+ProgressBar {
+    id: control
+    property alias minimumValue: control.from
+    property alias maximumValue: control.to
 
-    ProgressBar {
-        id: progress
-        anchors {
-            left: parent.left
-            right: parent.right
-            verticalCenter: parent.verticalCenter
-        }
+    anchors {
+        left: parent.left
+        right: parent.right
     }
 }
