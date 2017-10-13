@@ -31,7 +31,7 @@ Column {
 
     QuranLabel {
         id: textLabel
-
+        visible: text != ""
         anchors {
             left: parent.left
             right: parent.right
