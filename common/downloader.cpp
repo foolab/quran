@@ -87,8 +87,9 @@ void Download::handleDownloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
     emit sizeChanged();
   }
 
-  if (bytesReceived != m_progress) {
-    m_progress = bytesReceived;
+  qint64 progress = (bytesReceived * 100) / m_size;
+  if (progress != m_progress) {
+    m_progress = progress;
     emit progressChanged();
   }
 }

@@ -44,8 +44,6 @@ QuranPage {
 
         delegate: ListDelegate {
             id: item
-            property real _height: translation.status == Translation.Downloading ? quranTheme.itemSizeLarge + quranTheme.itemSizeSmall : quranTheme.itemSizeLarge
-            contentHeight: _height
 
             function _toggleTranslation() {
                 if (translation.status != Translation.Installed) {
@@ -76,15 +74,14 @@ QuranPage {
             }
 
             QuranProgressBar {
-                visible: translation.status == Translation.Downloading
                 anchors {
                     left: parent.left
                     right: parent.right
                 }
 
-                height: quranTheme.itemSizeSmall
+                visible: translation.status == Translation.Downloading
                 minimumValue: 0
-                maximumValue: translation.downloadSize
+                maximumValue: 100
                 value: translation.downloadProgress
             }
         }
