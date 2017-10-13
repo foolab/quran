@@ -11,14 +11,14 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg2"
    sodipodi:docname="Soeb_Plain_Arrows_8.svg"
-   inkscape:export-filename="/home/soeb/arrows_bg.png"
+   inkscape:export-filename="/home/mohammed/scratchbox/quran/quran/icons/back.png"
    viewBox="0 0 32 32"
    sodipodi:version="0.32"
-   inkscape:export-xdpi="91.836731"
+   inkscape:export-xdpi="144.00142"
    version="1.0"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-ydpi="91.836731"
-   inkscape:version="0.48.4 r9939"
+   inkscape:export-ydpi="144.00142"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
    width="100%"
    height="100%">
   <defs
@@ -30,14 +30,14 @@
      guidetolerance="10"
      pagecolor="#ffffff"
      gridtolerance="10000"
-     inkscape:window-height="686"
-     inkscape:zoom="6.8306595"
+     inkscape:window-height="683"
+     inkscape:zoom="12.388687"
      objecttolerance="10"
      showgrid="false"
      borderopacity="1.0"
      inkscape:current-layer="layer1"
-     inkscape:cx="0.46294353"
-     inkscape:cy="18.041707"
+     inkscape:cx="15.366911"
+     inkscape:cy="17.529311"
      inkscape:window-y="30"
      inkscape:window-x="0"
      inkscape:window-width="1024"
@@ -50,10 +50,11 @@
      inkscape:groupmode="layer"
      transform="translate(-103 -211.36)">
     <path
+       inkscape:connector-curvature="0"
        id="path6250"
        sodipodi:nodetypes="ccccc"
-       style="stroke-linejoin:round;fill-rule:evenodd;stroke:#ffffff;stroke-linecap:round;stroke-width:2;fill:none;stroke-opacity:1"
-       d="m134 242.36l-30-15 30-15-10 15 10 15z"
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       d="m 134.00003,242.36 -30,-15 30,-15 -10,15 z"
        inkscape:export-filename="/mnt/5/scratchbox/users/mohammed/home/mohammed/quran/sailfish/quran/icons/back.png"
        inkscape:export-xdpi="134.94203"
        inkscape:export-ydpi="134.94203" />
@@ -66,7 +67,7 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <cc:license
-           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
         <dc:publisher>
           <cc:Agent
              rdf:about="http://openclipart.org/">

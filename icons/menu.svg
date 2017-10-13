@@ -13,11 +13,11 @@
    height="48px"
    id="svg2985"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
-   inkscape:export-filename="/home/mohammed/scratchbox/quran/sailfish/quran/icons/menu.png"
-   inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90"
-   sodipodi:docname="New document 2">
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   inkscape:export-filename="/home/mohammed/scratchbox/quran/quran/icons/menu.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   sodipodi:docname="menu.svg">
   <defs
      id="defs2987" />
   <sodipodi:namedview
@@ -27,15 +27,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="9.2614416"
-     inkscape:cx="8.93755"
-     inkscape:cy="24"
+     inkscape:zoom="16.797367"
+     inkscape:cx="20.331275"
+     inkscape:cy="35.906628"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
      inkscape:window-width="1024"
-     inkscape:window-height="686"
+     inkscape:window-height="683"
      inkscape:window-x="0"
      inkscape:window-y="30"
      inkscape:window-maximized="1" />
@@ -47,7 +47,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -76,5 +76,20 @@
        height="10.463773"
        x="19.272947"
        y="33.352089" />
+    <path
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.18990603;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 20.704349,42.379864 c -0.02183,-0.02183 -0.03969,-1.736383 -0.03969,-3.810121 v -3.770432 h 3.393389 3.393389 v 3.810121 3.810121 h -3.3537 c -1.844535,0 -3.37156,-0.01786 -3.393389,-0.03969 z"
+       id="path3699"
+       inkscape:connector-curvature="0" />
+    <path
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.18990603;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 20.724193,23.904747 v -3.810121 h 3.393389 3.393389 v 3.810121 3.810121 h -3.393389 -3.393389 z"
+       id="path3701"
+       inkscape:connector-curvature="0" />
+    <path
+       style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.18990603;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 20.486061,9.4381944 V 5.6280735 h 3.393389 3.393388 V 9.4381944 13.248315 H 23.87945 20.486061 Z"
+       id="path3703"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>
