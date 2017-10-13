@@ -54,7 +54,7 @@ QuranPage {
         Repeater {
             model: tabs
             delegate: QuranBackgroundItem {
-                width: parent.width / 3
+                width: parent.width / tabs.length
                 height: quranTheme.itemSizeSmall
                 onClicked: mainView.currentIndex = index
                     QuranLabel {
