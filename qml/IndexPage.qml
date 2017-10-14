@@ -236,7 +236,7 @@ QuranPage {
                     ToolButton {
                         id: minus
                         anchors.verticalCenter: parent.verticalCenter
-                        icon.source: highlight ? "image://icon/minus.png?" + quranTheme.buttonHighlightColor : "image://icon/minus.png?" + quranTheme.buttonNormalColor
+                        icon: "image://icon/minus.png"
                         enabled: parseInt(slider.value) > slider.minimumValue
                         onClicked: slider.value = parseInt(slider.value) - 1
                     }
@@ -254,7 +254,7 @@ QuranPage {
                     ToolButton {
                         id: plus
                         anchors.verticalCenter: parent.verticalCenter
-                        icon.source: highlight ? "image://icon/plus.png?" + quranTheme.buttonHighlightColor : "image://icon/plus.png?" + quranTheme.buttonNormalColor
+                        icon: "image://icon/plus.png"
                         enabled: parseInt(slider.value) < slider.maximumValue
                         onClicked: slider.value = parseInt(slider.value) + 1
                     }

@@ -67,11 +67,11 @@ QuranPage {
 
     toolBar: [
         ToolButton {
-            icon.source: highlight ? "image://icon/reciter.png?" + quranTheme.buttonHighlightColor : "image://icon/reciter.png?" + quranTheme.buttonNormalColor
+            icon: "image://icon/reciter.png"
             onClicked: pushAnimated(Qt.resolvedUrl("RecitationSelector.qml"))
         },
         ToolButton {
-            icon.source: highlight ? "image://icon/translation.png?" + quranTheme.buttonHighlightColor : "image://icon/translation.png?" + quranTheme.buttonNormalColor
+            icon: "image://icon/translation.png"
             onClicked: pushAnimated(Qt.resolvedUrl("TranslationSelector.qml"))
         },
         NumberLabel {
@@ -82,12 +82,12 @@ QuranPage {
             color: highlight ? quranTheme.highlightColor : quranTheme.textColor
         },
         ToolButton {
-            icon.source: highlight ? "image://icon/play.png?" + quranTheme.buttonHighlightColor : "image://icon/play.png?" + quranTheme.buttonNormalColor
+            icon: "image://icon/play.png"
             enabled: settings.recitationMode != 0 && recitations.installedCount > 0
             onClicked: playAudio(MediaPlayer.PlayPage, settings.pageNumber)
         },
         ToolButton {
-            icon.source: highlight ? "image://icon/stop.png?" + quranTheme.buttonHighlightColor : "image://icon/stop.png?" + quranTheme.buttonNormalColor
+            icon: "image://icon/stop.png"
             onClicked: audioPlayer.stop()
             enabled: audioPlayer.playing
         }

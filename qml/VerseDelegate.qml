@@ -73,7 +73,7 @@ ListDelegate {
                 verticalCenter: undefined
             }
 
-            icon.source: verseBookmark.isBookmarked ? highlight ? "image://icon/favorite-selected.png?" + quranTheme.buttonHighlightColor : "image://icon/favorite-selected.png?" + quranTheme.buttonNormalColor : highlight ? "image://icon/favorite-unselected.png?" + quranTheme.buttonHighlightColor : "image://icon/favorite-unselected.png?" + quranTheme.buttonNormalColor
+            icon: verseBookmark.isBookmarked ? "image://icon/favorite-selected.png" :  "image://icon/favorite-unselected.png"
             onClicked: {
                 if (verseBookmark.isBookmarked) {
                     deleter.confirm(item, qsTr("Removing"), qsTr("Remove item?"))

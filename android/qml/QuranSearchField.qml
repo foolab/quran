@@ -42,7 +42,8 @@ QuranTextField {
                 width: Math.min(parent.width, parent.height)
                 height: width
                 anchors.centerIn: parent
-                icon.source: "image://icon/search.png?" + quranTheme.primaryColor
+                highlight: false
+                icon: "image://icon/search.png"
             }
         }
     }

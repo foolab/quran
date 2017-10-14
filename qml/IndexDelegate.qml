@@ -82,7 +82,7 @@ ListDelegate {
 
         ToolButton {
             id: play
-            icon.source: highlight ? "image://icon/play.png?" + quranTheme.buttonHighlightColor : "image://icon/play.png?" + quranTheme.primaryColor
+            icon: "image://icon/play.png"
 
             anchors {
                 verticalCenter: parent.verticalCenter

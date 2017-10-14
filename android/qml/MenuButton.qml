@@ -32,7 +32,7 @@ ToolButton {
 
     visible: parent.visible && menu != null
     opacity: visible ? 1.0 : 0
-    icon.source: highlight ? "image://icon/menu.png?" + quranTheme.buttonHighlightColor : "image://icon/menu.png?" + quranTheme.buttonNormalColor
+    icon: "image://icon/menu.png"
 
     Behavior on opacity {
         PropertyAnimation { duration: 400 }

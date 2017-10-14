@@ -19,11 +19,21 @@
 import QtQuick 2.0
 
 MouseArea {
-    property alias icon: image
+    property string text
+    property url icon
     property bool highlight: pressed && containsMouse
+    property bool highlightEnabled: true
     width: quranTheme.toolButtonSize
     height: width
     anchors.verticalCenter: parent ? parent.verticalCenter : undefined
+
+    function _icon() {
+        if (highlight) {
+            return icon + "?" + quranTheme.buttonHighlightColor
+        } else {
+            return icon + "?" + quranTheme.buttonNormaltColor
+        }
+    }
 
     Image {
         id: image
@@ -31,5 +41,6 @@ MouseArea {
         height: parent.height * 0.65
         anchors.centerIn: parent
         opacity: parent.enabled ? 1.0 : 0.5
+        source: parent.highlightEnabled ? _icon() : parent.icon
     }
 }

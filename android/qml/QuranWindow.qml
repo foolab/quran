@@ -61,8 +61,8 @@ Item {
             opacity: pageStack.depth > 1 ? 1.0 : 0.0
             visible: opacity > 0
 
-            property bool _highlight: highlight || (mouse.pressed && mouse.containsMouse)
-            icon.source: _highlight ? "image://icon/back.png?" + quranTheme.buttonHighlightColor : "image://icon/back.png?" + quranTheme.buttonNormalColor
+            highlight: (pressed && containsMouse) || (mouse.pressed && mouse.containsMouse)
+            icon: "image://icon/back.png"
 
             Behavior on opacity {
                 PropertyAnimation { duration: 400 }
@@ -107,10 +107,6 @@ Item {
             ToolButton {
                 anchors.verticalCenter: parent.verticalCenter
                 property MenuAction _action
-                property url iconUrl
-                property url _normal: iconUrl + "?" + quranTheme.buttonNormalColor
-                property url _highlight: iconUrl + "?" + quranTheme.buttonHighlightColor
-                icon.source: highlight ? _highlight : _normal
             }
         }
 
@@ -119,7 +115,7 @@ Item {
                 for (var x = 0; x < actions.length; x++) {
                     var obj = toolTemplate.createObject(toolsContainer,
                         {"_action": actions[x],
-                         "iconUrl": actions[x].icon})
+                         "icon": actions[x].icon})
                     obj.clicked.connect(function() { obj._action.clicked() })
                 }
             } else {
