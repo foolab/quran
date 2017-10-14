@@ -46,6 +46,10 @@ Item {
         return pageStack.push(page, props, StackView.PushTransition)
     }
 
+    function pushImmediate(page, props) {
+        return pageStack.push(page, props, StackView.Immediate)
+    }
+
     function popPage() {
         pageStack.pop()
     }

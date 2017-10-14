@@ -22,6 +22,12 @@ import Quran 1.0
 QuranPage {
     menu: pageMenu
 
+    Component.onCompleted: {
+        if (translations.installedCount == 0) {
+            pushImmediate(Qt.resolvedUrl("TranslationAddPage.qml"))
+        }
+    }
+
     QuranPageMenu {
         id: pageMenu
         view: view

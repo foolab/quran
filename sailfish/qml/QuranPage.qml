@@ -31,6 +31,10 @@ Page {
         return pageStack.push(page, props, PageStackAction.Animated)
     }
 
+    function pushImmediate(page, props) {
+        return pageStack.push(page, props, PageStackAction.Immediate)
+    }
+
     function popPage() {
         pageStack.pop()
     }
