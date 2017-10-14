@@ -27,12 +27,19 @@ Column {
     property alias text: label.text
     property alias font: label.font
     property alias horizontalAlignment: label.horizontalAlignment
+    property alias addTopMargin: topSeparator.visible
 
     anchors {
         left: parent.left
         right: parent.right
         rightMargin: quranTheme.marginSmall
         leftMargin: quranTheme.marginSmall
+    }
+
+    Item {
+        id: topSeparator
+        width: parent.width
+        height: quranTheme.marginSmall
     }
 
     Rectangle {
