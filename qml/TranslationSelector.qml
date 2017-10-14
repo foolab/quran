@@ -40,7 +40,7 @@ QuranPage {
 
         QuranViewPlaceholder {
             enabled: translations.installedCount == 0
-            text: qsTr("Install translations by selecting 'Manage translations' from the menu.")
+            text: qsTr("Please install translations first.")
         }
 
         header: QuranPageHeader {
