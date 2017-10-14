@@ -163,11 +163,15 @@ Translation *Translations::lookup(const QString& id, const QList<Translation *>&
 }
 
 QString Translations::indexPath(const QString& id) const {
+  ensureDir();
+
   return QString("%1%2%3%4").arg(m_dir).arg(QDir::separator())
     .arg(id).arg(INDEX_SUFFIX);
 }
 
 QString Translations::dataPath(const QString& id) const {
+  ensureDir();
+
   return QString("%1%2%3%4").arg(m_dir).arg(QDir::separator())
     .arg(id).arg(DATA_SUFFIX);
 }
@@ -299,5 +303,15 @@ void Translations::reportChanges(Translation *t) {
     // I doubt this could ever happen
     qmlInfo(this) << "Unknown translation installed";
     emit installedCountChanged();
+  }
+}
+
+void Translations::ensureDir() const {
+  // Create the directory just in case:
+  QDir dir(m_dir);
+  if (!dir.exists()) {
+    if (!dir.mkpath(".")) {
+      qWarning() << "Failed to create dir" << m_dir;
+    }
   }
 }

@@ -79,6 +79,7 @@ private:
   QHash<int, QByteArray> roleNames() const;
   bool isInstalled(Translation *t);
   void reportChanges(Translation *t);
+  void ensureDir() const;
 
   QList<Translation *> m_translations;
   Downloader *m_downloader;
