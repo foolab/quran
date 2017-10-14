@@ -70,6 +70,7 @@ QuranListView {
         id: loader
         property int _chapter: chapter
         property int _verse: verse
+        property bool _isFirstChapter: isFirstChapter
         width: parent.width
         sourceComponent: verse == -1 ? chapterDelegate : verseDelegate
     }
@@ -82,6 +83,7 @@ QuranListView {
                 chapter: _chapter
             }
 
+            addTopMargin: !_isFirstChapter
             horizontalAlignment: Text.AlignHCenter
             borderColor: quranTheme.chapterBorder
             backgroundColor: quranTheme.chapterBackground
