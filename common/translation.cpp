@@ -194,7 +194,7 @@ bool Translation::install(QTemporaryFile& file) {
   QFile::remove(data);
 
   if (!file.rename(data)) {
-    qmlInfo(this) << "Failed to rename file" << file.errorString();
+    qmlInfo(this) << "Failed to rename file " << file.errorString();
     file.remove();
     return false;
   }
