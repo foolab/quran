@@ -69,6 +69,9 @@ QVariant QuranViewModel::data(const QModelIndex& index, int role) const {
   case TypeRole:
     return m_info[row].m_type;
 
+  case IsFirstChapterRole:
+    return m_info[row].m_isFirstChapter;
+
   default:
     break;
   }
@@ -91,6 +94,13 @@ void QuranViewModel::populate() {
       }
 
       info << Info(frag.chapter(), x, Verse);
+    }
+  }
+
+  if (!info.isEmpty()) {
+    Info& inf = info[0];
+    if (inf.m_type == Title) {
+      inf.m_isFirstChapter = true;
     }
   }
 
@@ -125,6 +135,7 @@ QHash<int, QByteArray> QuranViewModel::roleNames() const {
   roles[ChapterRole] = "chapter";
   roles[VerseRole] = "verse";
   roles[TypeRole] = "type";
+  roles[IsFirstChapterRole] = "isFirstChapter";
 
   return roles;
 }

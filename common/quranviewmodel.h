@@ -37,6 +37,7 @@ public:
     ChapterRole = Qt::UserRole + 1,
     VerseRole,
     TypeRole,
+    IsFirstChapterRole,
   } Roles;
 
   typedef enum {
@@ -63,8 +64,9 @@ private:
   class Info {
   public:
   Info(int chapter, int verse, QuranViewModel::Type type) :
-    m_chapter(chapter), m_verse(verse), m_type(type) {}
+    m_isFirstChapter(false), m_chapter(chapter), m_verse(verse), m_type(type) {}
 
+    bool m_isFirstChapter;
     int m_chapter;
     int m_verse;
     QuranViewModel::Type m_type;
