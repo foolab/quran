@@ -63,6 +63,7 @@ QuranWindow {
 
         onRefreshed: {
             if (!loadTranslation(settings.defaultTranslation)) {
+                banner.showMessage(qsTr("Failed to load default translation"))
                 // Default translation cannot be loaded. Let's try another:
                 var t = findInstalledTranslation();
                 if (t == '') {
