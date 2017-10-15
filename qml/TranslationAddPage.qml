@@ -94,11 +94,13 @@ QuranPage {
                         // We just removed the loaded translation. Find a replacement
                         translations.loadTranslation('')
                         var t = translations.findInstalledTranslation();
-                        if (t == '') {
-                            return
+                        if (t != '') {
+                            translations.loadAndSetDefault(t)
                         }
+                    }
 
-                        translations.loadAndSetDefault(t)
+                    if (translations.installedCount == 1) {
+                        translations.loadAndSetDefault(translation.uuid)
                     }
                 }
             }
