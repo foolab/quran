@@ -46,10 +46,23 @@ QuranWindow {
         data: _data
         Component.onCompleted: {
             refresh()
-            loadTranslation(settings.defaultTranslation)
         }
 
         onDownloadError: banner.showMessage(qsTr("Failed to download %1").arg(name))
+
+        onRefreshed: {
+            if (!loadTranslation(settings.defaultTranslation)) {
+                // Default translation cannot be loaded. Let's try another:
+                var t = findInstalledTranslation();
+                if (t == '') {
+                    return
+                }
+
+                if (loadTranslation(t)) {
+                    settings.defaultTranslation = t
+                }
+            }
+        }
     }
 
     PhoneFlipControl {

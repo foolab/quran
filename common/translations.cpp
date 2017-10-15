@@ -197,6 +197,15 @@ bool Translations::removeTranslation(const QString& id) {
   return false;
 }
 
+QString Translations::findInstalledTranslation() {
+  auto iter =
+    std::find_if(m_translations.constBegin(),
+		 m_translations.constEnd(),
+		 [](const Translation *t) {return t->status() == Translation::Installed;});
+
+  return iter == m_translations.constEnd() ? QString() : (*iter)->uuid();
+}
+
 bool Translations::loadTranslation(const QString& id) {
   if (id.isEmpty()) {
     TextProvider *p = m_data->secondaryTextProvider();

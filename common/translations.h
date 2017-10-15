@@ -52,6 +52,7 @@ public:
   DataProvider *data() const;
   void setData(DataProvider *data);
 
+  Q_INVOKABLE QString findInstalledTranslation();
   Q_INVOKABLE bool loadTranslation(const QString& id);
   Q_INVOKABLE bool removeTranslation(const QString& id);
 
