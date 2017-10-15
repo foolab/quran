@@ -44,6 +44,17 @@ QuranWindow {
         dir: settings.translationsDir
         downloader: _downloader
         data: _data
+
+        function loadAndSetDefault(t) {
+            if (loadTranslation(t)) {
+                settings.defaultTranslation = t
+                return true
+            } else {
+                banner.showMessage(qsTr("Failed to load translation"))
+                return false
+            }
+        }
+
         Component.onCompleted: {
             refresh()
         }
@@ -58,9 +69,7 @@ QuranWindow {
                     return
                 }
 
-                if (loadTranslation(t)) {
-                    settings.defaultTranslation = t
-                }
+                loadAndSetDefault(t)
             }
         }
     }

@@ -62,11 +62,8 @@ QuranPage {
             id: item
 
             onClicked: {
-                if (translations.loadTranslation(translation.uuid)) {
-                    settings.defaultTranslation = translation.uuid
+                if (translations.loadAndSetDefault(translation.uuid)) {
                     popPage()
-                } else {
-                    banner.showMessage(qsTr("Failed to load translation"))
                 }
             }
 
