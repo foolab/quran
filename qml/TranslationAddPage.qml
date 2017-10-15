@@ -86,6 +86,22 @@ QuranPage {
                 maximumValue: 100
                 value: translation.downloadProgress
             }
+
+            Connections {
+                target: translation
+                onStatusChanged: {
+                    if (translation.status == Translation.None && translation.loaded) {
+                        // We just removed the loaded translation. Find a replacement
+                        translations.loadTranslation('')
+                        var t = translations.findInstalledTranslation();
+                        if (t == '') {
+                            return
+                        }
+
+                        translations.loadAndSetDefault(t)
+                    }
+                }
+            }
         }
 
         header: QuranPageHeader {
