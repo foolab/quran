@@ -43,18 +43,7 @@ Menu {
     }
 
     Instantiator {
-        function reverse(m) {
-            var l = m.length
-            var out = []
-
-            for (var x = 0; x < l; x++) {
-                out[x] = m[l - x - 1]
-            }
-
-            return out
-        }
-
-        model: reverse(actions)
+        model: actions
 
         delegate: MenuItem {
             text: modelData.text
