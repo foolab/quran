@@ -73,7 +73,7 @@ QuranPage {
                     font.pixelSize: textSizeSlider.value
                     color: quranTheme.textColor
 
-                    Component.onCompleted: populate();
+                    Component.onCompleted: populate()
 
                     NumberFormatter {
                         id: formatter
@@ -87,8 +87,8 @@ QuranPage {
 
                     Connections {
                         target: settings
-                        onNumberFormatChanged: previewLabel.populate();
-                        onTextTypeChanged: previewLabel.populate();
+                        onNumberFormatChanged: previewLabel.populate()
+                        onTextTypeChanged: previewLabel.populate()
                     }
                 }
             }
@@ -113,7 +113,7 @@ QuranPage {
             QuranSlider {
                 id: translationTextSizeSlider
                 width: parent.width
-                label: qsTr("Translation text size");
+                label: qsTr("Translation text size")
                 minimumValue: quranTheme.minimumTranslationFontSize
                 maximumValue: quranTheme.maximumTranslationFontSize
                 stepSize: 1
@@ -169,9 +169,9 @@ QuranPage {
                     MenuAction { text: qsTr("Center") }
                 ]
 
-                label: qsTr("Text alignment");
-                currentIndex: settings.centerText ? 1 : 0;
-                onCurrentIndexChanged: settings.centerText = (currentIndex == 1);
+                label: qsTr("Text alignment")
+                currentIndex: settings.centerText ? 1 : 0
+                onCurrentIndexChanged: settings.centerText = (currentIndex == 1)
             }
 
             QuranTextSwitch {
