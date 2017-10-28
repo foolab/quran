@@ -41,7 +41,7 @@ Item {
     property int marginSmall: _height / 100
     property int marginMedium: _height / 80
     property int spacing: _height / 50
-    property int toolButtonSize: _height / 15
+    property int toolButtonSize: _height / 13
 
     property int fontSizeSmall: _height / 35
     property int fontSizeLarge: _height / 25
