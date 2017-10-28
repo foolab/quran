@@ -20,6 +20,7 @@ import QtQuick 2.0
 import QtQuick.Window 2.2
 
 Item {
+    property int _height: Math.max(Screen.width, Screen.height)
     property bool inNightMode
     property string stop: settings.theme + "/" + "stop"
     property color chapterBorder: "#3f48cc"
@@ -37,17 +38,17 @@ Item {
     property color buttonHighlightColor: highlightColor
 
     property int itemSizeDecorative: 2
-    property int marginSmall: Screen.height / 100
-    property int marginMedium: Screen.height / 80
-    property int spacing: Screen.height / 50
-    property int toolButtonSize: Screen.height / 15
+    property int marginSmall: _height / 100
+    property int marginMedium: _height / 80
+    property int spacing: _height / 50
+    property int toolButtonSize: _height / 15
 
-    property int fontSizeSmall: Screen.height / 35
-    property int fontSizeLarge: Screen.height / 25
+    property int fontSizeSmall: _height / 35
+    property int fontSizeLarge: _height / 25
     property color primaryColor: inNightMode ? "white" : "black"
     property string fontFamilyHeading: "Nokia Pure Text"
-    property int itemSizeSmall: Screen.height / 12
-    property int itemSizeLarge: Screen.height / 10
+    property int itemSizeSmall: _height / 12
+    property int itemSizeLarge: _height / 10
     property int characterKeySize: 60
     property color highlightColor: "gray"
 
@@ -61,11 +62,11 @@ Item {
     property color keyboardPreviewTextColor: "white"
     property color keyboardPreviewBackgroundColor: "black"
 
-    property int toolBarHeight: Screen.height / 12
+    property int toolBarHeight: _height / 12
     property bool platformUsableKeyboard: true
 
-    property int minimumFontSize: Screen.height / 70
-    property int maximumFontSize: Screen.height / 10
+    property int minimumFontSize: _height / 70
+    property int maximumFontSize: _height / 10
     property int minimumTranslationFontSize: minimumFontSize
     property int maximumTranslationFontSize: maximumFontSize
 }
