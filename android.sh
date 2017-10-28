@@ -14,16 +14,16 @@ if [ $# -gt 0 ]; then
 	    show_help
 	    ;;
 	installd)
-	    ANT_ARG=installd
+	    ANT_ARG=--install
 	    ;;
 	installr)
-	    ANT_ARG=installr
+	    ANT_ARG="--release --install"
 	    ;;
 	debug)
-	    ANT_ARG=debug
+	    ANT_ARG=
 	    ;;
 	release)
-	    ANT_ARG=release
+	    ANT_ARG=--release
 	    ;;
 	*)
 	    show_help
@@ -59,15 +59,9 @@ cp data/search.db apk/assets/
 cp data/amiri-regular.ttf apk/assets/fonts/
 cp data/amiri-quran.ttf apk/assets/fonts/
 
-$ANDROID_SDK_ROOT/tools//android update project --path apk \
-    --target android-19 --name Quran
-
 $QT_DIR/android_armv7/bin/androiddeployqt \
     --input android/android-libQuran.so-deployment-settings.json \
     --output apk \
     --deployment bundled \
-    --verbose
-
-pushd apk
-ant $ANT_ARG
-popd
+    --verbose \
+    $ANT_ARG
