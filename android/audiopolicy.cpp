@@ -1,4 +1,5 @@
 #include "audiopolicy.h"
+#include "androidsupport.h"
 #include <QDebug>
 
 AudioPolicy::AudioPolicy(QObject *parent) :
@@ -11,11 +12,10 @@ AudioPolicy::~AudioPolicy() {
 }
 
 bool AudioPolicy::acquire() {
-  QMetaObject::invokeMethod(this, "acquired", Qt::QueuedConnection);
-
+  AndroidSupport::acquireAudioFocus(this);
   return true;
 }
 
 void AudioPolicy::release() {
-
+  AndroidSupport::releaseAudioFocus();
 }
