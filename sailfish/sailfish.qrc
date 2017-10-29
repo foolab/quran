@@ -15,7 +15,6 @@
     <file alias="/qml/QuranPageMenu.qml">qml/QuranPageMenu.qml</file>
     <file alias="/qml/QuranButton.qml">qml/QuranButton.qml</file>
     <file alias="/qml/QuranComboBox.qml">qml/QuranComboBox.qml</file>
-    <file alias="/qml/QuranStatusIndicator.qml">qml/QuranStatusIndicator.qml</file>
     <file alias="/qml/DeleteItem.qml">qml/DeleteItem.qml</file>
     <file alias="/qml/DeletePopup.qml">qml/DeletePopup.qml</file>
     <file alias="/qml/QuranTextField.qml">qml/QuranTextField.qml</file>
