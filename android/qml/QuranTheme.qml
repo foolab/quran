@@ -19,25 +19,12 @@
 import QtQuick 2.0
 import QtQuick.Window 2.2
 
-Item {
-    property int _height: Math.max(Screen.width, Screen.height)
-    property bool inNightMode
-    property string stop: settings.theme + "/" + "stop"
-    property color chapterBorder: "#3f48cc"
-    property color chapterBackground: inNightMode ? "gray" : "#bfe8f2"
-    property color translationBorder: "#00a3e8"
-    property color translationBackground: chapterBackground
-    property color backgroundColor: inNightMode ? "black" : "white"
-    property color textColor: inNightMode ? "white" : "black"
-    property color titleColor: textColor
-    property color verseColor: textColor
-    property color recitationHighlightColor: "red"
-    property color translationTextColor: textColor
-    property color buttonNormalColor: inNightMode ? "white" : "black"
+BaseTheme {
+    readonly property int _height: Math.max(Screen.width, Screen.height)
 
+    property color buttonNormalColor: inNightMode ? "white" : "black"
     property color buttonHighlightColor: highlightColor
 
-    property int itemSizeDecorative: 2
     property int marginSmall: _height / 100
     property int marginMedium: _height / 80
     property int spacing: _height / 50
@@ -51,16 +38,6 @@ Item {
     property int itemSizeLarge: _height / 10
     property int characterKeySize: 60
     property color highlightColor: "gray"
-
-    property color statusError: "red"
-    property color statusDownloading: "yellow"
-    property color statusInstalled: "green"
-
-    property string keyboardEnter: "image://theme/icon-m-enter"
-    property string keyboardBackspace: "image://theme/icon-m-backspace"
-
-    property color keyboardPreviewTextColor: "white"
-    property color keyboardPreviewBackgroundColor: "black"
 
     property int toolBarHeight: _height / 12
     property bool platformUsableKeyboard: true
