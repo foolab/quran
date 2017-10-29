@@ -31,7 +31,7 @@ MouseArea {
         if (highlight) {
             return icon + "?" + quranTheme.buttonHighlightColor
         } else {
-            return icon + "?" + quranTheme.buttonNormaltColor
+            return icon + "?" + quranTheme.buttonNormalColor
         }
     }
 
