@@ -29,7 +29,7 @@ QuranBackgroundItem {
         id: titleLabel
         font.family: quranTheme.fontFamilyHeading
         font.bold: true
-        color: quranTheme.primaryColor
+        color: highlighted ? quranTheme.colors.secondaryHighlight : quranTheme.colors.secondary
     }
 
     QuranLabel {
@@ -37,6 +37,6 @@ QuranBackgroundItem {
         anchors.top: titleLabel.bottom
         width: parent.width
         textFormat: Text.RichText
-        color: quranTheme.primaryColor
+        color: highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
     }
 }

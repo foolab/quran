@@ -29,7 +29,7 @@ QuranLabel {
 
     font.family: settings.fontFamily
     font.pixelSize: settings.fontSize
-    color: quranTheme.verseColor
+    color: quranTheme.colors.primary
     horizontalAlignment: settings.centerText ? Text.AlignHCenter : Text.AlignHRight
 
     NumberFormatter {

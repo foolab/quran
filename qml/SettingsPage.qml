@@ -62,7 +62,7 @@ QuranPage {
             Rectangle {
                 width: parent.width
                 height: previewLabel.height
-                color: quranTheme.backgroundColor
+                color: quranTheme.quranColors.background
 
                 QuranLabel {
                     id: previewLabel
@@ -71,7 +71,7 @@ QuranPage {
                     horizontalAlignment: Text.AlignHCenter
                     font.family: settings.fontFamily
                     font.pixelSize: textSizeSlider.value
-                    color: quranTheme.textColor
+                    color: quranTheme.quranColors.text
 
                     Component.onCompleted: populate()
 
@@ -97,8 +97,8 @@ QuranPage {
                 id: textSizeSlider
                 width: parent.width
                 label: qsTr("Text size")
-                minimumValue: quranTheme.minimumFontSize
-                maximumValue: quranTheme.maximumFontSize
+                minimumValue: quranTheme.fonts.minimum
+                maximumValue: quranTheme.fonts.maximum
                 stepSize: 1
                 value: settings.fontSize
             }
@@ -114,8 +114,8 @@ QuranPage {
                 id: translationTextSizeSlider
                 width: parent.width
                 label: qsTr("Translation text size")
-                minimumValue: quranTheme.minimumTranslationFontSize
-                maximumValue: quranTheme.maximumTranslationFontSize
+                minimumValue: quranTheme.fonts.minimum
+                maximumValue: quranTheme.fonts.maximum
                 stepSize: 1
                 value: settings.translationFontSize
             }
@@ -188,12 +188,12 @@ QuranPage {
 
             QuranBackgroundItem {
                 width: parent.width
-                height: quranTheme.itemSizeSmall
+                height: quranTheme.sizes.itemSmall
                 onClicked: deleter.confirm(qsTr("Resetting"), qsTr("Reset settings?"))
                 QuranLabel {
                     anchors {
                         left: parent.left
-                        leftMargin: quranTheme.marginSmall
+                        leftMargin: quranTheme.sizes.marginSmall
                         right: parent.right
                         top: parent.top
                         bottom: parent.bottom
@@ -205,12 +205,12 @@ QuranPage {
 
             QuranBackgroundItem {
                 width: parent.width
-                height: quranTheme.itemSizeSmall
+                height: quranTheme.sizes.itemSmall
                 onClicked: pushAnimated(Qt.resolvedUrl("AboutPage.qml"))
                 QuranLabel {
                     anchors {
                         left: parent.left
-                        leftMargin: quranTheme.marginSmall
+                        leftMargin: quranTheme.sizes.marginSmall
                         right: parent.right
                         top: parent.top
                         bottom: parent.bottom

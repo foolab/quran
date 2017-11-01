@@ -68,12 +68,20 @@ QuranPage {
             }
 
             QuranLabel {
+                function _color() {
+                    if (translation.loaded) {
+                        return highlighted ? quranTheme.colors.secondaryHighlight : quranTheme.colors.secondary
+                    } else {
+                        return highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
+                    }
+                }
+
                 width: parent.width
-                height: item.visible ? quranTheme.itemSizeLarge : 0
+                height: item.visible ? quranTheme.sizes.itemLarge : 0
                 truncateText: true
                 text: translation.name
                 verticalAlignment: Text.AlignVCenter
-                color: translation.loaded ? quranTheme.highlightColor : quranTheme.primaryColor
+                color: _color()
             }
         }
     }

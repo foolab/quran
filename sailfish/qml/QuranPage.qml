@@ -63,11 +63,11 @@ Page {
         id: mouseGrabber
         width: parent.width
         anchors.bottom: parent.bottom
-        height: toolBar.length > 0 ? Theme.itemSizeSmall : 0
+        height: toolBar.length > 0 ? Theme.sizes.itemSmall : 0
 
         Rectangle {
             anchors.fill: parent
-            color: quranTheme.backgroundColor
+            color: quranTheme.colors.background
         }
 
         Row {

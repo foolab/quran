@@ -40,9 +40,9 @@ MouseArea {
 
     BorderLabel {
         id: label
-        borderColor: quranTheme.translationBorder
-        backgroundColor: quranTheme.translationBackground
-        textColor: quranTheme.translationTextColor
+        borderColor: quranTheme.quranColors.translationBorder
+        backgroundColor: quranTheme.quranColors.translationBackground
+        textColor: quranTheme.quranColors.translation
         text: textSupplier.secondaryText
         font.pixelSize: settings.translationFontSize
     }

@@ -35,12 +35,12 @@ Column {
         anchors {
             left: parent.left
             right: parent.right
-            leftMargin: quranTheme.marginSmall
-            rightMargin: quranTheme.marginSmall
+            leftMargin: quranTheme.sizes.marginSmall
+            rightMargin: quranTheme.sizes.marginSmall
         }
 
-        font.pixelSize: quranTheme.fontSizeSmall
-        color: quranTheme.primaryColor
+        font.pixelSize: quranTheme.fonts.small
+        color: quranTheme.colors.primary
     }
 
     Slider {
@@ -49,11 +49,11 @@ Column {
         anchors {
             left: parent.left
             right: parent.right
-            leftMargin: quranTheme.marginSmall
-            rightMargin: quranTheme.marginSmall
+            leftMargin: quranTheme.sizes.marginSmall
+            rightMargin: quranTheme.sizes.marginSmall
         }
 
-        height: quranTheme.itemSizeSmall
+        height: quranTheme.sizes.itemSmall
         stepSize: 1.0
         snapMode: Slider.SnapAlways
     }

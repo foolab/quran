@@ -34,7 +34,7 @@ QuranPage {
 
         Column {
             width: parent.width
-            spacing: quranTheme.spacing
+            spacing: quranTheme.sizes.spacing
 
             QuranPageHeader {
                 width: parent.width
@@ -48,9 +48,9 @@ QuranPage {
 
                 anchors {
                     left: parent.left
-                    leftMargin: quranTheme.marginMedium
+                    leftMargin: quranTheme.sizes.marginMedium
                     right: parent.right
-                    rightMargin: quranTheme.marginMedium
+                    rightMargin: quranTheme.sizes.marginMedium
                 }
 
                 enterKeyText: qsTr("Search")
@@ -66,9 +66,9 @@ QuranPage {
             QuranTextSwitch {
                 anchors {
                     left: parent.left
-                    leftMargin: quranTheme.marginMedium
+                    leftMargin: quranTheme.sizes.marginMedium
                     right: parent.right
-                    rightMargin: quranTheme.marginMedium
+                    rightMargin: quranTheme.sizes.marginMedium
                 }
 
                 text: qsTr("Match whole words only");
@@ -129,7 +129,7 @@ QuranPage {
     Rectangle {
         id: preview
         property alias text: label.text
-        width: quranTheme.itemSizeLarge
+        width: quranTheme.sizes.itemLarge
         height: width
         color: quranTheme.keyboardPreviewBackgroundColor
         visible: !quranTheme.platformUsableKeyboard && text != ""
@@ -137,7 +137,7 @@ QuranPage {
         smooth: true
         border {
             color: quranTheme.keyboardPreviewTextColor
-            width: quranTheme.itemSizeDecorative
+            width: quranTheme.sizes.decorative
         }
 
         anchors {
@@ -149,7 +149,7 @@ QuranPage {
             id: label
             anchors.fill: parent
             color: quranTheme.keyboardPreviewTextColor
-            font.pixelSize: quranTheme.fontSizeLarge
+            font.pixelSize: quranTheme.fonts.large
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }

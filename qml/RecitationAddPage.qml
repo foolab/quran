@@ -30,13 +30,13 @@ QuranPage {
             delegate: QuranLabel {
                 anchors {
                     right: parent.right
-                    rightMargin: quranTheme.marginMedium
+                    rightMargin: quranTheme.sizes.marginMedium
                     left: parent.left
-                    leftMargin: quranTheme.marginMedium
+                    leftMargin: quranTheme.sizes.marginMedium
                 }
 
-                color: quranTheme.highlightColor
-                height: quranTheme.itemSizeSmall
+                color: quranTheme.colors.secondary
+                height: quranTheme.sizes.itemSmall
                 text: section == "online" ? qsTr("Online recitations") : qsTr("Offline recitations")
                 verticalAlignment: Text.AlignVCenter
             }
@@ -58,7 +58,7 @@ QuranPage {
 
             QuranTextSwitch {
                 id: _switch
-                height: quranTheme.itemSizeLarge
+                height: quranTheme.sizes.itemLarge
                 text: qsTr("%1 %2").arg(recitation.name).arg(recitation.quality)
                 checked: recitation.status == Recitation.Installed
                 onClicked: _toggleRecitation()

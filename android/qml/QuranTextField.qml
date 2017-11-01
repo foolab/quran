@@ -26,15 +26,15 @@ TextField {
 
     signal enterKeyClicked
 
-    height: quranTheme.itemSizeSmall
+    height: quranTheme.sizes.itemSmall
     Keys.onReturnPressed: enterKeyClicked()
-    color: quranTheme.primaryColor
-
+    color: quranTheme.colors.primary
+// TODO: find a better way
     Component.onCompleted: {
         // I cannot find a way to change the color of the placeholder text except by this hack
         for (var x = 0; x < children.length; x++) {
             if (children[x].text == control.placeholderText) {
-                children[x].color = Qt.binding(function() { return quranTheme.highlightColor })
+                children[x].color = Qt.binding(function() { return quranTheme.colors.secondary })
             }
         }
     }
@@ -42,8 +42,8 @@ TextField {
     background: Rectangle {
         anchors.fill: parent
         radius: control.height * 0.16
-        border.color: control.activeFocus ? quranTheme.highlightColor : quranTheme.primaryColor
-        color: quranTheme.backgroundColor
+        border.color: control.activeFocus ? quranTheme.colors.secondary : quranTheme.colors.primary
+        color: quranTheme.colors.background
     }
 
 //TODO:

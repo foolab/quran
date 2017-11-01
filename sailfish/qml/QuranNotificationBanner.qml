@@ -26,7 +26,7 @@ Rectangle {
     }
 
     width: parent.width
-    height: Theme.itemSizeSmall
+    height: Theme.sizes.itemSmall
 //    color: Theme.rgba(Theme.highlightBackgroundColor, Theme.highlightBackgroundOpacity)
     color: Theme.highlightBackgroundColor
     opacity: timer.running ? 1.0 : 0.0
@@ -44,7 +44,7 @@ Rectangle {
         width: parent.width
         height: parent.height
         verticalAlignment: Text.AlignVCenter
-        color: Theme.primaryColor
+        color: Theme.colors.primary
         truncateText: true
     }
 

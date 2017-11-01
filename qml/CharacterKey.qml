@@ -30,9 +30,9 @@ QuranBackgroundItem {
     QuranLabel {
         id: label
         anchors.fill: parent
-        font.pixelSize: quranTheme.fontSizeSmall
+        font.pixelSize: quranTheme.fonts.small
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        color: item.highlighted ? quranTheme.highlightColor : quranTheme.primaryColor
+        color: item.highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
      }
 }

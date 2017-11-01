@@ -29,11 +29,11 @@ Switch {
     anchors {
         left: parent.left
         right: parent.right
-        leftMargin: quranTheme.marginSmall
-        rightMargin: quranTheme.marginSmall
+        leftMargin: quranTheme.sizes.marginSmall
+        rightMargin: quranTheme.sizes.marginSmall
     }
 
-    height: quranTheme.itemSizeSmall
+    height: quranTheme.sizes.itemSmall
 
     contentItem: QuranLabel {
         id: label
@@ -41,7 +41,7 @@ Switch {
         rightPadding: control.indicator.width + control.spacing
         text: control.text
         verticalAlignment: Text.AlignVCenter
-        color: quranTheme.primaryColor
+        color: quranTheme.colors.primary
     }
 
     MouseArea {

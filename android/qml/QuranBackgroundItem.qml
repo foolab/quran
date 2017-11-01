@@ -21,8 +21,12 @@ import QtQuick.Controls 2.2
 
 MouseArea {
     id: mouse
+
+    property bool down: pressed && containsMouse
+    property bool highlighted: down
+
     Rectangle {
         anchors.fill: parent
-        color: mouse.pressed ? quranTheme.inNightMode ? "#191919" : "#e5e5e5" : quranTheme.backgroundColor
+        color: highlighted ? quranTheme.colors.backgroundHighlight : quranTheme.colors.background
     }
 }

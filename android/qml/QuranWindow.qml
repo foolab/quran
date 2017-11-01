@@ -50,7 +50,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            color: quranTheme.backgroundColor
+            color: quranTheme.colors.background
         }
 
         ToolButton {
@@ -72,7 +72,7 @@ Item {
         Item {
             id: separator
             anchors.left: backButton.right
-            width: visible ? quranTheme.spacing : 0
+            width: visible ? quranTheme.sizes.spacing : 0
             height: parent.height
             visible: backButton.visible
             Behavior on width {
@@ -88,9 +88,9 @@ Item {
             anchors.left: separator.right
             height: parent.height
             text: stack.currentItem ? stack.currentItem.__pageTitle : ""
-            font.pixelSize: quranTheme.fontSizeLarge
+            font.pixelSize: quranTheme.fonts.large
             verticalAlignment: Text.AlignVCenter
-            color: (backButton.pressed && backButton.containsMouse) || (mouse.pressed && mouse.containsMouse) ? quranTheme.highlightColor : quranTheme.textColor
+            color: (backButton.pressed && backButton.containsMouse) || (mouse.pressed && mouse.containsMouse) ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
             visible: backButton.visible
             opacity: backButton.opacity
 
@@ -127,7 +127,7 @@ Item {
 
         Row {
             id: toolsContainer
-            spacing: quranTheme.spacing
+            spacing: quranTheme.sizes.spacing
             anchors {
                 right: parent.right
                 top: parent.top
@@ -148,7 +148,7 @@ Item {
 
         Rectangle {
             anchors.fill: parent
-            color: quranTheme.backgroundColor
+            color: quranTheme.colors.background
         }
 
         Behavior on height {
@@ -160,7 +160,7 @@ Item {
             height: parent.height
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
-            spacing: quranTheme.spacing
+            spacing: quranTheme.sizes.spacing
             children: pageStack.currentItem ? pageStack.currentItem.toolBar : 0
         }
 

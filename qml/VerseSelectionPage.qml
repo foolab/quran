@@ -35,8 +35,8 @@ QuranPage {
 
         anchors {
             fill: parent
-            leftMargin: quranTheme.marginMedium
-            rightMargin: quranTheme.marginMedium
+            leftMargin: quranTheme.sizes.marginMedium
+            rightMargin: quranTheme.sizes.marginMedium
         }
 
         header: QuranPageHeader {
@@ -50,7 +50,7 @@ QuranPage {
 
             NumberLabel {
                 anchors.fill: parent
-                color: quranTheme.primaryColor
+                color: quranTheme.colors.primary
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 number: index + 1

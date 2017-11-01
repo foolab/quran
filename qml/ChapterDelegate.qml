@@ -27,13 +27,13 @@ QuranLabel {
 
     anchors {
         right: parent.right
-        rightMargin: quranTheme.marginMedium
+        rightMargin: quranTheme.sizes.marginMedium
         left: parent.left
-        leftMargin: quranTheme.marginMedium
+        leftMargin: quranTheme.sizes.marginMedium
     }
 
     horizontalAlignment: Text.AlignRight
     verticalAlignment: Text.AlignVCenter
     text: info.fullName
-    color: quranTheme.highlightColor
+    color: quranTheme.colors.secondary
 }

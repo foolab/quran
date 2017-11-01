@@ -31,20 +31,20 @@ ListDelegate {
     signal playClicked
     signal moreClicked
 
-    contentHeight: quranTheme.itemSizeLarge
+    contentHeight: quranTheme.sizes.itemLarge
 
     Item {
         width: parent.width
-        height: quranTheme.itemSizeLarge
+        height: quranTheme.sizes.itemLarge
 
         NumberLabel {
             id: numberLabel
             number: root.number + 1
-            width: quranTheme.itemSizeSmall
+            width: quranTheme.sizes.itemSmall
             height: width
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
-            color: root.highlight ? quranTheme.highlightColor : quranTheme.primaryColor
+            color: root.highlight ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
 
             anchors {
                 right: parent.right
@@ -55,7 +55,7 @@ ListDelegate {
         QuranLabel {
             id: label
             height: parent.height
-            color: root.highlight ? quranTheme.highlightColor : quranTheme.primaryColor
+            color: root.highlight ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
 
@@ -68,7 +68,7 @@ ListDelegate {
 
         QuranButton {
             id: more
-            width: quranTheme.itemSizeSmall
+            width: quranTheme.sizes.itemSmall
             height: width
             text: "..."
 

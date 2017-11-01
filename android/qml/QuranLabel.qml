@@ -23,8 +23,8 @@ Label {
     property bool truncateText: false
     wrapMode: Text.WordWrap
     renderType: Text.QtRendering
-    font.pixelSize: quranTheme.fontSizeSmall
+    font.pixelSize: quranTheme.fonts.small
 
     elide: truncateText ? Text.ElideRight : Text.ElideNone
-    color: quranTheme.primaryColor
+    color: quranTheme.colors.primary
 }

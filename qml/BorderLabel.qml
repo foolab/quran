@@ -32,19 +32,19 @@ Column {
     anchors {
         left: parent.left
         right: parent.right
-        rightMargin: quranTheme.marginSmall
-        leftMargin: quranTheme.marginSmall
+        rightMargin: quranTheme.sizes.marginSmall
+        leftMargin: quranTheme.sizes.marginSmall
     }
 
     Item {
         id: topSeparator
         width: parent.width
-        height: quranTheme.marginSmall
+        height: quranTheme.sizes.marginSmall
     }
 
     Rectangle {
         width: parent.width
-        height: quranTheme.itemSizeDecorative
+        height: quranTheme.sizes.decorative
         color: column.borderColor
     }
 
@@ -61,7 +61,7 @@ Column {
 
     Rectangle {
         width: parent.width
-        height: quranTheme.itemSizeDecorative
+        height: quranTheme.sizes.decorative
         color: column.borderColor
     }
 }

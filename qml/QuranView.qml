@@ -49,16 +49,16 @@ QuranListView {
         SuraList {
             id: verse
             anchors.left: parent.left
-            anchors.leftMargin: quranTheme.marginSmall
+            anchors.leftMargin: quranTheme.sizes.marginSmall
             suras: info.chapters
         }
 
         QuranLabel {
             id: part
             anchors.right: parent.right
-            anchors.rightMargin: quranTheme.marginSmall
+            anchors.rightMargin: quranTheme.sizes.marginSmall
             text: partInfo.name
-            color: quranTheme.textColor
+            color: quranTheme.quranColors.text
         }
     }
 
@@ -85,9 +85,9 @@ QuranListView {
 
             addTopMargin: !_isFirstChapter
             horizontalAlignment: Text.AlignHCenter
-            borderColor: quranTheme.chapterBorder
-            backgroundColor: quranTheme.chapterBackground
-            textColor: quranTheme.titleColor
+            borderColor: quranTheme.quranColors.chapterBorder
+            backgroundColor: quranTheme.quranColors.chapterBackground
+            textColor: quranTheme.quranColors.chapterTitle
             text:  qsTr("%1%2%3").arg(info.fullName)
                 .arg(info.hasBasmala ? "\n" : "")
                 .arg(info.hasBasmala ? _data.basmala : "")
@@ -107,8 +107,8 @@ QuranListView {
             anchors {
                 left: parent ? parent.left : undefined
                 right: parent ? parent.right : undefined
-                rightMargin: quranTheme.marginSmall
-                leftMargin: quranTheme.marginSmall
+                rightMargin: quranTheme.sizes.marginSmall
+                leftMargin: quranTheme.sizes.marginSmall
             }
 
             TextSupplier {
@@ -121,14 +121,14 @@ QuranListView {
             QuranVerseLabel {
                 id: label
                 width: parent.width
-                color: recitationPosition.chapter == _chapter && recitationPosition.verse == _verse ? quranTheme.recitationHighlightColor : quranTheme.verseColor
+                color: recitationPosition.chapter == _chapter && recitationPosition.verse == _verse ? quranTheme.quranColors.highlight : quranTheme.quranColors.text
                 textSupplier: supplier
                 verse: _verse
             }
 
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: quranTheme.spacing
+                spacing: quranTheme.sizes.spacing
 
                 ToolButton {
                     BookmarkItem {

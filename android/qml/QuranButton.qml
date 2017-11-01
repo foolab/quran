@@ -22,19 +22,19 @@ import QtQuick.Controls 2.2
 
 Button {
     id: control
-    height: quranTheme.itemSizeSmall
+    height: quranTheme.sizes.itemSmall
     background: Rectangle {
         anchors.fill: parent
-        color: control.down ? quranTheme.inNightMode ? "#191919" : "#e5e5e5" : quranTheme.backgroundColor
-        border.width: quranTheme.itemSizeDecorative
-        border.color: control.pressed ? quranTheme.primaryColor : quranTheme.highlightColor
+        color: control.down ? quranTheme.colors.backgroundHighlight : quranTheme.colors.background
+        border.width: quranTheme.sizes.decorative
+        border.color: control.down ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
         radius: border.width * 2
-        implicitWidth: quranTheme.itemSizeLarge * 2
+        implicitWidth: quranTheme.sizes.itemLarge * 2
     }
 
     contentItem: QuranLabel {
         text: control.text
-        color: quranTheme.primaryColor
+        color: control.down ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         renderType: Text.NativeRendering

@@ -32,54 +32,46 @@ Column {
         anchors {
             left: parent.left
             right: parent.right
-            leftMargin: quranTheme.marginSmall
-            rightMargin: quranTheme.marginSmall
+            leftMargin: quranTheme.sizes.marginSmall
+            rightMargin: quranTheme.sizes.marginSmall
         }
 
-        font.pixelSize: quranTheme.fontSizeSmall
-        color: quranTheme.primaryColor
+        font.pixelSize: quranTheme.fonts.small
+        color: quranTheme.colors.primary
     }
 
     ComboBox {
         id: combo
 
         background: Rectangle {
-            function _color() {
-                if (combo.pressed) {
-                    return quranTheme.inNightMode ? "#191919" : "#e5e5e5"
-                } else {
-                    return quranTheme.backgroundColor
-                }
-            }
-
             anchors.fill: parent
-            color: _color()
+            color: combo.pressed ? quranTheme.colors.backgroundHighlight : quranTheme.colors.background
         }
 
         contentItem: QuranLabel {
             text: combo.displayText
-            color: quranTheme.primaryColor
+            color: combo.pressed ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
             verticalAlignment: Text.AlignVCenter
             renderType: Text.NativeRendering
             anchors {
                 top: parent.top
                 bottom: parent.bottom
                 left: parent.left
-                leftMargin: quranTheme.marginMedium
+                leftMargin: quranTheme.sizes.marginMedium
                 right: parent.right
-                rightMargin: quranTheme.marginMedium
+                rightMargin: quranTheme.sizes.marginMedium
             }
         }
 
         anchors {
             left: parent.left
             right: parent.right
-            leftMargin: quranTheme.marginSmall
-            rightMargin: quranTheme.marginSmall
+            leftMargin: quranTheme.sizes.marginSmall
+            rightMargin: quranTheme.sizes.marginSmall
         }
 
         textRole: "text"
         model: actions
-        height: quranTheme.itemSizeSmall
+        height: quranTheme.sizes.itemSmall
     }
 }

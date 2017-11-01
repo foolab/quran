@@ -29,10 +29,10 @@ QuranLabel {
         verticalCenter: parent.verticalCenter
         right: parent.right
         left: parent.left
-        rightMargin: quranTheme.marginMedium
-        leftMargin: quranTheme.marginMedium
+        rightMargin: quranTheme.sizes.marginMedium
+        leftMargin: quranTheme.sizes.marginMedium
     }
 
     visible: parent.count == 0
-    color: quranTheme.primaryColor
+    color: quranTheme.colors.secondary
 }

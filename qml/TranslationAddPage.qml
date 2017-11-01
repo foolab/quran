@@ -30,13 +30,13 @@ QuranPage {
             delegate: QuranLabel {
                 anchors {
                     right: parent.right
-                    rightMargin: quranTheme.marginMedium
+                    rightMargin: quranTheme.sizes.marginMedium
                     left: parent.left
-                    leftMargin: quranTheme.marginMedium
+                    leftMargin: quranTheme.sizes.marginMedium
                 }
 
-                color: quranTheme.highlightColor
-                height: quranTheme.itemSizeSmall
+                color: quranTheme.colors.secondary
+                height: quranTheme.sizes.itemSmall
                 text: section
                 verticalAlignment: Text.AlignVCenter
             }
@@ -67,8 +67,9 @@ QuranPage {
             }
 
             QuranTextSwitch {
+                // TODO: loaded translation should have a different color
                 id: _switch
-                height: quranTheme.itemSizeLarge
+                height: quranTheme.sizes.itemLarge
                 text: translation.name
                 checked: translation.status == Translation.Installed
                 onClicked: _toggleTranslation()

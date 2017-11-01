@@ -32,8 +32,8 @@ QuranPage {
         contentHeight: col.height
 
         anchors {
-            topMargin: quranTheme.marginMedium
-            bottomMargin: quranTheme.marginMedium
+            topMargin: quranTheme.sizes.marginMedium
+            bottomMargin: quranTheme.sizes.marginMedium
         }
 
         Column {
@@ -41,11 +41,11 @@ QuranPage {
             anchors {
                 left: parent.left
                 right: parent.right
-                leftMargin: quranTheme.marginMedium
-                rightMargin: quranTheme.marginMedium
+                leftMargin: quranTheme.sizes.marginMedium
+                rightMargin: quranTheme.sizes.marginMedium
             }
 
-            spacing: quranTheme.spacing
+            spacing: quranTheme.sizes.spacing
             width: parent.width
 
             QuranPageHeader {
@@ -64,20 +64,20 @@ QuranPage {
                 text: qsTr("Holy Quran Version %1").arg(settings.version)
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.family: quranTheme.fontFamilyHeading
-                font.pixelSize: quranTheme.fontSizeLarge
+                font.pixelSize: quranTheme.fonts.large
                 width: parent.width
                 horizontalAlignment: Text.AlignHCenter
-                color: quranTheme.primaryColor
+                color: quranTheme.colors.primary
             }
 
             QuranLabel {
                 text: _about.copyright
-                font.pixelSize: quranTheme.fontSizeSmall
+                font.pixelSize: quranTheme.fonts.small
                 anchors.horizontalCenter: parent.horizontalCenter
                 horizontalAlignment: Text.AlignHCenter
                 width: parent.width
                 textFormat: Text.RichText
-                color: quranTheme.primaryColor
+                color: quranTheme.colors.primary
             }
 
             AboutPageBlock {

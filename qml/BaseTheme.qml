@@ -20,22 +20,52 @@ import QtQuick 2.0
 
 QtObject {
     property bool inNightMode
-    property color chapterBorder: "#3f48cc"
-    property color chapterBackground: inNightMode ? "gray" : "#bfe8f2"
-    property color translationBorder: "#00a3e8"
-    property color translationBackground: chapterBackground
-    property color backgroundColor: inNightMode ? "black" : "white"
-    property color textColor: inNightMode ? "white" : "black"
-    property color titleColor: textColor
-    property color verseColor: textColor
-    property color recitationHighlightColor: "red"
-    property color translationTextColor: textColor
 
-    property color keyboardPreviewTextColor: "white"
-    property color keyboardPreviewBackgroundColor: "black"
+    // Application wide colors
+    readonly property QtObject colors: QtObject {
+        readonly property color primary: inNightMode ? "white" : "black"
+        readonly property color secondary: "gray"
+        readonly property color background: inNightMode ? "black" : "white"
+        readonly property color primaryHighlight: inNightMode ? "lightgray" : "darkgray"
+        readonly property color secondaryHighlight: "gray"
+        readonly property color backgroundHighlight: inNightMode ? "darkgray" : "lightgray"
+    }
 
-    property string keyboardEnter: "image://theme/icon-m-enter"
-    property string keyboardBackspace: "image://theme/icon-m-backspace"
+    // These are used for quran text only:
+    readonly property QtObject quranColors: QtObject {
+        readonly property color text: inNightMode ? "white" : "black"
+        readonly property color translation: text
+        readonly property color background: inNightMode ? "black" : "white"
+        readonly property color chapterTitle: text
+        readonly property color chapterBorder: "#3f48cc"
+        readonly property color chapterBackground: inNightMode ? "gray" : "#bfe8f2"
+        readonly property color translationBorder: "#00a3e8"
+        readonly property color translationBackground: inNightMode ? "gray" : "#bfe8f2"
+        readonly property color highlight: "red"
+    }
 
-    property int itemSizeDecorative: 2
+    readonly property QtObject sizes: QtObject {
+        readonly property int decorative: 2
+        readonly property int marginSmall: 10
+        readonly property int marginMedium: 20
+        readonly property int spacing: 5
+        readonly property int toolButton: 20
+        readonly property int itemSmall: 20
+        readonly property int itemLarge: 30
+    }
+
+    readonly property QtObject fonts: QtObject {
+        readonly property int small: 20
+        readonly property int large: 40
+        readonly property int minimum: 15
+        readonly property int maximum: 60
+        readonly property string heading: "Droid Sans"
+    }
+
+    // TODO: get rid of these
+    readonly property color keyboardPreviewTextColor: "white"
+    readonly property color keyboardPreviewBackgroundColor: "black"
+
+    readonly property string keyboardEnter: "image://theme/icon-m-enter"
+    readonly property string keyboardBackspace: "image://theme/icon-m-backspace"
 }

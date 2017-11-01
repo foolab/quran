@@ -25,7 +25,7 @@ QuranPage {
 
     Rectangle {
         anchors.fill: parent
-        color: quranTheme.backgroundColor
+        color: quranTheme.quranColors.background
     }
 
     QuranListView {
@@ -75,11 +75,11 @@ QuranPage {
             onClicked: pushAnimated(Qt.resolvedUrl("TranslationSelector.qml"))
         },
         NumberLabel {
-            width: quranTheme.toolButtonSize
+            width: quranTheme.sizes.toolButton
             height: parent ? parent.height : width
             number: settings.pageNumber + 1
             onClicked: pushAnimated(Qt.resolvedUrl("IndexPage.qml"))
-            color: highlight ? quranTheme.highlightColor : quranTheme.textColor
+            color: highlight ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
         },
         ToolButton {
             icon: "image://icon/play.png"

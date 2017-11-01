@@ -43,13 +43,13 @@ QuranPage {
             delegate: QuranLabel {
                 anchors {
                     right: parent.right
-                    rightMargin: quranTheme.marginMedium
+                    rightMargin: quranTheme.sizes.marginMedium
                     left: parent.left
-                    leftMargin: quranTheme.marginMedium
+                    leftMargin: quranTheme.sizes.marginMedium
                 }
 
-                color: quranTheme.highlightColor
-                height: quranTheme.itemSizeSmall
+                color: quranTheme.colors.secondary
+                height: quranTheme.sizes.itemSmall
                 text: section == "online" ? qsTr("Online recitations") : qsTr("Offline recitations")
                 verticalAlignment: Text.AlignVCenter
             }
@@ -88,12 +88,20 @@ QuranPage {
             }
 
             QuranLabel {
+                function _color() {
+                    if (recitation.loaded) {
+                        return highlighted ? quranTheme.colors.secondaryHighlight : quranTheme.colors.secondary
+                    } else {
+                        return highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
+                    }
+                }
+
                 width: parent.width
-                height: quranTheme.itemSizeLarge
+                height: quranTheme.sizes.itemLarge
                 truncateText: true
                 text: qsTr("%1 %2").arg(recitation.name).arg(recitation.quality)
                 verticalAlignment: Text.AlignVCenter
-                color: recitation.loaded ? quranTheme.highlightColor : quranTheme.primaryColor
+                color: _color()
             }
         }
     }

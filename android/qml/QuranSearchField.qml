@@ -22,22 +22,22 @@ QuranTextField {
     id: control
     property bool enableSoftwareInputPanel
 
-    height: quranTheme.itemSizeLarge
+    height: quranTheme.sizes.itemLarge
     width: parent.width * 0.75
     placeholderText: qsTr("Search")
-    rightPadding: quranTheme.itemSizeSmall
+    rightPadding: quranTheme.sizes.itemSmall
 
     background: Rectangle {
         anchors.fill: parent
         radius: control.height * 0.16
-        border.color: control.activeFocus ? quranTheme.highlightColor : quranTheme.primaryColor
-        color: quranTheme.backgroundColor
+        border.color: control.activeFocus ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
+        color: quranTheme.colors.background
         Item {
             id: search
             anchors.right: parent.right
             anchors.top: parent.top
             height: parent.height
-            width: quranTheme.itemSizeSmall
+            width: quranTheme.sizes.itemSmall
             ToolButton {
                 width: Math.min(parent.width, parent.height)
                 height: width

@@ -22,12 +22,12 @@ Rectangle {
     anchors {
         horizontalCenter: parent.horizontalCenter
         bottom: parent.bottom
-        bottomMargin: quranTheme.marginMedium * 10
+        bottomMargin: quranTheme.sizes.marginMedium * 10
     }
 
     width: parent.width * 0.75
-    height: quranTheme.itemSizeSmall
-    color: quranTheme.textColor
+    height: quranTheme.sizes.itemSmall
+    color: quranTheme.colors.primary
     opacity: timer.running ? 1.0 : 0.0
     radius: height / 4
     smooth: true
@@ -44,12 +44,12 @@ Rectangle {
         id: label
         anchors {
             fill: parent
-            margins: quranTheme.marginSmall
+            margins: quranTheme.sizes.marginSmall
         }
 
         height: parent.height
         verticalAlignment: Text.AlignVCenter
-        color: quranTheme.backgroundColor
+        color: quranTheme.colors.background
         truncateText: true
         font.bold: true
     }

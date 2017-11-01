@@ -28,7 +28,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: quranTheme.backgroundColor
+        color: quranTheme.colors.background
     }
 
     function combine(page, props1, props2) {

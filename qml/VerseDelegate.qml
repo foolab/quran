@@ -63,7 +63,7 @@ ListDelegate {
             font.pixelSize: settings.fontSize
             text: qsTr("(%1) %2").arg(formatter.formattedNumber).arg(supplier.primaryText)
             horizontalAlignment: Text.AlignRight
-            color: quranTheme.primaryColor
+            color: quranTheme.colors.primary
         }
 
         ToolButton {

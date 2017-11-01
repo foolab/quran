@@ -55,11 +55,21 @@ QuranPage {
             model: tabs
             delegate: QuranBackgroundItem {
                 width: parent.width / tabs.length
-                height: quranTheme.itemSizeSmall
+                height: quranTheme.sizes.itemSmall
                 onClicked: mainView.currentIndex = index
                     QuranLabel {
+                        function _color() {
+                            if (current) {
+                                return highlighted ? quranTheme.colors.secondaryHighlight : quranTheme.colors.secondary
+                            } else {
+                                return highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
+                            }
+
+                        }
+
+                        property bool current: index == mainView.currentIndex
                         anchors.fill: parent
-                        color: index == mainView.currentIndex ? quranTheme.highlightColor : quranTheme.primaryColor
+                        color: _color()
                         text: name
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
@@ -189,19 +199,19 @@ QuranPage {
         Item {
             Column {
                 width: parent.width
-                spacing: quranTheme.spacing
+                spacing: quranTheme.sizes.spacing
                 anchors.centerIn: parent
                 QuranLabel {
                     anchors {
                         left: parent.left
                         right: parent.right
-                        leftMargin: quranTheme.marginMedium
-                        rightMargin: quranTheme.marginMedium
+                        leftMargin: quranTheme.sizes.marginMedium
+                        rightMargin: quranTheme.sizes.marginMedium
                     }
 
                     text: qsTr("Enter a page number between 1 and %1").arg(_data.pageCount)
-                    font.pixelSize: quranTheme.fontSizeLarge
-                    color: quranTheme.primaryColor
+                    font.pixelSize: quranTheme.fonts.large
+                    color: quranTheme.colors.secondary
                 }
 
                 QuranTextField {
@@ -215,7 +225,7 @@ QuranPage {
                     validator: IntValidator { bottom: 1; top: _data.pageCount }
 
                     font {
-                        pixelSize: quranTheme.fontSizeLarge
+                        pixelSize: quranTheme.fonts.large
                         family: quranTheme.fontFamilyHeading
                     }
 
@@ -232,7 +242,7 @@ QuranPage {
 
                 Row {
                     width: parent.width
-                    spacing: quranTheme.spacing
+                    spacing: quranTheme.sizes.spacing
                     ToolButton {
                         id: minus
                         anchors.verticalCenter: parent.verticalCenter

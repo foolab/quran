@@ -29,7 +29,7 @@ Popup {
 
     width: parent.width
     x: parent.x
-    y: parent.height - height - quranTheme.marginMedium
+    y: parent.height - height - quranTheme.sizes.marginMedium
 
     enter: Transition {
         NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 100 }
@@ -42,7 +42,7 @@ Popup {
     contentItem: Column {
         id: column
         width: parent.width
-        spacing: quranTheme.spacing
+        spacing: quranTheme.sizes.spacing
 
         QuranLabel {
             id: label
@@ -50,12 +50,12 @@ Popup {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             text: dialog.title
-            font.pixelSize: quranTheme.fontSizeLarge
+            font.pixelSize: quranTheme.fonts.large
         }
 
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
-            spacing: quranTheme.spacing
+            spacing: quranTheme.sizes.spacing
 
             QuranButton {
                 text: qsTr("No")

@@ -48,12 +48,12 @@ Item {
             }
 
             Row {
-                spacing: quranTheme.spacing
+                spacing: quranTheme.sizes.spacing
                 width: parent.width
                 height: parent.height
 
                 QuranLabel {
-                    width: parent.width - 2 * (quranTheme.spacing + quranTheme.itemSizeSmall)
+                    width: parent.width - 2 * (quranTheme.sizes.spacing + quranTheme.sizes.itemSmall)
                     height: parent.height
                     text: dialog.title
                     verticalAlignment: Text.AlignVCenter
@@ -62,8 +62,8 @@ Item {
 
                 QuranButton {
                     anchors.verticalCenter: parent.verticalCenter
-                    width: quranTheme.itemSizeSmall
-                    height: quranTheme.itemSizeSmall
+                    width: quranTheme.sizes.itemSmall
+                    height: quranTheme.sizes.itemSmall
                     text: qsTr("No")
                     onClicked: {
                         dialog.close()
@@ -73,8 +73,8 @@ Item {
 
                 QuranButton {
                     anchors.verticalCenter: parent.verticalCenter
-                    width: quranTheme.itemSizeSmall
-                    height: quranTheme.itemSizeSmall
+                    width: quranTheme.sizes.itemSmall
+                    height: quranTheme.sizes.itemSmall
                     text: qsTr("Yes")
                     onClicked: {
                         dialog.close()
