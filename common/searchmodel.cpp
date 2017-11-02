@@ -93,7 +93,7 @@ void SearchModel::setQuery(const QString& query, bool matchWholeWords) {
     err = sqlite3_open_v2(DB_PATH, &d_ptr->db, SQLITE_OPEN_READONLY, VFS);
   }
 
-  if (!d_ptr->db) {
+  if (err != SQLITE_OK || !d_ptr->db) {
     setError(tr("Failed to open search database."));
     return;
   }
