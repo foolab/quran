@@ -26,11 +26,12 @@ Rectangle {
     }
 
     width: parent.width * 0.75
-    height: quranTheme.sizes.itemSmall
+    height: label.height + (2 * quranTheme.sizes.marginSmall)
     color: quranTheme.colors.primary
     opacity: timer.running ? 1.0 : 0.0
     radius: height / 4
     smooth: true
+
     Behavior on opacity {
         NumberAnimation { duration: 250 }
     }
@@ -43,14 +44,14 @@ Rectangle {
     QuranLabel {
         id: label
         anchors {
-            fill: parent
+            bottom: parent.bottom
+            right: parent.right
+            left: parent.left
             margins: quranTheme.sizes.marginSmall
         }
 
-        height: parent.height
         verticalAlignment: Text.AlignVCenter
         color: quranTheme.colors.background
-        truncateText: true
         font.bold: true
     }
 
