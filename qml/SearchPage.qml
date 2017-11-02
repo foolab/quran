@@ -110,11 +110,6 @@ QuranPage {
         clip: keyboard.visible
         header: headerDelegate
 
-        QuranViewPlaceholder {
-            text: searchModel.errorString
-            enabled: searchModel.error
-        }
-
         section.property: "chapter"
         section.criteria: ViewSection.FullString
         section.delegate: sectionDelegate
@@ -123,6 +118,11 @@ QuranPage {
 
         model: SearchModel {
             id: searchModel
+            onErrorChanged: {
+                if (searchModel.error) {
+                    banner.showMessage(searchModel.errorString)
+                }
+            }
         }
     }
 
