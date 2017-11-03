@@ -107,16 +107,16 @@ Item {
             ToolButton {
                 anchors.verticalCenter: parent.verticalCenter
                 property MenuAction _action
+                icon: _action.icon
+                onClicked: _action.clicked()
             }
         }
 
         onActionsChanged: {
             if (stack.depth > 1 && actions != null && actions.length > 0) {
                 for (var x = 0; x < actions.length; x++) {
-                    var obj = toolTemplate.createObject(toolsContainer,
-                        {"_action": actions[x],
-                         "icon": actions[x].icon})
-                    obj.clicked.connect(function() { obj._action.clicked() })
+                    toolTemplate.createObject(toolsContainer,
+                        {"_action": actions[x]})
                 }
             } else {
                 for (var x = 0; x < toolsContainer.children.length; x++) {
