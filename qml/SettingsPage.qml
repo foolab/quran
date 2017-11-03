@@ -200,6 +200,7 @@ QuranPage {
                     }
                     text: qsTr("Reset settings")
                     verticalAlignment: Text.AlignVCenter
+                    color: parent.highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
                 }
             }
 
@@ -217,6 +218,7 @@ QuranPage {
                     }
                     text: qsTr("About")
                     verticalAlignment: Text.AlignVCenter
+                    color: parent.highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
                 }
             }
         }
