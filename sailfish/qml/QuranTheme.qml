@@ -40,6 +40,7 @@ BaseTheme {
     }
 
     readonly property QtObject fonts: QtObject {
+        readonly property int tiny: Theme.fontSizeTiny
         readonly property int small: Theme.fontSizeSmall
         readonly property int large: Theme.fontSizeLarge
         readonly property int minimum: Theme.fontSizeTiny

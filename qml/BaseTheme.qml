@@ -55,6 +55,7 @@ QtObject {
     }
 
     readonly property QtObject fonts: QtObject {
+        readonly property int tiny: 10
         readonly property int small: 20
         readonly property int large: 40
         readonly property int minimum: 15

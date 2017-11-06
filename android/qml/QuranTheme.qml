@@ -33,6 +33,7 @@ BaseTheme {
     }
 
     readonly property QtObject fonts: QtObject {
+        readonly property int tiny: _height / 45
         readonly property int small: _height / 35
         readonly property int large: _height / 25
         readonly property int minimum: _height / 70
