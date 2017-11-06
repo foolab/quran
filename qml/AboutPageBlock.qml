@@ -27,7 +27,7 @@ QuranBackgroundItem {
 
     QuranLabel {
         id: titleLabel
-        font.family: quranTheme.fontFamilyHeading
+        font.family: quranTheme.fonts.heading
         font.bold: true
         color: highlighted ? quranTheme.colors.secondaryHighlight : quranTheme.colors.secondary
     }

@@ -63,7 +63,7 @@ QuranPage {
             QuranLabel {
                 text: qsTr("Holy Quran Version %1").arg(settings.version)
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.family: quranTheme.fontFamilyHeading
+                font.family: quranTheme.fonts.heading
                 font.pixelSize: quranTheme.fonts.large
                 width: parent.width
                 horizontalAlignment: Text.AlignHCenter

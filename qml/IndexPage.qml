@@ -226,7 +226,7 @@ QuranPage {
 
                     font {
                         pixelSize: quranTheme.fonts.large
-                        family: quranTheme.fontFamilyHeading
+                        family: quranTheme.fonts.heading
                     }
 
                     onTextChanged: slider.value = parseInt(text)
