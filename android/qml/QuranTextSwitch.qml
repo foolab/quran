@@ -26,13 +26,7 @@ Switch {
     // We want the indicator on the right
     LayoutMirroring.enabled: true
 
-    anchors {
-        left: parent.left
-        right: parent.right
-        leftMargin: quranTheme.sizes.marginSmall
-        rightMargin: quranTheme.sizes.marginSmall
-    }
-
+    width: parent.width
     height: quranTheme.sizes.itemSmall
 
     contentItem: QuranLabel {
