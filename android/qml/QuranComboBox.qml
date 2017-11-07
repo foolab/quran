@@ -20,58 +20,126 @@ import QtQuick 2.2
 import QtQuick.Controls 2.2
 
 Column {
+    id: item
+
     property list<MenuAction> actions
-    property alias label: text.text
-    property alias currentIndex: combo.currentIndex
+    property alias label: title.text
+    property int currentIndex //: combo.currentIndex
 
     width: parent.width
 
     QuranLabel {
-        id: text
-
+        id: title
+        height: quranTheme.sizes.small
         anchors {
-            left: parent.left
             right: parent.right
-            leftMargin: quranTheme.sizes.marginSmall
-            rightMargin: quranTheme.sizes.marginSmall
+            left: parent.left
+            margins: quranTheme.sizes.marginSmall
         }
 
-        font.pixelSize: quranTheme.fonts.small
         color: quranTheme.colors.primary
     }
 
-    ComboBox {
-        id: combo
-
-        background: Rectangle {
-            anchors.fill: parent
-            color: combo.pressed ? quranTheme.colors.backgroundHighlight : quranTheme.colors.background
+    QuranBackgroundItem {
+        width: parent.width
+        height: subtitle.height + (2 * quranTheme.sizes.marginSmall)
+        onClicked: {
+            var dlg = dialog.createObject(stack.currentItem)
+            dlg.open()
         }
 
-        contentItem: QuranLabel {
-            text: combo.displayText
-            color: combo.pressed ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
+        QuranLabel {
+            id: subtitle
+            height: quranTheme.sizes.small
             verticalAlignment: Text.AlignVCenter
-            renderType: Text.NativeRendering
             anchors {
                 top: parent.top
-                bottom: parent.bottom
-                left: parent.left
-                leftMargin: quranTheme.sizes.marginMedium
+                topMargin: quranTheme.sizes.marginSmall
                 right: parent.right
                 rightMargin: quranTheme.sizes.marginMedium
+                left: parent.left
+                leftMargin: quranTheme.sizes.marginMedium
+            }
+
+            text: item.actions[item.currentIndex].text
+            color: parent.highlighted ? quranTheme.colors.secondaryHighlight : quranTheme.colors.secondary
+        }
+    }
+
+    Component {
+        id: dialog
+
+        Popup {
+            id: popup
+            parent: stack.currentItem
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
+            width: parent.width - (2 * quranTheme.sizes.marginMedium)
+            height: Math.min(parent.height - (2 * quranTheme.sizes.marginMedium), item.actions.length * quranTheme.sizes.itemSmall + popupTitle.height + quranTheme.sizes.spacing)
+            modal: true
+            focus: true
+
+            enter: Transition {
+                NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 100 }
+            }
+
+            exit: Transition {
+                NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 100 }
+            }
+
+            contentItem: Column {
+                width: parent.width
+                height: parent.height
+                spacing: quranTheme.sizes.spacing
+                QuranLabel {
+                    id: popupTitle
+                    font.pixelSize: quranTheme.fonts.tiny
+                    color: quranTheme.colors.secondary
+                    anchors {
+                        right: parent.right
+                        left: parent.left
+                        margins: quranTheme.sizes.marginSmall
+                    }
+
+                    text: title.text
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                QuranListView {
+                    id: view
+                    width: parent.width
+                    height: parent.height - quranTheme.sizes.spacing - popupTitle.height
+                    clip: true
+                    model: item.actions
+
+                    delegate: QuranBackgroundItem {
+                        function _color(index) {
+                            if (item.currentIndex == index) {
+                                return highlighted ? quranTheme.colors.secondaryHighlight : quranTheme.colors.secondary
+                            } else {
+                                return highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
+                            }
+                        }
+
+                        width: parent.width
+                        height: quranTheme.sizes.itemSmall
+                        onClicked: {
+                            item.currentIndex = index
+                            popup.close()
+                        }
+
+                        QuranLabel {
+                            anchors {
+                                fill: parent
+                                margins: quranTheme.sizes.marginSmall
+                            }
+                            text: modelData.text
+                            verticalAlignment: Text.AlignVCenter
+                            color: parent._color(index)
+                        }
+                    }
+                }
             }
         }
-
-        anchors {
-            left: parent.left
-            right: parent.right
-            leftMargin: quranTheme.sizes.marginSmall
-            rightMargin: quranTheme.sizes.marginSmall
-        }
-
-        textRole: "text"
-        model: actions
-        height: quranTheme.sizes.itemSmall
     }
 }
