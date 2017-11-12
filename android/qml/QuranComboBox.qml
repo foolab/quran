@@ -74,8 +74,9 @@ Column {
             parent: stack.currentItem
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
-            width: parent.width - (2 * quranTheme.sizes.marginMedium)
-            height: Math.min(parent.height - (2 * quranTheme.sizes.marginMedium), item.actions.length * quranTheme.sizes.itemSmall + popupTitle.height + quranTheme.sizes.spacing)
+            margins: quranTheme.sizes.marginMedium
+            width: parent.width - (2 * margins)
+            height: Math.min(parent.height - (2 * margins), item.actions.length * quranTheme.sizes.itemSmall + popupTitle.height + (2 * margins))
             modal: true
             focus: true
 
@@ -90,7 +91,7 @@ Column {
             contentItem: Column {
                 width: parent.width
                 height: parent.height
-                spacing: quranTheme.sizes.spacing
+
                 QuranLabel {
                     id: popupTitle
                     font.pixelSize: quranTheme.fonts.tiny
@@ -107,8 +108,9 @@ Column {
 
                 QuranListView {
                     id: view
+                    boundsBehavior: Flickable.StopAtBounds
                     width: parent.width
-                    height: parent.height - quranTheme.sizes.spacing - popupTitle.height
+                    height: parent.height - popupTitle.height
                     clip: true
                     model: item.actions
 
