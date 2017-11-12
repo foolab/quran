@@ -24,7 +24,7 @@ Column {
 
     property list<MenuAction> actions
     property alias label: title.text
-    property int currentIndex //: combo.currentIndex
+    property int currentIndex
 
     width: parent.width
 
