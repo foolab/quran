@@ -18,5 +18,6 @@
       <file>clear.png</file>
       <file>plus.png</file>
       <file>minus.png</file>
+      <file>download.png</file>
     </qresource>
 </RCC>

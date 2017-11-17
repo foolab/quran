@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="60"
+   height="60"
+   version="1.1"
+   id="svg21"
+   sodipodi:docname="1488160439.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
+  <metadata
+     id="metadata25">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1024"
+     inkscape:window-height="683"
+     id="namedview23"
+     showgrid="false"
+     inkscape:zoom="7.3289062"
+     inkscape:cx="30.542194"
+     inkscape:cy="30"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg21" />
+  <defs
+     id="defs11">
+    <linearGradient
+       id="a"
+       x1=".5"
+       x2=".5"
+       y2="1">
+      <stop
+         stop-color="#45ff4a"
+         offset="0"
+         id="stop2" />
+      <stop
+         stop-color="#15b419"
+         offset=".3"
+         id="stop4" />
+      <stop
+         stop-color="#15b419"
+         offset=".7"
+         id="stop6" />
+      <stop
+         stop-color="#45ff4a"
+         offset="1"
+         id="stop8" />
+    </linearGradient>
+  </defs>
+  <circle
+     cx="30"
+     cy="30"
+     r="29"
+     id="circle13"
+     stroke-width="2"
+     stroke="#000"
+     fill="url(#a)"
+     style="fill:none" />
+  <path
+     d="M18 25l12 12 12-12H18z"
+     id="path15" />
+  <rect
+     width="10"
+     height="16"
+     x="25"
+     y="12"
+     rx="3"
+     ry="3"
+     id="rect17" />
+  <path
+     fill="none"
+     stroke="#000"
+     stroke-width="2"
+     d="M11 39c0 2.5-.5 7 4 7h30c4.5 0 4-4.5 4-7"
+     id="path19" />
+</svg>
