@@ -22,10 +22,14 @@ import QtQuick.Controls 2.2
 Column {
     id: item
 
-    property list<MenuAction> actions
+    property var model
     property alias label: title.text
     property int currentIndex
 
+    // We cannot use the object we obtain from the model via get() in property bindings
+    // according to ListModel documentation
+    Component.onCompleted: subtitle.text = model.get(currentIndex).text
+    onCurrentIndexChanged: subtitle.text = model.get(currentIndex).text
     width: parent.width
 
     QuranLabel {
@@ -61,7 +65,6 @@ Column {
                 leftMargin: quranTheme.sizes.marginMedium
             }
 
-            text: item.actions[item.currentIndex].text
             color: parent.highlighted ? quranTheme.colors.secondaryHighlight : quranTheme.colors.secondary
         }
     }
@@ -76,7 +79,7 @@ Column {
             y: (parent.height - height) / 2
             margins: quranTheme.sizes.marginMedium
             width: parent.width - (2 * margins)
-            height: Math.min(parent.height - (2 * margins), item.actions.length * quranTheme.sizes.itemSmall + popupTitle.height + (2 * margins))
+            height: Math.min(parent.height - (2 * margins), item.model.count * quranTheme.sizes.itemSmall + popupTitle.height + (2 * margins))
             modal: true
             focus: true
 
@@ -112,9 +115,10 @@ Column {
                     width: parent.width
                     height: parent.height - popupTitle.height
                     clip: true
-                    model: item.actions
+                    model: item.model
 
                     delegate: QuranBackgroundItem {
+                        property string _text: text
                         function _color(index) {
                             if (item.currentIndex == index) {
                                 return highlighted ? quranTheme.colors.secondaryHighlight : quranTheme.colors.secondary
@@ -135,7 +139,7 @@ Column {
                                 fill: parent
                                 margins: quranTheme.sizes.marginSmall
                             }
-                            text: modelData.text
+                            text: _text
                             verticalAlignment: Text.AlignVCenter
                             color: parent._color(index)
                         }

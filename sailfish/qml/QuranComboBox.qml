@@ -20,11 +20,12 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 ComboBox {
-    property list<MenuAction> actions
+    id: root
+    property var model
 
     menu: ContextMenu {
         Repeater {
-            model: actions
+            model: root.model
             MenuItem {
                 text: modelData.text
             }

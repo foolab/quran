@@ -140,11 +140,11 @@ QuranPage {
             }
 
             QuranComboBox {
-                actions: [
-                    MenuAction { text: qsTr("Automatic") },
-                    MenuAction { text: qsTr("Portrait") },
-                    MenuAction { text: qsTr("Landscape") }
-                ]
+                model: ListModel {
+                    ListElement { text: qsTr("Automatic") }
+                    ListElement { text: qsTr("Portrait") }
+                    ListElement { text: qsTr("Landscape") }
+                }
 
                 label: qsTr("Orientation")
                 currentIndex: settings.orientation
@@ -164,10 +164,10 @@ QuranPage {
             }
 
             QuranComboBox {
-                actions: [
-                    MenuAction { text: qsTr("Automatic") },
-                    MenuAction { text: qsTr("Center") }
-                ]
+                model: ListModel {
+                    ListElement { text: qsTr("Automatic") }
+                    ListElement { text: qsTr("Center") }
+                }
 
                 label: qsTr("Text alignment")
                 currentIndex: settings.centerText ? 1 : 0
