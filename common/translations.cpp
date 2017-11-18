@@ -240,28 +240,6 @@ bool Translations::loadTranslation(const QString& id) {
   return true;
 }
 
-#if 0
-QVariant Translations::data(const QModelIndex& index, int role) const {
-  if (index.row() >= 0 && index.row() < m_translations.size()) {
-    QObject *translation = m_translations[index.row()];
-
-    switch (role) {
-    case LanguageRole:
-      return dynamic_cast<Translation *>(translation)->language();
-
-    case TranslationRole:
-      QQmlEngine::setObjectOwnership(translation, QQmlEngine::CppOwnership);
-      return QVariant::fromValue<QObject *>(translation);
-
-    default:
-      break;
-    }
-  }
-
-  return QVariant();
-}
-#endif
-
 bool Translations::isInstalled(Translation *t) {
   QFileInfo index(indexPath(t->uuid()));
   QFileInfo data(dataPath(t->uuid()));
