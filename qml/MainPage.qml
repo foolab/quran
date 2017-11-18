@@ -72,7 +72,7 @@ QuranPage {
         },
         ToolButton {
             icon: "image://icon/translation.png"
-            onClicked: pushAnimated(Qt.resolvedUrl("TranslationSelector.qml"))
+            onClicked: pushAnimated(Qt.resolvedUrl("TranslationsPage.qml"))
         },
         NumberLabel {
             width: quranTheme.sizes.toolButton

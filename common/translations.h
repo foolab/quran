@@ -18,24 +18,19 @@
 #ifndef TRANSLATIONS_H
 #define TRANSLATIONS_H
 
-#include <QAbstractListModel>
+#include <QObject>
 
 class Downloader;
 class DataProvider;
 class Translation;
 
-class Translations : public QAbstractListModel {
+class Translations : public QObject {
   Q_OBJECT
 
   Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
   Q_PROPERTY(QString dir READ dir WRITE setDir NOTIFY dirChanged);
   Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
   Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
-
-  enum {
-    TranslationRole = Qt::UserRole,
-    LanguageRole = Qt::UserRole + 1,
-  };
 
 public:
   Translations(QObject *parent = 0);
@@ -59,8 +54,8 @@ public:
   QString indexPath(const QString& id) const;
   QString dataPath(const QString& id) const;
 
-  int rowCount(const QModelIndex& parent = QModelIndex()) const;
-  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+  int count();
+  Translation *translation(int index);
 
 public slots:
   void refresh();
@@ -72,14 +67,13 @@ signals:
   void dataChanged();
   void refreshed();
   void downloadError(const QString& name);
+  void translationInstalled(Translation *t);
+  void translationRemoved(Translation *t);
 
 private:
-  Translation *lookup(const QString& id, const QList<Translation *>& translations);
+  Translation *lookup(const QString& id);
   void clear();
-  void reportChanges(int idx);
-  QHash<int, QByteArray> roleNames() const;
   bool isInstalled(Translation *t);
-  void reportChanges(Translation *t);
   void ensureDir() const;
 
   QList<Translation *> m_translations;

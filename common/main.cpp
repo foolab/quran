@@ -94,6 +94,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<TextSupplier>("Quran", 1, 0, "TextSupplier");
   qmlRegisterType<MediaPlayer>("Quran", 1, 0, "MediaPlayer");
   qmlRegisterType<InstalledFilterModel>("Quran", 1, 0, "InstalledFilterModel");
+  qmlRegisterType<TranslationsModel>("Quran", 1, 0, "TranslationsModel");
+  qmlRegisterType<VisibilityFilterModel>("Quran", 1, 0, "VisibilityFilterModel");
+  qmlRegisterType<InstalledTranslationsModel>("Quran", 1, 0, "InstalledTranslationsModel");
   qmlRegisterType<DeclarativeChapterInfo>("Quran", 1, 0, "ChapterInfo");
   qmlRegisterType<DeclarativePartInfo>("Quran", 1, 0, "PartInfo");
   qmlRegisterType<DeclarativePageInfo>("Quran", 1, 0, "PageInfo");

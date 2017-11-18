@@ -16,17 +16,69 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.0
+import QtQuick 2.2
 import Quran 1.0
 
 QuranPage {
+    QuranComboBox {
+        id: defaultTranslation
+        label: qsTr("Default translation")
+        model: ListModel { }
+        visible: model.count > 0
+        onCurrentIndexChanged: translations.loadAndSetDefault(model.get(currentIndex).translationObject.uuid)
+
+        Connections {
+            target: settings
+            onDefaultTranslationChanged: {
+                for (var x = 0; x < defaultTranslation.model.count; x++) {
+                    if (defaultTranslation.model.get(x).translationObject.uuid == settings.defaultTranslation) {
+                        defaultTranslation.currentIndex = x
+                        return
+                    }
+                }
+            }
+        }
+
+        Instantiator {
+            model: InstalledTranslationsModel { model: view.model }
+            delegate: QtObject {
+                property var translationObject: translation
+                property string text: translation.name
+            }
+
+            onObjectAdded: {
+                defaultTranslation.model.insert(index, object)
+
+                if (object.translationObject.uuid == settings.defaultTranslation) {
+                    defaultTranslation.currentIndex = index
+                }
+            }
+
+            onObjectRemoved: defaultTranslation.model.remove(index, 1)
+        }
+    }
+
+    TranslationsModel {
+        id: translationsModel
+        source: translations
+    }
+
     QuranListView {
         id: view
-        anchors.fill: parent
-        model: translations
+        clip: true
+        anchors {
+            top: defaultTranslation.visible ? defaultTranslation.bottom : parent.top
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
+
+        model: VisibilityFilterModel {
+            model: translationsModel
+        }
 
         section {
-            property: "language"
+            property: "section"
             delegate: QuranLabel {
                 anchors {
                     right: parent.right
@@ -66,14 +118,25 @@ QuranPage {
                 }
             }
 
-            QuranTextSwitch {
-                // TODO: loaded translation should have a different color
-                id: _switch
+            Row {
+                width: parent.width
                 height: quranTheme.sizes.itemLarge
-                text: translation.name
-                checked: translation.status == Translation.Installed
-                onClicked: _toggleTranslation()
-                automaticCheck: false
+                spacing: quranTheme.sizes.spacing
+
+                QuranLabel {
+                    height: parent.height
+                    width: parent.width - button.width - quranTheme.sizes.spacing
+                    text: translation.name
+                    verticalAlignment: Text.AlignVCenter
+                    color: quranTheme.colors.primary
+                    truncateText: true
+                }
+
+                ToolButton {
+                    id: button
+                    icon: translation.status == Translation.Installed ? "image://icon/clear.png" : "image://icon/download.png"
+                    onClicked: _toggleTranslation()
+                }
             }
 
             QuranProgressBar {
@@ -100,7 +163,7 @@ QuranPage {
                         }
                     }
 
-                    if (translations.installedCount == 1) {
+                    if (translation.status == Translation.Installed && translations.installedCount == 1) {
                         translations.loadAndSetDefault(translation.uuid)
                     }
                 }

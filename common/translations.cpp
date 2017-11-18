@@ -32,7 +32,7 @@
 // TODO: limit the number of simultaneously downloaded translations.
 
 Translations::Translations(QObject *parent) :
-  QAbstractListModel(parent),
+  QObject(parent),
   m_downloader(0),
   m_data(0) {
 
@@ -48,18 +48,8 @@ void Translations::clear() {
 
   loadTranslation(QString());
 
-  bool emitSignal = !m_translations.isEmpty();
-
-  if (emitSignal) {
-    beginRemoveRows(QModelIndex(), 0, m_translations.size() - 1);
-  }
-
   qDeleteAll(m_translations);
   m_translations.clear();
-
-  if (emitSignal) {
-    endRemoveRows();
-  }
 
   emit installedCountChanged();
 }
@@ -100,8 +90,6 @@ void Translations::setData(DataProvider *data) {
 void Translations::refresh() {
   clear();
 
-  QList<Translation *> translations;
-
   QSettings s(":/data/translations.ini", QSettings::IniFormat);
   s.setIniCodec("UTF-8");
 
@@ -122,27 +110,24 @@ void Translations::refresh() {
       t->setStatus(Translation::Installed);
     }
 
-    translations << t;
+    m_translations << t;
 
     s.endGroup();
 
     // We do the signal connection at the end.
     // If we do it before checking installed ones then statusChanged() will be emitted
-    // if we set any to installed. This will trigger a call to reportChanges()
-    // Which will report an ugly "Unknown translation" because m_translations is empty.
+    // if we set any to installed. This will emit installedCountChanged()
+    // We just emit the signal at the end as it's slightly more efficient
     QObject::connect(t, &Translation::statusChanged,
 		     [t, this]() {
 		       if (t->status() == Translation::Installed) {
-			 reportChanges(t);
+			 emit installedCountChanged();
+			 emit translationInstalled(t);
 		       } else if (t->status() == Translation::Error) {
 			 emit downloadError(t->name());
 		       }
 		     });
   }
-
-  beginInsertRows(QModelIndex(), 0, translations.size() - 1);
-  m_translations = translations;
-  endInsertRows();
 
   emit installedCountChanged();
   emit refreshed();
@@ -154,12 +139,12 @@ int Translations::installedCount() const {
 		[](const Translation *t) {return t->status() == Translation::Installed;});
 }
 
-Translation *Translations::lookup(const QString& id, const QList<Translation *>& translations) {
-  auto iter = std::find_if(translations.constBegin(),
-			   translations.constEnd(),
+Translation *Translations::lookup(const QString& id) {
+  auto iter = std::find_if(m_translations.constBegin(),
+			   m_translations.constEnd(),
 			   [&id](const Translation *t) {return t->uuid() == id;});
 
-  return iter == translations.constEnd() ? nullptr : (*iter);
+  return iter == m_translations.constEnd() ? nullptr : (*iter);
 }
 
 QString Translations::indexPath(const QString& id) const {
@@ -177,7 +162,7 @@ QString Translations::dataPath(const QString& id) const {
 }
 
 bool Translations::removeTranslation(const QString& id) {
-  Translation *t = lookup(id, m_translations);
+  Translation *t = lookup(id);
   if (!t) {
     qmlInfo(this) << "Unknown translation " << id;
     return false;
@@ -190,7 +175,8 @@ bool Translations::removeTranslation(const QString& id) {
 
   if (QFile(index).remove() && QFile(data).remove()) {
     t->setStatus(Translation::None);
-    reportChanges(t);
+    emit installedCountChanged();
+    emit translationRemoved(t);
     return true;
   }
 
@@ -210,14 +196,14 @@ bool Translations::loadTranslation(const QString& id) {
   if (id.isEmpty()) {
     TextProvider *p = m_data->secondaryTextProvider();
     if (p) {
-      lookup(p->uuid(), m_translations)->setLoaded(false);
+      lookup(p->uuid())->setLoaded(false);
     }
 
     m_data->setSecondaryText(0);
     return true;
   }
 
-  Translation *t = lookup(id, m_translations);
+  Translation *t = lookup(id);
   if (!t) {
     qmlInfo(this) << "Unknown translation " << id;
     return false;
@@ -242,7 +228,7 @@ bool Translations::loadTranslation(const QString& id) {
 
   TextProvider *old = m_data->secondaryTextProvider();
   if (old) {
-    Translation *ot = lookup(old->uuid(), m_translations);
+    Translation *ot = lookup(old->uuid());
     if (ot) {
       ot->setLoaded(false);
     }
@@ -255,14 +241,7 @@ bool Translations::loadTranslation(const QString& id) {
   return true;
 }
 
-int Translations::rowCount(const QModelIndex& parent) const {
-  if (!parent.isValid()) {
-    return m_translations.size();
-  }
-
-  return 0;
-}
-
+#if 0
 QVariant Translations::data(const QModelIndex& index, int role) const {
   if (index.row() >= 0 && index.row() < m_translations.size()) {
     QObject *translation = m_translations[index.row()];
@@ -282,37 +261,13 @@ QVariant Translations::data(const QModelIndex& index, int role) const {
 
   return QVariant();
 }
-
-void Translations::reportChanges(int idx) {
-  emit QAbstractItemModel::dataChanged(index(idx, 0), index(idx, 0));
-  emit installedCountChanged();
-}
-
-QHash<int, QByteArray> Translations::roleNames() const {
-  QHash<int, QByteArray> roles;
-  roles[TranslationRole] = "translation";
-  roles[LanguageRole] = "language";
-
-  return roles;
-}
+#endif
 
 bool Translations::isInstalled(Translation *t) {
   QFileInfo index(indexPath(t->uuid()));
   QFileInfo data(dataPath(t->uuid()));
 
   return index.size() > 0 && index.isReadable() && data.size() > 0 && data.isReadable();
-}
-
-void Translations::reportChanges(Translation *t) {
-  int idx = m_translations.indexOf(t);
-
-  if (idx != -1) {
-    reportChanges(idx);
-  } else {
-    // I doubt this could ever happen
-    qmlInfo(this) << "Unknown translation installed";
-    emit installedCountChanged();
-  }
 }
 
 void Translations::ensureDir() const {
@@ -323,4 +278,12 @@ void Translations::ensureDir() const {
       qWarning() << "Failed to create dir" << m_dir;
     }
   }
+}
+
+Translation *Translations::translation(int index) {
+  return m_translations[index];
+}
+
+int Translations::count() {
+  return m_translations.size();
 }

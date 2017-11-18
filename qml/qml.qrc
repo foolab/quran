@@ -21,8 +21,7 @@
     <file alias="qml/SearchPage.qml">SearchPage.qml</file>
     <file alias="qml/SettingsPage.qml">SettingsPage.qml</file>
     <file alias="qml/SuraList.qml">SuraList.qml</file>
-    <file alias="qml/TranslationAddPage.qml">TranslationAddPage.qml</file>
-    <file alias="qml/TranslationSelector.qml">TranslationSelector.qml</file>
+    <file alias="qml/TranslationsPage.qml">TranslationsPage.qml</file>
     <file alias="qml/MenuAction.qml">MenuAction.qml</file>
     <file alias="qml/VerseDelegate.qml">VerseDelegate.qml</file>
     <file alias="qml/ChapterDelegate.qml">ChapterDelegate.qml</file>

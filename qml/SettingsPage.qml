@@ -39,8 +39,8 @@ QuranPage {
             },
             MenuAction {
                 text: qsTr("Manage translations")
-                icon: "image://icon/translation-settings.png"
-                onClicked: pushAnimated(Qt.resolvedUrl("TranslationAddPage.qml"))
+                icon: "image://icon/translation.png"
+                onClicked: pushAnimated(Qt.resolvedUrl("TranslationsPage.qml"))
             }
         ]
     }
