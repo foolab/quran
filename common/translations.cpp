@@ -43,7 +43,7 @@ Translations::~Translations() {
 }
 
 void Translations::clear() {
-  std::for_each(m_translations.constBegin(), m_translations.constEnd(),
+  std::for_each(m_translations.begin(), m_translations.end(),
 		[](Translation *t) {t->stopDownload();});
 
   loadTranslation(QString());
@@ -110,7 +110,7 @@ void Translations::refresh() {
       t->setStatus(Translation::Installed);
     }
 
-    m_translations << t;
+    m_translations.push_back(t);
 
     s.endGroup();
 
@@ -129,22 +129,22 @@ void Translations::refresh() {
 		     });
   }
 
+  std::sort(m_translations.begin(), m_translations.end(),
+	    [] (const Translation *a, const Translation *b) { return a->language() < b->language(); });
   emit installedCountChanged();
   emit refreshed();
 }
 
 int Translations::installedCount() const {
-  return std::count_if(m_translations.constBegin(),
-		m_translations.constEnd(),
-		[](const Translation *t) {return t->status() == Translation::Installed;});
+  return std::count_if(m_translations.begin(), m_translations.end(),
+		       [](const Translation *t) {return t->status() == Translation::Installed;});
 }
 
 Translation *Translations::lookup(const QString& id) {
-  auto iter = std::find_if(m_translations.constBegin(),
-			   m_translations.constEnd(),
+  auto iter = std::find_if(m_translations.begin(), m_translations.end(),
 			   [&id](const Translation *t) {return t->uuid() == id;});
 
-  return iter == m_translations.constEnd() ? nullptr : (*iter);
+  return iter == m_translations.end() ? nullptr : (*iter);
 }
 
 QString Translations::indexPath(const QString& id) const {
@@ -185,11 +185,10 @@ bool Translations::removeTranslation(const QString& id) {
 
 QString Translations::findInstalledTranslation() {
   auto iter =
-    std::find_if(m_translations.constBegin(),
-		 m_translations.constEnd(),
+    std::find_if(m_translations.begin(), m_translations.end(),
 		 [](const Translation *t) {return t->status() == Translation::Installed;});
 
-  return iter == m_translations.constEnd() ? QString() : (*iter)->uuid();
+  return iter == m_translations.end() ? QString() : (*iter)->uuid();
 }
 
 bool Translations::loadTranslation(const QString& id) {

@@ -19,6 +19,7 @@
 #define TRANSLATIONS_H
 
 #include <QObject>
+#include <deque>
 
 class Downloader;
 class DataProvider;
@@ -76,7 +77,7 @@ private:
   bool isInstalled(Translation *t);
   void ensureDir() const;
 
-  QList<Translation *> m_translations;
+  std::deque<Translation *> m_translations;
   Downloader *m_downloader;
 
   QString m_dir;
