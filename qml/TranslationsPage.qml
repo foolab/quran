@@ -20,44 +20,6 @@ import QtQuick 2.2
 import Quran 1.0
 
 QuranPage {
-    QuranComboBox {
-        id: defaultTranslation
-        label: qsTr("Default translation")
-        model: ListModel { }
-        visible: model.count > 0
-        onCurrentIndexChanged: translations.loadAndSetDefault(model.get(currentIndex).translationObject.uuid)
-
-        Connections {
-            target: settings
-            onDefaultTranslationChanged: {
-                for (var x = 0; x < defaultTranslation.model.count; x++) {
-                    if (defaultTranslation.model.get(x).translationObject.uuid == settings.defaultTranslation) {
-                        defaultTranslation.currentIndex = x
-                        return
-                    }
-                }
-            }
-        }
-
-        Instantiator {
-            model: InstalledTranslationsModel { model: view.model }
-            delegate: QtObject {
-                property var translationObject: translation
-                property string text: translation.name
-            }
-
-            onObjectAdded: {
-                defaultTranslation.model.insert(index, object)
-
-                if (object.translationObject.uuid == settings.defaultTranslation) {
-                    defaultTranslation.currentIndex = index
-                }
-            }
-
-            onObjectRemoved: defaultTranslation.model.remove(index, 1)
-        }
-    }
-
     TranslationsModel {
         id: translationsModel
         source: translations
@@ -65,13 +27,8 @@ QuranPage {
 
     QuranListView {
         id: view
-        clip: true
-        anchors {
-            top: defaultTranslation.visible ? defaultTranslation.bottom : parent.top
-            bottom: parent.bottom
-            left: parent.left
-            right: parent.right
-        }
+
+        anchors.fill: parent
 
         model: VisibilityFilterModel {
             model: translationsModel
@@ -125,7 +82,7 @@ QuranPage {
 
                 QuranLabel {
                     height: parent.height
-                    width: parent.width - button.width - quranTheme.sizes.spacing
+                    width: button.visible ? parent.width - button.width - quranTheme.sizes.spacing : parent.width
                     text: translation.name
                     verticalAlignment: Text.AlignVCenter
                     color: quranTheme.colors.primary
@@ -134,7 +91,46 @@ QuranPage {
 
                 ToolButton {
                     id: button
-                    icon: translation.status == Translation.Installed ? "image://icon/clear.png" : "image://icon/download.png"
+                    visible: translation.status != Translation.Installed
+                    icon: "image://icon/download.png"
+                    onClicked: _toggleTranslation()
+                }
+            }
+
+            Item {
+                width: parent.width
+                height: quranTheme.sizes.itemLarge
+                visible: translation.status == Translation.Installed
+
+                QuranLabel {
+                    height: parent.height
+                    width: parent.width - defaultButton.width - removeButton.width
+                    text: translation.language
+                    verticalAlignment: Text.AlignVCenter
+                    color: quranTheme.colors.primary
+                    truncateText: true
+                    anchors.left: parent.left
+                }
+
+                QuranButton {
+                    id: defaultButton
+                    visible: settings.defaultTranslation != translation.uuid
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        horizontalCenter: parent.horizontalCenter
+                    }
+                    text: qsTr("Default")
+                    onClicked: translations.loadAndSetDefault(translation.uuid)
+                }
+
+                ToolButton {
+                    id: removeButton
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        right: parent.right
+                    }
+
+                    icon: "image://icon/clear.png"
                     onClicked: _toggleTranslation()
                 }
             }

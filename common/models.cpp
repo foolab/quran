@@ -50,35 +50,6 @@ bool InstalledFilterModel::filterAcceptsRow(int source_row,
   return object->property(m_name.toUtf8()).toInt() == m_value;
 }
 
-InstalledModel::InstalledModel(QObject *parent) :
-  QSortFilterProxyModel(parent) {
-
-  setFilterKeyColumn(0);
-  setDynamicSortFilter(true);
-}
-
-InstalledModel::~InstalledModel() {
-
-}
-
-QAbstractItemModel *InstalledModel::model() {
-  return sourceModel();
-}
-
-void InstalledModel::setModel(QAbstractItemModel *model) {
-  if (sourceModel() != model) {
-    setSourceModel(model);
-    emit modelChanged();
-  }
-}
-
-bool InstalledModel::filterAcceptsRow(int source_row,
-				      const QModelIndex& source_parent) const {
-  return filterAcceptsRow(sourceModel(),
-			  sourceModel()->index(source_row, 0, source_parent),
-			  TranslationsModel::TranslationRole);
-}
-
 VisibilityFilterModel::VisibilityFilterModel(QObject *parent) :
   QSortFilterProxyModel(parent) {
 
