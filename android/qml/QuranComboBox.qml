@@ -25,6 +25,7 @@ Column {
     property var model
     property alias label: title.text
     property int currentIndex
+    property var textRole: function(model) { return model.text }
 
     // We cannot use the object we obtain from the model via get() in property bindings
     // according to ListModel documentation
@@ -118,7 +119,6 @@ Column {
                     model: item.model
 
                     delegate: QuranBackgroundItem {
-                        property string _text: text
                         function _color(index) {
                             if (item.currentIndex == index) {
                                 return highlighted ? quranTheme.colors.secondaryHighlight : quranTheme.colors.secondary
@@ -139,7 +139,7 @@ Column {
                                 fill: parent
                                 margins: quranTheme.sizes.marginSmall
                             }
-                            text: _text
+                            text: item.textRole(model)
                             verticalAlignment: Text.AlignVCenter
                             color: parent._color(index)
                         }
