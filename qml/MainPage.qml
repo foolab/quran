@@ -58,8 +58,7 @@ QuranPage {
                 view: mainView
                 actions: [
                     MenuAction { text: qsTr("Settings"); onClicked: { pushAnimated(Qt.resolvedUrl("SettingsPage.qml")) } },
-                    MenuAction { text: qsTr("Search"); onClicked: { pushAnimated(Qt.resolvedUrl("SearchPage.qml")) } },
-                    MenuAction { text: qsTr("Favorites"); onClicked: pushAnimated(Qt.resolvedUrl("FavoritesPage.qml")) }
+                    MenuAction { text: qsTr("Search"); onClicked: { pushAnimated(Qt.resolvedUrl("SearchPage.qml")) } }
                 ]
             }
         }
@@ -71,8 +70,8 @@ QuranPage {
             onClicked: pushAnimated(Qt.resolvedUrl("RecitationSelector.qml"))
         },
         ToolButton {
-            icon: "image://icon/translation.png"
-            onClicked: pushAnimated(Qt.resolvedUrl("TranslationsPage.qml"))
+            icon: "image://icon/favorites.png"
+            onClicked: pushAnimated(Qt.resolvedUrl("FavoritesPage.qml"))
         },
         NumberLabel {
             width: quranTheme.sizes.toolButton
