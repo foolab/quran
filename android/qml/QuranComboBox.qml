@@ -132,6 +132,7 @@ Column {
                         onClicked: {
                             item.currentIndex = index
                             popup.close()
+                            popup.destroy(200)
                         }
 
                         QuranLabel {
