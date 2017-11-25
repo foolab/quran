@@ -18,22 +18,18 @@
 #ifndef RECITATIONS_H
 #define RECITATIONS_H
 
-#include <QAbstractListModel>
+#include <QObject>
+#include <deque>
 
 class Recitation;
 class MediaPlayer;
 
-class Recitations : public QAbstractListModel {
+class Recitations : public QObject {
   Q_OBJECT
 
   Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
   Q_PROPERTY(QString dir READ dir WRITE setDir NOTIFY dirChanged);
   Q_PROPERTY(MediaPlayer *player READ player WRITE setPlayer NOTIFY playerChanged);
-
-  enum {
-    RecitationRole = Qt::UserRole,
-    OnlineRole = Qt::UserRole + 1,
-  };
 
 public:
   Recitations(QObject *parent = 0);
@@ -49,8 +45,8 @@ public:
 
   Q_INVOKABLE bool loadRecitation(const QString& id);
 
-  int rowCount(const QModelIndex& parent = QModelIndex()) const;
-  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+  int count();
+  Recitation *recitation(int index);
 
 public slots:
   void refresh();
@@ -60,19 +56,17 @@ signals:
   void dirChanged();
   void playerChanged();
   void refreshed();
-
-private slots:
-  void reportChanges();
+  void recitationEnabled(Recitation *r);
+  void recitationDisabled(Recitation *r);
 
 private:
   void clear();
-  static Recitation *lookup(const QString& id, const QList<Recitation *>& recitations);
-  QHash<int, QByteArray> roleNames() const;
+  Recitation *lookup(const QString& id);
 
   QString m_dir;
   MediaPlayer *m_player;
 
-  QList<Recitation *> m_recitations;
+  std::deque<Recitation *> m_recitations;
 };
 
 #endif /* RECITATIONS_H */

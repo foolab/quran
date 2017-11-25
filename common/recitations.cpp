@@ -25,7 +25,7 @@
 #include <algorithm>
 
 Recitations::Recitations(QObject *parent)
-  : QAbstractListModel(parent),
+  : QObject(parent),
     m_player(0) {
 
 }
@@ -38,17 +38,8 @@ void Recitations::clear() {
   // unload recitation
   loadRecitation(QString());
 
-  bool emitSignal = !m_recitations.isEmpty();
-  if (emitSignal) {
-    beginRemoveRows(QModelIndex(), 0, m_recitations.size() - 1);
-  }
-
   qDeleteAll(m_recitations);
   m_recitations.clear();
-
-  if (emitSignal) {
-    endRemoveRows();
-  }
 
   emit installedCountChanged();
 }
@@ -78,8 +69,6 @@ void Recitations::setPlayer(MediaPlayer *player) {
 void Recitations::refresh() {
   clear();
 
-  QList<Recitation *> recitations;
-
   QSettings s(":/data/recitations.ini", QSettings::IniFormat);
   s.setIniCodec("UTF-8");
 
@@ -97,7 +86,7 @@ void Recitations::refresh() {
     info->m_url = s.value("audioUrl").toString();
     info->m_status = Recitation::None;
 
-    recitations << new Recitation(info, this);
+    m_recitations.push_back(new Recitation(info, this));
 
     s.endGroup();
   }
@@ -122,18 +111,20 @@ void Recitations::refresh() {
 
     // If it's an online recitation and we know about it then update the existing
     if (info->m_type == Recitation::Online) {
-      Recitation *r = lookup(info->m_uuid, recitations);
+      Recitation *r = lookup(info->m_uuid);
       if (!r) {
 	// That is strange but we will just load it.
-	recitations << new Recitation(info, this);
-	recitations.last()->setStatus(Recitation::Installed);
+	Recitation *r2 = new Recitation(info, this);
+	r2->setStatus(Recitation::Installed);
+	m_recitations.push_back(r2);
       } else {
 	r->setStatus(info->m_status);
 	delete info;
       }
     } else {
-      recitations << new Recitation(info, this);
-      recitations.last()->setStatus(Recitation::Installed);
+      Recitation *r = new Recitation(info, this);
+      r->setStatus(Recitation::Installed);
+      m_recitations.push_back(r);
     }
   }
 
@@ -151,18 +142,27 @@ void Recitations::refresh() {
     }
 
     info->m_uuid = id;
-    recitations << new Recitation(info, this);
-    recitations.last()->setStatus(Recitation::Installed);
+    Recitation *r = new Recitation(info, this);
+    r->setStatus(Recitation::Installed);
+    m_recitations.push_back(r);
   }
 
-  for (Recitation *r : recitations) {
-    QObject::connect(r, SIGNAL(enabled()), this, SLOT(reportChanges()));
-    QObject::connect(r, SIGNAL(disabled()), this, SLOT(reportChanges()));
+  for (Recitation *r : m_recitations) {
+    QObject::connect(r, &Recitation::enabled,
+		     [r, this] {
+		       emit installedCountChanged();
+		       emit recitationEnabled(r);
+		     });
+
+    QObject::connect(r, &Recitation::disabled,
+		     [r, this] {
+		       emit installedCountChanged();
+		       emit recitationDisabled(r);
+		     });
   }
 
-  beginInsertRows(QModelIndex(), 0, recitations.size() - 1);
-  m_recitations = recitations;
-  endInsertRows();
+  std::sort(m_recitations.begin(), m_recitations.end(),
+	    [] (const Recitation *a, const Recitation *b) { return a->name() < b->name(); });
 
   emit installedCountChanged();
   emit refreshed();
@@ -180,7 +180,7 @@ bool Recitations::loadRecitation(const QString& id) {
     return true;
   }
 
-  Recitation *r = lookup(id, m_recitations);
+  Recitation *r = lookup(id);
 
   if (!r) {
     qmlInfo(this) << "Unknown recitation " << id;
@@ -202,65 +202,23 @@ bool Recitations::loadRecitation(const QString& id) {
   return false;
 }
 
-Recitation *Recitations::lookup(const QString& id, const QList<Recitation *>& recitations) {
-  auto iter = std::find_if(recitations.constBegin(), recitations.constEnd(),
+Recitation *Recitations::lookup(const QString& id) {
+  auto iter = std::find_if(m_recitations.begin(), m_recitations.end(),
 			   [&id](const Recitation *r) {return r->uuid() == id;});
 
-  return iter == recitations.constEnd() ? nullptr : (*iter);
+  return iter == m_recitations.end() ? nullptr : (*iter);
 }
 
 int Recitations::installedCount() const {
-  return std::count_if(m_recitations.constBegin(),
-		m_recitations.constEnd(),
-		[](const Recitation *r) {return r->status() == Recitation::Installed;});
+  return std::count_if(m_recitations.begin(),
+		       m_recitations.end(),
+		       [](const Recitation *r) {return r->status() == Recitation::Installed;});
 }
 
-int Recitations::rowCount(const QModelIndex& parent) const {
-  if (!parent.isValid()) {
-    return m_recitations.size();
-  }
-
-  return 0;
+int Recitations::count() {
+  return m_recitations.size();
 }
 
-QVariant Recitations::data(const QModelIndex& index, int role) const {
-  if (index.row() >= 0 && index.row() < m_recitations.size()) {
-    QObject *recitation = m_recitations[index.row()];
-
-    switch (role) {
-    case OnlineRole:
-      return dynamic_cast<Recitation *>(recitation)->type() == Recitation::Online ? "online" : "offline";
-
-    case RecitationRole:
-      QQmlEngine::setObjectOwnership(recitation, QQmlEngine::CppOwnership);
-      return QVariant::fromValue<QObject *>(recitation);
-
-    default:
-      break;
-    }
-  }
-
-  return QVariant();
-}
-
-void Recitations::reportChanges() {
-  if (Recitation *r = dynamic_cast<Recitation *>(sender())) {
-    int idx = m_recitations.indexOf(r);
-    if (idx != -1) {
-      emit QAbstractItemModel::dataChanged(index(idx, 0), index(idx, 0));
-    } else {
-      // I doubt this could ever happen
-      qmlInfo(this) << "Unknown recitation";
-    }
-
-    emit installedCountChanged();
-  }
-}
-
-QHash<int, QByteArray> Recitations::roleNames() const {
-  QHash<int, QByteArray> roles;
-  roles[RecitationRole] = "recitation";
-  roles[OnlineRole] = "online";
-
-  return roles;
+Recitation *Recitations::recitation(int index) {
+  return m_recitations[index];
 }

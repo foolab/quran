@@ -17,55 +17,10 @@
 
 #include "models.h"
 #include "translations.h"
-#include <QQmlEngine>
 #include "translation.h"
-#include <QDebug>
-
-InstalledFilterModel::InstalledFilterModel(QObject *parent) :
-  QSortFilterProxyModel(parent),
-  m_value(-1),
-  m_role(-1) {
-
-  setFilterKeyColumn(0);
-  setDynamicSortFilter(true);
-}
-
-InstalledFilterModel::~InstalledFilterModel() {
-
-}
-
-void InstalledFilterModel::init(QAbstractItemModel *model, const QString& installedPropertyName,
-				int installedPropertyValue, const QString& role) {
-  m_name = installedPropertyName;
-  m_value = installedPropertyValue;
-
-
-  QHash<int, QByteArray> roles = model->roleNames();
-  foreach (int r, roles.keys()) {
-    if (roles[r] == role) {
-      m_role = r;
-      break;
-    }
-  }
-
-  setSourceModel(model);
-}
-
-bool InstalledFilterModel::filterAcceptsRow(int source_row,
-					    const QModelIndex& source_parent) const {
-  if (!sourceModel()) {
-    return false;
-  }
-
-  QObject *object =
-    sourceModel()->data(sourceModel()->index(source_row, 0, source_parent),
-			m_role).value<QObject *>();
-  if (!object) {
-    return false;
-  }
-
-  return object->property(m_name.toUtf8()).toInt() == m_value;
-}
+#include "recitations.h"
+#include "recitation.h"
+#include <QQmlEngine>
 
 VisibilityFilterModel::VisibilityFilterModel(QObject *parent) :
   QSortFilterProxyModel(parent) {
@@ -91,8 +46,9 @@ void VisibilityFilterModel::setModel(QAbstractItemModel *model) {
 
 bool VisibilityFilterModel::filterAcceptsRow(int source_row,
 					     const QModelIndex& source_parent) const {
+  // Qt::UserRole + 2 is VisibleRole
   return sourceModel()->data(sourceModel()->index(source_row, 0, source_parent),
-			     TranslationsModel::VisibleRole).toBool();
+			     Qt::UserRole + 2).toBool();
 }
 
 // For the sake of simplicity we will implement the model via a hack:
@@ -200,6 +156,112 @@ void TranslationsModel::translationChanged(Translation *t) {
     if (m_translations->translation(x) == t) {
       QModelIndex idx1 = index(x, 0);
       QModelIndex idx2 = index(x + m_translations->count(), 0);
+      emit dataChanged(idx1, idx1);
+      emit dataChanged(idx2, idx2);
+    }
+  }
+}
+
+RecitationsModel::RecitationsModel(QObject *parent) :
+  QAbstractListModel(parent),
+  m_recitations(0) {
+
+}
+
+RecitationsModel::~RecitationsModel() {
+
+}
+
+int RecitationsModel::rowCount(const QModelIndex& parent) const {
+  if (!parent.isValid() && m_recitations) {
+    return m_recitations->count() * 2;
+  }
+
+  return 0;
+}
+
+QVariant RecitationsModel::data(const QModelIndex& index, int role) const {
+  if (m_recitations && index.row() >= 0 && index.row() < m_recitations->count() * 2) {
+    switch (role) {
+    case SectionRole:
+      return index.row() < m_recitations->count() ? tr("Enabled") : tr("Available");
+
+    case RecitationRole:
+      if (index.row() < m_recitations->count()) {
+	Recitation *t = m_recitations->recitation(index.row());
+	QQmlEngine::setObjectOwnership(t, QQmlEngine::CppOwnership);
+	return QVariant::fromValue<QObject *>(t);
+      } else {
+	Recitation *t = m_recitations->recitation(index.row() - m_recitations->count());
+	QQmlEngine::setObjectOwnership(t, QQmlEngine::CppOwnership);
+	return QVariant::fromValue<QObject *>(t);
+      }
+
+    case VisibleRole:
+      if (index.row() < m_recitations->count()) {
+	return m_recitations->recitation(index.row())->status() == Recitation::Installed;
+      } else {
+	return m_recitations->recitation(index.row() - m_recitations->count())->status() != Recitation::Installed;
+      }
+    default:
+      break;
+    }
+  }
+
+  return QVariant();
+}
+
+Recitations *RecitationsModel::source() const {
+  return m_recitations;
+}
+
+void RecitationsModel::setSource(Recitations *recitations) {
+  if (m_recitations != recitations) {
+
+    if (m_recitations) {
+      QObject::disconnect(m_recitations, SIGNAL(refreshed()), this, SLOT(refresh()));
+      QObject::disconnect(m_recitations, SIGNAL(recitationEnabled(Recitation *)),
+			  this, SLOT(recitationChanged(Recitation *)));
+      QObject::disconnect(m_recitations, SIGNAL(recitationDisabled(Recitation *)()),
+			  this, SLOT(recitationChanged(Recitation *)));
+    }
+
+    m_recitations = recitations;
+
+    if (m_recitations) {
+      QObject::connect(m_recitations, SIGNAL(refreshed()), this, SLOT(refresh()));
+      QObject::connect(m_recitations, SIGNAL(recitationEnabled(Recitation *)),
+		       this, SLOT(recitationChanged(Recitation *)));
+      QObject::connect(m_recitations, SIGNAL(recitationDisabled(Recitation *)),
+		       this, SLOT(recitationChanged(Recitation *)));
+    }
+
+    emit sourceChanged();
+
+    refresh();
+  }
+}
+
+void RecitationsModel::refresh() {
+  beginResetModel();
+  // Ok :(
+  endResetModel();
+}
+
+QHash<int, QByteArray> RecitationsModel::roleNames() const {
+  QHash<int, QByteArray> roles;
+  roles[RecitationRole] = "recitation";
+  roles[SectionRole] = "section";
+  roles[VisibleRole] = "visible";
+
+  return roles;
+}
+
+void RecitationsModel::recitationChanged(Recitation *t) {
+  for (int x = 0; x < m_recitations->count(); x++) {
+    if (m_recitations->recitation(x) == t) {
+      QModelIndex idx1 = index(x, 0);
+      QModelIndex idx2 = index(x + m_recitations->count(), 0);
       emit dataChanged(idx1, idx1);
       emit dataChanged(idx2, idx2);
     }

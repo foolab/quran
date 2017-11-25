@@ -20,29 +20,11 @@
 
 #include <QSortFilterProxyModel>
 #include <QAbstractListModel>
-#include "translation.h"
 
 class Translations;
-
-class InstalledFilterModel : public QSortFilterProxyModel {
-  Q_OBJECT
-
-public:
-  InstalledFilterModel(QObject *parent = 0);
-  ~InstalledFilterModel();
-
-public slots:
-  void init(QAbstractItemModel *model, const QString& installedPropertyName,
-	    int installedPropertyValue, const QString& role);
-
-protected:
-  virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
-
-private:
-  QString m_name;
-  int m_value;
-  int m_role;
-};
+class Translation;
+class Recitations;
+class Recitation;
 
 class VisibilityFilterModel : public QSortFilterProxyModel {
   Q_OBJECT
@@ -93,6 +75,39 @@ private slots:
 
 private:
   Translations *m_translations;
+};
+
+class RecitationsModel : public QAbstractListModel {
+  Q_OBJECT
+  Q_PROPERTY(Recitations *source READ source WRITE setSource NOTIFY sourceChanged);
+
+public:
+  enum {
+    RecitationRole = Qt::UserRole,
+    SectionRole = Qt::UserRole + 1,
+    VisibleRole = Qt::UserRole + 2,
+  };
+
+  RecitationsModel(QObject *parent = 0);
+  ~RecitationsModel();
+
+  int rowCount(const QModelIndex& parent = QModelIndex()) const;
+  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+
+  Recitations *source() const;
+  void setSource(Recitations *translations);
+
+  QHash<int, QByteArray> roleNames() const;
+
+signals:
+  void sourceChanged();
+
+private slots:
+  void refresh();
+  void recitationChanged(Recitation *r);
+
+private:
+  Recitations *m_recitations;
 };
 
 #endif /* MODELS_H */

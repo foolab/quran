@@ -67,7 +67,7 @@ QuranPage {
     toolBar: [
         ToolButton {
             icon: "image://icon/reciter.png"
-            onClicked: pushAnimated(Qt.resolvedUrl("RecitationSelector.qml"))
+            onClicked: pushAnimated(Qt.resolvedUrl("RecitationsPage.qml"))
         },
         ToolButton {
             icon: "image://icon/favorites.png"

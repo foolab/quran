@@ -16,8 +16,7 @@
     <file alias="qml/QuranTranslationLabel.qml">QuranTranslationLabel.qml</file>
     <file alias="qml/QuranVerseLabel.qml">QuranVerseLabel.qml</file>
     <file alias="qml/QuranView.qml">QuranView.qml</file>
-    <file alias="qml/RecitationAddPage.qml">RecitationAddPage.qml</file>
-    <file alias="qml/RecitationSelector.qml">RecitationSelector.qml</file>
+    <file alias="qml/RecitationsPage.qml">RecitationsPage.qml</file>
     <file alias="qml/SearchPage.qml">SearchPage.qml</file>
     <file alias="qml/SettingsPage.qml">SettingsPage.qml</file>
     <file alias="qml/SuraList.qml">SuraList.qml</file>
