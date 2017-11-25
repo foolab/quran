@@ -22,12 +22,17 @@ import QtQuick.Controls 2.2
 Switch {
     id: control
     checkable: true
-    property bool automaticCheck: true
+
     // We want the indicator on the right
     LayoutMirroring.enabled: true
 
     width: parent.width
     height: quranTheme.sizes.itemSmall
+
+    background: QuranBackgroundItem {
+        enabled: false
+        down: control.down
+    }
 
     contentItem: QuranLabel {
         id: label
@@ -35,12 +40,6 @@ Switch {
         rightPadding: control.indicator.width + control.spacing
         text: control.text
         verticalAlignment: Text.AlignVCenter
-        color: quranTheme.colors.primary
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        enabled: !parent.automaticCheck
-        onClicked: parent.clicked()
+        color: control.background.highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
     }
 }
