@@ -27,7 +27,6 @@ QuranPage {
 
     QuranListView {
         id: view
-
         anchors.fill: parent
 
         model: VisibilityFilterModel {
@@ -82,17 +81,16 @@ QuranPage {
 
                 QuranLabel {
                     height: parent.height
-                    width: button.visible ? parent.width - button.width - quranTheme.sizes.spacing : parent.width
+                    width: parent.width - button.width - quranTheme.sizes.spacing
                     text: translation.name
                     verticalAlignment: Text.AlignVCenter
-                    color: quranTheme.colors.primary
+                    color: item.highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
                     truncateText: true
                 }
 
                 ToolButton {
                     id: button
-                    visible: translation.status != Translation.Installed
-                    icon: "image://icon/download.png"
+                    icon: translation.status == Translation.Installed ? "image://icon/clear.png" : "image://icon/download.png"
                     onClicked: _toggleTranslation()
                 }
             }
@@ -104,10 +102,10 @@ QuranPage {
 
                 QuranLabel {
                     height: parent.height
-                    width: parent.width - defaultButton.width - removeButton.width
+                    width: parent.width - defaultButton.width
                     text: translation.language
                     verticalAlignment: Text.AlignVCenter
-                    color: quranTheme.colors.primary
+                    color: item.highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
                     truncateText: true
                     anchors.left: parent.left
                 }
@@ -117,21 +115,10 @@ QuranPage {
                     visible: settings.defaultTranslation != translation.uuid
                     anchors {
                         verticalCenter: parent.verticalCenter
-                        horizontalCenter: parent.horizontalCenter
+                        right: parent.right
                     }
                     text: qsTr("Default")
                     onClicked: translations.loadAndSetDefault(translation.uuid)
-                }
-
-                ToolButton {
-                    id: removeButton
-                    anchors {
-                        verticalCenter: parent.verticalCenter
-                        right: parent.right
-                    }
-
-                    icon: "image://icon/clear.png"
-                    onClicked: _toggleTranslation()
                 }
             }
 
