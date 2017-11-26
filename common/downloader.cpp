@@ -63,6 +63,7 @@ Download::~Download() {
 void Download::stop() {
   if (m_reply) {
     QObject::disconnect(m_reply, 0, this, 0);
+    m_reply->abort();
     m_reply->deleteLater();
     m_reply = 0;
   }
