@@ -76,6 +76,11 @@ Column {
         spacing: (parent.width - (4 * quranTheme.sizes.toolButton)) / 3
 
         ToolButton {
+            icon: "image://icon/settings.png"
+            onClicked: pushAnimated(Qt.resolvedUrl("SettingsPage.qml"))
+        }
+
+        ToolButton {
             icon: "image://icon/reciter.png"
             onClicked: pushAnimated(Qt.resolvedUrl("RecitationsPage.qml"))
         }
@@ -83,11 +88,6 @@ Column {
         ToolButton {
             icon: "image://icon/translation.png"
             onClicked: pushAnimated(Qt.resolvedUrl("TranslationsPage.qml"))
-        }
-
-        ToolButton {
-            icon: "image://icon/settings.png"
-            onClicked: pushAnimated(Qt.resolvedUrl("SettingsPage.qml"))
         }
 
         ToolButton {
