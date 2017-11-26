@@ -52,6 +52,8 @@ Download::Download(QNetworkReply *reply, QObject *parent) :
 
   QObject::connect(m_reply, &QNetworkReply::downloadProgress,
 		   this, &Download::handleDownloadProgress);
+
+  m_reply->setParent(this);
 }
 
 Download::~Download() {
