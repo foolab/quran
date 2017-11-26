@@ -21,7 +21,6 @@ import Quran 1.0
 
 QuranPage {
     id: quranPage
-    menu: mainView.currentItem ? mainView.currentItem.menu : null
 
     Rectangle {
         anchors.fill: parent
@@ -30,7 +29,15 @@ QuranPage {
 
     QuranListView {
         id: mainView
-        anchors.fill: parent
+        clip: true
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+            bottomMargin: toolBar.open ? toolBar.height : toolBar.height / 2
+        }
+
         model: _data.pageCount
         orientation: ListView.Horizontal
         snapMode: ListView.SnapOneItem
@@ -52,42 +59,10 @@ QuranPage {
         id: quranPageDelegate
 
         QuranView {
-            property alias menu: pageMenu
-            QuranPageMenu {
-                id: pageMenu
-                view: mainView
-                actions: [
-                    MenuAction { text: qsTr("Settings"); onClicked: { pushAnimated(Qt.resolvedUrl("SettingsPage.qml")) } }
-                ]
-            }
         }
     }
 
-    toolBar: [
-        ToolButton {
-            icon: "image://icon/search.png"
-            onClicked: pushAnimated(Qt.resolvedUrl("SearchPage.qml"))
-        },
-        ToolButton {
-            icon: "image://icon/favorites.png"
-            onClicked: pushAnimated(Qt.resolvedUrl("FavoritesPage.qml"))
-        },
-        NumberLabel {
-            width: quranTheme.sizes.toolButton
-            height: parent ? parent.height : width
-            number: settings.pageNumber + 1
-            onClicked: pushAnimated(Qt.resolvedUrl("IndexPage.qml"))
-            color: highlight ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
-        },
-        ToolButton {
-            icon: "image://icon/play.png"
-            enabled: settings.recitationMode != 0 && recitations.installedCount > 0
-            onClicked: playAudio(MediaPlayer.PlayPage, settings.pageNumber)
-        },
-        ToolButton {
-            icon: "image://icon/stop.png"
-            onClicked: audioPlayer.stop()
-            enabled: audioPlayer.playing
-        }
-    ]
+    ToolBar {
+        id: toolBar
+    }
 }

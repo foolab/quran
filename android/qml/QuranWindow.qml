@@ -136,46 +136,12 @@ Item {
         }
     }
 
-    Ctrls.ToolBar {
-        id: toolBar
-        height: visible ? quranTheme.toolBarHeight : 0
-        visible: stack.depth == 1
-        anchors {
-            bottom: parent.bottom
-            left: parent.left
-            right: parent.right
-        }
-
-        Rectangle {
-            anchors.fill: parent
-            color: quranTheme.colors.background
-        }
-
-        Behavior on height {
-            PropertyAnimation { duration: 200 }
-        }
-
-        Row {
-            id: toolBarItem
-            height: parent.height
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            spacing: quranTheme.sizes.spacing
-            children: pageStack.currentItem ? pageStack.currentItem.toolBar : 0
-        }
-
-        MenuButton {
-            anchors.right: parent.right
-            menu: pageStack.currentItem ? pageStack.currentItem.menu : null
-        }
-    }
-
     Ctrls.StackView {
         id: stack
         clip: true
         anchors {
             top: stack.depth == 1 ? parent.top : title.bottom
-            bottom: stack.depth == 1 ? toolBar.top : parent.bottom
+            bottom: stack.currentItem && stack.currentItem.toolBar ? stack.currentItem.toolBar.top : parent.bottom
             left: parent.left
             right: parent.right
         }

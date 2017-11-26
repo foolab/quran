@@ -2,6 +2,7 @@
   <qresource prefix="/">
     <file alias="qml/main.qml">main.qml</file>
     <file alias="qml/ToolButton.qml">ToolButton.qml</file>
+    <file alias="qml/ToolBar.qml">ToolBar.qml</file>
     <file alias="qml/MainPage.qml">MainPage.qml</file>
     <file alias="qml/AboutPageBlock.qml">AboutPageBlock.qml</file>
     <file alias="qml/AboutPage.qml">AboutPage.qml</file>

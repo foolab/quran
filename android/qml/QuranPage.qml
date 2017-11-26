@@ -24,7 +24,6 @@ Item {
 
     property string __pageTitle
     property QuranPageMenu menu
-    property list<Item> toolBar
 
     Rectangle {
         anchors.fill: parent
