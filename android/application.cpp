@@ -19,6 +19,7 @@
 #include <QGuiApplication>
 #include <QQuickView>
 #include "androidsupport.h"
+#include "keyfilter.h"
 
 Application::Application(int& argc, char **argv) {
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -32,4 +33,5 @@ Application::~Application() {
 
 void Application::registerQmlTypes() {
   qmlRegisterType<AndroidSupport>("QuranAndroid", 1, 0, "AndroidSupport");
+  qmlRegisterType<KeyFilter>("QuranAndroid", 1, 0, "KeyFilter");
 }

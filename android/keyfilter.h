@@ -15,23 +15,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "application.h"
-#include <QGuiApplication>
-#include <QQuickView>
-#include "mockandroidsupport.h"
-#include "../android/keyfilter.h"
+#ifndef KEY_FILTER_H
+#define KEY_FILTER_H
 
-Application::Application(int& argc, char **argv) {
-  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-  setApplication(new QGuiApplication(argc, argv), "quran");
-  setView(new QQuickView);
-}
+#include <QObject>
 
-Application::~Application() {
+class KeyFilter : public QObject {
+  Q_OBJECT
 
-}
+public:
+  KeyFilter(QObject *parent = 0);
+  ~KeyFilter();
 
-void Application::registerQmlTypes() {
-  qmlRegisterType<AndroidSupport>("QuranAndroid", 1, 0, "AndroidSupport");
-  qmlRegisterType<KeyFilter>("QuranAndroid", 1, 0, "KeyFilter");
-}
+protected:
+  bool eventFilter(QObject *watched, QEvent *event);
+
+signals:
+  void backTriggered();
+};
+
+#endif /* KEY_FILTER_H */

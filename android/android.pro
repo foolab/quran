@@ -28,11 +28,13 @@ SOURCES += fsmonitor.cpp \
            audiopolicy.cpp \
            application.cpp \
            androidsupport.cpp \
+           keyfilter.cpp \
            sqlite-ndk/sources/sqlite3ndk.cpp
 HEADERS += fsmonitor.h \
            audiopolicy.h \
            application.h \
            androidsupport.h \
+           keyfilter.h \
            sqlite-ndk/sources/sqlite3ndk.h
 
 LIBS += -landroid

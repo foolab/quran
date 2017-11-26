@@ -15,23 +15,27 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "application.h"
+#include "keyfilter.h"
 #include <QGuiApplication>
-#include <QQuickView>
-#include "mockandroidsupport.h"
-#include "../android/keyfilter.h"
+#include <QKeyEvent>
 
-Application::Application(int& argc, char **argv) {
-  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-  setApplication(new QGuiApplication(argc, argv), "quran");
-  setView(new QQuickView);
+KeyFilter::KeyFilter(QObject *parent) :
+  QObject(parent) {
+  QGuiApplication::instance()->installEventFilter(this);
 }
 
-Application::~Application() {
-
+KeyFilter::~KeyFilter() {
+  QGuiApplication::instance()->removeEventFilter(this);
 }
 
-void Application::registerQmlTypes() {
-  qmlRegisterType<AndroidSupport>("QuranAndroid", 1, 0, "AndroidSupport");
-  qmlRegisterType<KeyFilter>("QuranAndroid", 1, 0, "KeyFilter");
+bool KeyFilter::eventFilter(QObject *watched, QEvent *event) {
+  if (event->type() == QEvent::KeyRelease) {
+    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+    if (keyEvent->key() == Qt::Key_Back || keyEvent->key() == Qt::Key_Backspace) {
+      emit backTriggered();
+      return true;
+    }
+  }
+
+  return QObject::eventFilter(watched, event);
 }

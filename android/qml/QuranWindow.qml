@@ -145,14 +145,12 @@ Item {
             left: parent.left
             right: parent.right
         }
+    }
 
-        // focus is needed for back key navigation
-        focus: true
-
-        Keys.onReleased: {
-            if (event.key === Qt.Key_Back && stack.depth > 1) {
+    KeyFilter {
+        onBackTriggered: {
+            if (stack.depth > 1) {
                 stack.pop()
-                event.accepted = true
             }
         }
     }
