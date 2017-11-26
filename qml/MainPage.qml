@@ -57,8 +57,7 @@ QuranPage {
                 id: pageMenu
                 view: mainView
                 actions: [
-                    MenuAction { text: qsTr("Settings"); onClicked: { pushAnimated(Qt.resolvedUrl("SettingsPage.qml")) } },
-                    MenuAction { text: qsTr("Search"); onClicked: { pushAnimated(Qt.resolvedUrl("SearchPage.qml")) } }
+                    MenuAction { text: qsTr("Settings"); onClicked: { pushAnimated(Qt.resolvedUrl("SettingsPage.qml")) } }
                 ]
             }
         }
@@ -66,8 +65,8 @@ QuranPage {
 
     toolBar: [
         ToolButton {
-            icon: "image://icon/reciter.png"
-            onClicked: pushAnimated(Qt.resolvedUrl("RecitationsPage.qml"))
+            icon: "image://icon/search.png"
+            onClicked: pushAnimated(Qt.resolvedUrl("SearchPage.qml"))
         },
         ToolButton {
             icon: "image://icon/favorites.png"
