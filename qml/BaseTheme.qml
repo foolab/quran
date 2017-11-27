@@ -63,6 +63,12 @@ QtObject {
         readonly property string heading: "Droid Sans"
     }
 
+    readonly property QtObject animations: QtObject {
+        readonly property int fast: 100
+        readonly property int medium: 200
+        readonly property int slow: 400
+    }
+
     // TODO: get rid of these
     readonly property color keyboardPreviewTextColor: "white"
     readonly property color keyboardPreviewBackgroundColor: "black"

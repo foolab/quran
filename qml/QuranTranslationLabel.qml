@@ -29,7 +29,7 @@ MouseArea {
     opacity: label.text != "" && ((shown && settings.translationsHidden) || !settings.translationsHidden) ? 1 : 0
 
     Behavior on opacity {
-        NumberAnimation { duration: 100 }
+        NumberAnimation { duration: quranTheme.animations.fast }
     }
 
     onClicked: {

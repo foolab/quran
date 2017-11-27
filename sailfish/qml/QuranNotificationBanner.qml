@@ -31,7 +31,7 @@ Rectangle {
     color: Theme.highlightBackgroundColor
     opacity: timer.running ? 1.0 : 0.0
     Behavior on opacity {
-        NumberAnimation { duration: 250 }
+        NumberAnimation { duration: quranTheme.animations.medium }
     }
 
     function showMessage(text) {

@@ -65,7 +65,7 @@ Item {
             icon: "image://icon/back.png"
 
             Behavior on opacity {
-                PropertyAnimation { duration: 400 }
+                PropertyAnimation { duration: quranTheme.animations.slow }
             }
         }
 
@@ -77,8 +77,8 @@ Item {
             visible: backButton.visible
             Behavior on width {
                 SequentialAnimation {
-                    PauseAnimation { duration: 400 }
-                    PropertyAnimation { duration: 400 }
+                    PauseAnimation { duration: quranTheme.animations.slow }
+                    PropertyAnimation { duration: quranTheme.animations.slow }
                 }
             }
         }

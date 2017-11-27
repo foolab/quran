@@ -167,7 +167,7 @@ QuranPage {
         visible: !quranTheme.platformUsableKeyboard && opacity > 0
 
         Behavior on opacity {
-            NumberAnimation { duration: 200 }
+            NumberAnimation { duration: quranTheme.animations.medium }
         }
 
         onKeyPressed: {

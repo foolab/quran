@@ -27,20 +27,20 @@ Column {
     anchors.bottomMargin: open ? 0 : - (height / 2)
 
     Behavior on anchors.bottomMargin {
-        NumberAnimation { duration: 200 }
+        NumberAnimation { duration: quranTheme.animations.medium }
     }
 
     Row {
         anchors.horizontalCenter: parent.horizontalCenter
         height: quranTheme.toolBarHeight
-        spacing: (parent.width - (5 * quranTheme.sizes.toolButton)) / 4
+        spacing: (parent.width - (5 * quranTheme.sizes.toolButton)) / 6
 
         ToolButton {
             icon: "image://icon/back.png"
             rotation: open ? 270 : 90
             onClicked: open = !open
             Behavior on rotation {
-                NumberAnimation { duration: 200 }
+                NumberAnimation { duration: quranTheme.animations.medium }
             }
         }
 
@@ -73,7 +73,7 @@ Column {
     Row {
         anchors.horizontalCenter: parent.horizontalCenter
         height: quranTheme.toolBarHeight
-        spacing: (parent.width - (4 * quranTheme.sizes.toolButton)) / 3
+        spacing: (parent.width - (4 * quranTheme.sizes.toolButton)) / 5
 
         ToolButton {
             icon: "image://icon/settings.png"

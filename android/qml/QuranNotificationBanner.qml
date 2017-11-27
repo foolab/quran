@@ -33,7 +33,7 @@ Rectangle {
     smooth: true
 
     Behavior on opacity {
-        NumberAnimation { duration: 250 }
+        NumberAnimation { duration: quranTheme.animations.medium }
     }
 
     function showMessage(text) {
