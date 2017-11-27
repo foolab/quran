@@ -22,16 +22,24 @@
 
 class KeyFilter : public QObject {
   Q_OBJECT
+  Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged);
 
 public:
   KeyFilter(QObject *parent = 0);
   ~KeyFilter();
 
+  bool isEnabled() const;
+  void setEnabled(bool enabled);
+
 protected:
   bool eventFilter(QObject *watched, QEvent *event);
 
 signals:
+  void enabledChanged();
   void backTriggered();
+
+private:
+  bool m_enabled;
 };
 
 #endif /* KEY_FILTER_H */

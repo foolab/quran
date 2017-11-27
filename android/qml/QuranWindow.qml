@@ -148,10 +148,9 @@ Item {
     }
 
     KeyFilter {
+        enabled: stack.depth > 1
         onBackTriggered: {
-            if (stack.depth > 1) {
-                stack.pop()
-            }
+            stack.pop()
         }
     }
 }

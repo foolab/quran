@@ -20,7 +20,9 @@
 #include <QKeyEvent>
 
 KeyFilter::KeyFilter(QObject *parent) :
-  QObject(parent) {
+  QObject(parent),
+  m_enabled(false) {
+
   QGuiApplication::instance()->installEventFilter(this);
 }
 
@@ -29,7 +31,8 @@ KeyFilter::~KeyFilter() {
 }
 
 bool KeyFilter::eventFilter(QObject *watched, QEvent *event) {
-  if (event->type() == QEvent::KeyRelease) {
+  if (m_enabled && event->type() == QEvent::KeyRelease) {
+
     QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
     if (keyEvent->key() == Qt::Key_Back || keyEvent->key() == Qt::Key_Backspace) {
       emit backTriggered();
@@ -38,4 +41,15 @@ bool KeyFilter::eventFilter(QObject *watched, QEvent *event) {
   }
 
   return QObject::eventFilter(watched, event);
+}
+
+bool KeyFilter::isEnabled() const {
+  return m_enabled;
+}
+
+void KeyFilter::setEnabled(bool enabled) {
+  if (m_enabled != enabled) {
+    m_enabled = enabled;
+    emit enabledChanged();
+  }
 }
