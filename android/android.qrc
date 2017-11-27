@@ -19,7 +19,6 @@
     <file alias="/qml/DeletePopup.qml">qml/DeletePopup.qml</file>
     <file alias="/qml/QuranTextField.qml">qml/QuranTextField.qml</file>
     <file alias="/qml/QuranSearchField.qml">qml/QuranSearchField.qml</file>
-    <file alias="/qml/MenuButton.qml">qml/MenuButton.qml</file>
     <file alias="/qml/QuranNotificationBanner.qml">qml/QuranNotificationBanner.qml</file>
     <file alias="/qml/QuranProgressBar.qml">qml/QuranProgressBar.qml</file>
     <file alias="/qml/QuranPopup.qml">qml/QuranPopup.qml</file>
