@@ -73,24 +73,12 @@ Column {
     Component {
         id: dialog
 
-        Popup {
+        QuranPopup {
             id: popup
             parent: stack.currentItem
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
-            margins: quranTheme.sizes.marginMedium
-            width: parent.width - (2 * margins)
             height: Math.min(parent.height - (2 * margins), item.model.count * quranTheme.sizes.itemSmall + popupTitle.height + (2 * margins))
-            modal: true
-            focus: true
-
-            enter: Transition {
-                NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 100 }
-            }
-
-            exit: Transition {
-                NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 100 }
-            }
 
             contentItem: Column {
                 width: parent.width

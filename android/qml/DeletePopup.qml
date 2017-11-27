@@ -19,25 +19,13 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.2
 
-Popup {
+QuranPopup {
     id: dialog
     signal confirmed
     property string title
 
-    modal: true
-    focus: true
-
-    width: parent.width
     x: parent.x
     y: parent.height - height - quranTheme.sizes.marginMedium
-
-    enter: Transition {
-        NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 100 }
-    }
-
-    exit: Transition {
-        NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 100 }
-    }
 
     contentItem: Column {
         id: column

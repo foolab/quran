@@ -29,23 +29,13 @@ Item {
     Component {
         id: component
 
-        Popup {
+        QuranPopup {
             id: dialog
             property string title
             x: 0
             y: 0
-            modal: true
-            focus: true
-            width: parent.width
+
             height: parent.height
-
-            enter: Transition {
-                NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: 100 }
-            }
-
-            exit: Transition {
-                NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: 100 }
-            }
 
             Row {
                 spacing: quranTheme.sizes.spacing
