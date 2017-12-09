@@ -38,6 +38,10 @@ QuranPage {
             bottomMargin: toolBar.open ? toolBar.height : toolBar.height / 2
         }
 
+        Behavior on anchors.bottomMargin {
+            NumberAnimation { duration: quranTheme.animations.medium }
+        }
+
         model: _data.pageCount
         orientation: ListView.Horizontal
         snapMode: ListView.SnapOneItem
