@@ -33,7 +33,7 @@ Column {
     Row {
         anchors.horizontalCenter: parent.horizontalCenter
         height: quranTheme.toolBarHeight
-        spacing: (parent.width - (5 * quranTheme.sizes.toolButton)) / 6
+        spacing: (parent.width - (children.length * quranTheme.sizes.toolButton)) / (children.length + 1)
 
         ToolButton {
             icon: "image://icon/back.png"
@@ -73,7 +73,7 @@ Column {
     Row {
         anchors.horizontalCenter: parent.horizontalCenter
         height: quranTheme.toolBarHeight
-        spacing: (parent.width - (2 * quranTheme.sizes.toolButton)) / 3
+        spacing: (parent.width - (children.length * quranTheme.sizes.toolButton)) / (children.length + 1)
 
         ToolButton {
             icon: "image://icon/settings.png"
