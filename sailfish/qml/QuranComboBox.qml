@@ -23,16 +23,13 @@ ComboBox {
     id: root
     property var model
     property var textRole: function(model) { return model.text }
-    property Component delegate: Component {
-        QuranComboBoxDelegate {
-            text: root.textRole(model)
-        }
-    }
 
     menu: ContextMenu {
         Repeater {
             model: root.model
-            delegate: root,delegate
+            MenuItem {
+                text: root.textRole(model)
+            }
         }
     }
 }
