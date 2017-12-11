@@ -19,20 +19,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-ComboBox {
-    id: root
-    property var model
-    property var textRole: function(model) { return model.text }
-    property Component delegate: Component {
-        QuranComboBoxDelegate {
-            text: root.textRole(model)
-        }
-    }
+MenuItem {
 
-    menu: ContextMenu {
-        Repeater {
-            model: root.model
-            delegate: root,delegate
-        }
-    }
 }

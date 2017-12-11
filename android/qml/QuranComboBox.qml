@@ -26,6 +26,11 @@ Column {
     property alias label: title.text
     property int currentIndex
     property var textRole: function(model) { return model.text }
+    property Component delegate: Component {
+        QuranComboBoxDelegate {
+            text: item.textRole(model)
+        }
+    }
 
     // We cannot use the object we obtain from the model via get() in property bindings
     // according to ListModel documentation
@@ -106,33 +111,7 @@ Column {
                     clip: true
                     model: item.model
 
-                    delegate: QuranBackgroundItem {
-                        function _color(index) {
-                            if (item.currentIndex == index) {
-                                return highlighted ? quranTheme.colors.secondaryHighlight : quranTheme.colors.secondary
-                            } else {
-                                return highlighted ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
-                            }
-                        }
-
-                        width: parent.width
-                        height: quranTheme.sizes.itemSmall
-                        onClicked: {
-                            item.currentIndex = index
-                            popup.close()
-                            popup.destroy(200)
-                        }
-
-                        QuranLabel {
-                            anchors {
-                                fill: parent
-                                margins: quranTheme.sizes.marginSmall
-                            }
-                            text: item.textRole(model)
-                            verticalAlignment: Text.AlignVCenter
-                            color: parent._color(index)
-                        }
-                    }
+                    delegate: item.delegate
                 }
             }
         }
