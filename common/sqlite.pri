@@ -8,7 +8,7 @@ SQLITE_EXTRA_COMPILE_FLAGS +=
 
 sqlite/.libs/libsqlite3.a.depends = $$SQLITE_SRC_PATH/configure
 sqlite/.libs/libsqlite3.a.commands = mkdir -p sqlite/ && cd sqlite && \
-                      CFLAGS=\"$$(CFLAGS) -DSQLITE_ENABLE_FTS4=1\" \
+                      CFLAGS=\"$$(CFLAGS) -DSQLITE_ENABLE_FTS4=1 -fPIC\" \
 		      ../$$SQLITE_SRC_PATH/configure \
 		      --enable-readline=no \
 		      --enable-threadsafe=no \
