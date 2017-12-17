@@ -19,6 +19,7 @@
 #define PAGE_INFO_H
 
 #include <QObject>
+#include <QStringList>
 
 struct Page;
 struct Fragment;
