@@ -27,7 +27,7 @@ Requires:  mapplauncherd-booster-silica-qt5
  favorites to easily navigate to them later.
 
 %define __provides_exclude_from ^%{_datadir}/harbour-quran/lib/.*$
-%define __requires_exclude ^libsqlite3.so.0|libavresample.so.2|libavformat.so.56|libavfilter.so.5|libavcodec.so.56|libavutil.so.54|libquazip.so.1|libaudioresource-qt.so.2|libdbus-glib-1.so.2|libdbus-qeventloop-qt5.so.1|libresource.so.0|libresourceqt5.so.1$
+%define __requires_exclude ^libaudioresource-qt.so.2|libdbus-glib-1.so.2|libdbus-qeventloop-qt5.so.1|libresource.so.0|libresourceqt5.so.1$
 
 %prep
 %setup -q
@@ -39,33 +39,14 @@ make
 popd
 
 pushd sailfish
-../build-libav.sh --prefix=%{_datadir}/harbour-quran/ --enable-shared --disable-static --disable-yasm
-../build_sqlite.sh --prefix=%{_datadir}/harbour-quran/
-
-mkdir quazip
-pushd quazip
-%qmake5 ../../quazip PREFIX=%{_datadir}/harbour-quran/
-make %{?jobs:-j%jobs}
-popd
 
 %qmake5
-
+make gen
+%qmake5
 make %{?jobs:-j%jobs}
 
 %install
 rm -rf %{buildroot}
-
-pushd sailfish/libav
-%make_install
-popd
-
-pushd sailfish/sqlite
-%make_install
-popd
-
-pushd sailfish/quazip
-%make_install
-popd
 
 pushd sailfish
 %qmake5_install
@@ -81,17 +62,10 @@ cp -a data/fonts.conf %{buildroot}/%{_datadir}/harbour-quran/fonts/
 
 mkdir -p %{buildroot}/%{_datadir}/icons/hicolor/86x86/apps/
 mkdir -p %{buildroot}/%{_datadir}/applications/
+mkdir -p %{buildroot}/%{_datadir}/harbour-quran/lib/
+
 cp %SOURCE1 %{buildroot}/%{_datadir}/icons/hicolor/86x86/apps/
 cp %SOURCE2 %{buildroot}/%{_datadir}/applications/
-
-rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/*.so
-rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/*.la
-rm -rf %{buildroot}/%{_datadir}/harbour-quran/lib/pkgconfig/
-rm -rf %{buildroot}/%{_datadir}/harbour-quran/include/
-rm -rf %{buildroot}/%{_datadir}/harbour-quran/share/
-rm -rf %{buildroot}/%{_datadir}/harbour-quran/bin/
-
-chmod -x %{buildroot}/%{_datadir}/harbour-quran/lib/*
 
 desktop-file-install --delete-original                   \
   --dir %{buildroot}%{_datadir}/applications             \
