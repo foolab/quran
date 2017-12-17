@@ -21,11 +21,11 @@ import Sailfish.Silica 1.0
 
 BaseTheme {
     readonly property QtObject colors: QtObject {
-        readonly property color primary: Theme.colors.primary
-        readonly property color secondary: Theme.colors.secondary
+        readonly property color primary: Theme.primaryColor
+        readonly property color secondary: Theme.secondaryColor
         readonly property color background: "transparent"
         readonly property color primaryHighlight: Theme.highlightColor
-        readonly property color secondaryHighlight: Theme.colors.secondaryHighlight
+        readonly property color secondaryHighlight: Theme.secondaryHighlightColor
         readonly property color backgroundHighlight: Theme.highlightBackgroundColor
     }
 
