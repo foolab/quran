@@ -138,17 +138,20 @@ QuranListView {
                     }
 
                     icon: checker.isBookmarked ? "image://icon/favorite-selected.png" : "image://icon/favorite-unselected.png"
+                    fillColor: quranTheme.quranColors.text
                     onClicked: checker.toggle()
                 }
 
                 ToolButton {
                     icon: "image://icon/translation.png"
+                    fillColor: quranTheme.quranColors.text
                     visible: settings.translationsHidden
                     onClicked: translation.shown = !translation.shown;
                 }
 
                 ToolButton {
                     icon: "image://icon/play.png"
+                    fillColor: quranTheme.quranColors.text
                     visible: settings.recitationMode != 0 && recitations.installedCount > 0
                     onClicked: playAudio(MediaPlayer.PlayVerse, checker.bookmark)
                 }

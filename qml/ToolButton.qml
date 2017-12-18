@@ -23,15 +23,18 @@ MouseArea {
     property url icon
     property bool highlight: pressed && containsMouse
     property bool highlightEnabled: true
+    property color fillColor: quranTheme.colors.primary
+    property color highlightColor: quranTheme.colors.primaryHighlight
+
     width: quranTheme.sizes.toolButton
     height: width
     anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
     function _icon() {
         if (highlight) {
-            return icon + "?" + quranTheme.colors.primaryHighlight
+            return icon + "?" + highlightColor
         } else {
-            return icon + "?" + quranTheme.colors.primary
+            return icon + "?" + fillColor
         }
     }
 

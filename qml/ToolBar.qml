@@ -38,6 +38,7 @@ Column {
         ToolButton {
             icon: "image://icon/back.png"
             rotation: open ? 270 : 90
+            fillColor: quranTheme.quranColors.text
             onClicked: open = !open
             Behavior on rotation {
                 NumberAnimation { duration: quranTheme.animations.medium }
@@ -46,6 +47,7 @@ Column {
 
         ToolButton {
             icon: "image://icon/favorites.png"
+            fillColor: quranTheme.quranColors.text
             onClicked: pushAnimated(Qt.resolvedUrl("FavoritesPage.qml"))
         }
 
@@ -54,17 +56,19 @@ Column {
             height: parent ? parent.height : width
             number: settings.pageNumber + 1
             onClicked: pushAnimated(Qt.resolvedUrl("IndexPage.qml"))
-            color: highlight ? quranTheme.colors.primaryHighlight : quranTheme.colors.primary
+            color: highlight ? quranTheme.colors.primaryHighlight : quranTheme.quranColors.text
         }
 
         ToolButton {
             icon: "image://icon/play.png"
+            fillColor: quranTheme.quranColors.text
             enabled: settings.recitationMode != 0 && recitations.installedCount > 0
             onClicked: playAudio(MediaPlayer.PlayPage, settings.pageNumber)
         }
 
         ToolButton {
             icon: "image://icon/stop.png"
+            fillColor: quranTheme.quranColors.text
             onClicked: audioPlayer.stop()
             enabled: audioPlayer.playing
         }
@@ -77,11 +81,13 @@ Column {
 
         ToolButton {
             icon: "image://icon/settings.png"
+            fillColor: quranTheme.quranColors.text
             onClicked: pushAnimated(Qt.resolvedUrl("SettingsPage.qml"))
         }
 
         ToolButton {
             icon: "image://icon/search.png"
+            fillColor: quranTheme.quranColors.text
             onClicked: pushAnimated(Qt.resolvedUrl("SearchPage.qml"))
         }
     }
