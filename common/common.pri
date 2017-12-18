@@ -22,7 +22,7 @@ sles:LIBS += -lOpenSLES
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/
 
-DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.6.6\\\"
+DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.7.0\\\"
 
 GENERATED = ../data/text-meta.h
 
