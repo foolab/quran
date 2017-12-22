@@ -108,7 +108,7 @@ QuranPage {
                         right: parent.right
                     }
                     text: qsTr("Default")
-                    onClicked: settings.defaultRecitation = recitation.uuid
+                    onClicked: recitations.loadAndSetDefault(recitation.uuid)
                 }
             }
         }

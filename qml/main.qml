@@ -112,7 +112,20 @@ QuranWindow {
 
         Component.onCompleted: {
             refresh()
-            loadRecitation(settings.defaultRecitation)
+        }
+
+        onRefreshed: {
+            if (!loadRecitation(settings.defaultRecitation)) {
+                banner.showMessage(qsTr("Failed to load default recitation"))
+            }
+        }
+
+        function loadAndSetDefault(r) {
+            if (loadRecitation(r)) {
+                settings.defaultRecitation = r
+            } else {
+                banner.showMessage(qsTr("Failed to load recitation"))
+            }
         }
     }
 
