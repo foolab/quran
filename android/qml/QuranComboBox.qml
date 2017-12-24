@@ -133,10 +133,16 @@ Column {
 
                         width: parent.width
                         height: quranTheme.sizes.itemSmall
+                        // For an unknown reason; binding anything to currentIndex makes
+                        // QML barf with:
+                        // qrc:/qml/QuranComboBox.qml:139: ReferenceError: popup is not defined
+                        // so we try to work around it.
+                        property Popup __popup: null
+                        Component.onCompleted: __popup = popup
                         onClicked: {
                             item.currentIndex = index
-                            popup.close()
-                            popup.destroy(200)
+                            __popup.close()
+                            __popup.destroy(200)
                         }
 
                         QuranLabel {
