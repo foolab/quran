@@ -27,11 +27,27 @@ Column {
     property int currentIndex
     property var textRole: function(model) { return model.text }
 
-    // We cannot use the object we obtain from the model via get() in property bindings
-    // according to ListModel documentation
-    Component.onCompleted: subtitle.text = model.get(currentIndex).text
-    onCurrentIndexChanged: subtitle.text = model.get(currentIndex).text
     width: parent.width
+
+    function __setSubtitle() {
+        var o = collection.objectAt(item.currentIndex)
+        if (o) {
+            subtitle.text = item.textRole(o.data)
+        }
+    }
+
+    Component.onCompleted: __setSubtitle()
+    onCurrentIndexChanged: __setSubtitle()
+
+    Instantiator {
+        id: collection
+        model: item.model
+        delegate: QtObject {
+            property var data: model
+        }
+
+        onCountChanged: __setSubtitle()
+    }
 
     QuranLabel {
         id: title
@@ -78,7 +94,7 @@ Column {
             parent: stack.currentItem
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
-            height: Math.min(parent.height - (2 * margins), item.model.count * quranTheme.sizes.itemSmall + popupTitle.height + (2 * margins))
+            height: Math.min(parent.height - (2 * margins), collection.count * quranTheme.sizes.itemSmall + popupTitle.height + (2 * margins))
 
             contentItem: Column {
                 width: parent.width
