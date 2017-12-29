@@ -40,11 +40,11 @@ ListDelegate {
         bookmark: _bookmarks.serialize(chapter, verse)
     }
 
-    Row {
+    Column {
         width: parent.width
         QuranLabel {
             id: label
-            width: parent.width - button.width
+            width: parent.width
 
             TextSupplier {
                 id: supplier
@@ -69,8 +69,8 @@ ListDelegate {
         ToolButton {
             id: button
             anchors {
-                top: parent.top
                 verticalCenter: undefined
+                horizontalCenter: parent.horizontalCenter
             }
 
             icon: verseBookmark.isBookmarked ? "image://icon/favorite-selected.png" :  "image://icon/favorite-unselected.png"
