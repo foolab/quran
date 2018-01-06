@@ -61,6 +61,7 @@ public class AndroidSupport implements AudioManager.OnAudioFocusChangeListener {
 		public void run() {
 		    mAudioManager.abandonAudioFocus(AndroidSupport.this);
 		    audioFocusReleased();
+		    mLock.release();
 		}
 	    });
     }
