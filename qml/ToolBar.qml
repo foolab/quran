@@ -94,6 +94,7 @@ Column {
         ToolButton {
             icon: "image://icon/playlist.png"
             fillColor: quranTheme.quranColors.text
+            enabled: settings.recitationMode != 0 && recitations.installedCount > 0
             onClicked: pushAnimated(Qt.resolvedUrl("PlaylistPage.qml"))
         }
     }
