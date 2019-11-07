@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,19 +61,13 @@ QString NumberFormatter::formattedNumber() const {
 
 void NumberFormatter::updateFormattedNumber() {
   if (m_number != -1 && m_format != -1) {
-
-    if (m_format != 0) {
-      m_formattedNumber = QString("%1").arg(m_number);
-    } else {
-      m_formattedNumber = toHindi();
-    }
-
+    m_formattedNumber = formatNumber(m_number);
     emit formattedNumberChanged();
   }
 }
 
-QString NumberFormatter::toHindi() {
-  QString in = QString("%1").arg(m_number);
+QString NumberFormatter::toHindi(int number) {
+  QString in = QString("%1").arg(number);
 
   QString result;
   QChar c;
@@ -89,4 +83,16 @@ QString NumberFormatter::toHindi() {
   }
 
   return result;
+}
+
+QString NumberFormatter::formatNumber(int number) {
+  if (number != -1 && m_format != -1) {
+    if (m_format != 0) {
+      return QString("%1").arg(number);
+    } else {
+      return toHindi(number);
+    }
+  }
+
+  return QString();
 }

@@ -90,5 +90,11 @@ Column {
             fillColor: quranTheme.quranColors.text
             onClicked: pushAnimated(Qt.resolvedUrl("SearchPage.qml"))
         }
+
+        ToolButton {
+            icon: "image://icon/playlist.png"
+            fillColor: quranTheme.quranColors.text
+            onClicked: pushAnimated(Qt.resolvedUrl("PlaylistPage.qml"))
+        }
     }
 }

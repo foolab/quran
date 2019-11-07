@@ -17,5 +17,6 @@
       <file>plus.png</file>
       <file>minus.png</file>
       <file>download.png</file>
+      <file>playlist.png</file>
     </qresource>
 </RCC>

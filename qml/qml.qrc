@@ -28,5 +28,6 @@
     <file alias="qml/ListDelegate.qml">ListDelegate.qml</file>
     <file alias="qml/BorderLabel.qml">BorderLabel.qml</file>
     <file alias="qml/BaseTheme.qml">BaseTheme.qml</file>
+    <file alias="qml/PlaylistPage.qml">PlaylistPage.qml</file>
   </qresource>
 </RCC>
