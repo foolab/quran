@@ -63,6 +63,11 @@ QuranPage {
                     id: chapterButton
                     anchors.right: parent.right
                     text: qsTr("Recite")
+                    onClicked: {
+                        pagePosition.setPosition(chapterSelector.currentIndex, 0)
+                        playAudio(MediaPlayer.PlayChapter, chapterSelector.currentIndex)
+                        popPage()
+                    }
                 }
             }
 
@@ -89,6 +94,19 @@ QuranPage {
                     id: partButton
                     anchors.right: parent.right
                     text: qsTr("Recite")
+                    PartInfo {
+                        id: partInfo
+                        part: partSelector.currentIndex
+                    }
+                    PageInfo {
+                        id: pageInfo
+                        page: partInfo.firstPage
+                    }
+                    onClicked: {
+                        pagePosition.setPosition(pageInfo.firstChapter, pageInfo.firstVerse)
+                        playAudio(MediaPlayer.PlayPart, partSelector.currentIndex)
+                        popPage()
+                    }
                 }
             }
 
@@ -110,7 +128,7 @@ QuranPage {
                     textRole: function(model) { return formatter.formatNumber(model.index + 1) }
                     ChapterInfo {
                         id: fromChapterInfo
-                        chapter: fromVerseSelector.currentIndex
+                        chapter: fromChapterSelector.currentIndex
                     }
                 }
             }
@@ -133,7 +151,7 @@ QuranPage {
                     textRole: function(model) { return formatter.formatNumber(model.index + 1) }
                     ChapterInfo {
                         id: toChapterInfo
-                        chapter: toVerseSelector.currentIndex
+                        chapter: toChapterSelector.currentIndex
                     }
                 }
             }
@@ -142,6 +160,12 @@ QuranPage {
                 text: qsTr("Recite")
                 anchors.horizontalCenter: parent.horizontalCenter
                 enabled: (fromChapterSelector.currentIndex * 1000) + fromVerseSelector.currentIndex <= (toChapterSelector.currentIndex * 1000) + toVerseSelector.currentIndex
+
+                onClicked: {
+                        pagePosition.setPosition(fromChapterSelector.currentIndex, fromVerseSelector.currentIndex)
+                        playAudioRange(fromChapterSelector.currentIndex, fromVerseSelector.currentIndex, toChapterSelector.currentIndex, toVerseSelector.currentIndex)
+                        popPage()
+                }
             }
         }
     }

@@ -81,6 +81,11 @@ QuranWindow {
         onFlipped: audioPlayer.stop()
     }
 
+    function playAudioRange(fromChapter, fromVerse, toChapter, toVerse) {
+        if (!audioPlayer.playRange(fromChapter, fromVerse, toChapter, toVerse)) {
+            banner.showMessage(qsTr("Failed to start audio playback"))
+        }
+    }
 
     function playAudio(mode, id) {
         if (!audioPlayer.play(mode, id)) {
