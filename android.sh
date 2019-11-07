@@ -14,7 +14,7 @@ if [ $# -gt 0 ]; then
 	    show_help
 	    ;;
 	installd)
-	    ANT_ARG=--install
+	    ANT_ARG=--reinstall
 	    ;;
 	installr)
 	    ANT_ARG="--release --install"
