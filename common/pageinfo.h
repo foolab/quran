@@ -66,6 +66,7 @@ class DeclarativePageInfo : public QObject, public PageInfo {
   Q_OBJECT
   Q_PROPERTY(int page READ page WRITE setPage NOTIFY pageChanged);
   Q_PROPERTY(int firstChapter READ firstChapter NOTIFY pageChanged);
+  Q_PROPERTY(int firstVerse READ firstVerse NOTIFY pageChanged);
   Q_PROPERTY(int part READ part NOTIFY pageChanged);
   Q_PROPERTY(QStringList chapters READ chapters NOTIFY pageChanged);
 
