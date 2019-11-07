@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ MediaPlaylist::MediaPlaylist(Recitation *recitation,
   QObject(parent),
   m_recitation(recitation),
   m_downloader(downloader),
-  m_playingId(-1),
   m_download(0) {
 
 }
@@ -46,9 +45,6 @@ void MediaPlaylist::playPage(int page) {
     return;
   }
 
-  m_mode = PlayPage;
-  m_playingId = page;
-
   QList<FragmentInfo> frags = PageInfo(page).fragments();
 
   int index = 0;
@@ -56,12 +52,61 @@ void MediaPlaylist::playPage(int page) {
   for (const FragmentInfo& f : frags) {
     if (f.start() == 0) {
       if (ChapterInfo(f.chapter()).hasBasmala()) {
-	addMedia(Media(m_recitation, 1, 1, index++));
+	// Signal the basmala only if we are at chapter 0
+	addMedia(Media(m_recitation, 1, 1, index++, f.chapter() == 0));
       }
     }
 
     for (int x = f.start(); x < f.start() + f.length(); x++) {
-      addMedia(Media(m_recitation, f.chapter() + 1, x + 1, index++));
+      addMedia(Media(m_recitation, f.chapter() + 1, x + 1, index++, true));
+    }
+  }
+}
+
+void MediaPlaylist::playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse) {
+  if (!m_recitation) {
+    return;
+  }
+
+  int index = 0;
+  if (fromChapter == toChapter) {
+    ChapterInfo info(fromChapter);
+    for (int x = fromVerse; x <= toVerse; x++) {
+      addMedia(Media(m_recitation, fromChapter + 1, x + 1, index++, true));
+    }
+  } else {
+    for (int c = fromChapter; c <= toChapter; c++) {
+      ChapterInfo info(c);
+      if (c == fromChapter) {
+	if (fromVerse == 0) {
+	  if (info.hasBasmala()) {
+	    // Signal the basmala only if we are at chapter 0
+	    addMedia(Media(m_recitation, 1, 1, index++, c == 0));
+	  }
+	}
+
+	for (int x = fromVerse; x < info.length(); x++) {
+	  addMedia(Media(m_recitation, c + 1, x + 1, index++, true));
+	}
+      } else if (c == toChapter) {
+	// We must be starting a new chapter because fromChapter != toChapter
+	if (info.hasBasmala()) {
+	  // Signal the basmala only if we are at chapter 0
+	  addMedia(Media(m_recitation, 1, 1, index++, c == 0));
+	}
+	for (int x = 0; x <= toVerse; x++) {
+	  addMedia(Media(m_recitation, c + 1, x + 1, index++, true));
+	}
+      } else {
+	// Add all of it:
+	if (info.hasBasmala()) {
+	  // Signal the basmala only if we are at chapter 0
+	  addMedia(Media(m_recitation, 1, 1, index++, c == 0));
+	}
+	for (int x = 0; x < info.length(); x++) {
+	  addMedia(Media(m_recitation, c + 1, x + 1, index++, true));
+	}
+      }
     }
   }
 }
@@ -71,18 +116,16 @@ void MediaPlaylist::playChapter(int chapter) {
     return;
   }
 
-  m_mode = PlayChapter;
-  m_playingId = chapter;
-
   int index = 0;
 
   ChapterInfo info(chapter);
   if (info.hasBasmala()) {
-    addMedia(Media(m_recitation, 1, 1, index++));
+    // Signal the basmala only if we are at chapter 0
+    addMedia(Media(m_recitation, 1, 1, index++, chapter == 0));
   }
 
   for (int x = 0; x < info.length(); x++) {
-    addMedia(Media(m_recitation, chapter + 1, x + 1, index++));
+    addMedia(Media(m_recitation, chapter + 1, x + 1, index++, true));
   }
 }
 
@@ -91,19 +134,13 @@ void MediaPlaylist::playVerse(int chapter, int verse) {
     return;
   }
 
-  m_mode = PlayVerse;
-  m_playingId = -1;
-
-  addMedia(Media(m_recitation, chapter + 1, verse + 1, 0));
+  addMedia(Media(m_recitation, chapter + 1, verse + 1, 0, true));
 }
 
 void MediaPlaylist::playPart(int part) {
   if (!m_recitation) {
     return;
   }
-
-  m_mode = PlayPart;
-  m_playingId = part;
 
   QList<FragmentInfo> frags;
   PartInfo p(part);
@@ -117,12 +154,13 @@ void MediaPlaylist::playPart(int part) {
   for (const FragmentInfo& frag : frags) {
     if (frag.start() == 0) {
       if (ChapterInfo(frag.chapter()).hasBasmala()) {
-	addMedia(Media(m_recitation, 1, 1, index++));
+	// Signal the basmala only if we are at chapter 0
+	addMedia(Media(m_recitation, 1, 1, index++, frag.chapter() == 0));
       }
     }
 
     for (int x = frag.start(); x < frag.start() + frag.length(); x++) {
-      addMedia(Media(m_recitation, frag.chapter() + 1, x + 1, index++));
+      addMedia(Media(m_recitation, frag.chapter() + 1, x + 1, index++, true));
     }
   }
 }
@@ -141,44 +179,7 @@ bool MediaPlaylist::signalMedia(int index, int& chapter, int& verse) const {
   chapter = media.chapter() - 1;
   verse = media.verse() - 1;
 
-  switch (m_mode) {
-  case MediaPlaylist::PlayVerse:
-    return true;
-
-  case MediaPlaylist::PlayPage:
-  case MediaPlaylist::PlayChapter:
-    if (chapter == 0 && verse == 0 && m_playingId != 0) {
-      // We are playing a basmala that is not on the first page or first chapter.
-      // Just unset the position.
-      return false;
-    }
-
-    return true;
-
-  case MediaPlaylist::PlayPart:
-    if (verse == 0 && chapter == 0) {
-      // We are reciting a basmala
-      if (m_playingId == 0) {
-	// We have 2 basmalas in the first part
-	if (m_media.first().index() == media.index()) {
-	  // First sura has a basmala
-	  return true;
-	}
-	else {
-	  return false;
-	}
-      }
-      else {
-	// Any other part. Don't set a position
-	return false;
-      }
-    }
-
-    return true;
-  }
-
-  // Silence g++
-  return false;
+  return media.signal();
 }
 
 void MediaPlaylist::start() {
@@ -249,6 +250,18 @@ MediaPlaylist *MediaPlaylist::chapterList(Recitation *recitation,
   MediaPlaylist *list = new MediaPlaylist(recitation, downloader, parent);
 
   list->playChapter(chapter);
+
+  return list;
+}
+
+MediaPlaylist *MediaPlaylist::rangeList(Recitation *recitation,
+					       Downloader *downloader,
+					       uint fromChapter, uint fromVerse,
+					       uint toChapter, uint toVerse,
+					       QObject *parent) {
+  MediaPlaylist *list = new MediaPlaylist(recitation, downloader, parent);
+
+  list->playRange(fromChapter, fromVerse, toChapter, toVerse);
 
   return list;
 }

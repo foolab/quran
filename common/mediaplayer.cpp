@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,6 +140,32 @@ bool MediaPlayer::play(const PlayType& type, uint id) {
     return false;
   }
 
+  return play();
+}
+
+bool MediaPlayer::playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse) {
+  stop();
+
+  if (!m_recitation) {
+    qmlInfo(this) << "No recitation set";
+    return false;
+  }
+
+  if (fromChapter == toChapter) {
+    if (fromVerse > toVerse) {
+      return false;
+    }
+  }
+
+  if (fromChapter > toChapter) {
+    return false;
+  }
+
+  m_list = MediaPlaylist::rangeList(m_recitation, m_downloader, fromChapter, fromVerse, toChapter, toVerse, this);
+  return play();
+}
+
+bool MediaPlayer::play() {
   m_policy = new AudioPolicy(this);
   QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
   QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));

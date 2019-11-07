@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ class Recitation;
 
 class Media {
 public:
-  Media(Recitation *recitation, int chapter, int verse, int index);
+  Media(Recitation *recitation, int chapter, int verse, int index, bool signal);
   virtual ~Media();
 
   static Media error();
@@ -33,6 +33,8 @@ public:
   int chapter() const;
   int verse() const;
   int index() const;
+  bool signal() const;
+
   QByteArray data() const;
   bool setData(const QByteArray& data) const;
 
@@ -44,6 +46,7 @@ private:
   int m_chapter;
   int m_verse;
   int m_index;
+  bool m_signal;
 };
 
 #endif /* MEDIA_H */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,12 @@
 #include "media.h"
 #include "recitation.h"
 
-Media::Media(Recitation *recitation, int chapter, int verse, int index) :
+Media::Media(Recitation *recitation, int chapter, int verse, int index, bool signal) :
   m_recitation(recitation),
   m_chapter(chapter),
   m_verse(verse),
-  m_index(index) {
+  m_index(index),
+  m_signal(signal) {
 
 }
 
@@ -31,11 +32,11 @@ Media::~Media() {
 }
 
 Media Media::error() {
-  return Media(0, 0, 0, -2);
+  return Media(0, 0, 0, -2, false);
 }
 
 Media Media::eos() {
-  return Media(0, 0, 0, -1);
+  return Media(0, 0, 0, -1, false);
 }
 
 bool Media::isError() {
@@ -56,6 +57,10 @@ int Media::verse() const {
 
 int Media::index() const {
   return m_index;
+}
+
+bool Media::signal() const {
+  return m_signal;
 }
 
 QByteArray Media::data() const {

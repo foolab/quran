@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,6 +54,7 @@ public:
   void setDownloader(Downloader *downloader);
 
   Q_INVOKABLE bool play(const PlayType& type, uint id);
+  Q_INVOKABLE bool playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse);
 
   bool isPlaying() const;
 
@@ -75,6 +76,8 @@ private slots:
   void audioPositionChanged(int index);
 
 private:
+  bool play();
+
   MediaPlaylist *m_list;
   MediaDecoder* m_decoder;
   AudioPolicy *m_policy;

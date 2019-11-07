@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,12 @@ public:
   static MediaPlaylist *chapterList(Recitation *recitation,
 				    Downloader *downloader, uint chapter, QObject *parent = 0);
 
+  static MediaPlaylist *rangeList(Recitation *recitation,
+				  Downloader *downloader,
+				  uint fromChapter, uint fromVerse,
+				  uint toChapter, uint toVerse,
+				  QObject *parent = 0);
+
   ~MediaPlaylist();
 
   Recitation *recitation();
@@ -66,6 +72,7 @@ private:
   void playChapter(int chapter);
   void playVerse(int chapter, int verse);
   void playPart(int part);
+  void playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse);
 
   void addMedia(const Media& media);
 
@@ -81,12 +88,8 @@ private:
   Recitation *m_recitation;
   Downloader *m_downloader;
 
-  PlayMode m_mode;
-
   QList<Media> m_media;
   QQueue<Media> m_queue;
-
-  int m_playingId;
 
   Download *m_download;
 };
