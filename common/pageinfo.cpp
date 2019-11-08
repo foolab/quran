@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,21 @@ int PageInfo::firstChapter() const {
 
 int PageInfo::firstVerse() const {
   return m_page ? m_page->verse : -1;
+}
+
+int PageInfo::lastChapter() const {
+  QList<FragmentInfo> info = fragments();
+  return info.isEmpty() ? -1 : info.last().chapter();
+}
+
+int PageInfo::lastVerse() const {
+  QList<FragmentInfo> info = fragments();
+  if (info.isEmpty()) {
+    return -1;
+  }
+
+  FragmentInfo frag = info.last();
+  return frag.start() + frag.length() - 1;
 }
 
 int PageInfo::firstFragment() const {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@ public:
   int index() const;
   int firstChapter() const;
   int firstVerse() const;
+  int lastChapter() const;
+  int lastVerse() const;
   int firstFragment() const;
   int lastFragment() const;
   int numberOfFragments() const;
@@ -67,6 +69,8 @@ class DeclarativePageInfo : public QObject, public PageInfo {
   Q_PROPERTY(int page READ page WRITE setPage NOTIFY pageChanged);
   Q_PROPERTY(int firstChapter READ firstChapter NOTIFY pageChanged);
   Q_PROPERTY(int firstVerse READ firstVerse NOTIFY pageChanged);
+  Q_PROPERTY(int lastChapter READ lastChapter NOTIFY pageChanged);
+  Q_PROPERTY(int lastVerse READ lastVerse NOTIFY pageChanged);
   Q_PROPERTY(int part READ part NOTIFY pageChanged);
   Q_PROPERTY(QStringList chapters READ chapters NOTIFY pageChanged);
 
