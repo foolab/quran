@@ -1,3 +1,6 @@
 [submodule "libav"]
 	path = libav
 	url = git://git.libav.org/libav.git
+[submodule "quazip"]
+	path = quazip
+	url = https://github.com/stachenov/quazip.git
