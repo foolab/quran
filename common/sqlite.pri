@@ -15,8 +15,13 @@ sqlite/.libs/libsqlite3.a.commands = mkdir -p sqlite/ && cd sqlite && \
 		      --enable-shared=no \
 		      --enable-static=yes \
 		      --enable-dynamic-extensions=no \
+		      --enable-fts4=yes \
 		      $$SQLITE_EXTRA_COMPILE_FLAGS \
-		      && make
+		      && make PROGRAMS=
+# PROGRAMS= is used to disable sqlite3 binary because it does not link
+# /usr/bin/ld: sqlite3-sqlite3.o: undefined reference to symbol 'pthread_join@@GLIBC_2.2.5'
+# /usr/bin/ld: /lib/x86_64-linux-gnu/libpthread.so.0: error adding symbols: DSO missing from command line
+# collect2: error: ld returned 1 exit status
 
 LIBS += sqlite/.libs/libsqlite3.a
 
