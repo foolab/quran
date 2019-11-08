@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,11 @@ QuranPage {
     NumberFormatter {
         id: formatter
         format: settings.numberFormat
+    }
+
+    PageInfo {
+        id: currentPageInfo
+        page: settings.pageNumber
     }
 
     QuranFlickable {
@@ -57,6 +62,7 @@ QuranPage {
                     model: ChapterListModel {}
                     textRole: function(model) { return model.name }
                     label: qsTr("Recite chapter")
+                    currentIndex: currentPageInfo.firstChapter
                 }
 
                 QuranButton {
@@ -88,6 +94,7 @@ QuranPage {
                     model: PartListModel {}
                     textRole: function(model) { return model.name }
                     label: qsTr("Recite part")
+                    currentIndex: currentPageInfo.part
                 }
 
                 QuranButton {
@@ -118,6 +125,7 @@ QuranPage {
                     model: ChapterListModel {}
                     textRole: function(model) { return model.name }
                     label: qsTr("From chapter")
+                    currentIndex: currentPageInfo.firstChapter
                 }
 
                 QuranComboBox {
@@ -126,6 +134,7 @@ QuranPage {
                     model: fromChapterInfo.length
                     label: qsTr("Verse")
                     textRole: function(model) { return formatter.formatNumber(model.index + 1) }
+                    currentIndex: currentPageInfo.firstVerse
                     ChapterInfo {
                         id: fromChapterInfo
                         chapter: fromChapterSelector.currentIndex
@@ -141,6 +150,7 @@ QuranPage {
                     model: ChapterListModel {}
                     textRole: function(model) { return model.name }
                     label: qsTr("To chapter")
+                    currentIndex: currentPageInfo.lastChapter
                 }
 
                 QuranComboBox {
@@ -149,6 +159,7 @@ QuranPage {
                     model: toChapterInfo.length
                     label: qsTr("Verse")
                     textRole: function(model) { return formatter.formatNumber(model.index + 1) }
+                    currentIndex: currentPageInfo.lastVerse
                     ChapterInfo {
                         id: toChapterInfo
                         chapter: toChapterSelector.currentIndex
