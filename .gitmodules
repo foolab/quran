@@ -4,3 +4,6 @@
 [submodule "quazip"]
 	path = quazip
 	url = https://github.com/stachenov/quazip.git
+[submodule "android/sqlite-ndk"]
+	path = android/sqlite-ndk
+	url = https://github.com/KrystianBigaj/sqlite-ndk.git
