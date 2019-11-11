@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,7 +97,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<MediaPlayer>("Quran", 1, 0, "MediaPlayer");
   qmlRegisterType<TranslationsModel>("Quran", 1, 0, "TranslationsModel");
   qmlRegisterType<RecitationsModel>("Quran", 1, 0, "RecitationsModel");
-  qmlRegisterType<VisibilityFilterModel>("Quran", 1, 0, "VisibilityFilterModel");
+  qmlRegisterType<SortModel>("Quran", 1, 0, "SortModel");
   qmlRegisterType<DeclarativeChapterInfo>("Quran", 1, 0, "ChapterInfo");
   qmlRegisterType<DeclarativePartInfo>("Quran", 1, 0, "PartInfo");
   qmlRegisterType<DeclarativePageInfo>("Quran", 1, 0, "PageInfo");

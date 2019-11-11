@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,13 +26,18 @@ class Translation;
 class Recitations;
 class Recitation;
 
-class VisibilityFilterModel : public QSortFilterProxyModel {
+class LessThanInterface {
+public:
+  virtual bool lessThan(const QModelIndex& source_left, const QModelIndex& source_right) = 0;
+};
+
+class SortModel : public QSortFilterProxyModel {
   Q_OBJECT
   Q_PROPERTY(QAbstractItemModel *model READ model WRITE setModel NOTIFY modelChanged);
 
 public:
-  VisibilityFilterModel(QObject *parent = 0);
-  ~VisibilityFilterModel();
+  SortModel(QObject *parent = 0);
+  ~SortModel();
 
   QAbstractItemModel *model();
   void setModel(QAbstractItemModel *model);
@@ -41,22 +46,18 @@ signals:
   void modelChanged();
 
 protected:
-  virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+  bool lessThan(const QModelIndex& source_left, const QModelIndex& source_right) const;
 };
 
-class TranslationsModel : public QAbstractListModel {
+class TranslationsModel : public QAbstractListModel, public LessThanInterface {
   Q_OBJECT
   Q_PROPERTY(Translations *source READ source WRITE setSource NOTIFY sourceChanged);
 
 public:
-  enum {
-    TranslationRole = Qt::UserRole,
-    SectionRole = Qt::UserRole + 1,
-    VisibleRole = Qt::UserRole + 2,
-  };
-
   TranslationsModel(QObject *parent = 0);
   ~TranslationsModel();
+
+  bool lessThan(const QModelIndex& source_left, const QModelIndex& source_right);
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const;
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -77,19 +78,15 @@ private:
   Translations *m_translations;
 };
 
-class RecitationsModel : public QAbstractListModel {
+class RecitationsModel : public QAbstractListModel, public LessThanInterface {
   Q_OBJECT
   Q_PROPERTY(Recitations *source READ source WRITE setSource NOTIFY sourceChanged);
 
 public:
-  enum {
-    RecitationRole = Qt::UserRole,
-    SectionRole = Qt::UserRole + 1,
-    VisibleRole = Qt::UserRole + 2,
-  };
-
   RecitationsModel(QObject *parent = 0);
   ~RecitationsModel();
+
+  bool lessThan(const QModelIndex& source_left, const QModelIndex& source_right);
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const;
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;

@@ -29,7 +29,7 @@ QuranPage {
         id: view
         anchors.fill: parent
 
-        model: VisibilityFilterModel {
+        model: SortModel {
             model: recitationsModel
         }
 
