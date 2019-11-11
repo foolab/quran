@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,5 +35,18 @@ QuranBackgroundItem {
             right: parent.right
             rightMargin: quranTheme.sizes.marginMedium
         }
+    }
+
+    Rectangle {
+        anchors {
+            bottom: parent.bottom
+            right: parent.right
+            rightMargin: quranTheme.sizes.marginMedium
+            left: parent.left
+            leftMargin: quranTheme.sizes.marginMedium
+        }
+
+        height: 1
+        color: quranTheme.colors.primaryHighlight
     }
 }
