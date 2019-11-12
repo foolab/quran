@@ -9,10 +9,12 @@ CONFIG += android sles
 SQLITE_EXTRA_COMPILE_FLAGS += --host=arm-linux-androideabi \
                               --with-sysroot=$$(SYSROOT)
 
-LIBAV_EXTRA_COMPILE_FLAGS += --enable-cross-compile \
+FFMPEG_EXTRA_COMPILE_FLAGS += --enable-cross-compile \
                             --sysroot=$$(SYSROOT) \
                             --target-os=android \
                             --arch=arm \
+                            --cpu=cortex-a8 \
+                            --cc=$$(TOOLCHAIN)/arm-linux-androideabi-gcc \
                             --cross-prefix=$$(TOOLCHAIN)/arm-linux-androideabi- \
                             --extra-cflags=\"-march=armv7-a -mfloat-abi=softfp\" \
                             --extra-ldflags=\"-Wl,--fix-cortex-a8\"

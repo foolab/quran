@@ -1,9 +1,9 @@
-[submodule "libav"]
-	path = libav
-	url = git://git.libav.org/libav.git
 [submodule "quazip"]
 	path = quazip
 	url = https://github.com/stachenov/quazip.git
 [submodule "android/sqlite-ndk"]
 	path = android/sqlite-ndk
 	url = https://github.com/KrystianBigaj/sqlite-ndk.git
+[submodule "ffmpeg"]
+	path = ffmpeg
+	url = https://git.ffmpeg.org/ffmpeg.git

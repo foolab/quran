@@ -106,7 +106,7 @@ bool MediaDecoder::decode(AVFormatContext *ctx, const Media& media) {
   MediaResampler *resampler = 0;
   AVPacket pkt;
   av_init_packet(&pkt);
-  int buffer_size = AVCODEC_MAX_AUDIO_FRAME_SIZE + FF_INPUT_BUFFER_PADDING_SIZE;
+  int buffer_size = AVCODEC_MAX_AUDIO_FRAME_SIZE + AV_INPUT_BUFFER_PADDING_SIZE;
   uint8_t buffer[buffer_size];
   pkt.data = buffer;
   pkt.size = buffer_size;

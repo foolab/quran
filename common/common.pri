@@ -1,4 +1,4 @@
-include(libav.pri)
+include(ffmpeg.pri)
 
 SQLITE_SRC_PATH=../sqlite
 include(sqlite.pri)
