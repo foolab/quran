@@ -78,7 +78,7 @@ gen.depends = gen_text gen_search
 
 defineReplace(build_dep) {
   android:QMAKE_ARGS=QMAKE_PKG_CONFIG=pkg-config
-  return(cd ../data/$$1/ && $$QMAKE_QMAKE \"$$QMAKE_ARGS\" && make gen)
+  return(cd ../data/$$1/ && $$QMAKE_QMAKE && make gen)
 }
 
 gen_text.commands = $$build_dep(text)
