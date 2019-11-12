@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 extern "C" {
 #include <libavcodec/avcodec.h>
-#include <libavresample/avresample.h>
+#include <libswresample/swresample.h>
 };
 
 class MediaResampler : public QObject {
@@ -39,7 +39,7 @@ private:
   MediaResampler(QObject *parent = 0);
   bool init(AVCodecContext *ctx);
 
-  AVAudioResampleContext *m_ctx;
+  SwrContext *m_ctx;
 
   bool m_bypass;
 };

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,8 +30,8 @@ MediaResampler::MediaResampler(QObject *parent) :
 
 MediaResampler::~MediaResampler() {
   if (m_ctx) {
-    avresample_close(m_ctx);
-    avresample_free(&m_ctx);
+    swr_close(m_ctx);
+    swr_free(&m_ctx);
     m_ctx = 0;
   }
 }
@@ -53,7 +53,7 @@ bool MediaResampler::init(AVCodecContext *ctx) {
     return true;
   }
 
-  m_ctx = avresample_alloc_context();
+  m_ctx = swr_alloc();
   if (!m_ctx) {
     return false;
   }
@@ -66,8 +66,8 @@ bool MediaResampler::init(AVCodecContext *ctx) {
   av_opt_set_int(m_ctx, "in_channel_layout", av_get_default_channel_layout(ctx->channels), 0);
   av_opt_set_int(m_ctx, "in_sample_rate", ctx->sample_rate, 0);
 
-  if (avresample_open(m_ctx) < 0) {
-    avresample_free(&m_ctx);
+  if (swr_init(m_ctx) < 0) {
+    swr_free(&m_ctx);
     m_ctx = 0;
     return false;
   }
@@ -94,10 +94,8 @@ bool MediaResampler::resample(AVFrame *frame, QByteArray& output) {
 
   uint8_t **out_t = &out;
   // Now we resample:
-  int nb_samples =
-    avresample_convert(m_ctx,
-		       out_t, out_line, frame->nb_samples,
-		       frame->extended_data, frame->linesize[0], frame->nb_samples);
+  int nb_samples = swr_convert(m_ctx, out_t, frame->nb_samples,
+			       (const uint8_t **)frame->extended_data, frame->nb_samples);
 
   if (nb_samples < 0) {
     av_free(out);
@@ -110,9 +108,7 @@ bool MediaResampler::resample(AVFrame *frame, QByteArray& output) {
 
   // Any data remaining (delay)
   out_t = &out;
-  nb_samples = avresample_convert(m_ctx,
-				  out_t, out_line, frame->nb_samples,
-				  NULL, 0, 0);
+  nb_samples = swr_convert(m_ctx, out_t, frame->nb_samples, NULL, 0);
 
   if (nb_samples < 0) {
     av_free(out);
@@ -121,20 +117,6 @@ bool MediaResampler::resample(AVFrame *frame, QByteArray& output) {
 
   output.append(QByteArray(reinterpret_cast<char *>(out),
 			   av_get_bytes_per_sample(AV_SAMPLE_FMT_S16) * nb_samples));
-
-  // FIFO:
-  while (true) {
-    out_t = &out;
-    nb_samples = avresample_read(m_ctx, out_t, frame->nb_samples);
-    if (nb_samples == 0) {
-      // Done
-      av_free(out);
-      return true;
-    }
-
-    output.append(QByteArray(reinterpret_cast<char *>(out),
-			     av_get_bytes_per_sample(AV_SAMPLE_FMT_S16) * nb_samples));
-  }
 
   av_free(out);
   return true;
