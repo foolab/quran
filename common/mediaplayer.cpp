@@ -20,7 +20,6 @@
 #include "media.h"
 #include <QDebug>
 #include "recitation.h"
-#include <QThread>
 #include "mediadecoder.h"
 #include "audiooutput.h"
 #include "audiopolicy.h"
@@ -195,10 +194,6 @@ bool MediaPlayer::play() {
 void MediaPlayer::stop() {
   if (m_decoder) {
     m_decoder->stop();
-    while (m_decoder->isRunning()) {
-      m_decoder->wait(20);
-    }
-
     m_decoder->deleteLater();
     m_decoder = 0;
   }

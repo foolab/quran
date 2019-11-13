@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,44 +15,50 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MEDIA_DECODER_H
-#define MEDIA_DECODER_H
+#ifndef MEDIA_CODEC_H
+#define MEDIA_CODEC_H
 
 #include <QObject>
 #include <QTimer>
+#include <QList>
+#include "media.h"
+#include "audiooutput.h"
 
-class Media;
-class AudioOutput;
-class AudioBuffer;
-class MediaCodec;
+class MediaResampler;
+struct AVFormatContext;
+struct AVPacket;
+struct AVCodecContext;
 
-class MediaDecoder : public QObject {
+class MediaCodec : public QObject {
   Q_OBJECT
 
 public:
-  MediaDecoder(QObject *parent = 0);
-  ~MediaDecoder();
+  MediaCodec(Media media, QObject *parent = 0);
+  ~MediaCodec();
 
-  void start();
+  bool isDone();
   void stop();
 
-  void addMedia(const Media& media);
+  QList<AudioBuffer> buffers();
 
-  void setOutput(AudioOutput *audio);
-
-private slots:
-  void decodeMedia();
+signals:
   void buffersAvailable();
 
-private:
-  void play(const AudioBuffer& buffer);
+private slots:
+  void decodePacket();
 
-  MediaCodec *m_codec;
-  AudioOutput *m_audio;
+private:
+  void cleanup();
+  bool decode(AVPacket *pkt, AudioBuffer& buffer);
+  AVFormatContext *context(const QByteArray& data);
+
+  Media m_media;
+  QTimer m_timer;
   QList<AudioBuffer> m_buffers;
 
-  QTimer m_timer;
-  QList<Media> m_media;
+  MediaResampler *m_resampler;
+  AVFormatContext *m_ctx;
+  AVCodecContext *m_codec;
 };
 
-#endif /* MEDIA_DECODER_H */
+#endif /* MEDIA_CODEC_H */

@@ -64,7 +64,6 @@ bool Media::signal() const {
 }
 
 QByteArray Media::data() const {
-  // Note that this can be called from a different thread
   return m_recitation->data(*this);
 }
 

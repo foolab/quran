@@ -44,10 +44,6 @@
 #include "chapterlistmodel.h"
 #include "partlistmodel.h"
 
-extern "C" {
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-};
 #ifndef ANDROID
 #include <fontconfig/fontconfig.h>
 #endif
@@ -75,9 +71,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   }
   FcConfigSetCurrent(conf);
 #endif
-
-  avcodec_register_all();
-  av_register_all();
 
   qmlRegisterType<DataProvider>("Quran", 1, 0, "DataProvider");
   qmlRegisterType<Settings>("Quran", 1, 0, "Settings");
