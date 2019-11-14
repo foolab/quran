@@ -29,8 +29,11 @@ extern "C" {
 };
 
 #define MAX_DECODE_TIME_MS           5
-#define PAGE_SIZE                    4096
 #define TIMER_INTERVAL_MS            50
+
+#ifndef PAGE_SIZE
+#define PAGE_SIZE                    4096
+#endif
 
 int read_qbuffer(void *opaque, uint8_t *buf, int buf_size);
 
@@ -49,10 +52,17 @@ MediaCodec::MediaCodec(Media media, QObject *parent) :
     return;
   }
 
-  m_codec = m_ctx->streams[0]->codec;
-  m_codec->request_sample_fmt = AV_SAMPLE_FMT_S16;
+  int stream_index = av_find_best_stream(m_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
+  if (stream_index < 0) {
+    m_buffers << AudioBuffer(Media::error());
+    m_timer.stop();
+    emit buffersAvailable();
+    return;
+  }
 
-  AVCodec *codec = avcodec_find_decoder(m_codec->codec_id);
+  AVStream *stream = m_ctx->streams[stream_index];
+
+  AVCodec *codec = avcodec_find_decoder(stream->codecpar->codec_id);
   if (!codec) {
     m_buffers << AudioBuffer(Media::error());
     m_timer.stop();
@@ -60,7 +70,28 @@ MediaCodec::MediaCodec(Media media, QObject *parent) :
     return;
   }
 
-  if (avcodec_open2(m_codec, codec, NULL) < 0) {
+  m_codec = avcodec_alloc_context3(codec);
+  if (!m_codec) {
+    m_buffers << AudioBuffer(Media::error());
+    m_timer.stop();
+    emit buffersAvailable();
+    return;
+  }
+
+  if (avcodec_parameters_to_context(m_codec, stream->codecpar) < 0) {
+    avcodec_free_context(&m_codec);
+    m_codec = 0;
+    m_buffers << AudioBuffer(Media::error());
+    m_timer.stop();
+    emit buffersAvailable();
+    return;
+  }
+
+  m_codec->request_sample_fmt = AV_SAMPLE_FMT_S16;
+  AVDictionary *opts = NULL;
+  av_dict_set(&opts, "refcounted_frames", "1", 0);
+  if (avcodec_open2(m_codec, codec, &opts) < 0) {
+    avcodec_free_context(&m_codec);
     m_codec = 0;
     m_buffers << AudioBuffer(Media::error());
     m_timer.stop();
@@ -104,9 +135,16 @@ void MediaCodec::decodePacket() {
     int n = av_read_frame(m_ctx, &pkt);
     if (n < 0) {
       av_packet_unref(&pkt);
-      // TODO: how do we detect an error?
-      m_timer.stop();
-      goto out;
+
+      if (n == AVERROR_EOF) {
+	// EOF -> flush
+	m_timer.stop();
+	flushDecoder(b);
+	goto out;
+      } else {
+	// Error:
+	goto error;
+      }
     }
 
     if (!decode(&pkt, b)) {
@@ -127,13 +165,24 @@ void MediaCodec::decodePacket() {
 out:
   m_buffers << b;
   emit buffersAvailable();
-
   return;
 
 error:
+  flushDecoder(b);
+  m_buffers << b;
   m_buffers << AudioBuffer(Media::error());
   m_timer.stop();
   emit buffersAvailable();
+}
+
+void MediaCodec::flushDecoder(AudioBuffer& buffer) {
+  AVPacket *pkt = av_packet_alloc();
+  if (pkt) {
+    pkt->data = NULL;
+    pkt->size = 0;
+    decode(pkt, buffer);
+    av_packet_free(&pkt);
+  }
 }
 
 void MediaCodec::stop() {
@@ -156,48 +205,40 @@ bool MediaCodec::decode(AVPacket *pkt, AudioBuffer& buffer) {
     return false;
   }
 
-  int len = 0;
-  int got_frame = 0;
+  int ret = avcodec_send_packet(m_codec, pkt);
+  if (ret < 0) {
+    av_frame_free(&frame);
+    return false;
+  }
 
-  while (len >= 0) {
-    len = avcodec_decode_audio4(m_codec, frame, &got_frame, pkt);
-    if (len < 0) {
+  while (ret >= 0) {
+    ret = avcodec_receive_frame(m_codec, frame);
+    if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
       av_frame_free(&frame);
-      // We will skip the packet but just return true so we don't signal an error
       return true;
     }
 
-    if (got_frame) {
-      int data_size = av_samples_get_buffer_size(NULL, m_codec->channels,
-						 frame->nb_samples,
-						 m_codec->sample_fmt, 1);
-      Q_UNUSED(data_size);
+    int data_size = av_samples_get_buffer_size(NULL, m_codec->channels,
+					       frame->nb_samples,
+					       m_codec->sample_fmt, 1);
+    Q_UNUSED(data_size);
 
-      QByteArray data;
+    QByteArray data;
+    if (!m_resampler) {
+      m_resampler = MediaResampler::create(m_codec);
       if (!m_resampler) {
-	m_resampler = MediaResampler::create(m_codec);
-	if (!m_resampler) {
-	  qWarning() << "Failed to create resampler";
-	  av_frame_free(&frame);
-	  return false;
-	}
-      }
-
-      if (!m_resampler->resample(frame, data)) {
+	qWarning() << "Failed to create resampler";
 	av_frame_free(&frame);
 	return false;
       }
-
-      buffer.data.append(data);
     }
 
-    pkt->size -= len;
-    pkt->data += len;
-
-    if (pkt->size == 0) {
+    if (!m_resampler->resample(frame, data)) {
       av_frame_free(&frame);
-      return true;
+      return false;
     }
+
+    buffer.data.append(data);
   }
 
   av_frame_free(&frame);
@@ -296,6 +337,7 @@ void MediaCodec::cleanup() {
 
   if (m_codec) {
     avcodec_close(m_codec);
+    avcodec_free_context(&m_codec);
     m_codec = 0;
   }
 

@@ -48,6 +48,7 @@ private slots:
   void decodePacket();
 
 private:
+  void flushDecoder(AudioBuffer& buffer);
   void cleanup();
   bool decode(AVPacket *pkt, AudioBuffer& buffer);
   AVFormatContext *context(const QByteArray& data);
