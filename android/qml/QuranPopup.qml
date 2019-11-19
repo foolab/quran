@@ -17,7 +17,7 @@
  */
 
 import QtQuick 2.2
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.4
 import QuranAndroid 1.0
 
 Popup {
@@ -26,6 +26,10 @@ Popup {
     width: parent.width - (2 * margins)
     modal: true
     focus: true
+
+    Overlay.modal: Rectangle {
+        color: "#88000000"
+    }
 
     enter: Transition {
         NumberAnimation {
