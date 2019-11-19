@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,11 +28,21 @@ Popup {
     focus: true
 
     enter: Transition {
-        NumberAnimation { property: "opacity"; from: 0.0; to: 1.0; duration: quranTheme.animations.fast }
+        NumberAnimation {
+            property: "scale"
+            from: 0.0
+            to: 1.0
+            duration: quranTheme.animations.fast
+        }
     }
 
     exit: Transition {
-        NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: quranTheme.animations.fast }
+        NumberAnimation {
+            property: "scale"
+            from: 1.0
+            to: 0.0
+            duration: quranTheme.animations.fast * 2
+        }
     }
 
     // We must assign KeyFilter to a property
