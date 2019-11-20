@@ -1,6 +1,11 @@
 #!/bin/bash
+
 set -e
 
+QT_VERSION=5.13.2
+ANDROID=armv7
+ANDROID_API=21
+ANDROID_TARGET=armv7a-linux-androideabi${ANDROID_API}
 ANT_ARG=debug
 
 show_help() {
@@ -31,22 +36,26 @@ if [ $# -gt 0 ]; then
     esac
 fi
 
-QT_VERSION=5.9.1
-QT_DIR=/home/mohammed/mnt/4/android/qt$QT_VERSION/$QT_VERSION/
+QT_DIR=/home/mohammed/Qt/$QT_VERSION/
 
 # Needed for Qt
-export ANDROID_NDK_ROOT=/home/mohammed/mnt/4/android/android-ndk-r15c/
-export ANDROID_SDK_ROOT=/home/mohammed/mnt/4/android/android-sdk-linux/
+export ANDROID_NDK_ROOT=/home/mohammed/android/ndk-bundle/
+export ANDROID_SDK_ROOT=/home/mohammed/android/
 
-export TOOLCHAIN=$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/
-export SYSROOT=$ANDROID_NDK_ROOT/platforms/android-9/arch-arm/
-export CFLAGS=--sysroot=$SYSROOT
-export PATH=$TOOLCHAIN:$PATH
+export TOOLCHAIN=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin/
 
+export ANDROID_CFLAGS="-march=armv7-a -mthumb"
+export ANDROID_LDFLAGS="-march=armv7-a -mthumb -Xlinker --fix-cortex-a8"
+
+export CC=${TOOLCHAIN}/armv7a-linux-androideabi21-clang
+export LD=${TOOLCHAIN}/armv7a-linux-androideabi21-clang
+export STRIP=${TOOLCHAIN}/arm-linux-androideabi-strip
+export NM=${TOOLCHAIN}/arm-linux-androideabi-nm
+export PATH=${TOOLCHAIN}:${PATH}
 rm -rf apk
 
 pushd android
-$QT_DIR/android_armv7/bin/qmake
+$QT_DIR/android_$ANDROID/bin/qmake
 make
 popd
 
@@ -59,9 +68,11 @@ cp data/search.db apk/assets/
 cp data/amiri-regular.ttf apk/assets/fonts/
 cp data/amiri-quran.ttf apk/assets/fonts/
 
-$QT_DIR/android_armv7/bin/androiddeployqt \
+$QT_DIR/android_$ANDROID/bin/androiddeployqt \
     --input android/android-libQuran.so-deployment-settings.json \
     --output apk \
     --deployment bundled \
     --verbose \
+    --android-platform android-${ANDROID_API} \
+    --gradle \
     $ANT_ARG
