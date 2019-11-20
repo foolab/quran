@@ -42,7 +42,7 @@ QuranPage {
 
             QuranPageHeader {
                 width: parent.width
-                title: qsTr("Playlist")
+                title: qsTr("Recite")
             }
 
             Item {
