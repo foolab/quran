@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -134,10 +134,13 @@ private:
 
 Alsa::Alsa(AudioOutput *parent) :
   AudioOutputInterface(parent),
-  m_running(false),
   m_audio(parent),
   m_device(0) {
 
+  m_timer.setSingleShot(false);
+  m_timer.setInterval(100);
+
+  QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(feedData()));
 }
 
 Alsa::~Alsa() {
@@ -148,64 +151,50 @@ Alsa::~Alsa() {
 }
 
 void Alsa::start() {
-  if (m_running) {
+  if (isRunning()) {
     return;
   }
 
-  m_running = true;
-  try {
-    m_thread = std::thread(__run, this);
-  } catch (...) {
-    m_running = false;
-    emit error();
-  }
+  m_timer.start();
 }
 
-void Alsa::__run(Alsa *that) {
-  that->run();
-}
-
-void Alsa::run() {
-  while (m_running) {
+void Alsa::feedData() {
+  if (m_buffer.isEmpty()) {
     AudioBuffer buffer = m_audio->buffer();
 
     if (buffer.media.isEos()) {
       QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
       return;
-    }
-    else if (buffer.media.isError()) {
+    } else if (buffer.media.isError()) {
       QMetaObject::invokeMethod(this, "drainAndError", Qt::QueuedConnection);
       return;
-    }
-    else if (!m_running) {
-      QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
     }
 
     emit positionChanged(buffer.media.index());
 
-    while (m_running &&
-	   buffer.data.size()) {
-      snd_pcm_wait(m_device->handle(), 100);
+    m_buffer = buffer.data;
+  }
 
-      snd_pcm_sframes_t frames = snd_pcm_avail(m_device->handle());
-      ssize_t size =
-	qMin((ssize_t)buffer.data.size(), snd_pcm_frames_to_bytes(m_device->handle(), frames));
-      frames = snd_pcm_bytes_to_frames(m_device->handle(), size);
-      int ret = snd_pcm_writei(m_device->handle(), buffer.data.constData(), frames);
-      buffer.data.remove(0, size);
-      if (ret != frames) {
-	emit error();
-	return;
-      }
-    }
+  snd_pcm_sframes_t frames = snd_pcm_avail(m_device->handle());
+
+  ssize_t size =
+    qMin((ssize_t)m_buffer.size(), snd_pcm_frames_to_bytes(m_device->handle(), frames));
+
+  frames = snd_pcm_bytes_to_frames(m_device->handle(), size);
+
+  int ret = snd_pcm_writei(m_device->handle(), m_buffer.constData(), frames);
+
+  m_buffer.remove(0, size);
+  if (ret != frames) {
+    emit error();
+    return;
   }
 }
 
 void Alsa::stop() {
-  m_running = false;
-  try {
-    m_thread.join();
-  } catch (...) {}
+  m_timer.stop();
+  snd_pcm_drop(m_device->handle());
+  m_buffer.clear();
 }
 
 bool Alsa::connect() {
@@ -237,7 +226,7 @@ bool Alsa::connect() {
 }
 
 bool Alsa::isRunning() {
-  return m_running;
+  return m_timer.isActive();
 }
 
 void Alsa::drainAndFinish() {

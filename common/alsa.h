@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,8 @@
 #define ALSA_H
 
 #include <QObject>
-#include <thread>
+#include <QTimer>
+#include <QByteArray>
 #include "audiooutput.h"
 
 class Device;
@@ -41,17 +42,16 @@ public:
 private slots:
   void drainAndFinish();
   void drainAndError();
+  void feedData();
 
 private:
-  static void __run(Alsa *that);
-
   void run();
   void drain();
 
-  bool m_running;
-  std::thread m_thread;
   AudioOutput *m_audio;
   Device *m_device;
+  QByteArray m_buffer;
+  QTimer m_timer;
 };
 
 #endif /* ALSA_H */
