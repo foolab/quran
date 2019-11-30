@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,8 @@
 #include "pulse.h"
 #elif defined(ALSA)
 #include "alsa.h"
+#elif defined(OBOE)
+#include "oboe.h"
 #endif
 #include <QDebug>
 
@@ -56,6 +58,8 @@ bool AudioOutput::start() {
     m_out = new Sles(this);
 #elif defined(ALSA)
     m_out = new Alsa(this);
+#elif defined(OBOE)
+    m_out = new Oboe(this);
 #endif
     QObject::connect(m_out, SIGNAL(positionChanged(int)),
 		     this, SLOT(audioPositionChanged(int)), Qt::QueuedConnection);

@@ -17,7 +17,6 @@ MOBILITY = sensors
 !android:PKGCONFIG += fontconfig
 alsa:PKGCONFIG += alsa
 pulse:PKGCONFIG += libpulse
-sles:LIBS += -lOpenSLES
 
 DEPENDPATH += . ../data/ ../common/
 INCLUDEPATH += . ../data/ ../common/
@@ -53,6 +52,12 @@ sles {
   SOURCES += sles.cpp
   HEADERS += sles.h
   DEFINES += SLES
+}
+
+oboe {
+  SOURCES += oboe.cpp
+  HEADERS += oboe.h
+  DEFINES += OBOE
 }
 
 pulse {
