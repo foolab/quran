@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,41 +19,30 @@
 #define SLES_H
 
 #include <QObject>
-#include <QMutex>
 #include "audiooutput.h"
 
 class Engine;
 class Mix;
 class Sink;
-typedef const struct SLAndroidSimpleBufferQueueItf_ * const * SLAndroidSimpleBufferQueueItf;
 
-class Sles : public AudioOutputInterface {
+class Sles : public AudioOutput {
   Q_OBJECT
 
 public:
-  Sles(AudioOutput *parent = 0);
+  Sles(QObject *parent = 0);
   ~Sles();
 
-  bool connect();
+  bool start();
   void stop();
-
-  void start();
 
   bool isRunning();
 
-private slots:
-  void drainAndFinish();
-  void drainAndError();
+protected:
+  bool connect();
+  bool writeData(QByteArray& data);
+  bool hasFrames();
 
 private:
-  static void slesCallback(SLAndroidSimpleBufferQueueItf q, void *context);
-  void writeData();
-  void drain();
-
-  AudioOutput *m_audio;
-  bool m_stop;
-  bool m_started;
-
   Engine *m_engine;
   Mix *m_mix;
   Sink *m_sink;

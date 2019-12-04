@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,33 +19,12 @@
 #define AUDIO_OUTPUT_H
 
 #include <QObject>
-#include <QMutex>
-#include <QWaitCondition>
+#include <QTimer>
 #include "media.h"
-
-class AudioOutputInterface : public QObject {
-  Q_OBJECT
-
-public:
-  virtual ~AudioOutputInterface() {}
-  virtual bool isRunning() = 0;
-  virtual bool connect() = 0;
-  virtual void start() = 0;
-  virtual void stop() = 0;
-
-protected:
-  AudioOutputInterface(QObject *parent = 0) :
-    QObject(parent) {}
-
-signals:
-  void error();
-  void finished();
-  void positionChanged(int index);
-};
 
 class AudioBuffer {
 public:
- AudioBuffer(const Media& m) : media(m) {}
+  AudioBuffer(const Media& m) : media(m) {}
 
   QByteArray data;
   Media media;
@@ -55,15 +34,28 @@ class AudioOutput : public QObject {
   Q_OBJECT
 
 public:
+  static AudioOutput *create(QObject *parent);
+
+  virtual ~AudioOutput();
+
+  virtual bool start();
+  virtual void stop();
+
+  //  bool pause();
+  //  bool resume();
+
+  bool isRunning();
+
+  void addBuffer(const AudioBuffer& buffer);
+
+protected:
   AudioOutput(QObject *parent = 0);
-  ~AudioOutput();
 
-  bool start();
-  void stop();
+  virtual bool connect() = 0;
 
-  void play(const AudioBuffer& buffer);
+  virtual bool writeData(QByteArray& data) = 0;
 
-  AudioBuffer buffer();
+  virtual bool hasFrames() = 0;
 
 signals:
   void finished();
@@ -71,14 +63,12 @@ signals:
   void positionChanged(int index);
 
 private slots:
-  void audioPositionChanged(int index);
+  void timeout();
 
 private:
-  QMutex m_mutex;
-  QWaitCondition m_cond;
   QList<AudioBuffer> m_buffers;
-
-  AudioOutputInterface *m_out;
+  QTimer m_timer;
+  QByteArray m_data;
 };
 
 #endif /* AUDIO_OUTPUT_H */

@@ -17,20 +17,13 @@
 
 #include "oboe.h"
 #include <oboe/Oboe.h>
-#include <QDebug>
+#include <QQmlInfo>
 
-#define TIMER_INTERVAL_MS      25
 #define BUFFER_CAPACITY        2000  // Arbitrary
 
-Oboe::Oboe(AudioOutput *parent) :
-  AudioOutputInterface(parent),
-  m_audio(parent),
+Oboe::Oboe(QObject *parent) :
   m_stream(0) {
 
-  m_timer.setSingleShot(false);
-  m_timer.setInterval(TIMER_INTERVAL_MS);
-
-  QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(feedData()));
 }
 
 Oboe::~Oboe() {
@@ -40,20 +33,19 @@ Oboe::~Oboe() {
   m_stream = 0;
 }
 
-void Oboe::start() {
-  if (isRunning()) {
-    return;
+bool Oboe::start() {
+  oboe::Result r = m_stream->requestStart();
+  if (r != oboe::Result::OK) {
+    qmlInfo(this) << "Failed to start audio stream" << oboe::convertToText(r);
+    return false;
   }
 
-  m_stream->requestStart();
-
-  m_timer.start();
+  return AudioOutput::start();
 }
 
 void Oboe::stop() {
-  m_timer.stop();
   m_stream->requestStop();
-  m_buffer.clear();
+  return AudioOutput::stop();
 }
 
 bool Oboe::connect() {
@@ -75,7 +67,7 @@ bool Oboe::connect() {
 
   oboe::Result result = builder.openStream(&m_stream);
   if (result != oboe::Result::OK) {
-    qWarning() << "Failed to open managed stream" << oboe::convertToText(result);
+    qmlInfo(this) << "Failed to open audio stream" << oboe::convertToText(result);
     delete m_stream;
     m_stream = 0;
     return false;
@@ -84,7 +76,7 @@ bool Oboe::connect() {
   if (m_stream->getFormat() != oboe::AudioFormat::I16 ||
       m_stream->getChannelCount() != oboe::ChannelCount::Mono ||
       m_stream->getSampleRate() != 22050) {
-    qWarning() << "Failed to set audio stream properties";
+    qmlInfo(this) << "Failed to set audio stream properties";
     delete m_stream;
     m_stream = 0;
     return false;
@@ -93,51 +85,26 @@ bool Oboe::connect() {
   return true;
 }
 
-bool Oboe::isRunning() {
-  return m_stream && m_stream->getState() == oboe::StreamState::Started && m_timer.isActive();
-}
-
-void Oboe::feedData() {
-  if (m_buffer.isEmpty()) {
-    AudioBuffer buffer = m_audio->buffer();
-
-    if (buffer.media.isEos()) {
-      QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
-      return;
-    } else if (buffer.media.isError()) {
-      QMetaObject::invokeMethod(this, "drainAndError", Qt::QueuedConnection);
-      return;
-    }
-
-    emit positionChanged(buffer.media.index());
-
-    m_buffer = buffer.data;
-  }
-
-  int32_t frames = m_buffer.size() / m_stream->getBytesPerFrame();
-  oboe::ResultWithValue<int32_t> r = m_stream->write(m_buffer.constData(), frames, 0);
+bool Oboe::writeData(QByteArray& data) {
+  int32_t frames = data.size() / m_stream->getBytesPerFrame();
+  oboe::ResultWithValue<int32_t> r = m_stream->write(data.constData(), frames, 0);
   if (!r) {
-    qWarning() << "Error writing to stream" << oboe::convertToText(r.error());
-    emit error();
-    return;
+    qmlInfo(this) << "Error writing to stream" << oboe::convertToText(r.error());
+    return false;
   }
 
-  m_buffer.remove(0, r.value() * m_stream->getBytesPerFrame());
+  data.remove(0, r.value() * m_stream->getBytesPerFrame());
+
+  return true;
 }
 
-void Oboe::drain() {
-  // TODO: This is not correct
-  m_stream->requestFlush();
-}
+bool Oboe::hasFrames() {
+  oboe::ResultWithValue<int32_t> r = m_stream->getAvailableFrames();
 
-void Oboe::drainAndFinish() {
-  drain();
+  if (!r) {
+    qmlInfo(this) << "Error getting stream available frames" << oboe::convertToText(r.error());
+    return false;
+  }
 
-  emit finished();
-}
-
-void Oboe::drainAndError() {
-  drain();
-
-  emit error();
+  return r.value() > 0;
 }

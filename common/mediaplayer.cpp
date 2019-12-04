@@ -45,7 +45,13 @@ bool MediaPlayer::isPlaying() const {
 }
 
 void MediaPlayer::policyAcquired() {
-  m_audio = new AudioOutput(this);
+  m_audio = AudioOutput::create(this);
+  if (!m_audio) {
+    qmlInfo(this) << "Failed to create audio output";
+    emit error();
+    return;
+  }
+
   QObject::connect(m_audio, SIGNAL(positionChanged(int)),
 		   this, SLOT(audioPositionChanged(int)));
 

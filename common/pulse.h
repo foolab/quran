@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,44 +19,34 @@
 #define PULSE_H
 
 #include <QObject>
-#include <QMutex>
 #include <pulse/pulseaudio.h>
 #include "audiooutput.h"
 
-class Pulse : public AudioOutputInterface {
+class Pulse : public AudioOutput {
   Q_OBJECT
 
 public:
-  Pulse(AudioOutput *parent = 0);
+  Pulse(QObject *parent = 0);
   ~Pulse();
 
-  bool connect();
+  bool start();
   void stop();
 
-  void start();
-
-  bool isRunning();
-
-private slots:
-  void drainAndFinish();
-  void drainAndError();
+protected:
+  bool connect();
+  bool writeData(QByteArray& data);
+  bool hasFrames();
 
 private:
   static void contextStateCallback(pa_context *ctx, Pulse *pulse);
   static void streamStateCallback(pa_stream *stream, Pulse *pulse);
-  static void streamWriteCallback(pa_stream *stream, size_t length, Pulse *pulse);
   static void successCallback(pa_stream *stream, int success, Pulse *pulse);
 
   bool createStream();
-  void writeData();
-  void drain();
 
-  AudioOutput *m_audio;
   pa_threaded_mainloop *m_loop;
   pa_context *m_ctx;
   pa_stream *m_stream;
-  bool m_stop;
-  bool m_started;
 };
 
 #endif /* PULSE_H */

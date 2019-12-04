@@ -19,40 +19,31 @@
 #define OBOE_H
 
 #include <QObject>
-#include <QTimer>
-#include <QByteArray>
 #include "audiooutput.h"
 
 namespace oboe {
   class AudioStream;
 };
 
-class Oboe : public AudioOutputInterface {
+class QByteArray;
+
+class Oboe : public AudioOutput {
   Q_OBJECT
 
 public:
-  Oboe(AudioOutput *parent = 0);
+  Oboe(QObject *parent = 0);
   ~Oboe();
 
-  bool connect();
+  bool start();
   void stop();
 
-  void start();
-
-  bool isRunning();
-
 private slots:
-  void feedData();
-  void drainAndFinish();
-  void drainAndError();
+  bool connect();
+  bool writeData(QByteArray& data);
+  bool hasFrames();
 
 private:
-  void drain();
-
-  AudioOutput *m_audio;
   oboe::AudioStream *m_stream;
-  QByteArray m_buffer;
-  QTimer m_timer;
 };
 
-#endif /* SLES_H */
+#endif /* OBOE_H */

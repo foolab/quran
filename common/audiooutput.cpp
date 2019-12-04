@@ -27,93 +27,96 @@
 #endif
 #include <QDebug>
 
-AudioOutput::AudioOutput(QObject *parent) :
-  QObject(parent),
-  m_out(0) {
+#define TIMER_INTERVAL_MS      25
 
+AudioOutput *AudioOutput::create(QObject *parent) {
+#if defined(PULSE)
+  AudioOutput *out = new Pulse(parent);
+#elif defined(SLES)
+  AudioOutput *out = new Sles(parent);
+#elif defined(ALSA)
+  AudioOutput *out = new Alsa(parent);
+#elif defined(OBOE)
+  AudioOutput *out = new Oboe(parent);
+#endif
+
+  if (!out->connect()) {
+    delete out;
+    return 0;
+  }
+
+  return out;
+}
+
+AudioOutput::AudioOutput(QObject *parent) :
+  QObject(parent) {
+
+  m_timer.setSingleShot(false);
+  m_timer.setInterval(TIMER_INTERVAL_MS);
+
+  QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
 
 AudioOutput::~AudioOutput() {
-  stop();
+
 }
 
-void AudioOutput::stop() {
-  if (m_out) {
-    m_mutex.lock();
-    m_buffers.clear();
-    m_buffers << AudioBuffer(Media::eos());
-    m_cond.wakeOne();
-    m_mutex.unlock();
-    m_out->stop();
-    delete m_out;
-    m_out = 0;
-  }
+void AudioOutput::addBuffer(const AudioBuffer& buffer) {
+  m_buffers << buffer;
+}
+
+bool AudioOutput::isRunning() {
+  return m_timer.isActive();
 }
 
 bool AudioOutput::start() {
-  if (!m_out) {
-#if defined(PULSE)
-    m_out = new Pulse(this);
-#elif defined(SLES)
-    m_out = new Sles(this);
-#elif defined(ALSA)
-    m_out = new Alsa(this);
-#elif defined(OBOE)
-    m_out = new Oboe(this);
-#endif
-    QObject::connect(m_out, SIGNAL(positionChanged(int)),
-		     this, SLOT(audioPositionChanged(int)), Qt::QueuedConnection);
-
-    QObject::connect(m_out, SIGNAL(finished()), this, SIGNAL(finished()));
-    QObject::connect(m_out, SIGNAL(error()), this, SIGNAL(error()));
-
-    if (!m_out->connect()) {
-      delete m_out;
-      m_out = 0;
-
-      return false;
-    }
+  if (isRunning()) {
+    return true;
   }
+
+  m_timer.start();
 
   return true;
 }
 
-void AudioOutput::play(const AudioBuffer& buffer) {
-  // TODO: limit the size of m_buffers
-
-  m_mutex.lock();
-  m_buffers << buffer;
-
-  if (m_out->isRunning()) {
-    m_cond.wakeOne();
-    m_mutex.unlock();
-  }
-  else {
-    m_mutex.unlock();
-    m_out->start();
-  }
+void AudioOutput::stop() {
+  m_data.clear();
+  m_timer.stop();
 }
 
-AudioBuffer AudioOutput::buffer() {
-  m_mutex.lock();
+void AudioOutput::timeout() {
+  if (m_data.isEmpty()) {
+    if (m_buffers.isEmpty()) {
+      // TODO:
+      return;
+    }
 
-  if (m_buffers.isEmpty()) {
-    m_cond.wait(&m_mutex);
+    AudioBuffer buffer = m_buffers.takeFirst();
+    if (buffer.media.isEos()) {
+      if (!hasFrames()) {
+	emit finished();
+      } else {
+	// Put it back because we will be called again.
+	m_buffers << buffer;
+      }
+      return;
+    } else if (buffer.media.isError()) {
+      if (!hasFrames()) {
+	emit error();
+      } else {
+	// Put it back because we will be called again.
+	m_buffers << buffer;
+      }
+      return;
+    }
+
+    emit positionChanged(buffer.media.index());
+
+    m_data = buffer.data;
   }
 
-  if (m_buffers.isEmpty()) {
-    m_mutex.unlock();
-    return AudioBuffer(Media::eos());
-  }
-
-  AudioBuffer b = m_buffers.takeFirst();
-  m_mutex.unlock();
-
-  return b;
-}
-
-void AudioOutput::audioPositionChanged(int index) {
-  if (m_out) {
-    emit positionChanged(index);
+  if (!writeData(m_data)) {
+    emit error();
+    return;
   }
 }

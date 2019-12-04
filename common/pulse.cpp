@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,20 +16,14 @@
  */
 
 #include "pulse.h"
-#include "audiooutput.h"
-#include <QDebug>
-#include "media.h"
 #include <QQmlInfo>
 #include <cstring>
 
-Pulse::Pulse(AudioOutput *parent) :
-  AudioOutputInterface(parent),
-  m_audio(parent),
+Pulse::Pulse(QObject *parent) :
+  AudioOutput(parent),
   m_loop(0),
   m_ctx(0),
-  m_stream(0),
-  m_stop(false),
-  m_started(false) {
+  m_stream(0) {
 
   m_loop = pa_threaded_mainloop_new();
 }
@@ -68,6 +62,8 @@ void Pulse::stop() {
   }
 
   pa_threaded_mainloop_stop(m_loop);
+
+  return AudioOutput::stop();
 }
 
 bool Pulse::connect() {
@@ -147,13 +143,6 @@ void Pulse::streamStateCallback(pa_stream *stream, Pulse *pulse) {
   pa_threaded_mainloop_signal(pulse->m_loop, 0);
 }
 
-void Pulse::streamWriteCallback(pa_stream *stream, size_t length, Pulse *pulse) {
-  Q_UNUSED(stream);
-  Q_UNUSED(length);
-
-  pulse->writeData();
-}
-
 void Pulse::successCallback(pa_stream *stream, int success, Pulse *pulse) {
   Q_UNUSED(stream);
   Q_UNUSED(success);
@@ -212,94 +201,42 @@ bool Pulse::createStream() {
   return true;
 }
 
-void Pulse::writeData() {
-  // Can be called from the GUI thread or a pulseaudio thread.
-  if (m_stop) {
-    return;
+bool Pulse::writeData(QByteArray& data) {
+  size_t bytes = pa_stream_writable_size(m_stream);
+  if (bytes == (size_t)-1) {
+    return false;
+  } else if (bytes == 0) {
+    return true;
   }
 
-  AudioBuffer buffer = m_audio->buffer();
+  size_t size =
+    qMin((size_t)data.size(), bytes);
 
-  if (buffer.media.isEos()) {
-    QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
-    m_stop = true;
-    return;
-  }
-  else if (buffer.media.isError()) {
-    QMetaObject::invokeMethod(this, "drainAndError", Qt::QueuedConnection);
-    m_stop = true;
-    return;
-  }
-  else if (m_stop) {
-    QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
-    return;
+  void *buff = 0;
+
+  if (pa_stream_begin_write(m_stream, &buff, &size) < 0) {
+    qmlInfo(this) << "Error from pulseaudio " << std::strerror(pa_context_errno(m_ctx));
+    return false;
   }
 
-  emit positionChanged(buffer.media.index());
-
-  while (!buffer.data.isEmpty()) {
-    void *data;
-    size_t len = buffer.data.size();
-    if (pa_stream_begin_write(m_stream, &data, &len) < 0) {
-      qmlInfo(this) << "Error from pulseaudio " << std::strerror(pa_context_errno(m_ctx));
-      emit error();
-      return;
-    }
-
-    len = qMin(len, (size_t)buffer.data.size());
-    memcpy(data, buffer.data.constData(), len);
-    buffer.data.remove(0, len);
-    if (pa_stream_write(m_stream, data, len, NULL, 0, PA_SEEK_RELATIVE) < 0) {
-      qmlInfo(this) << "Error from pulseaudio " << std::strerror(pa_context_errno(m_ctx));
-      emit error();
-      return;
-    }
+  size = qMin(size, (size_t)data.size());
+  memcpy(buff, data.constData(), size);
+  data.remove(0, size);
+  if (pa_stream_write(m_stream, buff, size, NULL, 0, PA_SEEK_RELATIVE) < 0) {
+    qmlInfo(this) << "Error from pulseaudio " << std::strerror(pa_context_errno(m_ctx));
+    return false;
   }
+
+  return true;
 }
 
-void Pulse::drainAndError() {
-  drain();
+bool Pulse::hasFrames() {
+  const pa_buffer_attr *attr = pa_stream_get_buffer_attr(m_stream);
+  size_t bytes = pa_stream_writable_size(m_stream);
 
-  emit error();
+  return bytes < attr->tlength;
 }
 
-void Pulse::drainAndFinish() {
-  drain();
-
-  emit finished();
-}
-
-void Pulse::drain() {
-  pa_threaded_mainloop_lock(m_loop);
-
-  if (!m_stream) {
-    pa_threaded_mainloop_unlock(m_loop);
-    return;
-  }
-
-  pa_operation *o = pa_stream_drain(m_stream, (pa_stream_success_cb_t)successCallback, this);
-
-  if (o) {
-    while (pa_operation_get_state(o) == PA_OPERATION_RUNNING) {
-      pa_threaded_mainloop_wait(m_loop);
-    }
-
-    pa_operation_unref(o);
-  }
-
-  pa_threaded_mainloop_unlock(m_loop);
-}
-
-void Pulse::start() {
-  if (!m_started) {
-    pa_stream_set_write_callback(m_stream, (pa_stream_request_cb_t)streamWriteCallback, this);
-
-    writeData();
-
-    m_started = true;
-  }
-}
-
-bool Pulse::isRunning() {
-  return m_started;
+bool Pulse::start() {
+  return AudioOutput::start();
 }

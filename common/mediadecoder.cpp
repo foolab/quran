@@ -115,7 +115,7 @@ void MediaDecoder::setOutput(AudioOutput *audio) {
   m_audio = audio;
 
   foreach (const AudioBuffer& buffer, m_buffers) {
-    m_audio->play(buffer);
+    m_audio->addBuffer(buffer);
   }
 
   m_buffers.clear();
@@ -123,7 +123,7 @@ void MediaDecoder::setOutput(AudioOutput *audio) {
 
 void MediaDecoder::play(const AudioBuffer& buffer) {
   if (m_audio) {
-    m_audio->play(buffer);
+    m_audio->addBuffer(buffer);
   } else {
     m_buffers << buffer;
   }

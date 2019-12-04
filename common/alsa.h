@@ -19,39 +19,28 @@
 #define ALSA_H
 
 #include <QObject>
-#include <QTimer>
-#include <QByteArray>
 #include "audiooutput.h"
 
 class Device;
+class QByteArray;
 
-class Alsa : public AudioOutputInterface {
+class Alsa : public AudioOutput {
   Q_OBJECT
 
 public:
-  Alsa(AudioOutput *parent = 0);
+  Alsa(QObject *parent = 0);
   ~Alsa();
 
-  bool connect();
+  bool start();
   void stop();
 
-  void start();
-
-  bool isRunning();
-
-private slots:
-  void drainAndFinish();
-  void drainAndError();
-  void feedData();
+protected:
+  bool connect();
+  bool writeData(QByteArray& data);
+  bool hasFrames();
 
 private:
-  void run();
-  void drain();
-
-  AudioOutput *m_audio;
   Device *m_device;
-  QByteArray m_buffer;
-  QTimer m_timer;
 };
 
 #endif /* ALSA_H */

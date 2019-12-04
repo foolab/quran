@@ -18,6 +18,7 @@
 #include "alsa.h"
 #include <alsa/asoundlib.h>
 #include <QDebug>
+#include <QQmlInfo>
 
 class Device {
 public:
@@ -132,15 +133,10 @@ private:
   snd_pcm_hw_params_t *m_params;
 };
 
-Alsa::Alsa(AudioOutput *parent) :
-  AudioOutputInterface(parent),
-  m_audio(parent),
+Alsa::Alsa(QObject *parent) :
+  AudioOutput(parent),
   m_device(0) {
 
-  m_timer.setSingleShot(false);
-  m_timer.setInterval(100);
-
-  QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(feedData()));
 }
 
 Alsa::~Alsa() {
@@ -150,51 +146,41 @@ Alsa::~Alsa() {
   m_device = 0;
 }
 
-void Alsa::start() {
-  if (isRunning()) {
-    return;
-  }
-
-  m_timer.start();
+bool Alsa::start() {
+  return AudioOutput::start();
 }
 
-void Alsa::feedData() {
-  if (m_buffer.isEmpty()) {
-    AudioBuffer buffer = m_audio->buffer();
-
-    if (buffer.media.isEos()) {
-      QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
-      return;
-    } else if (buffer.media.isError()) {
-      QMetaObject::invokeMethod(this, "drainAndError", Qt::QueuedConnection);
-      return;
-    }
-
-    emit positionChanged(buffer.media.index());
-
-    m_buffer = buffer.data;
+bool Alsa::writeData(QByteArray& data) {
+  snd_pcm_sframes_t frames = snd_pcm_avail(m_device->handle());
+  if (frames < 0) {
+    qmlInfo(this) << "Failed to get available sound device frames:" << snd_strerror(frames);
+    return false;
+  } else if (frames == 0) {
+    return true;
   }
 
-  snd_pcm_sframes_t frames = snd_pcm_avail(m_device->handle());
-
   ssize_t size =
-    qMin((ssize_t)m_buffer.size(), snd_pcm_frames_to_bytes(m_device->handle(), frames));
+    qMin((ssize_t)data.size(), snd_pcm_frames_to_bytes(m_device->handle(), frames));
 
   frames = snd_pcm_bytes_to_frames(m_device->handle(), size);
 
-  int ret = snd_pcm_writei(m_device->handle(), m_buffer.constData(), frames);
-
-  m_buffer.remove(0, size);
-  if (ret != frames) {
-    emit error();
-    return;
+  int ret = snd_pcm_writei(m_device->handle(), data.constData(), frames);
+  if (ret == -EINTR) {
+    // We should get called again.
+    return true;
+  } else if (ret < 0) {
+    qmlInfo(this) << "Failed to write samples to sound device:" << snd_strerror(ret);
+    return false;
   }
+
+  data.remove(0, snd_pcm_frames_to_bytes(m_device->handle(), ret));
+
+  return true;
 }
 
 void Alsa::stop() {
-  m_timer.stop();
   snd_pcm_drop(m_device->handle());
-  m_buffer.clear();
+  AudioOutput::stop();
 }
 
 bool Alsa::connect() {
@@ -225,22 +211,8 @@ bool Alsa::connect() {
   return true;
 }
 
-bool Alsa::isRunning() {
-  return m_timer.isActive();
-}
+bool Alsa::hasFrames() {
+  snd_pcm_sframes_t frames = snd_pcm_avail(m_device->handle());
 
-void Alsa::drainAndFinish() {
-  drain();
-
-  emit finished();
-}
-
-void Alsa::drainAndError() {
-  drain();
-
-  emit error();
-}
-
-void Alsa::drain() {
-  snd_pcm_drain(m_device->handle());
+  return frames > 0;
 }

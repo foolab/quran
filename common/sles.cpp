@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,10 @@
 
 #include "sles.h"
 #include <SLES/OpenSLES.h>
-#include <SLES/OpenSLES_Android.h>
+#include <QMutex>
+
+#define BUFFER_SIZE 4096
+#define NUM_BUFFERS 2
 
 class Engine {
 public:
@@ -96,8 +99,8 @@ public:
     m_queue(0) {
 
     /* source */
-    SLDataLocator_AndroidSimpleBufferQueue loc_bufq =
-      {SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 2};
+    SLDataLocator_BufferQueue loc_bufq =
+      {SL_DATALOCATOR_BUFFERQUEUE, NUM_BUFFERS};
     SLDataFormat_PCM format_pcm = {SL_DATAFORMAT_PCM, 1, SL_SAMPLINGRATE_22_05, /* 22050 */
 				   SL_PCMSAMPLEFORMAT_FIXED_16, SL_PCMSAMPLEFORMAT_FIXED_16,
 				   SL_SPEAKER_FRONT_CENTER, /* 1 channel */
@@ -109,7 +112,7 @@ public:
     SLDataSink audioSnk = {&loc_outmix, NULL};
 
     /* player */
-    const SLInterfaceID ids1[] = {SL_IID_ANDROIDSIMPLEBUFFERQUEUE};
+    const SLInterfaceID ids1[] = {SL_IID_BUFFERQUEUE};
     const SLboolean req1[] = {SL_BOOLEAN_TRUE};
     if ((*m_engine)->CreateAudioPlayer(m_engine, &m_playerObject, &audioSrc, &audioSnk,
 				       1, ids1, req1) != SL_RESULT_SUCCESS) {
@@ -127,7 +130,7 @@ public:
     }
 
     /* buffer queue interface */
-    if ((*m_playerObject)->GetInterface(m_playerObject, SL_IID_ANDROIDSIMPLEBUFFERQUEUE,
+    if ((*m_playerObject)->GetInterface(m_playerObject, SL_IID_BUFFERQUEUE,
 					&m_queue) != SL_RESULT_SUCCESS) {
       return;
     }
@@ -148,9 +151,39 @@ public:
   }
 
   bool play(QByteArray& data) {
-    m_data = data;
+    int size = qMin(data.size(), BUFFER_SIZE);
+    QByteArray d(data.constData(), size);
+    {
+      QMutexLocker l(&m_lock);
+      if (m_data.size() == NUM_BUFFERS) {
+	return true;
+      }
+      m_data << d;
+    }
 
-    if ((*m_queue)->Enqueue(m_queue, m_data.constData(), m_data.size()) != SL_RESULT_SUCCESS) {
+    if ((*m_queue)->Enqueue(m_queue, d.constData(), d.size()) != SL_RESULT_SUCCESS) {
+      return false;
+    }
+
+    data.remove(0, size);
+
+    return true;
+  }
+
+  void pop() {
+    QMutexLocker l(&m_lock);
+    m_data.takeFirst();
+  }
+
+  static void slesCallback(SLBufferQueueItf q, void *context) {
+    Q_UNUSED(q);
+    Sink *that = (Sink *) context;
+    that->pop();
+  }
+
+  bool registerCallback() {
+    if ((*m_queue)->RegisterCallback(m_queue,
+				     slesCallback, this) != SL_RESULT_SUCCESS) {
       return false;
     }
 
@@ -170,27 +203,17 @@ public:
     m_data.clear();
   }
 
+  QList<QByteArray> m_data;
+  QMutex m_lock;
   SLEngineItf m_engine;
   SLObjectItf m_mix;
   SLObjectItf m_playerObject;
   SLPlayItf m_player;
-  SLAndroidSimpleBufferQueueItf m_queue;
-  QByteArray m_data;
+  SLBufferQueueItf m_queue;
 };
 
-void Sles::slesCallback(SLAndroidSimpleBufferQueueItf q, void *context) {
-  Q_UNUSED(q);
-
-  Sles *sles = (Sles *)context;
-
-  sles->writeData();
-}
-
-Sles::Sles(AudioOutput *parent) :
-  AudioOutputInterface(parent),
-  m_audio(parent),
-  m_stop(false),
-  m_started(false),
+Sles::Sles(QObject *parent) :
+  AudioOutput(parent),
   m_engine(0),
   m_mix(0),
   m_sink(0) {
@@ -210,31 +233,26 @@ Sles::~Sles() {
   m_engine = 0;
 }
 
-void Sles::start() {
-  if (!m_started) {
-    /* callback */
-    if ((*m_sink->m_queue)->RegisterCallback(m_sink->m_queue,
-					     slesCallback, this) != SL_RESULT_SUCCESS) {
-      emit error();
-      return;
-    }
-
-    if ((*m_sink->m_player)->SetPlayState(m_sink->m_player,
-					  SL_PLAYSTATE_PLAYING) != SL_RESULT_SUCCESS) {
-      emit error();
-      return;
-    }
-
-    writeData();
-
-    m_started = true;
+bool Sles::start() {
+  if (!m_sink->registerCallback()) {
+    return false;
   }
+
+  if ((*m_sink->m_player)->SetPlayState(m_sink->m_player,
+					  SL_PLAYSTATE_PLAYING) != SL_RESULT_SUCCESS) {
+    emit error();
+    return false;
+  }
+
+  return AudioOutput::start();
 }
 
 void Sles::stop() {
   if (m_sink) {
     m_sink->stop();
   }
+
+  return AudioOutput::stop();
 }
 
 bool Sles::connect() {
@@ -278,57 +296,11 @@ bool Sles::connect() {
   return true;
 }
 
-bool Sles::isRunning() {
-  return m_started;
+bool Sles::writeData(QByteArray& data) {
+  return m_sink->play(data);
 }
 
-void Sles::writeData() {
-  // Can be called from the GUI thread or a sles thread.
-  if (m_stop) {
-    return;
-  }
-
-  AudioBuffer buffer = m_audio->buffer();
-
-  if (buffer.media.isEos()) {
-    QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
-    m_stop = true;
-    return;
-  }
-  else if (buffer.media.isError()) {
-    QMetaObject::invokeMethod(this, "drainAndError", Qt::QueuedConnection);
-    m_stop = true;
-    return;
-  }
-  else if (m_stop) {
-    QMetaObject::invokeMethod(this, "drainAndFinish", Qt::QueuedConnection);
-    return;
-  }
-
-  emit positionChanged(buffer.media.index());
-
-  if (!m_sink->play(buffer.data)) {
-    emit error();
-  }
-}
-
-void Sles::drain() {
-  // Android does not need that because OpenSL ES callback gets called when
-  // we are done playing the data (Which is a drain), we reach writeData()
-  // which detects EOS and sets m_stop. It will then never try to playback
-  // any buffers because of that flag.
-  // The callback will not be called too because we did not write any data
-  // so everything should stop.
-}
-
-void Sles::drainAndFinish() {
-  drain();
-
-  emit finished();
-}
-
-void Sles::drainAndError() {
-  drain();
-
-  emit error();
+bool Sles::hasFrames() {
+  QMutexLocker l(&m_sink->m_lock);
+  return !m_sink->m_data.isEmpty();
 }
