@@ -4,7 +4,7 @@ TARGET = Quran
 
 QT += qml quick sensors androidextras
 
-CONFIG += android oboe
+CONFIG += android sles
 SQLITE_EXTRA_COMPILE_FLAGS += --host=arm-linux-androideabi \
                               --with-sysroot=$$(SYSROOT)
 
@@ -40,7 +40,7 @@ HEADERS += fsmonitor.h \
            keyfilter.h \
            sqlite-ndk/sources/sqlite3ndk.h
 
-
+oboe {
 CONFIG += c++14
 
 INCLUDEPATH += oboe/src oboe/include
@@ -95,6 +95,7 @@ SOURCES += \
            oboe/src/common/StabilizedCallback.cpp \
            oboe/src/common/Trace.cpp \
            oboe/src/common/Version.cpp
+}
 
 LIBS += -landroid -lOpenSLES
 ANDROID_PACKAGE_SOURCE_DIR = android/apk
