@@ -23,10 +23,10 @@
 #include "mediacodec.h"
 
 #define TIMER_INTERVAL_MS            500
+#define NUM_DECODED_BUFFERS          10 // Arbitrary
 
 // This class does not have an error signal. It will queue an error AudioBuffer
 // in case of an error. This is to enable playing audio for as long as possible.
-
 MediaDecoder::MediaDecoder(QObject *parent) :
   QObject(parent),
   m_codec(0),
@@ -45,6 +45,11 @@ MediaDecoder::~MediaDecoder() {
 
 void MediaDecoder::decodeMedia() {
   if (m_media.isEmpty()) {
+    return;
+  }
+
+  if ((m_audio && m_audio->numberOfBuffers() >= NUM_DECODED_BUFFERS) ||
+      (!m_audio && m_buffers.size() >= NUM_DECODED_BUFFERS)) {
     return;
   }
 

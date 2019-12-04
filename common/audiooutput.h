@@ -41,6 +41,8 @@ public:
   virtual bool start();
   virtual void stop();
 
+  int numberOfBuffers();
+
   //  bool pause();
   //  bool resume();
 

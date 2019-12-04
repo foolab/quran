@@ -120,3 +120,7 @@ void AudioOutput::timeout() {
     return;
   }
 }
+
+int AudioOutput::numberOfBuffers() {
+  return m_buffers.size();
+}
