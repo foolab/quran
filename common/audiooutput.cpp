@@ -49,7 +49,8 @@ AudioOutput *AudioOutput::create(QObject *parent) {
 }
 
 AudioOutput::AudioOutput(QObject *parent) :
-  QObject(parent) {
+  QObject(parent),
+  m_paused(false) {
 
   m_timer.setSingleShot(false);
   m_timer.setInterval(TIMER_INTERVAL_MS);
@@ -66,7 +67,7 @@ void AudioOutput::addBuffer(const AudioBuffer& buffer) {
 }
 
 bool AudioOutput::isRunning() {
-  return m_timer.isActive();
+  return m_timer.isActive() || m_paused;
 }
 
 bool AudioOutput::start() {
@@ -84,7 +85,21 @@ void AudioOutput::stop() {
   m_timer.stop();
 }
 
+void AudioOutput::pause() {
+  m_timer.stop();
+  m_paused = true;
+}
+
+void AudioOutput::resume() {
+  m_timer.start();
+  m_paused = false;
+}
+
 void AudioOutput::timeout() {
+  if (isPaused()) {
+    return;
+  }
+
   if (m_data.isEmpty()) {
     if (m_buffers.isEmpty()) {
       // TODO:
@@ -123,4 +138,8 @@ void AudioOutput::timeout() {
 
 int AudioOutput::numberOfBuffers() {
   return m_buffers.size();
+}
+
+bool AudioOutput::isPaused() {
+  return m_paused;
 }

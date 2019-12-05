@@ -35,6 +35,7 @@ class MediaPlayer : public QObject {
 
   Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
   Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged);
+  Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged);
 
 public:
   enum PlayType {
@@ -57,13 +58,17 @@ public:
   Q_INVOKABLE bool playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse);
 
   bool isPlaying() const;
+  bool isPaused() const;
 
 public slots:
   void stop();
+  void pause();
+  void resume();
 
 signals:
   void downloaderChanged();
   void playingChanged();
+  void pausedChanged();
   void dataChanged();
   void positionChanged(int chapter, int verse);
   void error();

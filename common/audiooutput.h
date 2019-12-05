@@ -41,12 +41,13 @@ public:
   virtual bool start();
   virtual void stop();
 
+  virtual void pause();
+  virtual void resume();
+
   int numberOfBuffers();
 
-  //  bool pause();
-  //  bool resume();
-
   bool isRunning();
+  bool isPaused();
 
   void addBuffer(const AudioBuffer& buffer);
 
@@ -54,9 +55,7 @@ protected:
   AudioOutput(QObject *parent = 0);
 
   virtual bool connect() = 0;
-
   virtual bool writeData(QByteArray& data) = 0;
-
   virtual bool hasFrames() = 0;
 
 signals:
@@ -68,6 +67,7 @@ private slots:
   void timeout();
 
 private:
+  bool m_paused;
   QList<AudioBuffer> m_buffers;
   QTimer m_timer;
   QByteArray m_data;

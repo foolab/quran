@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,10 +60,38 @@ Column {
         }
 
         ToolButton {
-            icon: "image://icon/play.png"
+            SequentialAnimation on rotation {
+                loops: Animation.Infinite
+                NumberAnimation {
+                    from: 0
+                    to: 180
+                    duration: quranTheme.animations.slow
+                }
+                PauseAnimation { duration: quranTheme.animations.slow }
+                NumberAnimation {
+                    from: 180
+                    to: 360
+                    duration: quranTheme.animations.slow
+                }
+                PauseAnimation { duration: quranTheme.animations.slow }
+                running: audioPlayer.paused
+                alwaysRunToEnd: true
+            }
+
+            icon: audioPlayer.playing ? "image://icon/pause.png" : "image://icon/play.png"
             fillColor: quranTheme.quranColors.text
             enabled: settings.recitationMode != 0 && recitations.installedCount > 0
-            onClicked: playAudio(MediaPlayer.PlayPage, settings.pageNumber)
+            onClicked: {
+                if (audioPlayer.playing) {
+                    if (audioPlayer.paused) {
+                        audioPlayer.resume()
+                    } else {
+                        audioPlayer.pause()
+                    }
+                } else {
+                    playAudio(MediaPlayer.PlayPage, settings.pageNumber)
+                }
+            }
         }
 
         ToolButton {

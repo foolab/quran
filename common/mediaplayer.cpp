@@ -44,6 +44,10 @@ bool MediaPlayer::isPlaying() const {
   return m_list != 0;
 }
 
+bool MediaPlayer::isPaused() const {
+  return m_audio ? m_audio->isPaused() : false;
+}
+
 void MediaPlayer::policyAcquired() {
   m_audio = AudioOutput::create(this);
   if (!m_audio) {
@@ -205,6 +209,10 @@ void MediaPlayer::stop() {
   }
 
   if (m_audio) {
+    if (m_audio->isPaused()) {
+      emit pausedChanged();
+    }
+
     m_audio->stop();
     QObject::disconnect(m_audio, SIGNAL(positionChanged(int)),
 			this, SLOT(audioPositionChanged(int)));
@@ -234,5 +242,19 @@ void MediaPlayer::stop() {
     m_policy->release();
     m_policy->deleteLater();
     m_policy = 0;
+  }
+}
+
+void MediaPlayer::pause() {
+  if (m_audio) {
+    m_audio->pause();
+    emit pausedChanged();
+  }
+}
+
+void MediaPlayer::resume() {
+  if (m_audio) {
+    m_audio->resume();
+    emit pausedChanged();
   }
 }
