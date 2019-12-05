@@ -153,8 +153,16 @@ bool Alsa::start() {
 bool Alsa::writeData(QByteArray& data) {
   snd_pcm_sframes_t frames = snd_pcm_avail(m_device->handle());
   if (frames < 0) {
-    qmlInfo(this) << "Failed to get available sound device frames:" << snd_strerror(frames);
-    return false;
+    if (snd_pcm_recover(m_device->handle(), frames, 0) < 0) {
+      qmlInfo(this) << "Failed to get available sound device frames: " << snd_strerror(frames);
+      return false;
+    }
+
+    frames = snd_pcm_avail(m_device->handle());
+    if (frames < 0) {
+      qmlInfo(this) << "Failed to get available sound device frames: " << snd_strerror(frames);
+      return false;
+    }
   } else if (frames == 0) {
     return true;
   }
@@ -169,7 +177,7 @@ bool Alsa::writeData(QByteArray& data) {
     // We should get called again.
     return true;
   } else if (ret < 0) {
-    qmlInfo(this) << "Failed to write samples to sound device:" << snd_strerror(ret);
+    qmlInfo(this) << "Failed to write samples to sound device: " << snd_strerror(ret);
     return false;
   }
 
