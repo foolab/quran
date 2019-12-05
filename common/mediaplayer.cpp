@@ -93,6 +93,8 @@ void MediaPlayer::audioPositionChanged(int index) {
   int chapter, verse;
   if (m_list->signalMedia(index, chapter, verse)) {
     emit positionChanged(chapter, verse);
+  } else {
+    emit positionChanged(-1, -1);
   }
 }
 
