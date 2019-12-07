@@ -52,7 +52,7 @@ export LD=${TOOLCHAIN}/armv7a-linux-androideabi21-clang
 export STRIP=${TOOLCHAIN}/arm-linux-androideabi-strip
 export NM=${TOOLCHAIN}/arm-linux-androideabi-nm
 export PATH=${TOOLCHAIN}:${PATH}
-rm -rf apk
+#rm -rf apk
 
 pushd android
 $QT_DIR/android_$ANDROID/bin/qmake
