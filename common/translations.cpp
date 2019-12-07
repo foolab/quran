@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #include "translation.h"
 #include "dataprovider.h"
 #include "textprovider.h"
+#include "downloader.h"
 #include <QQmlInfo>
 #include <QQmlEngine>
 #include <QDir>
@@ -33,7 +34,7 @@
 
 Translations::Translations(QObject *parent) :
   QObject(parent),
-  m_downloader(0),
+  m_downloader(new Downloader(this)),
   m_data(0) {
 
 }
@@ -62,17 +63,6 @@ void Translations::setDir(const QString& dir) {
   if (m_dir != dir) {
     m_dir = dir;
     emit dirChanged();
-  }
-}
-
-Downloader *Translations::downloader() const {
-  return m_downloader;
-}
-
-void Translations::setDownloader(Downloader *downloader) {
-  if (m_downloader != downloader) {
-    m_downloader = downloader;
-    emit downloaderChanged();
   }
 }
 

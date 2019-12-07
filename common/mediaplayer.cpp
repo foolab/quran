@@ -18,11 +18,11 @@
 #include "mediaplayer.h"
 #include "mediaplaylist.h"
 #include "media.h"
-#include <QDebug>
 #include "recitation.h"
 #include "mediadecoder.h"
 #include "audiooutput.h"
 #include "audiopolicy.h"
+#include "downloader.h"
 #include <QQmlInfo>
 
 MediaPlayer::MediaPlayer(QObject *parent) :
@@ -31,6 +31,7 @@ MediaPlayer::MediaPlayer(QObject *parent) :
   m_decoder(0),
   m_policy(0),
   m_audio(0),
+  m_downloader(new Downloader(this)),
   m_recitation(0) {
 
   QObject::connect(this, SIGNAL(error()), this, SLOT(stop()));
@@ -108,17 +109,6 @@ void MediaPlayer::setRecitation(Recitation *recitation) {
 
 Recitation *MediaPlayer::recitation() const {
   return m_recitation;
-}
-
-Downloader *MediaPlayer::downloader() const {
-  return m_downloader;
-}
-
-void MediaPlayer::setDownloader(Downloader *downloader) {
-  if (m_downloader != downloader) {
-    m_downloader = downloader;
-    emit downloaderChanged();
-  }
 }
 
 bool MediaPlayer::play(const PlayType& type, uint id) {

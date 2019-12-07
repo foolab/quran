@@ -33,7 +33,6 @@ class MediaPlayer : public QObject {
 
   Q_ENUMS(PlayType);
 
-  Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
   Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged);
   Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged);
 
@@ -51,9 +50,6 @@ public:
   Recitation *recitation() const;
   void setRecitation(Recitation *recitation);
 
-  Downloader *downloader() const;
-  void setDownloader(Downloader *downloader);
-
   Q_INVOKABLE bool play(const PlayType& type, uint id);
   Q_INVOKABLE bool playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse);
 
@@ -66,7 +62,6 @@ public slots:
   void resume();
 
 signals:
-  void downloaderChanged();
   void playingChanged();
   void pausedChanged();
   void dataChanged();

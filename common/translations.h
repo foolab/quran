@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,6 @@ class Translations : public QObject {
 
   Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
   Q_PROPERTY(QString dir READ dir WRITE setDir NOTIFY dirChanged);
-  Q_PROPERTY(Downloader *downloader READ downloader WRITE setDownloader NOTIFY downloaderChanged);
   Q_PROPERTY(DataProvider *data READ data WRITE setData NOTIFY dataChanged);
 
 public:
@@ -41,9 +40,6 @@ public:
 
   QString dir() const;
   void setDir(const QString& dir);
-
-  Downloader *downloader() const;
-  void setDownloader(Downloader *downloader);
 
   DataProvider *data() const;
   void setData(DataProvider *data);
@@ -64,7 +60,6 @@ public slots:
 signals:
   void installedCountChanged();
   void dirChanged();
-  void downloaderChanged();
   void dataChanged();
   void refreshed();
   void downloadError(const QString& name);

@@ -22,7 +22,6 @@
 #include "numberformatter.h"
 #include "aboutdata.h"
 #include "translations.h"
-#include "downloader.h"
 #include "fsmonitor.h"
 #include "recitations.h"
 #include "phoneflipcontrol.h"
@@ -74,7 +73,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 
   qmlRegisterType<DataProvider>("Quran", 1, 0, "DataProvider");
   qmlRegisterType<Settings>("Quran", 1, 0, "Settings");
-  qmlRegisterType<Downloader>("Quran", 1, 0, "Downloader");
   qmlRegisterType<Bookmarks>("Quran", 1, 0, "Bookmarks");
   qmlRegisterType<NumberFormatter>("Quran", 1, 0, "NumberFormatter");
   qmlRegisterType<AboutData>("Quran", 1, 0, "AboutData");

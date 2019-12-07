@@ -26,10 +26,6 @@ QuranWindow {
         id: settings
     }
 
-    Downloader {
-        id: _downloader
-    }
-
     DataProvider {
         id: _data
     }
@@ -42,7 +38,6 @@ QuranWindow {
     Translations {
         id: translations
         dir: settings.translationsDir
-        downloader: _downloader
         data: _data
 
         function loadAndSetDefault(t) {
@@ -95,7 +90,6 @@ QuranWindow {
 
     MediaPlayer {
         id: audioPlayer
-        downloader: _downloader
         onError: banner.showMessage(qsTr("Failed to play recitation"))
 
         onPositionChanged: {
