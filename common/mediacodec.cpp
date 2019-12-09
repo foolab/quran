@@ -47,16 +47,12 @@ MediaCodec::MediaCodec(Media media, QObject *parent) :
   m_ctx = context(media.data());
   if (!m_ctx) {
     m_buffers << AudioBuffer(Media::error());
-    m_timer.stop();
-    emit buffersAvailable();
     return;
   }
 
   int stream_index = av_find_best_stream(m_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
   if (stream_index < 0) {
     m_buffers << AudioBuffer(Media::error());
-    m_timer.stop();
-    emit buffersAvailable();
     return;
   }
 
@@ -65,16 +61,12 @@ MediaCodec::MediaCodec(Media media, QObject *parent) :
   AVCodec *codec = avcodec_find_decoder(stream->codecpar->codec_id);
   if (!codec) {
     m_buffers << AudioBuffer(Media::error());
-    m_timer.stop();
-    emit buffersAvailable();
     return;
   }
 
   m_codec = avcodec_alloc_context3(codec);
   if (!m_codec) {
     m_buffers << AudioBuffer(Media::error());
-    m_timer.stop();
-    emit buffersAvailable();
     return;
   }
 
@@ -82,8 +74,6 @@ MediaCodec::MediaCodec(Media media, QObject *parent) :
     avcodec_free_context(&m_codec);
     m_codec = 0;
     m_buffers << AudioBuffer(Media::error());
-    m_timer.stop();
-    emit buffersAvailable();
     return;
   }
 
@@ -94,8 +84,6 @@ MediaCodec::MediaCodec(Media media, QObject *parent) :
     avcodec_free_context(&m_codec);
     m_codec = 0;
     m_buffers << AudioBuffer(Media::error());
-    m_timer.stop();
-    emit buffersAvailable();
     return;
   }
 
@@ -103,8 +91,6 @@ MediaCodec::MediaCodec(Media media, QObject *parent) :
     avcodec_close(m_codec);
     m_codec = 0;
     m_buffers << AudioBuffer(Media::error());
-    m_timer.stop();
-    emit buffersAvailable();
     return;
   }
 
