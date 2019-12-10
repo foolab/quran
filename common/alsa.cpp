@@ -223,7 +223,14 @@ bool Alsa::connect() {
 }
 
 bool Alsa::hasFrames() {
+  snd_pcm_uframes_t max_frames, periods;
+  int err = snd_pcm_get_params(m_device->handle(), &max_frames, &periods);
+  if (err < 0) {
+    qWarning() << "Failed to get device parameters: " << snd_strerror(err);
+    return false;
+  }
+
   snd_pcm_sframes_t frames = snd_pcm_avail(m_device->handle());
 
-  return frames > 0;
+  return frames < max_frames && frames > 0;
 }
