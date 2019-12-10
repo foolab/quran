@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,34 +15,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MEDIA_H
-#define MEDIA_H
+#ifndef RECITATION_DATA_PROVIDER_H
+#define RECITATION_DATA_PROVIDER_H
 
 #include <QByteArray>
+#include <QString>
 
-class Recitation;
+class QuaZip;
+class Media;
 
-class Media {
+class RecitationDataProvider {
 public:
-  Media(int chapter, int verse, int index, bool signal);
-  virtual ~Media();
+  RecitationDataProvider(const QString& path);
+  ~RecitationDataProvider();
 
-  static Media error();
-  static Media eos();
+  QByteArray data(const Media& media);
+  bool setData(const Media& media, const QByteArray& data);
 
-  int chapter() const;
-  int verse() const;
-  int index() const;
-  bool signal() const;
-
-  bool isError();
-  bool isEos();
+  bool isLocal() const;
 
 private:
-  int m_chapter;
-  int m_verse;
-  int m_index;
-  bool m_signal;
+  QString localPath(const Media& media);
+
+  QString m_path;
+  QString m_sub;
+  QuaZip *m_zip;
 };
 
-#endif /* MEDIA_H */
+#endif /* RECITATION_DATA_PROVIDER_H */

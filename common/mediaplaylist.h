@@ -26,6 +26,7 @@ class Media;
 class Recitation;
 class Downloader;
 class Download;
+class RecitationDataProvider;
 
 class MediaPlaylist : public QObject {
   Q_OBJECT
@@ -50,6 +51,8 @@ public:
   ~MediaPlaylist();
 
   Recitation *recitation();
+
+  RecitationDataProvider *dataProvider() const;
 
   const QList<Media> media() const;
 
@@ -85,6 +88,7 @@ private:
     PlayPart,
   };
 
+  RecitationDataProvider *m_dataProvider;
   Recitation *m_recitation;
   Downloader *m_downloader;
 

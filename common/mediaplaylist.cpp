@@ -26,6 +26,7 @@
 #include "chapterinfo.h"
 #include "pageinfo.h"
 #include "partinfo.h"
+#include "recitationdataprovider.h"
 
 MediaPlaylist::MediaPlaylist(Recitation *recitation,
 			     Downloader *downloader, QObject *parent) :
@@ -34,10 +35,14 @@ MediaPlaylist::MediaPlaylist(Recitation *recitation,
   m_downloader(downloader),
   m_download(0) {
 
+  m_dataProvider = new RecitationDataProvider(m_recitation->dir());
 }
 
 MediaPlaylist::~MediaPlaylist() {
   m_media.clear();
+
+  delete m_dataProvider;
+  m_dataProvider = 0;
 }
 
 void MediaPlaylist::playPage(int page) {
@@ -53,12 +58,12 @@ void MediaPlaylist::playPage(int page) {
     if (f.start() == 0) {
       if (ChapterInfo(f.chapter()).hasBasmala()) {
 	// Signal the basmala only if we are at chapter 0
-	addMedia(Media(m_recitation, 1, 1, index++, f.chapter() == 0));
+	addMedia(Media(1, 1, index++, f.chapter() == 0));
       }
     }
 
     for (int x = f.start(); x < f.start() + f.length(); x++) {
-      addMedia(Media(m_recitation, f.chapter() + 1, x + 1, index++, true));
+      addMedia(Media(f.chapter() + 1, x + 1, index++, true));
     }
   }
 }
@@ -72,7 +77,7 @@ void MediaPlaylist::playRange(uint fromChapter, uint fromVerse, uint toChapter, 
   if (fromChapter == toChapter) {
     ChapterInfo info(fromChapter);
     for (int x = fromVerse; x <= toVerse; x++) {
-      addMedia(Media(m_recitation, fromChapter + 1, x + 1, index++, true));
+      addMedia(Media(fromChapter + 1, x + 1, index++, true));
     }
   } else {
     for (int c = fromChapter; c <= toChapter; c++) {
@@ -81,30 +86,30 @@ void MediaPlaylist::playRange(uint fromChapter, uint fromVerse, uint toChapter, 
 	if (fromVerse == 0) {
 	  if (info.hasBasmala()) {
 	    // Signal the basmala only if we are at chapter 0
-	    addMedia(Media(m_recitation, 1, 1, index++, c == 0));
+	    addMedia(Media(1, 1, index++, c == 0));
 	  }
 	}
 
 	for (int x = fromVerse; x < info.length(); x++) {
-	  addMedia(Media(m_recitation, c + 1, x + 1, index++, true));
+	  addMedia(Media(c + 1, x + 1, index++, true));
 	}
       } else if (c == toChapter) {
 	// We must be starting a new chapter because fromChapter != toChapter
 	if (info.hasBasmala()) {
 	  // Signal the basmala only if we are at chapter 0
-	  addMedia(Media(m_recitation, 1, 1, index++, c == 0));
+	  addMedia(Media(1, 1, index++, c == 0));
 	}
 	for (int x = 0; x <= toVerse; x++) {
-	  addMedia(Media(m_recitation, c + 1, x + 1, index++, true));
+	  addMedia(Media(c + 1, x + 1, index++, true));
 	}
       } else {
 	// Add all of it:
 	if (info.hasBasmala()) {
 	  // Signal the basmala only if we are at chapter 0
-	  addMedia(Media(m_recitation, 1, 1, index++, c == 0));
+	  addMedia(Media(1, 1, index++, c == 0));
 	}
 	for (int x = 0; x < info.length(); x++) {
-	  addMedia(Media(m_recitation, c + 1, x + 1, index++, true));
+	  addMedia(Media(c + 1, x + 1, index++, true));
 	}
       }
     }
@@ -121,11 +126,11 @@ void MediaPlaylist::playChapter(int chapter) {
   ChapterInfo info(chapter);
   if (info.hasBasmala()) {
     // Signal the basmala only if we are at chapter 0
-    addMedia(Media(m_recitation, 1, 1, index++, chapter == 0));
+    addMedia(Media(1, 1, index++, chapter == 0));
   }
 
   for (int x = 0; x < info.length(); x++) {
-    addMedia(Media(m_recitation, chapter + 1, x + 1, index++, true));
+    addMedia(Media(chapter + 1, x + 1, index++, true));
   }
 }
 
@@ -134,7 +139,7 @@ void MediaPlaylist::playVerse(int chapter, int verse) {
     return;
   }
 
-  addMedia(Media(m_recitation, chapter + 1, verse + 1, 0, true));
+  addMedia(Media(chapter + 1, verse + 1, 0, true));
 }
 
 void MediaPlaylist::playPart(int part) {
@@ -155,18 +160,22 @@ void MediaPlaylist::playPart(int part) {
     if (frag.start() == 0) {
       if (ChapterInfo(frag.chapter()).hasBasmala()) {
 	// Signal the basmala only if we are at chapter 0
-	addMedia(Media(m_recitation, 1, 1, index++, frag.chapter() == 0));
+	addMedia(Media(1, 1, index++, frag.chapter() == 0));
       }
     }
 
     for (int x = frag.start(); x < frag.start() + frag.length(); x++) {
-      addMedia(Media(m_recitation, frag.chapter() + 1, x + 1, index++, true));
+      addMedia(Media(frag.chapter() + 1, x + 1, index++, true));
     }
   }
 }
 
 Recitation *MediaPlaylist::recitation() {
   return m_recitation;
+}
+
+RecitationDataProvider *MediaPlaylist::dataProvider() const {
+  return m_dataProvider;
 }
 
 const QList<Media> MediaPlaylist::media() const {
@@ -183,10 +192,9 @@ bool MediaPlaylist::signalMedia(int index, int& chapter, int& verse) const {
 }
 
 void MediaPlaylist::start() {
-  if (m_recitation->type() == Recitation::Online) {
+  if (!m_dataProvider->isLocal()) {
     download();
-  }
-  else {
+  } else {
     foreach (const Media& media, m_media) {
       emit mediaAvailable(media);
     }
@@ -274,7 +282,7 @@ void MediaPlaylist::download() {
 
   // NOTE: We can not use a reference here. otherwise the signal argument will contain garbage.
   const Media m = m_queue.head();
-  QByteArray data = m.data();
+  QByteArray data = m_dataProvider->data(m);
   if (!data.isEmpty()) {
     m_queue.dequeue();
     emit mediaAvailable(m);
@@ -307,7 +315,7 @@ void MediaPlaylist::replyFinished() {
   }
 
   const Media& media = m_queue.dequeue();
-  if (!media.setData(data)) {
+  if (!m_dataProvider->setData(media, data)) {
     qmlInfo(this) << "Failed to write data for "
 		  << m_download->reply()->url();
 

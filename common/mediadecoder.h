@@ -25,12 +25,13 @@ class Media;
 class AudioOutput;
 class AudioBuffer;
 class MediaCodec;
+class RecitationDataProvider;
 
 class MediaDecoder : public QObject {
   Q_OBJECT
 
 public:
-  MediaDecoder(QObject *parent = 0);
+  MediaDecoder(RecitationDataProvider *provider, QObject *parent = 0);
   ~MediaDecoder();
 
   void start();
@@ -47,6 +48,7 @@ private slots:
 private:
   void play(const AudioBuffer& buffer);
 
+  RecitationDataProvider *m_provider;
   MediaCodec *m_codec;
   AudioOutput *m_audio;
   QList<AudioBuffer> m_buffers;

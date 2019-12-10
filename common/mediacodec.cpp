@@ -37,14 +37,14 @@ extern "C" {
 
 int read_qbuffer(void *opaque, uint8_t *buf, int buf_size);
 
-MediaCodec::MediaCodec(Media media, QObject *parent) :
+MediaCodec::MediaCodec(Media media, QByteArray& data, QObject *parent) :
   QObject(parent),
   m_media(media),
   m_resampler(0),
   m_ctx(0),
   m_codec(0) {
 
-  m_ctx = context(media.data());
+  m_ctx = context(data);
   if (!m_ctx) {
     m_buffers << AudioBuffer(Media::error());
     return;

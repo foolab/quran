@@ -21,14 +21,16 @@
 #include <QDebug>
 #include "audiooutput.h"
 #include "mediacodec.h"
+#include "recitationdataprovider.h"
 
 #define TIMER_INTERVAL_MS            500
 #define NUM_DECODED_BUFFERS          10 // Arbitrary
 
 // This class does not have an error signal. It will queue an error AudioBuffer
 // in case of an error. This is to enable playing audio for as long as possible.
-MediaDecoder::MediaDecoder(QObject *parent) :
+MediaDecoder::MediaDecoder(RecitationDataProvider *provider, QObject *parent) :
   QObject(parent),
+  m_provider(provider),
   m_codec(0),
   m_audio(0) {
 
@@ -73,14 +75,14 @@ void MediaDecoder::decodeMedia() {
     return;
   }
 
-  QByteArray data = media.data();
+  QByteArray data = m_provider->data(media);
 
   if (data.isEmpty()) {
     play(AudioBuffer(Media::error()));
     return;
   }
 
-  m_codec = new MediaCodec(media);
+  m_codec = new MediaCodec(media, data);
   QObject::connect(m_codec, SIGNAL(buffersAvailable()), this, SLOT(buffersAvailable()));
 }
 

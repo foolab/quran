@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 #include <quazip.h>
 #include <quazipfile.h>
 
-#define BACKUP_SUFFIX                  "~"
 #define SIMPLE_INFO_FILE               "info.ini"
 #define ZEKR_INFO_FILE                 "recitation.properties"
 #define ONLINE_INFO_FILE               "data.ini"
@@ -190,6 +189,10 @@ QString Recitation::quality() const {
   return m_info->m_quality;
 }
 
+QString Recitation::dir() const {
+  return m_info->m_dir;
+}
+
 Recitation::Type Recitation::type() const {
   return m_info->m_type;
 }
@@ -205,15 +208,6 @@ void Recitation::setStatus(Recitation::Status status) {
   }
 }
 
-QUrl Recitation::playBackUrl(const Media& media) {
-  QString mp3 = QString("%1/%2/%2%3.mp3")
-    .arg(m_info->m_dir)
-    .arg(media.chapter(), 3, 10, QChar('0'))
-    .arg(media.verse(), 3, 10, QChar('0'));
-
-  return QUrl::fromLocalFile(mp3);
-}
-
 QUrl Recitation::downloadUrl(const Media& media) {
   if (!m_info->m_url.isValid()) {
     return QUrl();
@@ -223,95 +217,6 @@ QUrl Recitation::downloadUrl(const Media& media) {
 	      .arg(m_info->m_url.toString())
 	      .arg(media.chapter(), 3, 10, QChar('0'))
 	      .arg(media.verse(), 3, 10, QChar('0')));
-}
-
-QByteArray Recitation::data(const Media& media) {
-  if (m_info->m_type == Zipped) {
-    if (!m_zip) {
-      m_zip = new QuaZip(m_info->m_dir);
-      if (!m_zip->open(QuaZip::mdUnzip)) {
-	delete m_zip;
-	m_zip = 0;
-	qmlInfo(this) << "Failed to open " << m_info->m_dir;
-	return QByteArray();
-      }
-    }
-
-    QString mp3 = QString("%1/%2/%2%3.mp3")
-      .arg(m_info->m_subdir)
-      .arg(media.chapter(), 3, 10, QChar('0'))
-      .arg(media.verse(), 3, 10, QChar('0'));
-
-    if (!m_zip->setCurrentFile(mp3)) {
-      delete m_zip;
-      m_zip = 0;
-      qmlInfo(this) << "Failed to find " << mp3;
-      return QByteArray();
-    }
-
-    QuaZipFile file(m_zip);
-    if (!file.open(QIODevice::ReadOnly)) {
-      delete m_zip;
-      m_zip = 0;
-      qmlInfo(this) << "Failed to open file" << mp3;
-      return QByteArray();
-    }
-
-    QByteArray data = file.readAll();
-    if (data.isEmpty()) {
-      delete m_zip;
-      m_zip = 0;
-      qmlInfo(this) << "Failed to read file" << mp3;
-    }
-
-    return data;
-  }
-
-  // TODO: use mmap
-  QFile f(playBackUrl(media).toLocalFile());
-
-  if (!f.open(QFile::ReadOnly)) {
-    qmlInfo(this) << "Failed to open file " << f.fileName() << " " << f.errorString();
-    return QByteArray();
-  }
-
-  QByteArray data = f.readAll();
-  if (f.error() != QFile::NoError) {
-    qmlInfo(this) << "Failed to read file " << f.fileName() << " " << f.errorString();
-  }
-
-  return data;
-}
-
-bool Recitation::setData(const Media& media, const QByteArray& data) {
-  if (m_info->m_type != Online) {
-    qmlInfo(this) << "setData should not be called for non-online recitations";
-    return false;
-  }
-
-  QString mp3 = playBackUrl(media).toLocalFile();
-
-  QFileInfo inf(mp3);
-  if (!inf.dir().mkpath(".")) {
-    qmlInfo(this) << "Failed to create directory " << inf.dir();
-    return false;
-  }
-
-  QFile f(QString("%1%2").arg(mp3).arg(BACKUP_SUFFIX));
-  if (!f.open(QFile::WriteOnly)) {
-    qmlInfo(this) << "Failed to open " << f.fileName() << " " << f.errorString();
-    return false;
-  }
-
-  if (!f.write(data)) {
-    qmlInfo(this) << "Failed to write " << f.fileName() << " " << f.errorString();
-    f.remove();
-    return false;
-  }
-
-  f.close();
-
-  return QFile::rename(mp3 + BACKUP_SUFFIX, mp3);
 }
 
 bool Recitation::enable() {

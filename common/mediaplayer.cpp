@@ -182,7 +182,7 @@ bool MediaPlayer::play() {
   QObject::connect(m_list, SIGNAL(mediaAvailable(const Media&)),
 		   this, SLOT(mediaAvailable(const Media&)));
 
-  m_decoder = new MediaDecoder(this);
+  m_decoder = new MediaDecoder(m_list->dataProvider(), this);
 
   m_list->start();
 

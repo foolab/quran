@@ -33,7 +33,7 @@ class MediaCodec : public QObject {
   Q_OBJECT
 
 public:
-  MediaCodec(Media media, QObject *parent = 0);
+  MediaCodec(Media media, QByteArray& data, QObject *parent = 0);
   ~MediaCodec();
 
   bool isDone();

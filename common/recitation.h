@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,8 +59,6 @@ public:
 
   QUrl playBackUrl(const Media& media);
   QUrl downloadUrl(const Media& media);
-  QByteArray data(const Media& media);
-  bool setData(const Media& media, const QByteArray& data);
 
   bool isLoaded() const;
   void setLoaded(bool loaded);
@@ -77,6 +75,7 @@ public:
   QString uuid() const;
   QString name() const;
   QString quality() const;
+  QString dir() const;
 
   Type type() const;
   Status status() const;

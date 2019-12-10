@@ -18,8 +18,7 @@
 #include "media.h"
 #include "recitation.h"
 
-Media::Media(Recitation *recitation, int chapter, int verse, int index, bool signal) :
-  m_recitation(recitation),
+Media::Media(int chapter, int verse, int index, bool signal) :
   m_chapter(chapter),
   m_verse(verse),
   m_index(index),
@@ -32,11 +31,11 @@ Media::~Media() {
 }
 
 Media Media::error() {
-  return Media(0, 0, 0, -2, false);
+  return Media(0, 0, -2, false);
 }
 
 Media Media::eos() {
-  return Media(0, 0, 0, -1, false);
+  return Media(0, 0, -1, false);
 }
 
 bool Media::isError() {
@@ -61,12 +60,4 @@ int Media::index() const {
 
 bool Media::signal() const {
   return m_signal;
-}
-
-QByteArray Media::data() const {
-  return m_recitation->data(*this);
-}
-
-bool Media::setData(const QByteArray& data) const {
-  return m_recitation->setData(*this, data);
 }
