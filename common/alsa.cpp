@@ -187,7 +187,10 @@ bool Alsa::writeData(QByteArray& data) {
 }
 
 void Alsa::stop() {
-  snd_pcm_drop(m_device->handle());
+  if (m_device && m_device->handle()) {
+    snd_pcm_drop(m_device->handle());
+  }
+
   AudioOutput::stop();
 }
 
