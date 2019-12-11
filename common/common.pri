@@ -34,7 +34,7 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            bookmarkitem.cpp mediaresampler.cpp searchmodel.cpp models.cpp \
            coreapplication.cpp metadata.cpp chapterinfo.cpp partinfo.cpp pageinfo.cpp \
            pageposition.cpp normalize.cpp chapterlistmodel.cpp partlistmodel.cpp \
-           mediacodec.cpp recitationdataprovider.cpp
+           mediacodec.cpp recitationdataprovider.cpp mediaplayerconfig.cpp mediaplayback.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmodel.h \
            aboutdata.h textsupplier.h \
@@ -45,7 +45,7 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmode
            bookmarkitem.h mediaresampler.h searchmodel.h models.h \
            coreapplication.h metadata.h chapterinfo.h partinfo.h pageinfo.h \
            pageposition.h chapterlistmodel.h partlistmodel.h \
-           mediacodec.h recitationdataprovider.h \
+           mediacodec.h recitationdataprovider.h mediaplayerconfig.h mediaplayback.h \
            $$GENERATED
 
 sles {

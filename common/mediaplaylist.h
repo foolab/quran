@@ -21,9 +21,8 @@
 #include <QObject>
 #include <QQueue>
 
-class Recitation;
+class MediaPlayerConfig;
 class Media;
-class Recitation;
 class Downloader;
 class Download;
 class RecitationDataProvider;
@@ -32,25 +31,8 @@ class MediaPlaylist : public QObject {
   Q_OBJECT
 
 public:
-  static MediaPlaylist *partList(Recitation *recitation,
-				 Downloader *downloader, uint part, QObject *parent = 0);
-  static MediaPlaylist *pageList(Recitation *recitation,
-				 Downloader *downloader, uint page, QObject *parent = 0);
-  static MediaPlaylist *verseList(Recitation *recitation,
-				  Downloader *downloader, uint serialized,
-				  QObject *parent = 0);
-  static MediaPlaylist *chapterList(Recitation *recitation,
-				    Downloader *downloader, uint chapter, QObject *parent = 0);
-
-  static MediaPlaylist *rangeList(Recitation *recitation,
-				  Downloader *downloader,
-				  uint fromChapter, uint fromVerse,
-				  uint toChapter, uint toVerse,
-				  QObject *parent = 0);
-
+  MediaPlaylist(const MediaPlayerConfig& config, QObject *parent = 0);
   ~MediaPlaylist();
-
-  Recitation *recitation();
 
   RecitationDataProvider *dataProvider() const;
 
@@ -68,33 +50,17 @@ private slots:
   void replyFinished();
 
 private:
-  MediaPlaylist(Recitation *recitation,
-		Downloader *downloader, QObject *parent = 0);
-
-  void playPage(int page);
-  void playChapter(int chapter);
-  void playVerse(int chapter, int verse);
-  void playPart(int part);
-  void playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse);
-
   void addMedia(const Media& media);
 
   void download();
 
-  enum PlayMode {
-    PlayPage,
-    PlayChapter,
-    PlayVerse,
-    PlayPart,
-  };
-
   RecitationDataProvider *m_dataProvider;
-  Recitation *m_recitation;
   Downloader *m_downloader;
 
   QList<Media> m_media;
   QQueue<Media> m_queue;
 
+  QString m_url;
   Download *m_download;
 };
 

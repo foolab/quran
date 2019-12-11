@@ -89,7 +89,7 @@ Column {
                         audioPlayer.pause()
                     }
                 } else {
-                    playAudio(MediaPlayer.PlayPage, settings.pageNumber)
+                    playAudio(MediaPlayback.PlayPage, settings.pageNumber)
                 }
             }
         }

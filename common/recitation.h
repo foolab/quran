@@ -57,9 +57,6 @@ public:
   Recitation(RecitationInfo *info, QObject *parent = 0);
   ~Recitation();
 
-  QUrl playBackUrl(const Media& media);
-  QUrl downloadUrl(const Media& media);
-
   bool isLoaded() const;
   void setLoaded(bool loaded);
 
@@ -75,7 +72,8 @@ public:
   QString uuid() const;
   QString name() const;
   QString quality() const;
-  QString dir() const;
+  QString localPath() const;
+  QUrl downloadUrl() const;
 
   Type type() const;
   Status status() const;

@@ -71,7 +71,7 @@ QuranPage {
                     text: qsTr("Recite")
                     onClicked: {
                         pagePosition.setPosition(chapterSelector.currentIndex, 0)
-                        playAudio(MediaPlayer.PlayChapter, chapterSelector.currentIndex)
+                        playAudio(MediaPlayback.PlayChapter, chapterSelector.currentIndex)
                         popPage()
                     }
                 }
@@ -111,7 +111,7 @@ QuranPage {
                     }
                     onClicked: {
                         pagePosition.setPosition(pageInfo.firstChapter, pageInfo.firstVerse)
-                        playAudio(MediaPlayer.PlayPart, partSelector.currentIndex)
+                        playAudio(MediaPlayback.PlayPart, partSelector.currentIndex)
                         popPage()
                     }
                 }

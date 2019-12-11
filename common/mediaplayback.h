@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,32 +15,41 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MEDIA_PLAYER_H
-#define MEDIA_PLAYER_H
+#ifndef MEDIA_PLAYBACK_H
+#define MEDIA_PLAYBACK_H
 
 #include <QObject>
 
-class MediaPlaylist;
-class Media;
-class MediaDecoder;
-class AudioPolicy;
-class AudioOutput;
-class MediaPlayerConfig;
+class MediaPlayer;
+class Recitation;
 
-class MediaPlayer : public QObject {
+class MediaPlayback : public QObject {
   Q_OBJECT
+
+  Q_ENUMS(PlayType);
 
   Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged);
   Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged);
 
 public:
-  MediaPlayer(QObject *parent = 0);
-  ~MediaPlayer();
+  MediaPlayback(QObject *parent = 0);
+  ~MediaPlayback();
 
-  bool play(const MediaPlayerConfig& config);
+  enum PlayType {
+    PlayVerse,
+    PlayPage,
+    PlayChapter,
+    PlayPart,
+  };
+
+  Q_INVOKABLE bool play(const PlayType& type, uint id);
+  Q_INVOKABLE bool playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse);
 
   bool isPlaying() const;
   bool isPaused() const;
+
+  Recitation *recitation() const;
+  void setRecitation(Recitation *recitation);
 
 public slots:
   void stop();
@@ -53,18 +62,9 @@ signals:
   void positionChanged(int chapter, int verse);
   void error();
 
-private slots:
-  void policyAcquired();
-  void policyLost();
-  void policyDenied();
-  void mediaAvailable(const Media& media);
-  void audioPositionChanged(int index);
-
 private:
-  MediaPlaylist *m_list;
-  MediaDecoder* m_decoder;
-  AudioPolicy *m_policy;
-  AudioOutput *m_audio;
+  MediaPlayer *m_player;
+  Recitation *m_recitation;
 };
 
-#endif /* MEDIA_PLAYER_H */
+#endif /* MEDIA_PLAYBACK_H */

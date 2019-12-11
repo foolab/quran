@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ QuranPage {
 
                 onPlayClicked: {
                     pagePosition.setPosition(index, 0)
-                    playAudio(MediaPlayer.PlayChapter, index)
+                    playAudio(MediaPlayback.PlayChapter, index)
                     popPage()
                 }
 
@@ -187,7 +187,7 @@ QuranPage {
 
                 onPlayClicked: {
                     settings.pageNumber = info.firstPage
-                    playAudio(MediaPlayer.PlayPart, index)
+                    playAudio(MediaPlayback.PlayPart, index)
                     popPage()
                 }
             }

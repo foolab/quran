@@ -88,7 +88,7 @@ QuranWindow {
         }
     }
 
-    MediaPlayer {
+    MediaPlayback {
         id: audioPlayer
         onError: banner.showMessage(qsTr("Failed to play recitation"))
 
@@ -106,8 +106,8 @@ QuranWindow {
 
     Recitations {
         id: recitations
-        player: audioPlayer
         dir: settings.recitationsDir
+        player: audioPlayer
 
         Component.onCompleted: {
             refresh()

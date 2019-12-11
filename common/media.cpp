@@ -16,7 +16,6 @@
  */
 
 #include "media.h"
-#include "recitation.h"
 
 Media::Media(int chapter, int verse, int index, bool signal) :
   m_chapter(chapter),

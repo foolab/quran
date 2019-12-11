@@ -16,26 +16,24 @@
  */
 
 #include "mediaplaylist.h"
-#include "recitation.h"
-#include <QDebug>
+#include "mediaplayerconfig.h"
 #include "media.h"
 #include "downloader.h"
 #include <QNetworkReply>
-#include "bookmarks.h"
 #include <QQmlInfo>
-#include "chapterinfo.h"
-#include "pageinfo.h"
-#include "partinfo.h"
 #include "recitationdataprovider.h"
 
-MediaPlaylist::MediaPlaylist(Recitation *recitation,
-			     Downloader *downloader, QObject *parent) :
+MediaPlaylist::MediaPlaylist(const MediaPlayerConfig& config, QObject *parent) :
   QObject(parent),
-  m_recitation(recitation),
-  m_downloader(downloader),
+  m_downloader(new Downloader(this)),
+  m_url(config.downloadUrl()),
   m_download(0) {
 
-  m_dataProvider = new RecitationDataProvider(m_recitation->dir());
+  m_dataProvider = new RecitationDataProvider(config.localPath());
+
+  for (const Media& media : config.media()) {
+    addMedia(media);
+  }
 }
 
 MediaPlaylist::~MediaPlaylist() {
@@ -43,135 +41,6 @@ MediaPlaylist::~MediaPlaylist() {
 
   delete m_dataProvider;
   m_dataProvider = 0;
-}
-
-void MediaPlaylist::playPage(int page) {
-  if (!m_recitation) {
-    return;
-  }
-
-  QList<FragmentInfo> frags = PageInfo(page).fragments();
-
-  int index = 0;
-
-  for (const FragmentInfo& f : frags) {
-    if (f.start() == 0) {
-      if (ChapterInfo(f.chapter()).hasBasmala()) {
-	// Signal the basmala only if we are at chapter 0
-	addMedia(Media(1, 1, index++, f.chapter() == 0));
-      }
-    }
-
-    for (int x = f.start(); x < f.start() + f.length(); x++) {
-      addMedia(Media(f.chapter() + 1, x + 1, index++, true));
-    }
-  }
-}
-
-void MediaPlaylist::playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse) {
-  if (!m_recitation) {
-    return;
-  }
-
-  int index = 0;
-  if (fromChapter == toChapter) {
-    ChapterInfo info(fromChapter);
-    for (int x = fromVerse; x <= toVerse; x++) {
-      addMedia(Media(fromChapter + 1, x + 1, index++, true));
-    }
-  } else {
-    for (int c = fromChapter; c <= toChapter; c++) {
-      ChapterInfo info(c);
-      if (c == fromChapter) {
-	if (fromVerse == 0) {
-	  if (info.hasBasmala()) {
-	    // Signal the basmala only if we are at chapter 0
-	    addMedia(Media(1, 1, index++, c == 0));
-	  }
-	}
-
-	for (int x = fromVerse; x < info.length(); x++) {
-	  addMedia(Media(c + 1, x + 1, index++, true));
-	}
-      } else if (c == toChapter) {
-	// We must be starting a new chapter because fromChapter != toChapter
-	if (info.hasBasmala()) {
-	  // Signal the basmala only if we are at chapter 0
-	  addMedia(Media(1, 1, index++, c == 0));
-	}
-	for (int x = 0; x <= toVerse; x++) {
-	  addMedia(Media(c + 1, x + 1, index++, true));
-	}
-      } else {
-	// Add all of it:
-	if (info.hasBasmala()) {
-	  // Signal the basmala only if we are at chapter 0
-	  addMedia(Media(1, 1, index++, c == 0));
-	}
-	for (int x = 0; x < info.length(); x++) {
-	  addMedia(Media(c + 1, x + 1, index++, true));
-	}
-      }
-    }
-  }
-}
-
-void MediaPlaylist::playChapter(int chapter) {
-  if (!m_recitation) {
-    return;
-  }
-
-  int index = 0;
-
-  ChapterInfo info(chapter);
-  if (info.hasBasmala()) {
-    // Signal the basmala only if we are at chapter 0
-    addMedia(Media(1, 1, index++, chapter == 0));
-  }
-
-  for (int x = 0; x < info.length(); x++) {
-    addMedia(Media(chapter + 1, x + 1, index++, true));
-  }
-}
-
-void MediaPlaylist::playVerse(int chapter, int verse) {
-  if (!m_recitation) {
-    return;
-  }
-
-  addMedia(Media(chapter + 1, verse + 1, 0, true));
-}
-
-void MediaPlaylist::playPart(int part) {
-  if (!m_recitation) {
-    return;
-  }
-
-  QList<FragmentInfo> frags;
-  PartInfo p(part);
-
-  for (int x = p.firstPage(); x < p.firstPage() + p.numberOfPages(); x++) {
-    frags.append(PageInfo(x).fragments());
-  }
-
-  int index = 0;
-
-  for (const FragmentInfo& frag : frags) {
-    if (frag.start() == 0) {
-      if (ChapterInfo(frag.chapter()).hasBasmala()) {
-	// Signal the basmala only if we are at chapter 0
-	addMedia(Media(1, 1, index++, frag.chapter() == 0));
-      }
-    }
-
-    for (int x = frag.start(); x < frag.start() + frag.length(); x++) {
-      addMedia(Media(frag.chapter() + 1, x + 1, index++, true));
-    }
-  }
-}
-
-Recitation *MediaPlaylist::recitation() {
-  return m_recitation;
 }
 
 RecitationDataProvider *MediaPlaylist::dataProvider() const {
@@ -218,62 +87,6 @@ void MediaPlaylist::addMedia(const Media& media) {
   m_queue.enqueue(media);
 }
 
-MediaPlaylist *MediaPlaylist::partList(Recitation *recitation,
-				       Downloader *downloader, uint part, QObject *parent) {
-
-  MediaPlaylist *list = new MediaPlaylist(recitation, downloader, parent);
-
-  list->playPart(part);
-
-  return list;
-}
-
-MediaPlaylist *MediaPlaylist::pageList(Recitation *recitation,
-				       Downloader *downloader, uint page, QObject *parent) {
-
-  MediaPlaylist *list = new MediaPlaylist(recitation, downloader, parent);
-
-  list->playPage(page);
-
-  return list;
-}
-
-MediaPlaylist *MediaPlaylist::verseList(Recitation *recitation,
-					Downloader *downloader,
-					uint serialized, QObject *parent) {
-
-  int chapter, verse;
-  Bookmarks::deserialize(serialized, chapter, verse);
-
-  MediaPlaylist *list = new MediaPlaylist(recitation, downloader, parent);
-
-  list->playVerse(chapter, verse);
-
-  return list;
-}
-
-MediaPlaylist *MediaPlaylist::chapterList(Recitation *recitation,
-					  Downloader *downloader, uint chapter, QObject *parent) {
-
-  MediaPlaylist *list = new MediaPlaylist(recitation, downloader, parent);
-
-  list->playChapter(chapter);
-
-  return list;
-}
-
-MediaPlaylist *MediaPlaylist::rangeList(Recitation *recitation,
-					       Downloader *downloader,
-					       uint fromChapter, uint fromVerse,
-					       uint toChapter, uint toVerse,
-					       QObject *parent) {
-  MediaPlaylist *list = new MediaPlaylist(recitation, downloader, parent);
-
-  list->playRange(fromChapter, fromVerse, toChapter, toVerse);
-
-  return list;
-}
-
 void MediaPlaylist::download() {
   if (m_queue.isEmpty()) {
     emit mediaAvailable(Media::eos());
@@ -290,7 +103,12 @@ void MediaPlaylist::download() {
     return;
   }
 
-  m_download = m_downloader->get(m_recitation->downloadUrl(m));
+  QUrl url(QString("%1/%2%3.mp3")
+	   .arg(m_url)
+	   .arg(m.chapter(), 3, 10, QChar('0'))
+	   .arg(m.verse(), 3, 10, QChar('0')));
+
+  m_download = m_downloader->get(url);
 
   QObject::connect(m_download, SIGNAL(finished()), this, SLOT(replyFinished()));
 }

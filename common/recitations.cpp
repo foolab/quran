@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,16 +17,15 @@
 
 #include "recitations.h"
 #include "recitation.h"
+#include "mediaplayback.h"
 #include <QSettings>
 #include <QQmlInfo>
 #include <QQmlEngine>
 #include <QDir>
-#include "mediaplayer.h"
 #include <algorithm>
 
 Recitations::Recitations(QObject *parent)
-  : QObject(parent),
-    m_player(0) {
+  : QObject(parent) {
 
 }
 
@@ -55,11 +54,11 @@ void Recitations::setDir(const QString& dir) {
   }
 }
 
-MediaPlayer *Recitations::player() const {
+MediaPlayback *Recitations::player() const {
   return m_player;
 }
 
-void Recitations::setPlayer(MediaPlayer *player) {
+void Recitations::setPlayer(MediaPlayback *player) {
   if (m_player != player) {
     m_player = player;
     emit playerChanged();
@@ -174,9 +173,10 @@ bool Recitations::loadRecitation(const QString& id) {
   if (id.isEmpty()) {
     if (old) {
       old->setLoaded(false);
+    } else {
+      m_player->setRecitation(0);
     }
 
-    m_player->setRecitation(0);
     return true;
   }
 
@@ -192,8 +192,10 @@ bool Recitations::loadRecitation(const QString& id) {
       old->setLoaded(false);
     }
 
-    m_player->setRecitation(r);
     r->setLoaded(true);
+
+    m_player->setRecitation(r);
+
     return true;
   }
 

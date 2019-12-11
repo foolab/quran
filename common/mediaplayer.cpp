@@ -18,11 +18,10 @@
 #include "mediaplayer.h"
 #include "mediaplaylist.h"
 #include "media.h"
-#include "recitation.h"
 #include "mediadecoder.h"
 #include "audiooutput.h"
 #include "audiopolicy.h"
-#include "downloader.h"
+#include "mediaplayerconfig.h"
 #include <QQmlInfo>
 
 MediaPlayer::MediaPlayer(QObject *parent) :
@@ -30,9 +29,7 @@ MediaPlayer::MediaPlayer(QObject *parent) :
   m_list(0),
   m_decoder(0),
   m_policy(0),
-  m_audio(0),
-  m_downloader(new Downloader(this)),
-  m_recitation(0) {
+  m_audio(0) {
 
   QObject::connect(this, SIGNAL(error()), this, SLOT(stop()));
 }
@@ -99,74 +96,16 @@ void MediaPlayer::audioPositionChanged(int index) {
   }
 }
 
-void MediaPlayer::setRecitation(Recitation *recitation) {
-  if (m_recitation) {
-    stop();
-  }
-
-  m_recitation = recitation;
-}
-
-Recitation *MediaPlayer::recitation() const {
-  return m_recitation;
-}
-
-bool MediaPlayer::play(const PlayType& type, uint id) {
+bool MediaPlayer::play(const MediaPlayerConfig& config) {
   stop();
 
-  if (!m_recitation) {
+  if (config.localPath().isEmpty()) {
     qmlInfo(this) << "No recitation set";
     return false;
   }
 
-  switch (type) {
-  case PlayVerse:
-    m_list = MediaPlaylist::verseList(m_recitation, m_downloader, id, this);
-    break;
+  m_list = new MediaPlaylist(config);
 
-  case PlayPage:
-    m_list = MediaPlaylist::pageList(m_recitation, m_downloader, id, this);
-    break;
-
-  case PlayChapter:
-    m_list = MediaPlaylist::chapterList(m_recitation, m_downloader, id, this);
-    break;
-
-  case PlayPart:
-    m_list = MediaPlaylist::partList(m_recitation, m_downloader, id, this);
-    break;
-
-  default:
-    qmlInfo(this) << "Unknown play type" << type;
-    return false;
-  }
-
-  return play();
-}
-
-bool MediaPlayer::playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse) {
-  stop();
-
-  if (!m_recitation) {
-    qmlInfo(this) << "No recitation set";
-    return false;
-  }
-
-  if (fromChapter == toChapter) {
-    if (fromVerse > toVerse) {
-      return false;
-    }
-  }
-
-  if (fromChapter > toChapter) {
-    return false;
-  }
-
-  m_list = MediaPlaylist::rangeList(m_recitation, m_downloader, fromChapter, fromVerse, toChapter, toVerse, this);
-  return play();
-}
-
-bool MediaPlayer::play() {
   m_policy = new AudioPolicy(this);
   QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
   QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));

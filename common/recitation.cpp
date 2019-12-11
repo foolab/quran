@@ -189,8 +189,12 @@ QString Recitation::quality() const {
   return m_info->m_quality;
 }
 
-QString Recitation::dir() const {
+QString Recitation::localPath() const {
   return m_info->m_dir;
+}
+
+QUrl Recitation::downloadUrl() const {
+  return m_info->m_url;
 }
 
 Recitation::Type Recitation::type() const {
@@ -206,17 +210,6 @@ void Recitation::setStatus(Recitation::Status status) {
     m_info->m_status = status;
     emit statusChanged();
   }
-}
-
-QUrl Recitation::downloadUrl(const Media& media) {
-  if (!m_info->m_url.isValid()) {
-    return QUrl();
-  }
-
-  return QUrl(QString("%1/%2%3.mp3")
-	      .arg(m_info->m_url.toString())
-	      .arg(media.chapter(), 3, 10, QChar('0'))
-	      .arg(media.verse(), 3, 10, QChar('0')));
 }
 
 bool Recitation::enable() {

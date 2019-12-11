@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,14 +22,14 @@
 #include <deque>
 
 class Recitation;
-class MediaPlayer;
+class MediaPlayback;
 
 class Recitations : public QObject {
   Q_OBJECT
 
   Q_PROPERTY(int installedCount READ installedCount NOTIFY installedCountChanged);
   Q_PROPERTY(QString dir READ dir WRITE setDir NOTIFY dirChanged);
-  Q_PROPERTY(MediaPlayer *player READ player WRITE setPlayer NOTIFY playerChanged);
+  Q_PROPERTY(MediaPlayback *player READ player WRITE setPlayer NOTIFY playerChanged);
 
 public:
   Recitations(QObject *parent = 0);
@@ -40,8 +40,8 @@ public:
 
   int installedCount() const;
 
-  MediaPlayer *player() const;
-  void setPlayer(MediaPlayer *player);
+  MediaPlayback *player() const;
+  void setPlayer(MediaPlayback *player);
 
   Q_INVOKABLE bool loadRecitation(const QString& id);
 
@@ -64,7 +64,7 @@ private:
   Recitation *lookup(const QString& id);
 
   QString m_dir;
-  MediaPlayer *m_player;
+  MediaPlayback *m_player;
 
   std::deque<Recitation *> m_recitations;
 };

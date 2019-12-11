@@ -34,7 +34,7 @@
 #include "textsupplier.h"
 #include "translation.h"
 #include "recitation.h"
-#include "mediaplayer.h"
+#include "mediaplayback.h"
 #include "models.h"
 #include "chapterinfo.h"
 #include "partinfo.h"
@@ -85,7 +85,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<BookmarkItem>("Quran", 1, 0, "BookmarkItem");
   qmlRegisterType<QuranViewModel>("Quran", 1, 0, "QuranViewModel");
   qmlRegisterType<TextSupplier>("Quran", 1, 0, "TextSupplier");
-  qmlRegisterType<MediaPlayer>("Quran", 1, 0, "MediaPlayer");
+  qmlRegisterType<MediaPlayback>("Quran", 1, 0, "MediaPlayback");
   qmlRegisterType<TranslationsModel>("Quran", 1, 0, "TranslationsModel");
   qmlRegisterType<RecitationsModel>("Quran", 1, 0, "RecitationsModel");
   qmlRegisterType<SortModel>("Quran", 1, 0, "SortModel");
