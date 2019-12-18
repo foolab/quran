@@ -41,9 +41,6 @@ public:
   Orientation orientation() const;
   void setOrientation(const Orientation& orientation);
 
-  static void acquireAudioFocus(AudioPolicy *audio);
-  static void releaseAudioFocus();
-
 public slots:
   void applyOrientation();
 

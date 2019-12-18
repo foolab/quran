@@ -1,27 +1,34 @@
+/*
+ * Copyright (c) 2014-2019 Mohammed Sameer <msameer@foolab.org>.
+ *
+ * This package is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.foolab.quran;
 
 import android.content.pm.ActivityInfo;
 import android.util.Log;
-import android.media.AudioManager;
 import android.app.Activity;
-import android.content.Context;
-import android.os.PowerManager.WakeLock;
-import android.os.PowerManager;
 import android.content.res.AssetManager;
 
-public class AndroidSupport implements AudioManager.OnAudioFocusChangeListener {
-    private static String TAG = "org.foolab.quran";
+public class AndroidSupport {
+    private static String TAG = "QuranAndroidSupport";
 
-    AudioManager mAudioManager;
-    PowerManager mPowerManager;
-    Activity mActivity;
-    WakeLock mLock;
+    private Activity mActivity;
 
     AndroidSupport() {
 	mActivity = org.qtproject.qt5.android.QtNative.activity();
-	mAudioManager = (AudioManager)mActivity.getSystemService(Context.AUDIO_SERVICE);
-	mPowerManager = (PowerManager)mActivity.getSystemService(Context.POWER_SERVICE);
-	mLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
 	storeAssetManager(mActivity.getAssets());
     }
 
@@ -37,35 +44,6 @@ public class AndroidSupport implements AudioManager.OnAudioFocusChangeListener {
 	setOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
-    public void acquireAudioFocus() {
-	mActivity.runOnUiThread(new Runnable() {
-		@Override
-		public void run() {
-		    int result = mAudioManager.requestAudioFocus(AndroidSupport.this,
-						      AudioManager.STREAM_MUSIC,
-						      AudioManager.AUDIOFOCUS_GAIN);
-		    if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-			audioFocusDenied();
-			mLock.release();
-		    } else {
-			audioFocusAcquired();
-			mLock.acquire();
-		    }
-		}
-	    });
-    }
-
-    public void releaseAudioFocus() {
-	mActivity.runOnUiThread(new Runnable() {
-		@Override
-		public void run() {
-		    mAudioManager.abandonAudioFocus(AndroidSupport.this);
-		    audioFocusReleased();
-		    mLock.release();
-		}
-	    });
-    }
-
     private void setOrientation(final int o) {
 	mActivity.runOnUiThread(new Runnable() {
 		@Override
@@ -75,25 +53,5 @@ public class AndroidSupport implements AudioManager.OnAudioFocusChangeListener {
 	    });
     }
 
-    @Override
-    public void onAudioFocusChange(int focusChange) {
-	switch (focusChange) {
-	case AudioManager.AUDIOFOCUS_GAIN:
-	    audioFocusAcquired();
-	    mLock.acquire();
-	    break;
-	case AudioManager.AUDIOFOCUS_LOSS:
-	case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-	case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-	    audioFocusLost();
-	    mLock.release();
-	    break;
-	}
-    }
-
-    native void audioFocusAcquired();
-    native void audioFocusDenied();
-    native void audioFocusLost();
-    native void audioFocusReleased();
     native void storeAssetManager(AssetManager assetManager);
 }

@@ -25,46 +25,7 @@
 #include "sqlite-ndk/sources/sqlite3ndk.h"
 
 static AAssetManager *m_assets = 0;
-static QPointer<AudioPolicy> m_audio;
 static QPointer<AndroidSupport> m_support;
-
-extern "C" void
-Java_org_foolab_quran_AndroidSupport_audioFocusAcquired(JNIEnv *env, jobject objectOrClass) {
-  Q_UNUSED(env);
-  Q_UNUSED(objectOrClass);
-
-  if (m_audio) {
-    QMetaObject::invokeMethod(m_audio, "acquired", Qt::QueuedConnection);
-  }
-}
-
-extern "C" void
-Java_org_foolab_quran_AndroidSupport_audioFocusDenied(JNIEnv *env, jobject objectOrClass) {
-  Q_UNUSED(env);
-  Q_UNUSED(objectOrClass);
-
-  if (m_audio) {
-    QMetaObject::invokeMethod(m_audio, "denied", Qt::QueuedConnection);
-  }
-}
-
-extern "C" void
-Java_org_foolab_quran_AndroidSupport_audioFocusLost(JNIEnv *env, jobject objectOrClass) {
-  Q_UNUSED(env);
-  Q_UNUSED(objectOrClass);
-
-  if (m_audio) {
-    QMetaObject::invokeMethod(m_audio, "lost", Qt::QueuedConnection);
-  }
-}
-
-extern "C" void
-Java_org_foolab_quran_AndroidSupport_audioFocusReleased(JNIEnv *env, jobject objectOrClass) {
-  Q_UNUSED(env);
-  Q_UNUSED(objectOrClass);
-
-  // We don't care
-}
 
 extern "C" void
 Java_org_foolab_quran_AndroidSupport_storeAssetManager(JNIEnv *env,
@@ -116,13 +77,4 @@ void AndroidSupport::applyOrientation() {
     m_obj.callMethod<void>("lockOrientationLandscape");
     return;
   }
-}
-
-void AndroidSupport::acquireAudioFocus(AudioPolicy *audio) {
-  m_audio = audio;
-  m_support->m_obj.callMethod<void>("acquireAudioFocus");
-}
-
-void AndroidSupport::releaseAudioFocus() {
-  m_support->m_obj.callMethod<void>("releaseAudioFocus");
 }
