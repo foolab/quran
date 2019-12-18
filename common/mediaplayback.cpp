@@ -16,7 +16,7 @@
  */
 
 #include "mediaplayback.h"
-#include "mediaplayer.h"
+#include "mediaservice.h"
 #include "pageinfo.h"
 #include "chapterinfo.h"
 #include "partinfo.h"
@@ -28,26 +28,26 @@
 
 MediaPlayback::MediaPlayback(QObject *parent) :
   QObject(parent),
-  m_player(new MediaPlayer(this)),
+  m_service(new MediaService(this)),
   m_recitation(0) {
 
-  QObject::connect(m_player, SIGNAL(playingChanged()), this, SIGNAL(playingChanged()));
-  QObject::connect(m_player, SIGNAL(pausedChanged()), this, SIGNAL(pausedChanged()));
-  QObject::connect(m_player, SIGNAL(positionChanged(int, int)), this, SIGNAL(positionChanged(int, int)));
-  QObject::connect(m_player, SIGNAL(error()), this, SIGNAL(error()));
+  QObject::connect(m_service, SIGNAL(playingChanged()), this, SIGNAL(playingChanged()));
+  QObject::connect(m_service, SIGNAL(pausedChanged()), this, SIGNAL(pausedChanged()));
+  QObject::connect(m_service, SIGNAL(positionChanged(int, int)), this, SIGNAL(positionChanged(int, int)));
+  QObject::connect(m_service, SIGNAL(error()), this, SIGNAL(error()));
 }
 
 MediaPlayback::~MediaPlayback() {
-  delete m_player;
-  m_player = 0;
+  delete m_service;
+  m_service = 0;
 }
 
 bool MediaPlayback::isPlaying() const {
-  return m_player->isPlaying();
+  return m_service->isPlaying();
 }
 
 bool MediaPlayback::isPaused() const {
-  return m_player->isPaused();
+  return m_service->isPaused();
 }
 
 bool MediaPlayback::play(const PlayType& type, uint id) {
@@ -149,19 +149,19 @@ bool MediaPlayback::playRange(uint fromChapter, uint fromVerse, uint toChapter, 
   conf.setDownloadUrl(m_recitation->downloadUrl().toString());
   conf.setLocalPath(m_recitation->localPath());
 
-  return m_player->play(conf);
+  return m_service->play(conf);
 }
 
 void MediaPlayback::stop() {
-  return m_player->stop();
+  return m_service->stop();
 }
 
 void MediaPlayback::pause() {
-  return m_player->pause();
+  return m_service->pause();
 }
 
 void MediaPlayback::resume() {
-  m_player->resume();
+  m_service->resume();
 }
 
 Recitation *MediaPlayback::recitation() const {

@@ -15,41 +15,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MEDIA_PLAYBACK_H
-#define MEDIA_PLAYBACK_H
+#ifndef MEDIA_SERVICE_H
+#define MEDIA_SERVICE_H
 
 #include <QObject>
 
-class MediaService;
-class Recitation;
+class MediaPlayerConfig;
+class MediaPlayer;
 
-class MediaPlayback : public QObject {
+class MediaService : public QObject {
   Q_OBJECT
-
-  Q_ENUMS(PlayType);
 
   Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged);
   Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged);
 
 public:
-  MediaPlayback(QObject *parent = 0);
-  ~MediaPlayback();
+  MediaService(QObject *parent = 0);
+  ~MediaService();
 
-  enum PlayType {
-    PlayVerse,
-    PlayPage,
-    PlayChapter,
-    PlayPart,
-  };
-
-  Q_INVOKABLE bool play(const PlayType& type, uint id);
-  Q_INVOKABLE bool playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse);
+  bool play(const MediaPlayerConfig& config);
 
   bool isPlaying() const;
   bool isPaused() const;
-
-  Recitation *recitation() const;
-  void setRecitation(Recitation *recitation);
 
 public slots:
   void stop();
@@ -63,8 +50,7 @@ signals:
   void error();
 
 private:
-  MediaService *m_service;
-  Recitation *m_recitation;
+  MediaPlayer *m_player;
 };
 
-#endif /* MEDIA_PLAYBACK_H */
+#endif /* MEDIA_SERVICE_H */

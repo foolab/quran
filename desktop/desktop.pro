@@ -18,10 +18,12 @@ SOURCES += fsmonitor.cpp \
            audiopolicy.cpp \
            application.cpp \
            mockandroidsupport.cpp \
+           mediaservice.cpp \
            ../android/keyfilter.cpp
 
 HEADERS += fsmonitor.h \
            audiopolicy.h \
            application.h \
            mockandroidsupport.h \
+           mediaservice.h \
            ../android/keyfilter.h
