@@ -18,8 +18,8 @@ MOBILITY = sensors
 alsa:PKGCONFIG += alsa
 pulse:PKGCONFIG += libpulse
 
-DEPENDPATH += . ../data/ ../common/
-INCLUDEPATH += . ../data/ ../common/
+DEPENDPATH += . ../data/ ../common/ ../common/interfaces/
+INCLUDEPATH += . ../data/ ../common/ ../common/interfaces/
 
 DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.7.0\\\"
 
@@ -46,7 +46,9 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmode
            coreapplication.h metadata.h chapterinfo.h partinfo.h pageinfo.h \
            pageposition.h chapterlistmodel.h partlistmodel.h \
            mediacodec.h recitationdataprovider.h mediaplayerconfig.h mediaplayback.h \
-           $$GENERATED
+           $$GENERATED $$INTERFACES
+
+INTERFACES = interfaces/application.h
 
 sles {
   SOURCES += sles.cpp

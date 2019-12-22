@@ -35,7 +35,6 @@ SOURCES += fsmonitor.cpp \
            sqlite-ndk/sources/sqlite3ndk.cpp
 HEADERS += fsmonitor.h \
            audiopolicy.h \
-           application.h \
            androidsupport.h \
            keyfilter.h \
            sqlite-ndk/sources/sqlite3ndk.h
