@@ -42,9 +42,6 @@ public:
     PlayPart,
   };
 
-  Q_INVOKABLE bool play(const PlayType& type, uint id);
-  Q_INVOKABLE bool playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse);
-
   bool isPlaying() const;
   bool isPaused() const;
 
@@ -52,6 +49,8 @@ public:
   void setRecitation(Recitation *recitation);
 
 public slots:
+  void play(const PlayType& type, uint id);
+  void playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse);
   void stop();
   void pause();
   void resume();

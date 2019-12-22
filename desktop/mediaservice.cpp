@@ -33,8 +33,8 @@ MediaService::~MediaService() {
   m_player = 0;
 }
 
-bool MediaService::play(const MediaPlayerConfig& config) {
-  return m_player->play(config);
+void MediaService::play(const MediaPlayerConfig& config) {
+  m_player->play(config);
 }
 
 bool MediaService::isPlaying() const {

@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,15 +77,11 @@ QuranWindow {
     }
 
     function playAudioRange(fromChapter, fromVerse, toChapter, toVerse) {
-        if (!audioPlayer.playRange(fromChapter, fromVerse, toChapter, toVerse)) {
-            banner.showMessage(qsTr("Failed to start audio playback"))
-        }
+        audioPlayer.playRange(fromChapter, fromVerse, toChapter, toVerse)
     }
 
     function playAudio(mode, id) {
-        if (!audioPlayer.play(mode, id)) {
-            banner.showMessage(qsTr("Failed to start audio playback"))
-        }
+        audioPlayer.play(mode, id)
     }
 
     MediaPlayback {

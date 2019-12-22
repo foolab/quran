@@ -96,12 +96,13 @@ void MediaPlayer::audioPositionChanged(int index) {
   }
 }
 
-bool MediaPlayer::play(const MediaPlayerConfig& config) {
+void MediaPlayer::play(const MediaPlayerConfig& config) {
   stop();
 
   if (config.localPath().isEmpty()) {
     qmlInfo(this) << "No recitation set";
-    return false;
+    emit error();
+    return;
   }
 
   m_list = new MediaPlaylist(config);
@@ -115,7 +116,7 @@ bool MediaPlayer::play(const MediaPlayerConfig& config) {
     delete m_list;
     m_list = 0;
     emit error();
-    return false;
+    return;
   }
 
   QObject::connect(m_list, SIGNAL(mediaAvailable(const Media&)),
@@ -128,8 +129,6 @@ bool MediaPlayer::play(const MediaPlayerConfig& config) {
   m_decoder->start();
 
   emit playingChanged();
-
-  return true;
 }
 
 void MediaPlayer::stop() {

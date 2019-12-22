@@ -33,7 +33,7 @@ public:
   MediaService(QObject *parent = 0);
   ~MediaService();
 
-  bool play(const MediaPlayerConfig& config);
+  void play(const MediaPlayerConfig& config);
 
   bool isPlaying() const;
   bool isPaused() const;

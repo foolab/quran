@@ -37,12 +37,11 @@ public:
   MediaPlayer(QObject *parent = 0);
   ~MediaPlayer();
 
-  bool play(const MediaPlayerConfig& config);
-
   bool isPlaying() const;
   bool isPaused() const;
 
 public slots:
+  void play(const MediaPlayerConfig& config);
   void stop();
   void pause();
   void resume();

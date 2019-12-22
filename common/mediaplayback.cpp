@@ -50,46 +50,54 @@ bool MediaPlayback::isPaused() const {
   return m_service->isPaused();
 }
 
-bool MediaPlayback::play(const PlayType& type, uint id) {
+void MediaPlayback::play(const PlayType& type, uint id) {
   switch (type) {
     case PlayVerse: {
       int chapter, verse;
       Bookmarks::deserialize(id, chapter, verse);
-      return playRange(chapter, verse, chapter, verse);
+      playRange(chapter, verse, chapter, verse);
     }
+      break;
+
     case PlayPage: {
       PageInfo inf(id);
-      return playRange(inf.firstChapter(), inf.firstVerse(), inf.lastChapter(), inf.lastVerse());
+      playRange(inf.firstChapter(), inf.firstVerse(), inf.lastChapter(), inf.lastVerse());
     }
+      break;
+
     case PlayChapter: {
       ChapterInfo inf(id);
-      return playRange(id, 0, id, inf.length() - 1);
+      playRange(id, 0, id, inf.length() - 1);
     }
+      break;
+
     case PlayPart: {
       PartInfo inf(id);
       PageInfo p1(inf.firstPage());
       PageInfo p2(inf.firstPage() + inf.numberOfPages() - 1);
-      return playRange(p1.firstChapter(), p1.firstVerse(), p2.lastChapter(), p2.lastVerse());
+      playRange(p1.firstChapter(), p1.firstVerse(), p2.lastChapter(), p2.lastVerse());
     }
+      break;
   }
-
-  return false;
 }
 
-bool MediaPlayback::playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse) {
+void MediaPlayback::playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse) {
   if (!m_recitation) {
     qmlInfo(this) << "No recitation set";
-    return false;
+    emit error();
+    return;
   }
 
   if (fromChapter == toChapter) {
     if (fromVerse > toVerse) {
-      return false;
+      emit error();
+      return;
     }
   }
 
   if (fromChapter > toChapter) {
-    return false;
+    emit error();
+    return;
   }
 
   QList<Media> media;
@@ -149,7 +157,7 @@ bool MediaPlayback::playRange(uint fromChapter, uint fromVerse, uint toChapter, 
   conf.setDownloadUrl(m_recitation->downloadUrl().toString());
   conf.setLocalPath(m_recitation->localPath());
 
-  return m_service->play(conf);
+  m_service->play(conf);
 }
 
 void MediaPlayback::stop() {
