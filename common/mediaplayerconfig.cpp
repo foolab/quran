@@ -16,6 +16,7 @@
  */
 
 #include "mediaplayerconfig.h"
+#include <QDataStream>
 
 MediaPlayerConfig::MediaPlayerConfig() {
 
@@ -57,3 +58,40 @@ void MediaPlayerConfig::setMedia(const QList<Media>& media) {
   m_media = media;
 }
 
+QByteArray MediaPlayerConfig::toByteArray() const {
+  QByteArray data;
+  QDataStream stream(&data, QIODevice::WriteOnly);
+
+  stream << m_localPath << m_downloadUrl << m_reciter;
+
+  stream << m_media.size();
+
+  for (const Media& m : m_media) {
+    stream << m.chapter() << m.verse() << m.index() << m.signal();
+  }
+
+  return data;
+}
+
+MediaPlayerConfig MediaPlayerConfig::fromByteArray(const QByteArray& data) {
+  QDataStream stream(const_cast<QByteArray *>(&data), QIODevice::ReadOnly);
+  MediaPlayerConfig config;
+  int n;
+
+  stream >> config.m_localPath >> config.m_downloadUrl >> config.m_reciter;
+
+  stream >> n;
+
+  for (int x = 0; x < n; x++) {
+    int chapter, verse, index;
+    bool signal;
+
+    stream >> chapter;
+    stream >> verse;
+    stream >> index;
+    stream >> signal;
+    config.m_media << Media(chapter, verse, index, signal);
+  }
+
+  return config;
+}

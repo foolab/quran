@@ -39,6 +39,9 @@ public:
   QList<Media> media() const;
   void setMedia(const QList<Media>& media);
 
+  QByteArray toByteArray() const;
+  static MediaPlayerConfig fromByteArray(const QByteArray& data);
+
 private:
   QString m_localPath;
   QString m_downloadUrl;
