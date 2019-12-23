@@ -37,8 +37,8 @@ public:
   MediaPlayer(QObject *parent = 0);
   ~MediaPlayer();
 
-  bool isPlaying() const;
-  bool isPaused() const;
+  Q_INVOKABLE bool isPlaying() const;
+  Q_INVOKABLE bool isPaused() const;
 
 public slots:
   void play(const MediaPlayerConfig& config);
