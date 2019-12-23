@@ -49,4 +49,6 @@ private:
   QList<Media> m_media;
 };
 
+Q_DECLARE_METATYPE(MediaPlayerConfig);
+
 #endif /* MEDIA_PLAYER_CONFIG_H */
