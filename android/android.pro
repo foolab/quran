@@ -32,11 +32,16 @@ SOURCES += fsmonitor.cpp \
            application.cpp \
            androidsupport.cpp \
            keyfilter.cpp \
+           mediaservice.cpp \
+           service.cpp \
            sqlite-ndk/sources/sqlite3ndk.cpp
+
 HEADERS += fsmonitor.h \
            audiopolicy.h \
            androidsupport.h \
            keyfilter.h \
+           mediaservice.h \
+           service.h \
            sqlite-ndk/sources/sqlite3ndk.h
 
 oboe {

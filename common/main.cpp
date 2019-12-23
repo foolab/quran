@@ -45,12 +45,23 @@
 
 #ifndef ANDROID
 #include <fontconfig/fontconfig.h>
+#else
+#include "service.h"
 #endif
 
 #define FONTS_DIR         DATA_DIR"fonts"
 #define FONTS_CONF        FONTS_DIR"/fonts.conf"
 
 Q_DECL_EXPORT int main(int argc, char *argv[]) {
+#ifdef ANDROID
+  for (int x = 0; x < argc; x++) {
+    if (argv[x] == QLatin1String("-service")) {
+      Service service(argc, argv);
+      return service.exec();
+    }
+  }
+#endif
+
   Application app(argc, argv);
 
   app.init();

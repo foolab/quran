@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="media_service_descruption" translatable="false">Quran audio playback service</string>
+  <string name="media_service_label" translatable="false">Quran audio player</string>
+</resources>
