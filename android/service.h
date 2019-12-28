@@ -19,6 +19,7 @@
 #define SERVICE_H
 
 #include <QAndroidService>
+#include <QAndroidBinder>
 
 class Binder;
 class MediaPlayer;
@@ -57,8 +58,9 @@ private slots:
 private:
   void send(int code, const QVariant& data);
 
+  QAndroidBinder m_sender;
   MediaPlayer *m_player;
-  Binder *m_receiver;
+  Binder *m_localBinder;
   int m_chapter;
   int m_verse;
 };

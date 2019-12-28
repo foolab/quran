@@ -20,7 +20,7 @@
 #include "mediaplayerconfig.h"
 #include "media.h"
 #include "bookmarks.h"
-#include <QAndroidBinder>
+#include "binder.h"
 #include <android/log.h>
 #include <QAndroidParcel>
 
@@ -61,84 +61,10 @@ void messageHandler(QtMsgType type, const QMessageLogContext& context, const QSt
   }
 }
 
-class Binder : public QAndroidBinder {
-public:
-  Binder(MediaPlayer *player) :
-    m_player(player) {
-
-  }
-
-  bool onTransact(int code, const QAndroidParcel& data, const QAndroidParcel& reply,
-		  QAndroidBinder::CallType flags) {
-
-    switch (code) {
-    case Service::UpdateBinder:
-      m_sender = data.readBinder();
-      return true;
-
-    case Service::ActionPlay: {
-      QByteArray d(data.readData());
-
-      MediaPlayerConfig config = MediaPlayerConfig::fromByteArray(d);
-
-      bool res = QMetaObject::invokeMethod(m_player, "play", Qt::AutoConnection,
-					   Q_ARG(MediaPlayerConfig, config));
-
-      reply.writeVariant(res);
-    }
-      return true;
-
-    case Service::ActionStop:
-      reply.writeVariant(QMetaObject::invokeMethod(m_player, "stop", Qt::AutoConnection));
-      return true;
-
-    case Service::ActionPause:
-      reply.writeVariant(QMetaObject::invokeMethod(m_player, "pause", Qt::AutoConnection));
-      return true;
-
-    case Service::ActionResume:
-      reply.writeVariant(QMetaObject::invokeMethod(m_player, "resume", Qt::AutoConnection));
-      return true;
-
-    case Service::QueryPosition: {
-      uint pos;
-      QMetaObject::invokeMethod(m_player, "getPosition",
-				Qt::BlockingQueuedConnection, Q_RETURN_ARG(uint, pos));
-      reply.writeVariant(pos);
-    }
-      return true;
-
-    case Service::QueryPlaying: {
-      bool st = false;
-      QMetaObject::invokeMethod(m_player, "isPlaying",
-				Qt::BlockingQueuedConnection, Q_RETURN_ARG(bool, st));
-      reply.writeVariant(st);
-    }
-      return true;
-
-    case Service::QueryPaused: {
-      bool st = false;
-      QMetaObject::invokeMethod(m_player, "isPaused",
-				Qt::BlockingQueuedConnection, Q_RETURN_ARG(bool, st));
-      reply.writeVariant(st);
-    }
-      return true;
-
-    default:
-      break;
-    }
-
-    return false;
-  }
-
-  QAndroidBinder m_sender;
-  MediaPlayer *m_player;
-};
-
 Service::Service(int& argc, char **argv) :
   QAndroidService(argc, argv),
   m_player(new MediaPlayer(this)),
-  m_receiver(new Binder(m_player)),
+  m_localBinder(new Binder),
   m_chapter(-1),
   m_verse(-1) {
 
@@ -150,11 +76,43 @@ Service::Service(int& argc, char **argv) :
   QObject::connect(m_player, SIGNAL(error()), this, SLOT(error()));
 
   qRegisterMetaType<MediaPlayerConfig>();
+
+  m_localBinder->addHandler(Service::UpdateBinder,
+			    [this](const QAndroidParcel& data) {
+			      m_sender = data.readBinder();
+			      return true;
+			    });
+
+  m_localBinder->addHandler(Service::ActionPlay,
+			    [this](const QAndroidParcel& data) {
+			      QByteArray d(data.readData());
+			      MediaPlayerConfig config = MediaPlayerConfig::fromByteArray(d);
+			      return QMetaObject::invokeMethod(m_player, "play",
+							       Qt::QueuedConnection,
+							       Q_ARG(MediaPlayerConfig, config));
+			    });
+  m_localBinder->addHandler(Service::ActionStop,
+			    Binder::MethodInvoker(m_player, QLatin1String("stop")));
+
+  m_localBinder->addHandler(Service::ActionPause,
+			    Binder::MethodInvoker(m_player, QLatin1String("pause")));
+
+  m_localBinder->addHandler(Service::ActionResume,
+			    Binder::MethodInvoker(m_player, QLatin1String("resume")));
+
+  m_localBinder->addHandler(Service::QueryPosition,
+			    Binder::UnsignedIntPropertyGetter(m_player, QLatin1String("getPosition")));
+
+  m_localBinder->addHandler(Service::QueryPlaying,
+			    Binder::BoolPropertyGetter(m_player, QLatin1String("isPlaying")));
+
+  m_localBinder->addHandler(Service::QueryPaused,
+			    Binder::BoolPropertyGetter(m_player, QLatin1String("isPaused")));
 }
 
 Service::~Service() {
-  delete m_receiver;
-  m_receiver = 0;
+  delete m_localBinder;
+  m_localBinder = 0;
 
   m_player->stop();
   delete m_player;
@@ -162,7 +120,8 @@ Service::~Service() {
 }
 
 QAndroidBinder *Service::onBind(const QAndroidIntent& intent) {
-  return m_receiver;
+  Q_UNUSED(intent);
+  return m_localBinder;
 }
 
 void Service::playingChanged() {
@@ -188,7 +147,8 @@ void Service::send(int code, const QVariant& data) {
   QAndroidParcel sendData, replyData;
   sendData.writeVariant(data);
 
-  m_receiver->m_sender.transact(code, sendData, &replyData);
+  // TODO: This can disappear while we are manipulating it?
+  m_sender.transact(code, sendData, &replyData);
 }
 
 uint Service::getPosition() {

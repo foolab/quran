@@ -25,68 +25,22 @@
 #include "bookmarks.h"
 #include "service.h"
 #include "mediaplayerconfig.h"
-
+#include "binder.h"
 
 #define SERVICE "org.foolab.quran.MediaService"
 
-class ClientBinder : public QAndroidBinder {
-public:
-  ClientBinder(MediaService *service) :
-    m_service(service) {
-
-  }
-
-  bool onTransact(int code, const QAndroidParcel& data, const QAndroidParcel& reply,
-		  QAndroidBinder::CallType flags) {
-
-    switch (code) {
-    case Service::ActionPlayingChanged:
-      reply.writeVariant(QMetaObject::invokeMethod(m_service, "playingChanged",
-						   Qt::AutoConnection));
-      return true;
-
-    case Service::ActionPausedChanged:
-      reply.writeVariant(QMetaObject::invokeMethod(m_service, "pausedChanged",
-						   Qt::AutoConnection));
-      return true;
-
-    case Service::ActionUpdatePosition: {
-      uint pos = data.readVariant().value<uint>();
-      int chapter, verse;
-      Bookmarks::deserialize(pos, chapter, verse);
-      reply.writeVariant(QMetaObject::invokeMethod(m_service, "positionChanged",
-						   Qt::AutoConnection,
-						   Q_ARG(int, chapter),
-						   Q_ARG(int, verse)));
-    }
-      return true;
-    case Service::ActionError:
-      reply.writeVariant(QMetaObject::invokeMethod(m_service, "error",
-						   Qt::AutoConnection));
-      return true;
-
-    default:
-      break;
-    }
-
-    return false;
-  }
-
-  MediaService *m_service;
-};
-
 class ServiceConnection : public QAndroidServiceConnection {
 public:
-  ServiceConnection(MediaService *service) :
+  ServiceConnection(MediaService *service, Binder *binder) :
     m_service(service),
-    m_receiver(ClientBinder(service)) {
+    m_localBinder(binder) {
 
   }
 
   void onServiceConnected(const QString& name, const QAndroidBinder& serviceBinder) {
     m_sender = serviceBinder;
     QAndroidParcel sendData, replyData;
-    sendData.writeBinder(m_receiver);
+    sendData.writeBinder(*m_localBinder);
     m_sender.transact(Service::UpdateBinder, sendData, &replyData);
   }
 
@@ -94,24 +48,55 @@ public:
     QMetaObject::invokeMethod(m_service, "error", Qt::AutoConnection);
   }
 
+  bool send(int code, const QAndroidParcel& data, QAndroidParcel *reply) {
+    return m_sender.transact(code, data, reply);
+  }
+
+private:
   MediaService *m_service;
   QAndroidBinder m_sender;
-  ClientBinder m_receiver;
+  Binder *m_localBinder;
 };
 
 MediaService::MediaService(QObject *parent) :
   QObject(parent),
-  m_connection(new ServiceConnection(this)) {
+  m_binder(new Binder),
+  m_connection(new ServiceConnection(this, m_binder)) {
+
+  m_binder->addHandler(Service::ActionPlayingChanged,
+		       Binder::MethodInvoker(this, QLatin1String("playingChanged")));
+
+  m_binder->addHandler(Service::ActionPausedChanged,
+		       Binder::MethodInvoker(this, QLatin1String("pausedChanged")));
+
+  m_binder->addHandler(Service::ActionError,
+		       Binder::MethodInvoker(this, QLatin1String("error")));
+
+  m_binder->addHandler(Service::ActionUpdatePosition,
+		       [this](const QAndroidParcel& data) {
+			 uint pos = data.readVariant().value<uint>();
+			 int chapter, verse;
+			 Bookmarks::deserialize(pos, chapter, verse);
+			 return QMetaObject::invokeMethod(this, "positionChanged",
+							  Qt::QueuedConnection,
+							  Q_ARG(int, chapter),
+							  Q_ARG(int, verse));
+		       });
+
   // TODO: unbind
   // TODO: error
-  // TODO: if playing then get status and update our ptoperties
   QtAndroid::bindService(QAndroidIntent(QtAndroid::androidActivity(), SERVICE),
 			 *m_connection, QtAndroid::BindFlag::AutoCreate);
 }
 
 MediaService::~MediaService() {
+  // TODO: unbind
+
   delete m_connection;
   m_connection = 0;
+
+  delete m_binder;
+  m_binder = 0;
 }
 
 void MediaService::play(const MediaPlayerConfig& config) {
@@ -147,7 +132,7 @@ bool MediaService::send(int code, const QByteArray *data) {
     sendData.writeData(*data);
   }
 
-  if (!m_connection->m_sender.transact(code, sendData, &replyData)) {
+  if (!m_connection->send(code, sendData, &replyData)) {
     qWarning() << Q_FUNC_INFO << "Failed to send " << code;
     emit error();
     return false;
@@ -167,7 +152,7 @@ bool MediaService::send(int code, const QByteArray *data) {
 bool MediaService::get(int code) {
   QAndroidParcel sendData, replyData;
 
-  if (!m_connection->m_sender.transact(code, sendData, &replyData)) {
+  if (!m_connection->send(code, sendData, &replyData)) {
     qWarning() << Q_FUNC_INFO << "Failed to send " << code;
     //    emit error();
     return false;

@@ -22,6 +22,7 @@
 
 class ServiceConnection;
 class MediaPlayerConfig;
+class Binder;
 
 class MediaService : public QObject {
   Q_OBJECT
@@ -53,6 +54,7 @@ private:
   bool send(int code, const QByteArray *data = 0);
   bool get(int code);
 
+  Binder *m_binder;
   ServiceConnection *m_connection;
 };
 

@@ -34,6 +34,7 @@ SOURCES += fsmonitor.cpp \
            keyfilter.cpp \
            mediaservice.cpp \
            service.cpp \
+           binder.cpp \
            sqlite-ndk/sources/sqlite3ndk.cpp
 
 HEADERS += fsmonitor.h \
@@ -42,6 +43,7 @@ HEADERS += fsmonitor.h \
            keyfilter.h \
            mediaservice.h \
            service.h \
+           binder.h \
            sqlite-ndk/sources/sqlite3ndk.h
 
 oboe {
