@@ -21,8 +21,18 @@
 #include <QAndroidService>
 #include <QAndroidBinder>
 
+#define SERVICE            "org.foolab.quran.MediaService"
+#define ACTION_PLAY        "play"
+#define ACTION_STOP        "stop"
+#define ACTION_PAUSE       "pause"
+#define ACTION_RESUME      "resume"
+
+#define KEY_CONFIG         "conf"
+#define KEY_RECITER        "reciter"
+
 class Binder;
 class MediaPlayer;
+class Intent;
 
 class Service : public QAndroidService {
   Q_OBJECT
@@ -34,8 +44,7 @@ public:
   QAndroidBinder *onBind(const QAndroidIntent& intent);
 
   typedef enum {
-    UpdateBinder = 0,
-    ActionPlay = 1,
+    UpdateBinder = 1,
     ActionStop = 2,
     ActionPause = 3,
     ActionResume = 4,
@@ -48,6 +57,8 @@ public:
     QueryPlaying = 11,
   } Action;
 
+  bool onStartCommand(Intent& intent);
+
 private slots:
   void playingChanged();
   void pausedChanged();
@@ -56,6 +67,7 @@ private slots:
   uint getPosition();
 
 private:
+  void stopService();
   void send(int code, const QVariant& data);
 
   QAndroidBinder m_sender;

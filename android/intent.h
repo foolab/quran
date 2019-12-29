@@ -24,9 +24,8 @@ class Intent : public QAndroidIntent {
 public:
   using QAndroidIntent::QAndroidIntent;
 
-  void putExtra(const QString& key, const QString& data);
-
-  QString extraString(const QString& key);
+  void putExtraString(const QString& key, const QString& data);
+  //  QString extraString(const QString& key);
 
   void setAction(const QString& action);
   QString action();

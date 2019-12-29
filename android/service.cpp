@@ -21,8 +21,13 @@
 #include "media.h"
 #include "bookmarks.h"
 #include "binder.h"
+#include "intent.h"
 #include <android/log.h>
 #include <QAndroidParcel>
+#include <QAndroidJniObject>
+#include <QAndroidJniExceptionCleaner>
+#include <QtAndroid>
+#include <QDebug>
 
 #define applicationName "QuranMediaService"
 
@@ -61,6 +66,14 @@ void messageHandler(QtMsgType type, const QMessageLogContext& context, const QSt
   }
 }
 
+static Service *that = 0;
+
+extern "C" jboolean
+Java_org_foolab_quran_MediaService_onStartCommand(JNIEnv *env, jobject objectOrClass, jobject i) {
+  Intent intent = Intent(QAndroidJniObject(i));
+  return that->onStartCommand(intent);
+}
+
 Service::Service(int& argc, char **argv) :
   QAndroidService(argc, argv),
   m_player(new MediaPlayer(this)),
@@ -83,14 +96,6 @@ Service::Service(int& argc, char **argv) :
 			      return true;
 			    });
 
-  m_localBinder->addHandler(Service::ActionPlay,
-			    [this](const QAndroidParcel& data) {
-			      QByteArray d(data.readData());
-			      MediaPlayerConfig config = MediaPlayerConfig::fromByteArray(d);
-			      return QMetaObject::invokeMethod(m_player, "play",
-							       Qt::QueuedConnection,
-							       Q_ARG(MediaPlayerConfig, config));
-			    });
   m_localBinder->addHandler(Service::ActionStop,
 			    Binder::MethodInvoker(m_player, QLatin1String("stop")));
 
@@ -108,6 +113,8 @@ Service::Service(int& argc, char **argv) :
 
   m_localBinder->addHandler(Service::QueryPaused,
 			    Binder::BoolPropertyGetter(m_player, QLatin1String("isPaused")));
+
+  that = this;
 }
 
 Service::~Service() {
@@ -117,6 +124,8 @@ Service::~Service() {
   m_player->stop();
   delete m_player;
   m_player = 0;
+
+  that = 0;
 }
 
 QAndroidBinder *Service::onBind(const QAndroidIntent& intent) {
@@ -126,6 +135,7 @@ QAndroidBinder *Service::onBind(const QAndroidIntent& intent) {
 
 void Service::playingChanged() {
   send(ActionPlayingChanged, m_player->isPlaying());
+  stopService();
 }
 
 void Service::pausedChanged() {
@@ -141,6 +151,7 @@ void Service::positionChanged(int chapter, int verse) {
 
 void Service::error() {
   send(ActionError, true);
+  stopService();
 }
 
 void Service::send(int code, const QVariant& data) {
@@ -151,6 +162,28 @@ void Service::send(int code, const QVariant& data) {
   m_sender.transact(code, sendData, &replyData);
 }
 
+bool Service::onStartCommand(Intent& intent) {
+  QString action(intent.action());
+  if (action == "play") {
+    QByteArray d(intent.extraBytes("conf"));
+    MediaPlayerConfig config = MediaPlayerConfig::fromByteArray(d);
+    return QMetaObject::invokeMethod(m_player, "play",
+				     Qt::QueuedConnection,
+				     Q_ARG(MediaPlayerConfig, config));
+  } else if (!action.isEmpty()) {
+    bool res =
+      QMetaObject::invokeMethod(m_player, action.toUtf8().constData(), Qt::QueuedConnection);
+    return action == "stop" ? false : res;
+  } else {
+    return false;
+  }
+}
+
 uint Service::getPosition() {
   return Bookmarks::serialize(m_chapter, m_verse);
+}
+
+void Service::stopService() {
+  QAndroidJniExceptionCleaner cleaner;
+  QtAndroid::androidContext().callMethod<void>("_stopService");
 }

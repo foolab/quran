@@ -1,138 +1,104 @@
 package org.foolab.quran;
 
 import org.qtproject.qt5.android.bindings.QtService;
-import org.foolab.quran.MediaSupport;
+import org.qtproject.qt5.android.QtNative;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.content.ServiceConnection;
-import android.content.ComponentName;
-import android.os.IBinder;
-import android.os.Messenger;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Bundle;
-import android.os.RemoteException;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.app.Notification.Action;
+import android.app.Notification.Action.Builder;
 
 public class MediaService extends QtService {
     private static String TAG = "QuranMediaService";
-
+    private int mStartId;
     public static Context mCtx;
+    private String mReciter;
 
-    /*
-    public static final int ACTION_STATUS = 0;
-    public static final int ACTION_STOP = 2;
-    public static final int ACTION_PAUSE = 3;
-    public static final int ACTION_RESUME = 4;
-
-    public static final int MSG_STATUS = 0;
-    public static final int MSG_STOP = 2;
-    public static final int MSG_PAUSE = 3;
-    public static final int MSG_RESUME = 4;
-
-    public static final String CONFIG = "config";
-    public static final String ACTION = "action";
-    public static final String PLAYING = "playing";
-    public static final String PAUSED = "paused";
-    public static final String CHAPTER = "chapter";
-    public static final String VERSE = "verse";
-    public static final String STARTED = "started";
-    public static final String ERROR = "error";
-
-    private void reportStatus() {
-	Log.e(TAG, "report status");
-	Message reply = Message.obtain(null, MSG_STATUS, 0, 0);
-	Bundle bundle = new Bundle(5);
-	bundle.putBoolean(MediaService.PLAYING, isPlaying());
-	bundle.putBoolean(MediaService.PAUSED, isPaused());
-	bundle.putBoolean(MediaService.STARTED, m_id != -1);
-	bundle.putBoolean(MediaService.ERROR, m_error);
-	bundle.putInt(MediaService.CHAPTER, chapter());
-	bundle.putInt(MediaService.VERSE, verse());
-	reply.setData(bundle);
-
-        try {
-	    m_sender.send(reply);
-        } catch (RemoteException e) {
-	    Log.e(TAG, "failed to send message");
-            e.printStackTrace();
-        }
-
-	Log.e(TAG, "reported status");
+    // Called from application activity
+    public static boolean _startService(Intent intent) {
+	return org.qtproject.qt5.android.QtNative.activity().startService(intent) != null;
     }
-    */
+
+    public void _stopService() {
+	Log.e(TAG, "stop service");
+	stopForeground(true);
+	stopSelf(mStartId);
+    }
+
     @Override
     public void onCreate() {
 	Log.e(TAG, "on create");
 	super.onCreate();
+
 	MediaService.mCtx = this;
     }
-    /*
+
     @Override
     public void onDestroy() {
 	Log.e(TAG, "on destroy");
 	super.onDestroy();
     }
 
-    public IBinder onBind(Intent intent) {
-	Log.e(TAG, "on bind");
-	return m_messenger.getBinder();
+    private Notification.Action makeNotificationAction(String action) {
+	Intent intent = new Intent(this, MediaService.class);
+	intent.setAction(action);
+
+	PendingIntent actionIntent =
+	    PendingIntent.getService(this, 0, intent,
+				     PendingIntent.FLAG_UPDATE_CURRENT |
+				     PendingIntent.FLAG_ONE_SHOT);
+
+	return new Notification.Action.Builder(0, action, actionIntent).build();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 	Log.e(TAG, "on start command");
-	byte[] conf = intent.getByteArrayExtra(MediaService.CONFIG);
-	play(conf);
-	reportStatus();
 
-	return START_NOT_STICKY;
+	mStartId = startId;
+
+	if (intent == null) {
+	    // TODO: handle
+	}
+
+	if (!onStartCommand(intent)) {
+	    _stopService();
+	    return START_STICKY;
+	}
+
+	String action = intent.getAction();
+	if (action.equals("play")) {
+	    mReciter = intent.getStringExtra("reciter");
+	}
+
+	Intent launchIntent =
+	    new Intent(this, org.qtproject.qt5.android.bindings.QtActivity.class);
+	PendingIntent contentIntent =
+	    PendingIntent.getActivity(this, 0, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+	android.app.Notification.Builder builder = new android.app.Notification.Builder(mCtx);
+	builder.setContentTitle(getString(R.string.app_name))
+	    .setContentText(mReciter)
+	    .setSmallIcon(R.drawable.icon)
+	    .setShowWhen(false)
+	    .setContentIntent(contentIntent)
+	    .addAction(makeNotificationAction("stop"));
+
+	// stop action has been handled by our native layer.
+	if (action.equals("play")) {
+	    builder.addAction(makeNotificationAction("pause"));
+	} else if (action.equals("pause")) {
+	    builder.addAction(makeNotificationAction("resume"));
+	} else if (action.equals("resume")) {
+	    builder.addAction(makeNotificationAction("pause"));
+	}
+
+	startForeground(13, builder.build());
+
+	return START_STICKY;
     }
 
-    private Messenger m_messenger = new Messenger(new Handler() {
-	    @Override
-	    public void handleMessage(Message msg) {
-		Log.e(TAG, "handle message");
-		switch (msg.what) {
-		case MediaService.ACTION_STATUS:
-		    m_sender = msg.replyTo;
-		    reportStatus();
-		    break;
-		case MediaService.MSG_STOP:
-		    stop();
-		    reportStatus();
-		    break;
-
-		case MediaService.MSG_PAUSE:
-		    pause();
-		    reportStatus();
-		    break;
-
-		case MediaService.MSG_RESUME:
-		    resume();
-		    reportStatus();
-		    break;
-
-		default:
-		    super.handleMessage(msg);
-		}
-	    }
-	});
-
-    //    private native void init();
-    private native boolean play(byte[] conf);
-    private native void stop();
-    private native void pause();
-    private native void resume();
-    private native int chapter();
-    private native int verse();
-
-    private native boolean isPlaying();
-    private native boolean isPaused();
-
-    private Messenger m_sender;
-    private boolean m_error = false;
-    private int m_id = -1;
-
-    */
+    private native boolean onStartCommand(Intent intent);
 }

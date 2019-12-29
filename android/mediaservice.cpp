@@ -26,8 +26,8 @@
 #include "service.h"
 #include "mediaplayerconfig.h"
 #include "binder.h"
-
-#define SERVICE "org.foolab.quran.MediaService"
+#include "intent.h"
+#include <QAndroidJniExceptionCleaner>
 
 class ServiceConnection : public QAndroidServiceConnection {
 public:
@@ -100,8 +100,18 @@ MediaService::~MediaService() {
 }
 
 void MediaService::play(const MediaPlayerConfig& config) {
+  QAndroidJniExceptionCleaner cleaner;
+
   QByteArray data = config.toByteArray();
-  if (!send(Service::ActionPlay, &data)) {
+
+  Intent intent(QtAndroid::androidActivity().object(), SERVICE);
+  intent.putExtra("conf", data);
+  intent.putExtraString("reciter", config.reciter());
+  intent.setAction(ACTION_PLAY);
+
+  if (!QAndroidJniObject::callStaticMethod<jboolean>("org/foolab/quran/MediaService",
+						     "_startService", "(Landroid/content/Intent;)Z",
+						     intent.handle().object())) {
     emit error();
   }
 }

@@ -19,7 +19,7 @@
 #include <QAndroidJniEnvironment>
 #include <QAndroidJniExceptionCleaner>
 
-void Intent::putExtra(const QString& key, const QString& data) {
+void Intent::putExtraString(const QString& key, const QString& data) {
   QAndroidJniExceptionCleaner cleaner;
 
   handle().callObjectMethod("putExtra",
@@ -27,7 +27,7 @@ void Intent::putExtra(const QString& key, const QString& data) {
 			    QAndroidJniObject::fromString(key).object(),
 			    QAndroidJniObject::fromString(data).object());
 }
-
+#if 0
 QString Intent::extraString(const QString& key) {
   QAndroidJniExceptionCleaner cleaner;
 
@@ -35,6 +35,7 @@ QString Intent::extraString(const QString& key) {
 				   "(Ljava/lang/String;)Ljava/lang/String;",
 				   QAndroidJniObject::fromString(key).object()).toString();
 }
+#endif
 
 void Intent::setAction(const QString& action) {
   QAndroidJniExceptionCleaner cleaner;
