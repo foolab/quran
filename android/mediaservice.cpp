@@ -105,13 +105,14 @@ void MediaService::play(const MediaPlayerConfig& config) {
   QByteArray data = config.toByteArray();
 
   Intent intent(QtAndroid::androidActivity().object(), SERVICE);
-  intent.putExtra("conf", data);
-  intent.putExtraString("reciter", config.reciter());
+  intent.putExtra(KEY_CONFIG, data);
+  intent.putExtraString(KEY_RECITER, config.reciter());
   intent.setAction(ACTION_PLAY);
 
-  if (!QAndroidJniObject::callStaticMethod<jboolean>("org/foolab/quran/MediaService",
-						     "_startService", "(Landroid/content/Intent;)Z",
-						     intent.handle().object())) {
+  QAndroidJniObject obj = QtAndroid::androidContext()
+    .callObjectMethod("startService", "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+		      intent.handle().object());
+  if (!obj.isValid()) {
     emit error();
   }
 }

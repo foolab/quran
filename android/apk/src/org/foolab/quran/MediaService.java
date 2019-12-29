@@ -16,11 +16,6 @@ public class MediaService extends QtService {
     public static Context mCtx;
     private String mReciter;
 
-    // Called from application activity
-    public static boolean _startService(Intent intent) {
-	return org.qtproject.qt5.android.QtNative.activity().startService(intent) != null;
-    }
-
     public void _stopService() {
 	Log.e(TAG, "stop service");
 	stopForeground(true);
