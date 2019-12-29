@@ -135,7 +135,9 @@ QAndroidBinder *Service::onBind(const QAndroidIntent& intent) {
 
 void Service::playingChanged() {
   send(ActionPlayingChanged, m_player->isPlaying());
-  stopService();
+  if (!m_player->isPlaying()) {
+    stopService();
+  }
 }
 
 void Service::pausedChanged() {
