@@ -80,7 +80,7 @@ Column {
 
             icon: audioPlayer.playing ? "image://icon/pause.png" : "image://icon/play.png"
             fillColor: quranTheme.quranColors.text
-            enabled: settings.recitationMode != 0 && recitations.installedCount > 0
+            enabled: root.canPlayAudio
             onClicked: {
                 if (audioPlayer.playing) {
                     if (audioPlayer.paused) {
@@ -122,7 +122,7 @@ Column {
         ToolButton {
             icon: "image://icon/playlist.png"
             fillColor: quranTheme.quranColors.text
-            enabled: settings.recitationMode != 0 && recitations.installedCount > 0
+            enabled: root.canPlayAudio
             onClicked: pushAnimated(Qt.resolvedUrl("PlaylistPage.qml"))
         }
     }

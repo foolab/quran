@@ -131,7 +131,7 @@ QuranPage {
                 number: index
                 text: info.fullName
                 highlight: ListView.isCurrentItem
-                showPlay: settings.recitationMode != 0 && recitations.installedCount > 0
+                showPlay: root.canPlayAudio
                 onClicked: {
                     pagePosition.setPosition(index, 0)
                     popPage()
@@ -176,7 +176,7 @@ QuranPage {
                 }
                 number: index
                 text: info.name
-                showPlay: settings.recitationMode != 0 && recitations.installedCount > 0
+                showPlay: root.canPlayAudio
                 showMore: false
                 highlight: ListView.isCurrentItem
 

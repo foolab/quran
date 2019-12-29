@@ -21,6 +21,8 @@ import Quran 1.0
 
 QuranWindow {
     id: root
+    readonly property bool canPlayAudio: settings.recitationMode != 0 &&
+        recitations.installedCount > 0
 
     Settings {
         id: settings

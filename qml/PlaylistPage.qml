@@ -69,6 +69,7 @@ QuranPage {
                     id: chapterButton
                     anchors.right: parent.right
                     text: qsTr("Recite")
+                    enabled: root.canPlayAudio
                     onClicked: {
                         pagePosition.setPosition(chapterSelector.currentIndex, 0)
                         playAudio(MediaPlayback.PlayChapter, chapterSelector.currentIndex)
@@ -100,6 +101,7 @@ QuranPage {
                 QuranButton {
                     id: partButton
                     anchors.right: parent.right
+                    enabled: root.canPlayAudio
                     text: qsTr("Recite")
                     PartInfo {
                         id: partInfo
@@ -170,7 +172,7 @@ QuranPage {
             QuranButton {
                 text: qsTr("Recite")
                 anchors.horizontalCenter: parent.horizontalCenter
-                enabled: (fromChapterSelector.currentIndex * 1000) + fromVerseSelector.currentIndex <= (toChapterSelector.currentIndex * 1000) + toVerseSelector.currentIndex
+                enabled: ((fromChapterSelector.currentIndex * 1000) + fromVerseSelector.currentIndex <= (toChapterSelector.currentIndex * 1000) + toVerseSelector.currentIndex) && root.canPlayAudio
 
                 onClicked: {
                         pagePosition.setPosition(fromChapterSelector.currentIndex, fromVerseSelector.currentIndex)
