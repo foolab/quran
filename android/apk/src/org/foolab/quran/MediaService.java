@@ -2,7 +2,6 @@ package org.foolab.quran;
 
 import org.qtproject.qt5.android.bindings.QtService;
 import org.qtproject.qt5.android.QtNative;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.app.Notification;
@@ -13,7 +12,6 @@ import android.app.Notification.Action.Builder;
 public class MediaService extends QtService {
     private static String TAG = "QuranMediaService";
     private int mStartId;
-    public static Context mCtx;
     private String mReciter;
 
     public void _stopService() {
@@ -26,8 +24,6 @@ public class MediaService extends QtService {
     public void onCreate() {
 	Log.e(TAG, "on create");
 	super.onCreate();
-
-	MediaService.mCtx = this;
     }
 
     @Override
@@ -73,7 +69,8 @@ public class MediaService extends QtService {
 	PendingIntent contentIntent =
 	    PendingIntent.getActivity(this, 0, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-	android.app.Notification.Builder builder = new android.app.Notification.Builder(mCtx);
+	android.app.Notification.Builder builder =
+	    new android.app.Notification.Builder(org.qtproject.qt5.android.QtNative.service());
 	builder.setContentTitle(getString(R.string.app_name))
 	    .setContentText(mReciter)
 	    .setSmallIcon(R.drawable.icon)

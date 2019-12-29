@@ -24,6 +24,7 @@ import android.content.Context;
 import android.os.PowerManager.WakeLock;
 import android.os.PowerManager;
 import android.os.Handler;
+import org.qtproject.qt5.android.QtNative;
 
 public class MediaSupport implements AudioManager.OnAudioFocusChangeListener {
     private static String TAG = "QuranMediaSupport";
@@ -34,7 +35,7 @@ public class MediaSupport implements AudioManager.OnAudioFocusChangeListener {
     Handler mHandler;
 
     MediaSupport() {
-	Context ctx = org.foolab.quran.MediaService.mCtx;
+	Context ctx = org.qtproject.qt5.android.QtNative.service();
 	mHandler = new Handler(ctx.getMainLooper());
 	mAudioManager = (AudioManager)ctx.getSystemService(Context.AUDIO_SERVICE);
 	mPowerManager = (PowerManager)ctx.getSystemService(Context.POWER_SERVICE);
