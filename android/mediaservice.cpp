@@ -38,13 +38,18 @@ public:
   }
 
   void onServiceConnected(const QString& name, const QAndroidBinder& serviceBinder) {
+    Q_UNUSED(name);
+
     m_sender = serviceBinder;
+
     QAndroidParcel sendData, replyData;
     sendData.writeBinder(*m_localBinder);
     m_sender.transact(Service::UpdateBinder, sendData, &replyData);
   }
 
   void onServiceDisconnected(const QString& name) {
+    Q_UNUSED(name);
+
     QMetaObject::invokeMethod(m_service, "error", Qt::AutoConnection);
   }
 

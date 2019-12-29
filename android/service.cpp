@@ -70,6 +70,9 @@ static Service *that = 0;
 
 extern "C" jboolean
 Java_org_foolab_quran_MediaService_onStartCommand(JNIEnv *env, jobject objectOrClass, jobject i) {
+  Q_UNUSED(env);
+  Q_UNUSED(objectOrClass);
+
   Intent intent = Intent(QAndroidJniObject(i));
   return that->onStartCommand(intent);
 }
@@ -166,8 +169,8 @@ void Service::send(int code, const QVariant& data) {
 
 bool Service::onStartCommand(Intent& intent) {
   QString action(intent.action());
-  if (action == "play") {
-    QByteArray d(intent.extraBytes("conf"));
+  if (action == ACTION_PLAY) {
+    QByteArray d(intent.extraBytes(KEY_CONFIG));
     MediaPlayerConfig config = MediaPlayerConfig::fromByteArray(d);
     return QMetaObject::invokeMethod(m_player, "play",
 				     Qt::QueuedConnection,
@@ -175,7 +178,7 @@ bool Service::onStartCommand(Intent& intent) {
   } else if (!action.isEmpty()) {
     bool res =
       QMetaObject::invokeMethod(m_player, action.toUtf8().constData(), Qt::QueuedConnection);
-    return action == "stop" ? false : res;
+    return action == ACTION_STOP ? false : res;
   } else {
     return false;
   }
