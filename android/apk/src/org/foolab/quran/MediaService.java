@@ -15,20 +15,20 @@ public class MediaService extends QtService {
     private String mReciter;
 
     public void _stopService() {
-	Log.e(TAG, "stop service");
+	Log.d(TAG, "stop service");
 	stopForeground(true);
 	stopSelf(mStartId);
     }
 
     @Override
     public void onCreate() {
-	Log.e(TAG, "on create");
+	Log.d(TAG, "on create");
 	super.onCreate();
     }
 
     @Override
     public void onDestroy() {
-	Log.e(TAG, "on destroy");
+	Log.d(TAG, "on destroy");
 	super.onDestroy();
     }
 
@@ -46,7 +46,7 @@ public class MediaService extends QtService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-	Log.e(TAG, "on start command");
+	Log.d(TAG, "on start command");
 
 	mStartId = startId;
 
