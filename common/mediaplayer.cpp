@@ -132,6 +132,10 @@ void MediaPlayer::play(const MediaPlayerConfig& config) {
 }
 
 void MediaPlayer::stop() {
+  if (!isPlaying()) {
+    return;
+  }
+
   if (m_decoder) {
     m_decoder->stop();
     m_decoder->deleteLater();
