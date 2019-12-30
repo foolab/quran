@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -126,8 +126,17 @@ int Bookmarks::aya(uint bookmark) {
   return aya;
 }
 
-void Bookmarks::deserialize(uint bookmark, int& sura, int& aya) {
-  aya = bookmark & 0xffff;
+void Bookmarks::deserialize(uint bookmark, int& chapter, int& verse) {
+  verse = bookmark & 0xffff;
+  chapter = (bookmark >> 16);
 
-  sura = (bookmark >> 16);
+  // This can happen if we try to serialize and deserialize chapter -1 and verse -1
+  // -1 is used to refer to an invalid entity.
+  if (verse == (ushort)-1) {
+    verse = -1;
+  }
+
+  if (chapter == (ushort)-1) {
+    chapter = -1;
+  }
 }

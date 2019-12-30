@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public:
   Q_INVOKABLE static int sura(uint bookmark);
   Q_INVOKABLE static int aya(uint bookmark);
 
-  static void deserialize(uint bookmark, int& sura, int& aya);
+  static void deserialize(uint bookmark, int& chapter, int& verse);
 
   bool isEmpty();
 
