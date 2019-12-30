@@ -154,12 +154,14 @@ QuranWindow {
         function setPosition(chapter, verse) {
             pagePosition.chapter = chapter
             pagePosition.verse = verse
-            settings.pageNumber = pagePosition.page
-            // We cannot depend on the pageChanged() signal because it will
-            // be emitted after we set the chapter and verse but before we assign
-            // the pageNumber above so our delegates will miss it because the actual
-            // page change will happen after the reaction to pageChanged completes
-            pagePosition.changed()
+            if (pagePosition.isValid) {
+                settings.pageNumber = pagePosition.page
+                // We cannot depend on the pageChanged() signal because it will
+                // be emitted after we set the chapter and verse but before we assign
+                // the pageNumber above so our delegates will miss it because the actual
+                // page change will happen after the reaction to pageChanged completes
+                pagePosition.changed()
+            }
         }
     }
 
