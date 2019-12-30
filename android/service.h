@@ -65,6 +65,7 @@ private slots:
   void positionChanged(int chapter, int verse);
   void error();
   uint getPosition();
+  void sendState();
 
 private:
   void stopService();

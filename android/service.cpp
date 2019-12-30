@@ -96,7 +96,8 @@ Service::Service(int& argc, char **argv) :
   m_localBinder->addHandler(Service::UpdateBinder,
 			    [this](const QAndroidParcel& data) {
 			      m_sender = data.readBinder();
-			      return true;
+			      return
+				QMetaObject::invokeMethod(this, "sendState", Qt::QueuedConnection);
 			    });
 
   m_localBinder->addHandler(Service::ActionStop,
@@ -193,4 +194,10 @@ uint Service::getPosition() {
 void Service::stopService() {
   QAndroidJniExceptionCleaner cleaner;
   QtAndroid::androidContext().callMethod<void>("_stopService");
+}
+
+void Service::sendState() {
+  send(ActionPlayingChanged, m_player->isPlaying());
+  send(ActionPausedChanged, m_player->isPaused());
+  send(ActionUpdatePosition, getPosition());
 }
