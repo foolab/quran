@@ -148,10 +148,12 @@ void Service::pausedChanged() {
 }
 
 void Service::positionChanged(int chapter, int verse) {
-  m_chapter = chapter;
-  m_verse = verse;
+  if (m_chapter != chapter || m_verse != verse) {
+    m_chapter = chapter;
+    m_verse = verse;
 
-  send(ActionUpdatePosition, getPosition());
+    send(ActionUpdatePosition, getPosition());
+  }
 }
 
 void Service::error() {
