@@ -6,7 +6,6 @@
     <file alias="qml/MainPage.qml">MainPage.qml</file>
     <file alias="qml/AboutPageBlock.qml">AboutPageBlock.qml</file>
     <file alias="qml/AboutPage.qml">AboutPage.qml</file>
-    <file alias="qml/FavoritesModel.qml">FavoritesModel.qml</file>
     <file alias="qml/FavoritesPage.qml">FavoritesPage.qml</file>
     <file alias="qml/IndexPage.qml">IndexPage.qml</file>
     <file alias="qml/IndexDelegate.qml">IndexDelegate.qml</file>
@@ -20,7 +19,7 @@
     <file alias="qml/RecitationsPage.qml">RecitationsPage.qml</file>
     <file alias="qml/SearchPage.qml">SearchPage.qml</file>
     <file alias="qml/SettingsPage.qml">SettingsPage.qml</file>
-    <file alias="qml/SuraList.qml">SuraList.qml</file>
+    <file alias="qml/ChapterList.qml">ChapterList.qml</file>
     <file alias="qml/TranslationsPage.qml">TranslationsPage.qml</file>
     <file alias="qml/MenuAction.qml">MenuAction.qml</file>
     <file alias="qml/VerseDelegate.qml">VerseDelegate.qml</file>

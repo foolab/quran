@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2014 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,8 +96,8 @@ bool TextProvider::load() {
   return true;
 }
 
-QString TextProvider::text(int aya, off_t start) const {
-  const QPair<off_t, size_t>& a = d_ptr->offsets.at(start + aya);
+QString TextProvider::text(int verse, off_t start) const {
+  const QPair<off_t, size_t>& a = d_ptr->offsets.at(start + verse);
 
   char *data = d_ptr->ptr + a.first;
 

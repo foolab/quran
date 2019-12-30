@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,10 +43,10 @@ QVariant BookmarksModel::data(const QModelIndex& index, int role) const {
       return m_ids[index.row()];
     }
     else if (role == ChapterRole) {
-      return m_bookmarks->sura(m_ids[index.row()]);
+      return m_bookmarks->chapter(m_ids[index.row()]);
     }
     else if (role == VerseRole) {
-      return m_bookmarks->aya(m_ids[index.row()]);
+      return m_bookmarks->verse(m_ids[index.row()]);
     }
   }
 

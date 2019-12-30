@@ -46,11 +46,11 @@ QuranListView {
             part: info.part
         }
 
-        SuraList {
+        ChapterList {
             id: verse
             anchors.left: parent.left
             anchors.leftMargin: quranTheme.sizes.marginSmall
-            suras: info.chapters
+            chapters: info.chapters
         }
 
         QuranLabel {

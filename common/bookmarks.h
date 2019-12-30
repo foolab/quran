@@ -36,14 +36,14 @@ public:
   Settings *settings();
   void setSettings(Settings *settings);
 
-  Q_INVOKABLE static uint serialize(int sura, int aya);
+  Q_INVOKABLE static uint serialize(int chapter, int verse);
 
   bool isBookmarked(uint bookmark) const;
 
   QList<uint> bookmarks() const;
 
-  Q_INVOKABLE static int sura(uint bookmark);
-  Q_INVOKABLE static int aya(uint bookmark);
+  Q_INVOKABLE static int chapter(uint bookmark);
+  Q_INVOKABLE static int verse(uint bookmark);
 
   static void deserialize(uint bookmark, int& chapter, int& verse);
 
@@ -52,8 +52,8 @@ public:
 public slots:
   void add(uint bookmark);
   void remove(uint bookmark);
-  void add(int sura, int aya);
-  void remove(int sura, int aya);
+  void add(int chapter, int verse);
+  void remove(int chapter, int verse);
   void clear();
 
 signals:

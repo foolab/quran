@@ -46,11 +46,11 @@ bool Bookmarks::isEmpty() {
   return m_bookmarks.isEmpty();
 }
 
-uint Bookmarks::serialize(int sura, int aya) {
-  uint bookmark = sura;
+uint Bookmarks::serialize(int chapter, int verse) {
+  uint bookmark = chapter;
 
   bookmark <<= 16;
-  bookmark |= aya;
+  bookmark |= verse;
 
   return bookmark;
 }
@@ -87,12 +87,12 @@ void Bookmarks::remove(uint bookmark) {
   }
 }
 
-void Bookmarks::add(int sura, int aya) {
-  add(serialize(sura, aya));
+void Bookmarks::add(int chapter, int verse) {
+  add(serialize(chapter, verse));
 }
 
-void Bookmarks::remove(int sura, int aya) {
-  remove(serialize(sura, aya));
+void Bookmarks::remove(int chapter, int verse) {
+  remove(serialize(chapter, verse));
 }
 
 QList<uint> Bookmarks::bookmarks() const {
@@ -108,22 +108,22 @@ void Bookmarks::clear() {
   }
 }
 
-int Bookmarks::sura(uint bookmark) {
-  int sura = -1;
-  int aya = -1;
+int Bookmarks::chapter(uint bookmark) {
+  int chapter = -1;
+  int verse = -1;
 
-  deserialize(bookmark, sura, aya);
+  deserialize(bookmark, chapter, verse);
 
-  return sura;
+  return chapter;
 }
 
-int Bookmarks::aya(uint bookmark) {
-  int sura = -1;
-  int aya = -1;
+int Bookmarks::verse(uint bookmark) {
+  int chapter = -1;
+  int verse = -1;
 
-  deserialize(bookmark, sura, aya);
+  deserialize(bookmark, chapter, verse);
 
-  return aya;
+  return verse;
 }
 
 void Bookmarks::deserialize(uint bookmark, int& chapter, int& verse) {

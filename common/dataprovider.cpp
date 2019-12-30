@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,20 +70,20 @@ QString DataProvider::basmala() const {
   return text(0, 0);
 }
 
-QString DataProvider::text(int sura, int aya) const {
+QString DataProvider::text(int chapter, int verse) const {
   if (!m_data) {
     return QString();
   }
 
-  return m_data->text(aya, ChapterInfo(sura).offset());
+  return m_data->text(verse, ChapterInfo(chapter).offset());
 }
 
-QString DataProvider::secondaryText(int sura, int aya) {
+QString DataProvider::secondaryText(int chapter, int verse) {
   if (!m_secondary) {
     return QString();
   }
 
-  return m_secondary->text(aya, ChapterInfo(sura).offset());
+  return m_secondary->text(verse, ChapterInfo(chapter).offset());
 }
 
 int DataProvider::textType() const {

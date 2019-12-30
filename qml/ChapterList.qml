@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,28 +18,18 @@
 
 import QtQuick 2.0
 
-ListModel {
-    id: model
+Grid {
+    property variant chapters: []
+    rows: 1
+    columns: chapters.length
+    spacing: quranTheme.sizes.spacing
 
-    Component.onCompleted: {
-        var bs = _bookmarks.bookmarks();
-
-        for (var x = 0; x < bs.length; x++) {
-            addBookmark(bs[x]);
+    Repeater {
+        model: chapters
+        QuranLabel {
+            // Hack: we need to reverse them
+            Component.onCompleted: text = chapters[chapters.length - index - 1];
+            color: quranTheme.quranColors.text
         }
-    }
-
-    function removeBookmark(index) {
-        _bookmarks.removeByIndex(index);
-    }
-
-    function bookmarkRemoved(b, index) {
-        remove(index);
-    }
-
-    function addBookmark(b) {
-        var sura = _bookmarks.sura(b);
-        var aya = _bookmarks.aya(b);
-        append({"bookmark": b, "sura": sura, "aya": aya});
     }
 }
