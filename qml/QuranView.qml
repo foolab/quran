@@ -20,7 +20,7 @@ import QtQuick 2.0
 import Quran 1.0
 
 QuranListView {
-    property int page: index
+    property int page: _data.pageCount - 1 - index
     id: view
     width: ListView.view.width
     height: ListView.view.height
@@ -35,7 +35,7 @@ QuranListView {
 
     PageInfo {
         id: info
-        page: index
+        page: view.page
     }
 
     header: Item {
@@ -171,7 +171,7 @@ QuranListView {
 
     function scrollRequest() {
         if (!pagePosition.isValid ||
-            index != pagePosition.page) {
+            view.page != pagePosition.page) {
             // Not for us.
             return;
         }

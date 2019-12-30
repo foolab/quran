@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,15 +46,13 @@ QuranPage {
         orientation: ListView.Horizontal
         snapMode: ListView.SnapOneItem
         highlightRangeMode: ListView.StrictlyEnforceRange
-        LayoutMirroring.enabled: true
-        LayoutMirroring.childrenInherit: false
         highlightFollowsCurrentItem: true
         highlightMoveDuration: 1
         delegate: quranPageDelegate
-        currentIndex: settings.pageNumber
+        currentIndex: _data.pageCount - 1 - settings.pageNumber
         onCurrentIndexChanged: {
             if (currentIndex != -1) {
-                settings.pageNumber = currentIndex
+                settings.pageNumber = _data.pageCount - 1 - currentIndex
             }
         }
     }
