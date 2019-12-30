@@ -194,6 +194,9 @@ uint Service::getPosition() {
 void Service::stopService() {
   QAndroidJniExceptionCleaner cleaner;
   QtAndroid::androidContext().callMethod<void>("_stopService");
+
+  m_chapter = -1;
+  m_verse = -1;
 }
 
 void Service::sendState() {
