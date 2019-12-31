@@ -50,8 +50,11 @@ signals:
   void positionChanged(int chapter, int verse);
   void error();
 
+private slots:
+  void binderUpdated();
+
 private:
-  bool send(int code, const QByteArray *data = 0);
+  bool send(int code);
   bool get(int code);
 
   Binder *m_binder;

@@ -31,9 +31,8 @@
 
 class ServiceConnection : public QAndroidServiceConnection {
 public:
-  ServiceConnection(MediaService *service, Binder *binder) :
-    m_service(service),
-    m_localBinder(binder) {
+  ServiceConnection(MediaService *service) :
+    m_service(service) {
 
   }
 
@@ -42,9 +41,7 @@ public:
 
     m_sender = serviceBinder;
 
-    QAndroidParcel sendData, replyData;
-    sendData.writeBinder(*m_localBinder);
-    m_sender.transact(Service::UpdateBinder, sendData, &replyData);
+    QMetaObject::invokeMethod(m_service, "binderUpdated", Qt::AutoConnection);
   }
 
   void onServiceDisconnected(const QString& name) {
@@ -60,13 +57,12 @@ public:
 private:
   MediaService *m_service;
   QAndroidBinder m_sender;
-  Binder *m_localBinder;
 };
 
 MediaService::MediaService(QObject *parent) :
   QObject(parent),
   m_binder(new Binder),
-  m_connection(new ServiceConnection(this, m_binder)) {
+  m_connection(new ServiceConnection(this)) {
 
   m_binder->addHandler(Service::ActionPlayingChanged,
 		       Binder::MethodInvoker(this, QLatin1String("playingChanged")));
@@ -142,11 +138,8 @@ void MediaService::resume() {
   send(Service::ActionResume);
 }
 
-bool MediaService::send(int code, const QByteArray *data) {
+bool MediaService::send(int code) {
   QAndroidParcel sendData, replyData;
-  if (data) {
-    sendData.writeData(*data);
-  }
 
   if (!m_connection->send(code, sendData, &replyData)) {
     qWarning() << Q_FUNC_INFO << "Failed to send " << code;
@@ -177,4 +170,10 @@ bool MediaService::get(int code) {
   bool result = replyData.readVariant().value<bool>();
 
   return result;
+}
+
+void MediaService::binderUpdated() {
+  QAndroidParcel sendData, replyData;
+  sendData.writeBinder(*m_binder);
+  m_connection->send(Service::UpdateBinder, sendData, &replyData);
 }
