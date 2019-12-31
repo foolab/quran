@@ -34,6 +34,7 @@ signals:
   void acquired();
   void lost();
   void denied();
+  void stop();
 };
 
 #endif /* AUDIO_POLICY_H */

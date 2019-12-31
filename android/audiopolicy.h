@@ -35,6 +35,7 @@ signals:
   void acquired();
   void lost();
   void denied();
+  void stop();
 
 private:
   QAndroidJniObject m_obj;
