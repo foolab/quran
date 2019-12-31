@@ -24,10 +24,42 @@ Column {
 
     property bool open: false
     anchors.bottom: parent.bottom
-    anchors.bottomMargin: open ? 0 : - (height / 2)
+    anchors.bottomMargin: open ? 0 : audioPlayer.playing ? - (height / 3) : - (height / 2)
 
     Behavior on anchors.bottomMargin {
         NumberAnimation { duration: quranTheme.animations.medium }
+    }
+
+    Row {
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: audioPlayer.playing ? quranTheme.toolBarHeight : 0
+        spacing: (parent.width - (children.length * quranTheme.sizes.toolButton)) / (children.length + 1)
+        visible: height > 0
+
+        Behavior on height {
+            NumberAnimation { duration: quranTheme.animations.fast }
+        }
+
+        ToolButton {
+            icon: "image://icon/play.png"
+            fillColor: quranTheme.quranColors.text
+            enabled: audioPlayer.paused
+            onClicked: audioPlayer.resume()
+        }
+
+        ToolButton {
+            icon: "image://icon/pause.png"
+            fillColor: quranTheme.quranColors.text
+            enabled: audioPlayer.playing && !audioPlayer.paused
+            onClicked: audioPlayer.pause()
+        }
+
+        ToolButton {
+            icon: "image://icon/stop.png"
+            fillColor: quranTheme.quranColors.text
+            onClicked: audioPlayer.stop()
+            enabled: audioPlayer.playing
+        }
     }
 
     Row {
@@ -60,45 +92,17 @@ Column {
         }
 
         ToolButton {
-            SequentialAnimation on rotation {
-                loops: Animation.Infinite
-                NumberAnimation {
-                    from: 0
-                    to: 180
-                    duration: quranTheme.animations.slow
-                }
-                PauseAnimation { duration: quranTheme.animations.slow }
-                NumberAnimation {
-                    from: 180
-                    to: 360
-                    duration: quranTheme.animations.slow
-                }
-                PauseAnimation { duration: quranTheme.animations.slow }
-                running: audioPlayer.paused
-                alwaysRunToEnd: true
-            }
-
-            icon: audioPlayer.playing ? "image://icon/pause.png" : "image://icon/play.png"
+            icon: "image://icon/play.png"
             fillColor: quranTheme.quranColors.text
             enabled: root.canPlayAudio
-            onClicked: {
-                if (audioPlayer.playing) {
-                    if (audioPlayer.paused) {
-                        audioPlayer.resume()
-                    } else {
-                        audioPlayer.pause()
-                    }
-                } else {
-                    playAudio(MediaPlayback.PlayPage, settings.pageNumber)
-                }
-            }
+            onClicked: playAudio(MediaPlayback.PlayPage, settings.pageNumber)
         }
 
         ToolButton {
-            icon: "image://icon/stop.png"
+            icon: "image://icon/playlist.png"
             fillColor: quranTheme.quranColors.text
-            onClicked: audioPlayer.stop()
-            enabled: audioPlayer.playing
+            enabled: root.canPlayAudio
+            onClicked: pushAnimated(Qt.resolvedUrl("PlaylistPage.qml"))
         }
     }
 
@@ -117,13 +121,6 @@ Column {
             icon: "image://icon/search.png"
             fillColor: quranTheme.quranColors.text
             onClicked: pushAnimated(Qt.resolvedUrl("SearchPage.qml"))
-        }
-
-        ToolButton {
-            icon: "image://icon/playlist.png"
-            fillColor: quranTheme.quranColors.text
-            enabled: root.canPlayAudio
-            onClicked: pushAnimated(Qt.resolvedUrl("PlaylistPage.qml"))
         }
     }
 }
