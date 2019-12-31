@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,22 +61,10 @@ Settings::Settings(QObject *parent) :
   qRegisterMetaType<QList<uint> >("QList<uint>");
   qRegisterMetaTypeStreamOperators<QList<uint> >("QList<uint>");
 
-#if defined(SAILFISH)
-  m_settings = new QSettings(QString("%1%2harbour-quran%2%3")
-			     .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
-			     .arg(QDir::separator()).arg(CONF_FILE),
+  m_settings = new QSettings(QString("%1%2")
+			     .arg(Settings::configurationDir())
+			     .arg(CONF_FILE),
 			     QSettings::IniFormat);
-#elif defined(ANDROID)
-  m_settings = new QSettings(QString("%1%2android-quran%2%3")
-			     .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
-			     .arg(QDir::separator()).arg(CONF_FILE),
-			     QSettings::IniFormat);
-#else
-  m_settings = new QSettings(QString("%1%2quran%2%3")
-			     .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
-			     .arg(QDir::separator()).arg(CONF_FILE),
-			     QSettings::IniFormat);
-#endif
 }
 
 Settings::~Settings() {
@@ -315,6 +303,19 @@ void Settings::setTheme(const QString& theme) {
 
 QString Settings::theme() {
   return m_settings->value("General/theme", DEFAULT_THEME).toString();
+}
+
+QString Settings::configurationDir() {
+  QString tpl = QString("%1%2%3%2")
+    .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+    .arg(QDir::separator());
+#if defined(SAILFISH)
+  return tpl.arg("harbour-quran");
+#elif defined(ANDROID)
+  return tpl.arg("android-quran");
+#else
+  return tpl.arg("quran");
+#endif
 }
 
 void Settings::reset() {

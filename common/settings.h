@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,6 +60,7 @@ public:
     OrientationPortrait = 1,
     OrientationLandscape = 2,
   } Orientation;
+
   Settings(QObject *parent = 0);
   ~Settings();
 
@@ -120,9 +121,10 @@ public:
   QString recitationsDir() const;
   QString translationsDir() const;
 
+  static QString configurationDir();
+
 public slots:
   void reset();
-
   void setFontSize(int size);
   void setNumberFormat(int format);
   void setTextType(int type);
