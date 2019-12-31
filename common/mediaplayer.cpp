@@ -143,9 +143,7 @@ void MediaPlayer::stop() {
   }
 
   if (m_audio) {
-    if (m_audio->isPaused()) {
-      emit pausedChanged();
-    }
+    bool paused = isPaused();
 
     m_audio->stop();
     QObject::disconnect(m_audio, SIGNAL(positionChanged(int)),
@@ -156,6 +154,9 @@ void MediaPlayer::stop() {
 
     m_audio->deleteLater();
     m_audio = 0;
+    if (paused) {
+      emit pausedChanged();
+    }
   }
 
   if (m_list) {
