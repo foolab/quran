@@ -34,8 +34,7 @@ QuranPage {
             top: parent.top
             left: parent.left
             right: parent.right
-            bottom: parent.bottom
-            bottomMargin: toolBar.open ? toolBar.height : toolBar.height / 2
+            bottom: toolBar.top
         }
 
         Behavior on anchors.bottomMargin {
