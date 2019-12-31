@@ -21,6 +21,9 @@ import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.media.AudioManager;
 import android.content.Context;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.PowerManager.WakeLock;
 import android.os.PowerManager;
 import android.os.Handler;
@@ -33,6 +36,34 @@ public class MediaSupport implements AudioManager.OnAudioFocusChangeListener {
     PowerManager mPowerManager;
     WakeLock mLock;
     Handler mHandler;
+    NoisyReceiver mReceiver;
+
+    private class NoisyReceiver extends BroadcastReceiver {
+	private boolean mRegistered = false;
+
+	@Override
+	public void onReceive(Context context, Intent intent) {
+	    if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+		stopRequested();
+	    }
+	}
+
+	void register() {
+	    if (!mRegistered) {
+		IntentFilter filter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+		org.qtproject.qt5.android.QtNative.service().registerReceiver(this,
+									      filter);
+		mRegistered = true;
+	    }
+	}
+
+	void unregister() {
+	    if (mRegistered) {
+		org.qtproject.qt5.android.QtNative.service().unregisterReceiver(this);
+		mRegistered = false;
+	    }
+	}
+    }
 
     MediaSupport() {
 	Context ctx = org.qtproject.qt5.android.QtNative.service();
@@ -40,6 +71,7 @@ public class MediaSupport implements AudioManager.OnAudioFocusChangeListener {
 	mAudioManager = (AudioManager)ctx.getSystemService(Context.AUDIO_SERVICE);
 	mPowerManager = (PowerManager)ctx.getSystemService(Context.POWER_SERVICE);
 	mLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
+	mReceiver = new NoisyReceiver();
     }
 
     public void acquireAudioFocus() {
@@ -50,11 +82,9 @@ public class MediaSupport implements AudioManager.OnAudioFocusChangeListener {
 								 AudioManager.STREAM_MUSIC,
 								 AudioManager.AUDIOFOCUS_GAIN);
 		    if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-			audioFocusDenied();
-			mLock.release();
+			handleFocusDenied();
 		    } else {
-			audioFocusAcquired();
-			mLock.acquire();
+			handleFocusAcquired();
 		    }
 		}
 	    });
@@ -65,6 +95,7 @@ public class MediaSupport implements AudioManager.OnAudioFocusChangeListener {
 		@Override
 		public void run() {
 		    mAudioManager.abandonAudioFocus(MediaSupport.this);
+		    mReceiver.unregister();
 		    audioFocusReleased();
 		    mLock.release();
 		}
@@ -75,20 +106,37 @@ public class MediaSupport implements AudioManager.OnAudioFocusChangeListener {
     public void onAudioFocusChange(int focusChange) {
 	switch (focusChange) {
 	case AudioManager.AUDIOFOCUS_GAIN:
-	    audioFocusAcquired();
-	    mLock.acquire();
+	    handleFocusAcquired();
 	    break;
 	case AudioManager.AUDIOFOCUS_LOSS:
 	case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
 	case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-	    audioFocusLost();
-	    mLock.release();
+	    handleFocusLost();
 	    break;
 	}
+    }
+
+    private void handleFocusAcquired() {
+	mLock.acquire();
+	audioFocusAcquired();
+	mReceiver.register();
+    }
+
+    private void handleFocusLost() {
+	audioFocusLost();
+	mLock.release();
+	mReceiver.unregister();
+    }
+
+    private void handleFocusDenied() {
+	audioFocusDenied();
+	mLock.release();
+	mReceiver.unregister();
     }
 
     native void audioFocusAcquired();
     native void audioFocusDenied();
     native void audioFocusLost();
     native void audioFocusReleased();
+    native void stopRequested();
 }

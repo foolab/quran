@@ -59,6 +59,16 @@ Java_org_foolab_quran_MediaSupport_audioFocusReleased(JNIEnv *env, jobject objec
   // We don't care
 }
 
+extern "C" void
+Java_org_foolab_quran_MediaSupport_stopRequested(JNIEnv *env, jobject objectOrClass) {
+  Q_UNUSED(env);
+  Q_UNUSED(objectOrClass);
+
+  if (m_audio) {
+    QMetaObject::invokeMethod(m_audio, "stop", Qt::QueuedConnection);
+  }
+}
+
 AudioPolicy::AudioPolicy(QObject *parent) :
   QObject(parent),
   m_obj(QAndroidJniObject("org/foolab/quran/MediaSupport", "()V")) {
