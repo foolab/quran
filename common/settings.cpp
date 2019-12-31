@@ -51,7 +51,7 @@ Q_DECLARE_METATYPE(QList<uint>);
 #if defined(SAILFISH)
 #define CONF_FILE "harbour-quran.conf"
 #elif defined(ANDROID)
-#define CONF_FILE "android-quran.conf"
+#define CONF_FILE "org.foolab.quran.conf"
 #elif defined(DESKTOP)
 #define CONF_FILE "quran.conf"
 #endif
@@ -312,7 +312,7 @@ QString Settings::configurationDir() {
 #if defined(SAILFISH)
   return tpl.arg("harbour-quran");
 #elif defined(ANDROID)
-  return tpl.arg("android-quran");
+  return tpl.arg("org.foolab.quran");
 #else
   return tpl.arg("quran");
 #endif
