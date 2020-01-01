@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,8 @@
  */
 
 #include "androidsupport.h"
-#include <QtAndroid>
-#include <QDebug>
-#include <QAndroidJniEnvironment>
+#include <QAndroidJniExceptionCleaner>
 #include <QPointer>
-#include "audiopolicy.h"
 #include <android/asset_manager_jni.h>
 #include "sqlite-ndk/sources/sqlite3ndk.h"
 
@@ -39,10 +36,12 @@ Java_org_foolab_quran_AndroidSupport_storeAssetManager(JNIEnv *env,
 
 AndroidSupport::AndroidSupport(QObject *parent) :
   QObject(parent),
-  m_orientation(OrientationAll) {
+  m_orientation(OrientationAll),
+  m_obj(QAndroidJniObject("org/foolab/quran/AndroidSupport", "()V")) {
+
+  QAndroidJniExceptionCleaner cleaner;
 
   m_support = this;
-  m_obj = QAndroidJniObject("org/foolab/quran/AndroidSupport", "()V");
 }
 
 AndroidSupport::~AndroidSupport() {
@@ -64,6 +63,8 @@ void AndroidSupport::setOrientation(const AndroidSupport::Orientation& orientati
 }
 
 void AndroidSupport::applyOrientation() {
+  QAndroidJniExceptionCleaner cleaner;
+
   switch (m_orientation) {
   case OrientationAll:
     m_obj.callMethod<void>("unlockOrientation");
