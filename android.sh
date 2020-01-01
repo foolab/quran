@@ -72,7 +72,6 @@ $QT_DIR/android_$ANDROID/bin/androiddeployqt \
     --input android/android-libQuran.so-deployment-settings.json \
     --output apk \
     --deployment bundled \
-    --verbose \
     --android-platform android-${ANDROID_API} \
     --gradle \
     $ANT_ARG
