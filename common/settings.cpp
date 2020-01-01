@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ Settings::~Settings() {
   m_settings = 0;
 }
 
-QString Settings::dataDir() const {
+QString Settings::dataDir() {
 #if defined(ANDROID)
   return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/org.foolab.quran/";
 #elif defined(SAILFISH)

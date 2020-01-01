@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,6 +63,8 @@ public:
 
   Settings(QObject *parent = 0);
   ~Settings();
+
+  static QString dataDir();
 
   QString fontFamily() const;
 
@@ -150,7 +152,6 @@ signals:
   void themeChanged();
 
 private:
-  QString dataDir() const;
   QSettings *m_settings;
 };
 
