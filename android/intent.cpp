@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,11 @@
 #include "intent.h"
 #include <QAndroidJniEnvironment>
 #include <QAndroidJniExceptionCleaner>
+
+Intent::Intent(QAndroidIntent& intent) :
+  QAndroidIntent(intent.handle()) {
+
+}
 
 void Intent::putExtraString(const QString& key, const QString& data) {
   QAndroidJniExceptionCleaner cleaner;
@@ -50,4 +55,23 @@ QString Intent::action() {
 
   return handle().callObjectMethod("getAction",
 				   "()Ljava/lang/String;").toString();
+}
+
+void Intent::setBundle(const QString& key, Bundle& bundle) {
+  QAndroidJniExceptionCleaner cleaner;
+
+  handle().callObjectMethod("putExtra",
+			    "(Ljava/lang/String;Landroid/os/Bundle;)Landroid/content/Intent;",
+			    QAndroidJniObject::fromString(key).object(),
+			    bundle.handle().object());
+}
+
+Bundle Intent::bundle(const QString& key) {
+  QAndroidJniExceptionCleaner cleaner;
+
+  QAndroidJniObject bundle =
+    handle().callObjectMethod("getBundleExtra",
+			      "(Ljava/lang/String;)Landroid/os/Bundle;",
+			      QAndroidJniObject::fromString(key).object());
+  return Bundle(bundle);
 }

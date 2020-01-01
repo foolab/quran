@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,26 +15,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INTENT_H
-#define INTENT_H
+#ifndef BUNDLE_H
+#define BUNDLE_H
 
-#include <QAndroidIntent>
-#include "bundle.h"
+#include <QAndroidJniObject>
 
-class Intent : public QAndroidIntent {
+class Bundle {
 public:
-  using QAndroidIntent::QAndroidIntent;
+  Bundle();
+  Bundle(QAndroidJniObject& handle);
+  ~Bundle();
 
-  Intent(QAndroidIntent& intent);
+  void setProperty(const QString& key, bool value);
+  bool isPropertySet(const QString& key);
+  bool property(const QString& key);
+  bool property(const QString& key, bool defaultValue);
 
-  void putExtraString(const QString& key, const QString& data);
-  //  QString extraString(const QString& key);
+  QAndroidJniObject handle();
 
-  void setAction(const QString& action);
-  QString action();
-
-  void setBundle(const QString& key, Bundle& bundle);
-  Bundle bundle(const QString& key);
+private:
+  QAndroidJniObject m_handle;
 };
 
-#endif /* INTENT_H */
+#endif /* BUNDLE_H */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,26 +15,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INTENT_H
-#define INTENT_H
+#ifndef PARCEL_H
+#define PARCEL_H
 
-#include <QAndroidIntent>
+#include <QAndroidJniObject>
+#include <QAndroidBinder>
 #include "bundle.h"
 
-class Intent : public QAndroidIntent {
+class QAndroidParcel;
+
+class Parcel {
 public:
-  using QAndroidIntent::QAndroidIntent;
+  Parcel();
+  Parcel(QAndroidParcel& parcel);
+  ~Parcel();
 
-  Intent(QAndroidIntent& intent);
+  Bundle readBundle();
+  void writeBundle(Bundle& bundle);
 
-  void putExtraString(const QString& key, const QString& data);
-  //  QString extraString(const QString& key);
+  QAndroidBinder readBinder();
+  void writeBinder(QAndroidBinder& binder);
 
-  void setAction(const QString& action);
-  QString action();
+  QAndroidJniObject handle();
 
-  void setBundle(const QString& key, Bundle& bundle);
-  Bundle bundle(const QString& key);
+private:
+  QAndroidJniObject m_handle;
 };
 
-#endif /* INTENT_H */
+#endif /* PARCEL_H */
