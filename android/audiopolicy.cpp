@@ -18,6 +18,7 @@
 #include "audiopolicy.h"
 #include "androidsupport.h"
 #include <QPointer>
+#include <QAndroidJniExceptionCleaner>
 
 static QPointer<AudioPolicy> m_audio;
 
@@ -73,6 +74,7 @@ AudioPolicy::AudioPolicy(QObject *parent) :
   QObject(parent),
   m_obj(QAndroidJniObject("org/foolab/quran/MediaSupport", "()V")) {
 
+  QAndroidJniExceptionCleaner cleaner;
   m_audio = this;
 }
 
@@ -81,11 +83,15 @@ AudioPolicy::~AudioPolicy() {
 }
 
 bool AudioPolicy::acquire() {
+  QAndroidJniExceptionCleaner cleaner;
+
   m_obj.callMethod<void>("acquireAudioFocus");
 
   return true;
 }
 
 void AudioPolicy::release() {
+  QAndroidJniExceptionCleaner cleaner;
+
   m_obj.callMethod<void>("releaseAudioFocus");
 }
