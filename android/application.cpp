@@ -18,6 +18,9 @@
 #include "application.h"
 #include <QGuiApplication>
 #include <QQuickView>
+#include <QDir>
+#include <QFile>
+#include "settings.h"
 #include "androidsupport.h"
 #include "keyfilter.h"
 
@@ -25,6 +28,13 @@ Application::Application(int& argc, char **argv) {
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   setApplication(new QGuiApplication(argc, argv), "quran");
   setView(new QQuickView);
+
+  QDir d(Settings::dataDir());
+  d.mkpath(".");
+  QFile f(d.filePath(".nomedia"));
+  f.open(QFile::WriteOnly);
+  f.write("");
+  f.close();
 }
 
 Application::~Application() {
