@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ QuranPage {
                     enabled: root.canPlayAudio
                     onClicked: {
                         pagePosition.setPosition(chapterSelector.currentIndex, 0)
-                        playAudio(MediaPlayback.PlayChapter, chapterSelector.currentIndex)
+                        audioPlayer.playChapter(chapterSelector.currentIndex)
                         popPage()
                     }
                 }
@@ -113,7 +113,7 @@ QuranPage {
                     }
                     onClicked: {
                         pagePosition.setPosition(pageInfo.firstChapter, pageInfo.firstVerse)
-                        playAudio(MediaPlayback.PlayPart, partSelector.currentIndex)
+                        audioPlayer.playPart(partSelector.currentIndex)
                         popPage()
                     }
                 }
@@ -176,7 +176,7 @@ QuranPage {
 
                 onClicked: {
                         pagePosition.setPosition(fromChapterSelector.currentIndex, fromVerseSelector.currentIndex)
-                        playAudioRange(fromChapterSelector.currentIndex, fromVerseSelector.currentIndex, toChapterSelector.currentIndex, toVerseSelector.currentIndex)
+                        audioPlayer.playRange(fromChapterSelector.currentIndex, fromVerseSelector.currentIndex, toChapterSelector.currentIndex, toVerseSelector.currentIndex)
                         popPage()
                 }
             }

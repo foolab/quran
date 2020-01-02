@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,21 +26,12 @@ class Recitation;
 class MediaPlayback : public QObject {
   Q_OBJECT
 
-  Q_ENUMS(PlayType);
-
   Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged);
   Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged);
 
 public:
   MediaPlayback(QObject *parent = 0);
   ~MediaPlayback();
-
-  enum PlayType {
-    PlayVerse,
-    PlayPage,
-    PlayChapter,
-    PlayPart,
-  };
 
   bool isPlaying() const;
   bool isPaused() const;
@@ -49,8 +40,12 @@ public:
   void setRecitation(Recitation *recitation);
 
 public slots:
-  void play(const PlayType& type, uint id);
+  void playPage(int page);
+  void playVerse(int chapter, int verse);
+  void playChapter(int chapter);
+  void playPart(int part);
   void playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse);
+
   void stop();
   void pause();
   void resume();

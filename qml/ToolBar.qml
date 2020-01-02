@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ Column {
             icon: "image://icon/play.png"
             fillColor: quranTheme.quranColors.text
             enabled: root.canPlayAudio
-            onClicked: playAudio(MediaPlayback.PlayPage, settings.pageNumber)
+            onClicked: audioPlayer.playPage(settings.pageNumber)
         }
 
         ToolButton {

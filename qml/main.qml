@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,14 +76,6 @@ QuranWindow {
         id: flipControl
         active: settings.flipToStopRecitation && audioPlayer.playing
         onFlipped: audioPlayer.stop()
-    }
-
-    function playAudioRange(fromChapter, fromVerse, toChapter, toVerse) {
-        audioPlayer.playRange(fromChapter, fromVerse, toChapter, toVerse)
-    }
-
-    function playAudio(mode, id) {
-        audioPlayer.play(mode, id)
     }
 
     MediaPlayback {

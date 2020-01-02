@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,35 +50,25 @@ bool MediaPlayback::isPaused() const {
   return m_service->isPaused();
 }
 
-void MediaPlayback::play(const PlayType& type, uint id) {
-  switch (type) {
-    case PlayVerse: {
-      int chapter, verse;
-      Bookmarks::deserialize(id, chapter, verse);
-      playRange(chapter, verse, chapter, verse);
-    }
-      break;
+void MediaPlayback::playPage(int page) {
+  PageInfo info(page);
+  playRange(info.firstChapter(), info.firstVerse(), info.lastChapter(), info.lastVerse());
+}
 
-    case PlayPage: {
-      PageInfo inf(id);
-      playRange(inf.firstChapter(), inf.firstVerse(), inf.lastChapter(), inf.lastVerse());
-    }
-      break;
+void MediaPlayback::playVerse(int chapter, int verse) {
+  playRange(chapter, verse, chapter, verse);
+}
 
-    case PlayChapter: {
-      ChapterInfo inf(id);
-      playRange(id, 0, id, inf.length() - 1);
-    }
-      break;
+void MediaPlayback::playChapter(int chapter) {
+  ChapterInfo info(chapter);
+  playRange(chapter, 0, chapter, info.length() - 1);
+}
 
-    case PlayPart: {
-      PartInfo inf(id);
-      PageInfo p1(inf.firstPage());
-      PageInfo p2(inf.firstPage() + inf.numberOfPages() - 1);
-      playRange(p1.firstChapter(), p1.firstVerse(), p2.lastChapter(), p2.lastVerse());
-    }
-      break;
-  }
+void MediaPlayback::playPart(int part) {
+  PartInfo info(part);
+  PageInfo p1(info.firstPage());
+  PageInfo p2(info.firstPage() + info.numberOfPages() - 1);
+  playRange(p1.firstChapter(), p1.firstVerse(), p2.lastChapter(), p2.lastVerse());
 }
 
 void MediaPlayback::playRange(uint fromChapter, uint fromVerse, uint toChapter, uint toVerse) {
