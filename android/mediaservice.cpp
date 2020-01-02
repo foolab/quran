@@ -110,12 +110,7 @@ void MediaService::play(const MediaPlayerConfig& config) {
   intent.putExtraString(KEY_RECITER, config.reciter());
   intent.setAction(ACTION_PLAY);
 
-  QAndroidJniObject obj = QtAndroid::androidContext()
-    .callObjectMethod("startService", "(Landroid/content/Intent;)Landroid/content/ComponentName;",
-		      intent.handle().object());
-  if (!obj.isValid()) {
-    emit error();
-  }
+  sendIntent(intent);
 }
 
 bool MediaService::isPlaying() {
@@ -127,15 +122,21 @@ bool MediaService::isPaused() {
 }
 
 void MediaService::stop() {
-  send(Service::ActionStop);
+  Intent intent(QtAndroid::androidActivity().object(), SERVICE);
+  intent.setAction(ACTION_STOP);
+  sendIntent(intent);
 }
 
 void MediaService::pause() {
-  send(Service::ActionPause);
+  Intent intent(QtAndroid::androidActivity().object(), SERVICE);
+  intent.setAction(ACTION_PAUSE);
+  sendIntent(intent);
 }
 
 void MediaService::resume() {
-  send(Service::ActionResume);
+  Intent intent(QtAndroid::androidActivity().object(), SERVICE);
+  intent.setAction(ACTION_RESUME);
+  sendIntent(intent);
 }
 
 bool MediaService::send(int code) {
@@ -176,4 +177,13 @@ void MediaService::binderUpdated() {
   QAndroidParcel sendData, replyData;
   sendData.writeBinder(*m_binder);
   m_connection->send(Service::UpdateBinder, sendData, &replyData);
+}
+
+void MediaService::sendIntent(const Intent& intent) {
+  QAndroidJniObject obj = QtAndroid::androidContext()
+    .callObjectMethod("startService", "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+		      intent.handle().object());
+  if (!obj.isValid()) {
+    emit error();
+  }
 }

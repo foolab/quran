@@ -45,16 +45,13 @@ public:
 
   typedef enum {
     UpdateBinder = 1,
-    ActionStop = 2,
-    ActionPause = 3,
-    ActionResume = 4,
-    ActionUpdatePosition = 5,
-    ActionPlayingChanged = 6,
-    ActionPausedChanged = 7,
-    ActionError = 8,
-    QueryPosition = 9,
-    QueryPaused = 10,
-    QueryPlaying = 11,
+    ActionUpdatePosition,
+    ActionPlayingChanged,
+    ActionPausedChanged,
+    ActionError,
+    QueryPosition,
+    QueryPaused,
+    QueryPlaying,
   } Action;
 
   bool onStartCommand(Intent& intent);

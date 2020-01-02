@@ -23,6 +23,7 @@
 class ServiceConnection;
 class MediaPlayerConfig;
 class Binder;
+class Intent;
 
 class MediaService : public QObject {
   Q_OBJECT
@@ -54,6 +55,8 @@ private slots:
   void binderUpdated();
 
 private:
+  void sendIntent(const Intent& intent);
+
   bool send(int code);
   bool get(int code);
 

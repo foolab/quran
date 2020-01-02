@@ -100,15 +100,6 @@ Service::Service(int& argc, char **argv) :
 				QMetaObject::invokeMethod(this, "sendState", Qt::QueuedConnection);
 			    });
 
-  m_localBinder->addHandler(Service::ActionStop,
-			    Binder::MethodInvoker(m_player, QLatin1String("stop")));
-
-  m_localBinder->addHandler(Service::ActionPause,
-			    Binder::MethodInvoker(m_player, QLatin1String("pause")));
-
-  m_localBinder->addHandler(Service::ActionResume,
-			    Binder::MethodInvoker(m_player, QLatin1String("resume")));
-
   m_localBinder->addHandler(Service::QueryPosition,
 			    Binder::UnsignedIntPropertyGetter(m_player, QLatin1String("getPosition")));
 
