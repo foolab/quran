@@ -26,6 +26,23 @@
 * cache cleaner
 * enable data downloading only when connected to wifi?
 * tooltips for buttons?
+* Landscape mode should move all toolbars to the right
+* sync settings to disk so we do not lose it if we crash?
+* pause should save state and close sound device
+* Consider using the one word per symbol Quran font from the quran complex?
+* Add repeat verse to playlist page
+* Add repeat after done to playlist page
+* Add toggle night mode to main toolbar and move playlist page to its original location
+* Add toggle flip to stop playback to the player toolbar
+* Make player toolbar collapsible
+* Add UI translation support
+* React to headset play/pause buttons
 
 android:
 * android colors and style
+* actions not visible easily in lock screen notification
+* Use toasts for in-app notifications?
+* Add a service to download quran translations
+* We start to play audio slower than most apps.
+* show buttons in notification (Similar to MediaStyle).
+* show chapter and verse info in notification
