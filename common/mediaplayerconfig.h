@@ -18,6 +18,7 @@
 #ifndef MEDIA_PLAYER_CONFIG_H
 #define MEDIA_PLAYER_CONFIG_H
 
+#include <QMetaType>
 #include <QString>
 #include <QList>
 #include "media.h"
