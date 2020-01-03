@@ -113,7 +113,8 @@ Service::Service(int& argc, char **argv) :
 			    });
 
   m_localBinder->addHandler(Service::QueryPosition,
-			    Binder::UnsignedIntPropertyGetter(m_player, QLatin1String("getPosition")));
+			    Binder::UnsignedIntPropertyGetter(m_player,
+							      QLatin1String("getPosition")));
 
   that = this;
 }
