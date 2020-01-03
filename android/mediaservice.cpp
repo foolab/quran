@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,11 +64,8 @@ MediaService::MediaService(QObject *parent) :
   m_binder(new Binder),
   m_connection(new ServiceConnection(this)) {
 
-  m_binder->addHandler(Service::ActionPlayingChanged,
-		       Binder::MethodInvoker(this, QLatin1String("playingChanged")));
-
-  m_binder->addHandler(Service::ActionPausedChanged,
-		       Binder::MethodInvoker(this, QLatin1String("pausedChanged")));
+  m_binder->addHandler(Service::ActionStateChanged,
+		       Binder::MethodInvoker(this, QLatin1String("stateChanged")));
 
   m_binder->addHandler(Service::ActionError,
 		       Binder::MethodInvoker(this, QLatin1String("error")));
@@ -113,12 +110,8 @@ void MediaService::play(const MediaPlayerConfig& config) {
   sendIntent(intent);
 }
 
-bool MediaService::isPlaying() {
-  return get(Service::QueryPlaying);
-}
-
-bool MediaService::isPaused() {
-  return get(Service::QueryPaused);
+Quran::PlaybackState MediaService::state() {
+  return get(Service::QueryState).value<Quran::PlaybackState>();
 }
 
 void MediaService::stop() {
@@ -159,18 +152,16 @@ bool MediaService::send(int code) {
   return true;
 }
 
-bool MediaService::get(int code) {
+QVariant MediaService::get(int code) {
   QAndroidParcel sendData, replyData;
 
   if (!m_connection->send(code, sendData, &replyData)) {
     qWarning() << Q_FUNC_INFO << "Failed to send " << code;
     //    emit error();
-    return false;
+    return QVariant();
   }
 
-  bool result = replyData.readVariant().value<bool>();
-
-  return result;
+  return replyData.readVariant();
 }
 
 void MediaService::binderUpdated() {

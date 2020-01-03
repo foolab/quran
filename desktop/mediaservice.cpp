@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,7 @@ MediaService::MediaService(QObject *parent) :
   QObject(parent),
   m_player(new MediaPlayer(this)) {
 
-  QObject::connect(m_player, SIGNAL(playingChanged()), this, SIGNAL(playingChanged()));
-  QObject::connect(m_player, SIGNAL(pausedChanged()), this, SIGNAL(pausedChanged()));
+  QObject::connect(m_player, SIGNAL(stateChanged()), this, SIGNAL(stateChanged()));
   QObject::connect(m_player, SIGNAL(positionChanged(int, int)), this, SIGNAL(positionChanged(int, int)));
   QObject::connect(m_player, SIGNAL(error()), this, SIGNAL(error()));
 }
@@ -37,12 +36,8 @@ void MediaService::play(const MediaPlayerConfig& config) {
   m_player->play(config);
 }
 
-bool MediaService::isPlaying() const {
-  return m_player->isPlaying();
-}
-
-bool MediaService::isPaused() const {
-  return m_player->isPaused();
+Quran::PlaybackState MediaService::state() const {
+  return m_player->state();
 }
 
 void MediaService::stop() {

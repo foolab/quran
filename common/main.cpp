@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@
 #include "pageposition.h"
 #include "chapterlistmodel.h"
 #include "partlistmodel.h"
+#include "quran.h"
 
 #ifndef ANDROID
 #include <fontconfig/fontconfig.h>
@@ -82,6 +83,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   FcConfigSetCurrent(conf);
 #endif
 
+  qRegisterMetaTypeStreamOperators<Quran::PlaybackState>("Quran::PlaybackState");
+
   qmlRegisterType<DataProvider>("Quran", 1, 0, "DataProvider");
   qmlRegisterType<Settings>("Quran", 1, 0, "Settings");
   qmlRegisterType<Bookmarks>("Quran", 1, 0, "Bookmarks");
@@ -111,6 +114,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 					  "Use Translations to obtain a Translation");
   qmlRegisterUncreatableType<Recitation>("Quran", 1, 0, "Recitation",
 					  "Use Recitations to obtain a Recitation");
+  qmlRegisterUncreatableMetaObject(Quran::staticMetaObject, "Quran", 1, 0, "Quran",
+				   "Used for enums only");
 
   if (!app.load(QUrl("qrc:/qml/main.qml"))) {
     return 1;

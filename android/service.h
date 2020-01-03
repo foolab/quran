@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,19 +46,16 @@ public:
   typedef enum {
     UpdateBinder = 1,
     ActionUpdatePosition,
-    ActionPlayingChanged,
-    ActionPausedChanged,
+    ActionStateChanged,
     ActionError,
     QueryPosition,
-    QueryPaused,
-    QueryPlaying,
+    QueryState,
   } Action;
 
   bool onStartCommand(Intent& intent);
 
 private slots:
-  void playingChanged();
-  void pausedChanged();
+  void stateChanged();
   void positionChanged(int chapter, int verse);
   void error();
   uint getPosition();

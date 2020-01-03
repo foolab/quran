@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #define MEDIA_SERVICE_H
 
 #include <QObject>
+#include "quran.h"
 
 class ServiceConnection;
 class MediaPlayerConfig;
@@ -28,8 +29,7 @@ class Intent;
 class MediaService : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged);
-  Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged);
+  Q_PROPERTY(Quran::PlaybackState state READ state NOTIFY stateChanged);
 
 public:
   MediaService(QObject *parent = 0);
@@ -37,8 +37,7 @@ public:
 
   void play(const MediaPlayerConfig& config);
 
-  bool isPlaying();
-  bool isPaused();
+  Quran::PlaybackState state();
 
 public slots:
   void stop();
@@ -46,8 +45,7 @@ public slots:
   void resume();
 
 signals:
-  void playingChanged();
-  void pausedChanged();
+  void stateChanged();
   void positionChanged(int chapter, int verse);
   void error();
 
@@ -58,7 +56,7 @@ private:
   void sendIntent(const Intent& intent);
 
   bool send(int code);
-  bool get(int code);
+  QVariant get(int code);
 
   Binder *m_binder;
   ServiceConnection *m_connection;

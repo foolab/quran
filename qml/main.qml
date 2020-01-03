@@ -74,7 +74,7 @@ QuranWindow {
 
     PhoneFlipControl {
         id: flipControl
-        active: settings.flipToStopRecitation && audioPlayer.playing
+        active: settings.flipToStopRecitation && audioPlayer.state == Quran.Playing
         onFlipped: audioPlayer.stop()
     }
 
@@ -88,9 +88,11 @@ QuranWindow {
             recitationPosition.chapter = chapter
         }
 
-        onPlayingChanged: {
-            recitationPosition.verse = -1
-            recitationPosition.chapter = -1
+        onStateChanged: {
+            if (audioPlayer.state == Quran.Stopped) {
+                recitationPosition.verse = -1
+                recitationPosition.chapter = -1
+            }
         }
     }
 

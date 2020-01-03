@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,12 +38,16 @@ MediaPlayer::~MediaPlayer() {
   stop();
 }
 
-bool MediaPlayer::isPlaying() const {
-  return m_list != 0;
-}
-
-bool MediaPlayer::isPaused() const {
-  return m_audio ? m_audio->isPaused() : false;
+Quran::PlaybackState MediaPlayer::state() {
+  if (!m_list) {
+    return Quran::Stopped;
+  } else if (!m_audio) {
+    return Quran::Playing;
+  } else if (m_audio->isPaused()) {
+    return Quran::Paused;
+  } else {
+    return Quran::Playing;
+  }
 }
 
 void MediaPlayer::policyAcquired() {
@@ -129,11 +133,11 @@ void MediaPlayer::play(const MediaPlayerConfig& config) {
 
   m_decoder->start();
 
-  emit playingChanged();
+  emit stateChanged();
 }
 
 void MediaPlayer::stop() {
-  if (!isPlaying()) {
+  if (state() == Quran::Stopped) {
     return;
   }
 
@@ -144,8 +148,6 @@ void MediaPlayer::stop() {
   }
 
   if (m_audio) {
-    bool paused = isPaused();
-
     m_audio->stop();
     QObject::disconnect(m_audio, SIGNAL(positionChanged(int)),
 			this, SLOT(audioPositionChanged(int)));
@@ -155,9 +157,6 @@ void MediaPlayer::stop() {
 
     m_audio->deleteLater();
     m_audio = 0;
-    if (paused) {
-      emit pausedChanged();
-    }
   }
 
   if (m_list) {
@@ -166,8 +165,6 @@ void MediaPlayer::stop() {
 			this, SLOT(mediaAvailable(const Media&)));
     m_list->deleteLater();
     m_list = 0;
-
-    emit playingChanged();
   }
 
   if (m_policy) {
@@ -180,18 +177,20 @@ void MediaPlayer::stop() {
     m_policy->deleteLater();
     m_policy = 0;
   }
+
+  emit stateChanged();
 }
 
 void MediaPlayer::pause() {
   if (m_audio) {
     m_audio->pause();
-    emit pausedChanged();
+    emit stateChanged();
   }
 }
 
 void MediaPlayer::resume() {
   if (m_audio) {
     m_audio->resume();
-    emit pausedChanged();
+    emit stateChanged();
   }
 }

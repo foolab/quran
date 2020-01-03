@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,12 +86,12 @@ Service::Service(int& argc, char **argv) :
 
   qInstallMessageHandler(messageHandler);
 
-  QObject::connect(m_player, SIGNAL(playingChanged()), this, SLOT(playingChanged()));
-  QObject::connect(m_player, SIGNAL(pausedChanged()), this, SLOT(pausedChanged()));
+  qRegisterMetaType<MediaPlayerConfig>();
+  qRegisterMetaTypeStreamOperators<Quran::PlaybackState>("Quran::PlaybackState");
+
+  QObject::connect(m_player, SIGNAL(stateChanged()), this, SLOT(stateChanged()));
   QObject::connect(m_player, SIGNAL(positionChanged(int, int)), this, SLOT(positionChanged(int, int)));
   QObject::connect(m_player, SIGNAL(error()), this, SLOT(error()));
-
-  qRegisterMetaType<MediaPlayerConfig>();
 
   m_localBinder->addHandler(Service::UpdateBinder,
 			    [this](const QAndroidParcel& data) {
@@ -100,14 +100,20 @@ Service::Service(int& argc, char **argv) :
 				QMetaObject::invokeMethod(this, "sendState", Qt::QueuedConnection);
 			    });
 
+  m_localBinder->addHandler(Service::QueryState,
+			    [this](const QAndroidParcel& data) {
+			      Q_UNUSED(data);
+			      Quran::PlaybackState st;
+			      bool res =
+				QMetaObject::invokeMethod(m_player, "state",
+							  Qt::BlockingQueuedConnection,
+							  Q_RETURN_ARG(Quran::PlaybackState, st));
+			      Q_ASSERT_X(res, "QueryState", "Should not be triggered");
+			      return QVariant::fromValue<Quran::PlaybackState>(st);
+			    });
+
   m_localBinder->addHandler(Service::QueryPosition,
 			    Binder::UnsignedIntPropertyGetter(m_player, QLatin1String("getPosition")));
-
-  m_localBinder->addHandler(Service::QueryPlaying,
-			    Binder::BoolPropertyGetter(m_player, QLatin1String("isPlaying")));
-
-  m_localBinder->addHandler(Service::QueryPaused,
-			    Binder::BoolPropertyGetter(m_player, QLatin1String("isPaused")));
 
   that = this;
 }
@@ -128,15 +134,12 @@ QAndroidBinder *Service::onBind(const QAndroidIntent& intent) {
   return m_localBinder;
 }
 
-void Service::playingChanged() {
-  send(ActionPlayingChanged, m_player->isPlaying());
-  if (!m_player->isPlaying()) {
+void Service::stateChanged() {
+  Quran::PlaybackState state = m_player->state();
+  send(ActionStateChanged, QVariant::fromValue<Quran::PlaybackState>(state));
+  if (state == Quran::Stopped) {
     stopService();
   }
-}
-
-void Service::pausedChanged() {
-  send(ActionPausedChanged, m_player->isPaused());
 }
 
 void Service::positionChanged(int chapter, int verse) {
@@ -191,7 +194,6 @@ void Service::stopService() {
 }
 
 void Service::sendState() {
-  send(ActionPlayingChanged, m_player->isPlaying());
-  send(ActionPausedChanged, m_player->isPaused());
+  send(ActionStateChanged, QVariant::fromValue<Quran::PlaybackState>(m_player->state()));
   send(ActionUpdatePosition, getPosition());
 }

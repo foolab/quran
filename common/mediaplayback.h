@@ -19,6 +19,7 @@
 #define MEDIA_PLAYBACK_H
 
 #include <QObject>
+#include "quran.h"
 
 class MediaService;
 class Recitation;
@@ -26,15 +27,13 @@ class Recitation;
 class MediaPlayback : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged);
-  Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged);
+  Q_PROPERTY(Quran::PlaybackState state READ state NOTIFY stateChanged);
 
 public:
   MediaPlayback(QObject *parent = 0);
   ~MediaPlayback();
 
-  bool isPlaying() const;
-  bool isPaused() const;
+  Quran::PlaybackState state();
 
   Recitation *recitation() const;
   void setRecitation(Recitation *recitation);
@@ -51,8 +50,7 @@ public slots:
   void resume();
 
 signals:
-  void playingChanged();
-  void pausedChanged();
+  void stateChanged();
   void positionChanged(int chapter, int verse);
   void error();
 

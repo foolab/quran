@@ -24,7 +24,7 @@ Column {
 
     property bool open: false
     anchors.bottom: parent.bottom
-    anchors.bottomMargin: open ? 0 : audioPlayer.playing ? - (height / 3) : - (height / 2)
+    anchors.bottomMargin: open ? 0 : audioPlayer.state != Quran.Stopped ? - (height / 3) : - (height / 2)
 
     Behavior on anchors.bottomMargin {
         NumberAnimation { duration: quranTheme.animations.medium }
@@ -32,7 +32,7 @@ Column {
 
     Row {
         anchors.horizontalCenter: parent.horizontalCenter
-        height: audioPlayer.playing ? quranTheme.toolBarHeight : 0
+        height: audioPlayer.state != Quran.Stopped ? quranTheme.toolBarHeight : 0
         spacing: (parent.width - (children.length * quranTheme.sizes.toolButton)) / (children.length + 1)
         visible: height > 0
 
@@ -43,14 +43,14 @@ Column {
         ToolButton {
             icon: "image://icon/play.png"
             fillColor: quranTheme.quranColors.text
-            enabled: audioPlayer.paused
+            enabled: audioPlayer.state == Quran.Paused
             onClicked: audioPlayer.resume()
         }
 
         ToolButton {
             icon: "image://icon/pause.png"
             fillColor: quranTheme.quranColors.text
-            enabled: audioPlayer.playing && !audioPlayer.paused
+            enabled: audioPlayer.state == Quran.Playing
             onClicked: audioPlayer.pause()
         }
 
@@ -58,7 +58,7 @@ Column {
             icon: "image://icon/stop.png"
             fillColor: quranTheme.quranColors.text
             onClicked: audioPlayer.stop()
-            enabled: audioPlayer.playing
+            enabled: audioPlayer.state != Quran.Stopped
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #define MEDIA_PLAYER_H
 
 #include <QObject>
+#include "quran.h"
 
 class MediaPlaylist;
 class Media;
@@ -30,15 +31,13 @@ class MediaPlayerConfig;
 class MediaPlayer : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(bool playing READ isPlaying NOTIFY playingChanged);
-  Q_PROPERTY(bool paused READ isPaused NOTIFY pausedChanged);
+  Q_PROPERTY(Quran::PlaybackState state READ state NOTIFY stateChanged);
 
 public:
   MediaPlayer(QObject *parent = 0);
   ~MediaPlayer();
 
-  Q_INVOKABLE bool isPlaying() const;
-  Q_INVOKABLE bool isPaused() const;
+  Q_INVOKABLE Quran::PlaybackState state();
 
 public slots:
   void play(const MediaPlayerConfig& config);
@@ -47,8 +46,7 @@ public slots:
   void resume();
 
 signals:
-  void playingChanged();
-  void pausedChanged();
+  void stateChanged();
   void positionChanged(int chapter, int verse);
   void error();
 

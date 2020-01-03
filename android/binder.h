@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,23 +56,6 @@ public:
   // For whatever reason having those as a class template is not working.
   // We end up getting true for at least the bool instance even if the
   // invoked method returns false.
-  class BoolPropertyGetter : public MethodInvoker {
-  public:
-    using MethodInvoker::MethodInvoker;
-
-    virtual QVariant operator()(const QAndroidParcel& data) override {
-      Q_UNUSED(data);
-      Q_ASSERT(m_obj != 0);
-      bool result;
-
-      bool st = QMetaObject::invokeMethod(m_obj, m_method.data(),
-					  Qt::BlockingQueuedConnection, Q_RETURN_ARG(bool, result));
-      Q_ASSERT(st != false);
-
-      return result;
-    }
-  };
-
   class UnsignedIntPropertyGetter : public MethodInvoker {
   public:
     using MethodInvoker::MethodInvoker;

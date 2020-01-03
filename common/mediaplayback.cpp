@@ -31,8 +31,7 @@ MediaPlayback::MediaPlayback(QObject *parent) :
   m_service(new MediaService(this)),
   m_recitation(0) {
 
-  QObject::connect(m_service, SIGNAL(playingChanged()), this, SIGNAL(playingChanged()));
-  QObject::connect(m_service, SIGNAL(pausedChanged()), this, SIGNAL(pausedChanged()));
+  QObject::connect(m_service, SIGNAL(stateChanged()), this, SIGNAL(stateChanged()));
   QObject::connect(m_service, SIGNAL(positionChanged(int, int)), this, SIGNAL(positionChanged(int, int)));
   QObject::connect(m_service, SIGNAL(error()), this, SIGNAL(error()));
 }
@@ -42,12 +41,8 @@ MediaPlayback::~MediaPlayback() {
   m_service = 0;
 }
 
-bool MediaPlayback::isPlaying() const {
-  return m_service->isPlaying();
-}
-
-bool MediaPlayback::isPaused() const {
-  return m_service->isPaused();
+Quran::PlaybackState MediaPlayback::state() {
+  return m_service->state();
 }
 
 void MediaPlayback::playPage(int page) {

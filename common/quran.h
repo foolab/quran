@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,40 +15,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MEDIA_SERVICE_H
-#define MEDIA_SERVICE_H
+#ifndef QURAN_H
+#define QURAN_H
 
 #include <QObject>
-#include "quran.h"
 
-class MediaPlayerConfig;
-class MediaPlayer;
+class QDataStream;
 
-class MediaService : public QObject {
-  Q_OBJECT
+namespace Quran {
+  Q_NAMESPACE;
 
-  Q_PROPERTY(Quran::PlaybackState state READ state NOTIFY stateChanged);
+  enum PlaybackState {
+      Stopped,
+      Paused,
+      Playing,
+  };
 
-public:
-  MediaService(QObject *parent = 0);
-  ~MediaService();
-
-  void play(const MediaPlayerConfig& config);
-
-  Quran::PlaybackState state() const;
-
-public slots:
-  void stop();
-  void pause();
-  void resume();
-
-signals:
-  void stateChanged();
-  void positionChanged(int chapter, int verse);
-  void error();
-
-private:
-  MediaPlayer *m_player;
+  Q_ENUM_NS(PlaybackState);
 };
+Q_DECLARE_METATYPE(Quran::PlaybackState);
 
-#endif /* MEDIA_SERVICE_H */
+
+QDataStream& operator<<(QDataStream& out, const Quran::PlaybackState& s);
+QDataStream& operator>>(QDataStream& in, Quran::PlaybackState& s);
+
+#endif /* QURAN_H */
