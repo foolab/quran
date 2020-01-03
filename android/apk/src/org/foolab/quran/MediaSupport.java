@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ public class MediaSupport implements AudioManager.OnAudioFocusChangeListener {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 	    if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
-		stopRequested();
+		handleFocusLost();
 	    }
 	}
 
@@ -97,7 +97,9 @@ public class MediaSupport implements AudioManager.OnAudioFocusChangeListener {
 		    mAudioManager.abandonAudioFocus(MediaSupport.this);
 		    mReceiver.unregister();
 		    audioFocusReleased();
-		    mLock.release();
+		    if (mLock.isHeld()) {
+			mLock.release();
+		    }
 		}
 	    });
     }
@@ -117,26 +119,32 @@ public class MediaSupport implements AudioManager.OnAudioFocusChangeListener {
     }
 
     private void handleFocusAcquired() {
-	mLock.acquire();
+	if (!mLock.isHeld()) {
+	    mLock.acquire();
+	}
+
 	audioFocusAcquired();
 	mReceiver.register();
     }
 
     private void handleFocusLost() {
 	audioFocusLost();
-	mLock.release();
 	mReceiver.unregister();
+	if (mLock.isHeld()) {
+	    mLock.release();
+	}
     }
 
     private void handleFocusDenied() {
 	audioFocusDenied();
-	mLock.release();
 	mReceiver.unregister();
+	if (mLock.isHeld()) {
+	    mLock.release();
+	}
     }
 
     native void audioFocusAcquired();
     native void audioFocusDenied();
     native void audioFocusLost();
     native void audioFocusReleased();
-    native void stopRequested();
 }

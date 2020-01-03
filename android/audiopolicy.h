@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2017-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ signals:
   void acquired();
   void lost();
   void denied();
-  void stop();
 
 private:
   QAndroidJniObject m_obj;

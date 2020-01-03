@@ -82,9 +82,7 @@ void MediaPlayer::policyDenied() {
 }
 
 void MediaPlayer::policyLost() {
-  if (m_decoder) {
-    emit error();
-  }
+  stop();
 }
 
 void MediaPlayer::mediaAvailable(const Media& media) {
@@ -115,7 +113,6 @@ void MediaPlayer::play(const MediaPlayerConfig& config) {
   QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
   QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
   QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
-  QObject::connect(m_policy, SIGNAL(stop()), this, SLOT(stop()));
 
   if (!m_policy->acquire()) {
     delete m_list;
@@ -171,7 +168,6 @@ void MediaPlayer::stop() {
     QObject::disconnect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
     QObject::disconnect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
     QObject::disconnect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
-    QObject::disconnect(m_policy, SIGNAL(stop()), this, SLOT(stop()));
 
     m_policy->release();
     m_policy->deleteLater();

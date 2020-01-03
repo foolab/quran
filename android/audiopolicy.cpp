@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2017-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,16 +58,6 @@ Java_org_foolab_quran_MediaSupport_audioFocusReleased(JNIEnv *env, jobject objec
   Q_UNUSED(objectOrClass);
 
   // We don't care
-}
-
-extern "C" void
-Java_org_foolab_quran_MediaSupport_stopRequested(JNIEnv *env, jobject objectOrClass) {
-  Q_UNUSED(env);
-  Q_UNUSED(objectOrClass);
-
-  if (m_audio) {
-    QMetaObject::invokeMethod(m_audio, "stop", Qt::QueuedConnection);
-  }
 }
 
 AudioPolicy::AudioPolicy(QObject *parent) :
