@@ -28,12 +28,14 @@ class MediaPlayback : public QObject {
   Q_OBJECT
 
   Q_PROPERTY(Quran::PlaybackState state READ state NOTIFY stateChanged);
+  Q_PROPERTY(bool isAvailable READ isAvailable NOTIFY isAvailableChanged);
 
 public:
   MediaPlayback(QObject *parent = 0);
   ~MediaPlayback();
 
   Quran::PlaybackState state();
+  bool isAvailable();
 
   Recitation *recitation() const;
   void setRecitation(Recitation *recitation);
@@ -53,6 +55,7 @@ signals:
   void stateChanged();
   void positionChanged(int chapter, int verse);
   void error();
+  void isAvailableChanged();
 
 private:
   MediaService *m_service;

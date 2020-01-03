@@ -46,12 +46,17 @@ public:
 
   void onServiceDisconnected(const QString& name) {
     Q_UNUSED(name);
+    m_sender = QAndroidBinder();
 
-    QMetaObject::invokeMethod(m_service, "error", Qt::AutoConnection);
+    QMetaObject::invokeMethod(m_service, "binderUpdated", Qt::AutoConnection);
   }
 
   bool send(int code, const QAndroidParcel& data, QAndroidParcel *reply) {
     return m_sender.transact(code, data, reply);
+  }
+
+  bool isValid() {
+    return m_sender.handle().isValid();
   }
 
 private:
@@ -81,10 +86,10 @@ MediaService::MediaService(QObject *parent) :
 							  Q_ARG(int, verse));
 		       });
 
-  // TODO: unbind
-  // TODO: error
-  QtAndroid::bindService(QAndroidIntent(QtAndroid::androidActivity(), SERVICE),
-			 *m_connection, QtAndroid::BindFlag::AutoCreate);
+  if (!QtAndroid::bindService(QAndroidIntent(QtAndroid::androidActivity(), SERVICE),
+			      *m_connection, QtAndroid::BindFlag::AutoCreate)) {
+    QMetaObject::invokeMethod(this, "binderUpdated", Qt::QueuedConnection);
+  }
 }
 
 MediaService::~MediaService() {
@@ -95,6 +100,10 @@ MediaService::~MediaService() {
 
   delete m_binder;
   m_binder = 0;
+}
+
+bool MediaService::isAvailable() {
+  return m_connection->isValid();
 }
 
 void MediaService::play(const MediaPlayerConfig& config) {
@@ -165,9 +174,16 @@ QVariant MediaService::get(int code) {
 }
 
 void MediaService::binderUpdated() {
-  QAndroidParcel sendData, replyData;
-  sendData.writeBinder(*m_binder);
-  m_connection->send(Service::UpdateBinder, sendData, &replyData);
+  emit isAvailableChanged();
+
+  if (!m_connection->isValid()) {
+    // TODO: reconnect
+    emit error();
+  } else {
+    QAndroidParcel sendData, replyData;
+    sendData.writeBinder(*m_binder);
+    m_connection->send(Service::UpdateBinder, sendData, &replyData);
+  }
 }
 
 void MediaService::sendIntent(const Intent& intent) {

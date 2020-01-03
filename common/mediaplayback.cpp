@@ -34,6 +34,7 @@ MediaPlayback::MediaPlayback(QObject *parent) :
   QObject::connect(m_service, SIGNAL(stateChanged()), this, SIGNAL(stateChanged()));
   QObject::connect(m_service, SIGNAL(positionChanged(int, int)), this, SIGNAL(positionChanged(int, int)));
   QObject::connect(m_service, SIGNAL(error()), this, SIGNAL(error()));
+  QObject::connect(m_service, SIGNAL(isAvailableChanged()), this, SIGNAL(isAvailableChanged()));
 }
 
 MediaPlayback::~MediaPlayback() {
@@ -43,6 +44,10 @@ MediaPlayback::~MediaPlayback() {
 
 Quran::PlaybackState MediaPlayback::state() {
   return m_service->state();
+}
+
+bool MediaPlayback::isAvailable() {
+  return m_service->isAvailable();
 }
 
 void MediaPlayback::playPage(int page) {

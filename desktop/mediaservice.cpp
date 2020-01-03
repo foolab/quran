@@ -40,6 +40,10 @@ Quran::PlaybackState MediaService::state() const {
   return m_player->state();
 }
 
+bool MediaService::isAvailable() {
+  return true;
+}
+
 void MediaService::stop() {
   return m_player->stop();
 }

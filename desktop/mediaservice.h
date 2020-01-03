@@ -28,6 +28,7 @@ class MediaService : public QObject {
   Q_OBJECT
 
   Q_PROPERTY(Quran::PlaybackState state READ state NOTIFY stateChanged);
+  Q_PROPERTY(bool isAvailable READ isAvailable NOTIFY isAvailableChanged);
 
 public:
   MediaService(QObject *parent = 0);
@@ -36,6 +37,7 @@ public:
   void play(const MediaPlayerConfig& config);
 
   Quran::PlaybackState state() const;
+  bool isAvailable();
 
 public slots:
   void stop();
@@ -46,6 +48,7 @@ signals:
   void stateChanged();
   void positionChanged(int chapter, int verse);
   void error();
+  void isAvailableChanged();
 
 private:
   MediaPlayer *m_player;
