@@ -32,8 +32,13 @@
 class ServiceConnection : public QAndroidServiceConnection {
 public:
   ServiceConnection(MediaService *service) :
-    m_service(service) {
+    m_service(service),
+    m_bound(false) {
 
+  }
+
+  ~ServiceConnection() {
+    unbind();
   }
 
   void onServiceConnected(const QString& name, const QAndroidBinder& serviceBinder) {
@@ -59,9 +64,34 @@ public:
     return m_sender.handle().isValid();
   }
 
+  void bind() {
+    if (m_bound) {
+      return;
+    }
+
+    m_bound = QtAndroid::bindService(QAndroidIntent(QtAndroid::androidActivity(), SERVICE),
+				     *this, QtAndroid::BindFlag::AutoCreate);
+    if (!m_bound) {
+      QMetaObject::invokeMethod(m_service, "binderUpdated", Qt::QueuedConnection);
+    }
+  }
+
+  void unbind() {
+    if (!m_bound) {
+      return;
+    }
+
+    QAndroidJniExceptionCleaner cleaner;
+    QAndroidJniObject obj = QtAndroid::androidContext();
+    obj.callMethod<void>("unbindService", "(Landroid/content/ServiceConnection;)V",
+			 handle().object());
+    m_bound = false;
+  }
+
 private:
   MediaService *m_service;
   QAndroidBinder m_sender;
+  bool m_bound;
 };
 
 MediaService::MediaService(QObject *parent) :
@@ -86,14 +116,11 @@ MediaService::MediaService(QObject *parent) :
 							  Q_ARG(int, verse));
 		       });
 
-  if (!QtAndroid::bindService(QAndroidIntent(QtAndroid::androidActivity(), SERVICE),
-			      *m_connection, QtAndroid::BindFlag::AutoCreate)) {
-    QMetaObject::invokeMethod(this, "binderUpdated", Qt::QueuedConnection);
-  }
+  m_connection->bind();
 }
 
 MediaService::~MediaService() {
-  // TODO: unbind
+  m_connection->unbind();
 
   delete m_connection;
   m_connection = 0;
