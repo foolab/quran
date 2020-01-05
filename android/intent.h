@@ -30,6 +30,8 @@ public:
   void putExtraString(const QString& key, const QString& data);
   //  QString extraString(const QString& key);
 
+  void putExtraInt(const QString& key, int data);
+
   void setAction(const QString& action);
   QString action();
 

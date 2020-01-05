@@ -42,6 +42,15 @@ QString Intent::extraString(const QString& key) {
 }
 #endif
 
+void Intent::putExtraInt(const QString& key, int data) {
+  QAndroidJniExceptionCleaner cleaner;
+
+  handle().callObjectMethod("putExtra",
+			    "(Ljava/lang/String;I)Landroid/content/Intent;",
+			    QAndroidJniObject::fromString(key).object(),
+			    data);
+}
+
 void Intent::setAction(const QString& action) {
   QAndroidJniExceptionCleaner cleaner;
 
