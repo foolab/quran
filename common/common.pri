@@ -21,7 +21,7 @@ pulse:PKGCONFIG += libpulse
 DEPENDPATH += . ../data/ ../common/ ../common/interfaces/
 INCLUDEPATH += . ../data/ ../common/ ../common/interfaces/
 
-DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.7.0\\\"
+DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.8.0\\\"
 
 GENERATED = ../data/text-meta.h
 
