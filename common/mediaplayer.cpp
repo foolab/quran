@@ -146,11 +146,7 @@ void MediaPlayer::stop() {
 
   if (m_audio) {
     m_audio->stop();
-    QObject::disconnect(m_audio, SIGNAL(positionChanged(int)),
-			this, SLOT(audioPositionChanged(int)));
-
-    QObject::disconnect(m_audio, SIGNAL(error()), this, SIGNAL(error()));
-    QObject::disconnect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
+    QObject::disconnect(m_audio, 0, this, 0);
 
     m_audio->deleteLater();
     m_audio = 0;
@@ -165,9 +161,7 @@ void MediaPlayer::stop() {
   }
 
   if (m_policy) {
-    QObject::disconnect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
-    QObject::disconnect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
-    QObject::disconnect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
+    QObject::disconnect(m_policy, 0, this, 0);
 
     m_policy->release();
     m_policy->deleteLater();
