@@ -31,7 +31,7 @@ MediaPlayer::MediaPlayer(QObject *parent) :
   m_policy(0),
   m_audio(0) {
 
-  QObject::connect(this, SIGNAL(error()), this, SLOT(stop()));
+  QObject::connect(this, SIGNAL(error()), this, SLOT(pause()));
 }
 
 MediaPlayer::~MediaPlayer() {
@@ -103,6 +103,7 @@ void MediaPlayer::play(const MediaPlayerConfig& config) {
 
   if (config.localPath().isEmpty()) {
     qmlInfo(this) << "No recitation set";
+    stop();
     emit error();
     return;
   }
@@ -111,12 +112,11 @@ void MediaPlayer::play(const MediaPlayerConfig& config) {
 
   m_policy = new AudioPolicy(this);
   QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
-  QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(policyLost()));
+  QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(pause()));
   QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
 
   if (!m_policy->acquire()) {
-    delete m_list;
-    m_list = 0;
+    stop();
     emit error();
     return;
   }
@@ -134,10 +134,6 @@ void MediaPlayer::play(const MediaPlayerConfig& config) {
 }
 
 void MediaPlayer::stop() {
-  if (state() == Quran::Stopped) {
-    return;
-  }
-
   if (m_decoder) {
     m_decoder->stop();
     m_decoder->deleteLater();
