@@ -17,10 +17,12 @@
 
 #include "mediaservice.h"
 #include "mediaplayer.h"
+#include "mediastate.h"
 
 MediaService::MediaService(QObject *parent) :
   QObject(parent),
-  m_player(new MediaPlayer(this)) {
+  m_state(new MediaState),
+  m_player(new MediaPlayer(m_state, this)) {
 
   QObject::connect(m_player, SIGNAL(stateChanged()), this, SIGNAL(stateChanged()));
   QObject::connect(m_player, SIGNAL(positionChanged(int, int)), this, SIGNAL(positionChanged(int, int)));
@@ -30,6 +32,9 @@ MediaService::MediaService(QObject *parent) :
 MediaService::~MediaService() {
   delete m_player;
   m_player = 0;
+
+  delete m_state;
+  m_state = 0;
 }
 
 void MediaService::play(const MediaPlayerConfig& config) {

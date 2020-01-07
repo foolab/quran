@@ -35,7 +35,7 @@ SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quran
            coreapplication.cpp metadata.cpp chapterinfo.cpp partinfo.cpp pageinfo.cpp \
            pageposition.cpp normalize.cpp chapterlistmodel.cpp partlistmodel.cpp \
            mediacodec.cpp recitationdataprovider.cpp mediaplayerconfig.cpp mediaplayback.cpp \
-           quran.cpp
+           quran.cpp mediastate.cpp
 
 HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmodel.h \
            aboutdata.h textsupplier.h \
@@ -47,7 +47,7 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmode
            coreapplication.h metadata.h chapterinfo.h partinfo.h pageinfo.h \
            pageposition.h chapterlistmodel.h partlistmodel.h \
            mediacodec.h recitationdataprovider.h mediaplayerconfig.h mediaplayback.h \
-           quran.h \
+           quran.h mediastate.h \
            $$GENERATED $$INTERFACES
 
 INTERFACES = interfaces/application.h

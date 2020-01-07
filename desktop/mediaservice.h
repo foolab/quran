@@ -21,6 +21,7 @@
 #include <QObject>
 #include "quran.h"
 
+class MediaState;
 class MediaPlayerConfig;
 class MediaPlayer;
 
@@ -51,6 +52,7 @@ signals:
   void isAvailableChanged();
 
 private:
+  MediaState *m_state;
   MediaPlayer *m_player;
 };
 

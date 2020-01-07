@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,4 +94,11 @@ MediaPlayerConfig MediaPlayerConfig::fromByteArray(const QByteArray& data) {
   }
 
   return config;
+}
+
+bool MediaPlayerConfig::isValid() const {
+  return !m_localPath.isEmpty() &&
+    !m_downloadUrl.isEmpty() &&
+    !m_reciter.isEmpty() &&
+    !m_media.isEmpty();
 }

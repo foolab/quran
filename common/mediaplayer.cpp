@@ -22,10 +22,12 @@
 #include "audiooutput.h"
 #include "audiopolicy.h"
 #include "mediaplayerconfig.h"
+#include "mediastate.h"
 #include <QQmlInfo>
 
-MediaPlayer::MediaPlayer(QObject *parent) :
+MediaPlayer::MediaPlayer(MediaState *handler, QObject *parent) :
   QObject(parent),
+  m_state(handler),
   m_list(0),
   m_decoder(0),
   m_policy(0),
@@ -36,6 +38,8 @@ MediaPlayer::MediaPlayer(QObject *parent) :
 
 MediaPlayer::~MediaPlayer() {
   stop();
+
+  m_state->save();
 }
 
 Quran::PlaybackState MediaPlayer::state() {
@@ -62,7 +66,11 @@ void MediaPlayer::policyAcquired() {
 		   this, SLOT(audioPositionChanged(int)));
 
   QObject::connect(m_audio, SIGNAL(error()), this, SIGNAL(error()));
-  QObject::connect(m_audio, SIGNAL(finished()), this, SLOT(stop()));
+  QObject::connect(m_audio, &AudioOutput::finished,
+		   this, [this]() {
+			   m_state->setPosition(0);
+			   stop();
+			 });
 
   if (!m_audio->start()) {
     qmlInfo(this) << "Failed to start audio output";
@@ -81,15 +89,13 @@ void MediaPlayer::policyDenied() {
   }
 }
 
-void MediaPlayer::policyLost() {
-  stop();
-}
-
 void MediaPlayer::mediaAvailable(const Media& media) {
   m_decoder->addMedia(media);
 }
 
 void MediaPlayer::audioPositionChanged(int index) {
+  m_state->setPosition(index);
+
   int chapter, verse;
   if (m_list->signalMedia(index, chapter, verse)) {
     emit positionChanged(chapter, verse);
@@ -107,6 +113,8 @@ void MediaPlayer::play(const MediaPlayerConfig& config) {
     emit error();
     return;
   }
+
+  m_state->setConfig(config);
 
   m_list = new MediaPlaylist(config);
 

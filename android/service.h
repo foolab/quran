@@ -33,6 +33,7 @@
 class Binder;
 class MediaPlayer;
 class Intent;
+class MediaState;
 
 class Service : public QAndroidService {
   Q_OBJECT
@@ -52,7 +53,7 @@ public:
     QueryState,
   } Action;
 
-  bool onStartCommand(Intent& intent);
+  bool onStartCommand(Intent& intent, bool restore);
 
 private slots:
   void stateChanged();
@@ -66,6 +67,7 @@ private:
   void send(int code, const QVariant& data);
 
   QAndroidBinder m_sender;
+  MediaState *m_state;
   MediaPlayer *m_player;
   Binder *m_localBinder;
   int m_chapter;
