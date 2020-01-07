@@ -28,12 +28,15 @@
 #include "binder.h"
 #include "intent.h"
 #include <QAndroidJniExceptionCleaner>
+#include <QMutex>
+#include <QMutexLocker>
 
 class ServiceConnection : public QAndroidServiceConnection {
 public:
   ServiceConnection(MediaService *service) :
     m_service(service),
-    m_bound(false) {
+    m_bound(false),
+    m_valid(false) {
 
   }
 
@@ -44,24 +47,38 @@ public:
   void onServiceConnected(const QString& name, const QAndroidBinder& serviceBinder) {
     Q_UNUSED(name);
 
+    m_lock.lock();
     m_sender = serviceBinder;
+    m_valid = true;
+    m_lock.unlock();
 
     QMetaObject::invokeMethod(m_service, "binderUpdated", Qt::AutoConnection);
   }
 
   void onServiceDisconnected(const QString& name) {
     Q_UNUSED(name);
+
+    m_lock.lock();
     m_sender = QAndroidBinder();
+    m_valid = false;
+    m_lock.unlock();
 
     QMetaObject::invokeMethod(m_service, "binderUpdated", Qt::AutoConnection);
   }
 
   bool send(int code, const QAndroidParcel& data, QAndroidParcel *reply) {
+    QMutexLocker l(&m_lock);
+
+    if (!m_valid) {
+      return false;
+    }
+
     return m_sender.transact(code, data, reply);
   }
 
   bool isValid() {
-    return m_sender.handle().isValid();
+    QMutexLocker l(&m_lock);
+    return m_valid;
   }
 
   void bind() {
@@ -92,6 +109,8 @@ private:
   MediaService *m_service;
   QAndroidBinder m_sender;
   bool m_bound;
+  bool m_valid;
+  QMutex m_lock;
 };
 
 MediaService::MediaService(QObject *parent) :
