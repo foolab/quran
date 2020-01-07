@@ -5,20 +5,24 @@ TARGET = Quran
 QT += qml quick sensors androidextras
 
 CONFIG += android sles
-SQLITE_EXTRA_COMPILE_FLAGS += --host=arm-linux-androideabi \
-                              --with-sysroot=$$(SYSROOT)
+
+equals(ANDROID_TARGET_ARCH, armeabi-v7a) {
+  EXTRA_CFLAGS="-march=armv7-a -mthumb"
+  EXTRA_LDFLAGS="-march=armv7-a -mthumb -Xlinker --fix-cortex-a8"
+  SQLITE_EXTRA_COMPILE_FLAGS += --host=arm-linux-androideabi
+}
 
 FFMPEG_EXTRA_COMPILE_FLAGS += --enable-cross-compile \
                               --target-os=android \
                               --disable-runtime-cpudetect \
                               --arch=arm \
                               --cpu=cortex-a8 \
-                              --cc=$$(CC) \
-                              --ld=$$(LD) \
-                              --nm=$$(NM) \
-                              --strip=$$(STRIP) \
-                              --extra-cflags=\"$$(ANDROID_CFLAGS)\" \
-                              --extra-ldflags=\"$$(ANDROID_LDFLAGS)\"
+                              --cc=\"$${QMAKE_CC} $${QMAKE_CFLAGS}\" \
+                              --ld=\"$${QMAKE_LINK} $${QMAKE_LFLAGS}\" \
+                              --nm=\"$${QMAKE_NM}\" \
+                              --strip=\"$${QMAKE_STRIP}\" \
+                              --extra-cflags=\"$$EXTRA_CFLAGS\" \
+                              --extra-ldflags=\"$$EXTRA_LDFLAGS\"
 
 # Has to be after android keyword in config
 include(../common/common.pri)
