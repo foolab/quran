@@ -105,7 +105,9 @@ void MediaPlayer::audioPositionChanged(int index) {
 }
 
 void MediaPlayer::play(const MediaPlayerConfig& config) {
-  stop();
+  if (m_decoder || m_audio || m_list || m_policy) {
+    stop();
+  }
 
   if (config.localPath().isEmpty()) {
     qmlInfo(this) << "No recitation set";
