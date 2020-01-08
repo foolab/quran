@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,6 @@ Download *Downloader::get(const QUrl& url) {
 
 Download::Download(QNetworkReply *reply, QObject *parent) :
   QObject(parent),
-  m_size(0),
   m_progress(0),
   m_reply(reply) {
 
@@ -70,27 +69,11 @@ void Download::stop() {
 }
 
 void Download::handleDownloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
-  if (bytesTotal == -1) {
-    // We can try to get it from the HTTP content length header
-    QVariant val = m_reply->header(QNetworkRequest::ContentLengthHeader);
-    if (!val.isValid()) {
-      // HACK: Let's hardcode an arbitrary value (3MB).
-      bytesTotal = 1024 * 1024 * 3;
-    } else {
-      bytesTotal = val.value<qint64>();
-    }
+  if (bytesTotal == 0 || bytesTotal == -1) {
+    return;
   }
 
-  if (bytesTotal < bytesReceived) {
-    bytesTotal = bytesReceived;
-  }
-
-  if (bytesTotal != m_size) {
-    m_size = bytesTotal;
-    emit sizeChanged();
-  }
-
-  qint64 progress = (bytesReceived * 100) / m_size;
+  qint64 progress = (bytesReceived * 100) / bytesTotal;
   if (progress != m_progress) {
     m_progress = progress;
     emit progressChanged();
@@ -103,8 +86,4 @@ QNetworkReply *Download::reply() const {
 
 qint64 Download::progress() const {
   return m_progress;
-}
-
-qint64 Download::size() const {
-  return m_size;
 }

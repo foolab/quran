@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,18 +44,15 @@ public:
   QNetworkReply *reply() const;
   void stop();
   qint64 progress() const;
-  qint64 size() const;
 
 signals:
   void progressChanged();
-  void sizeChanged();
   void finished();
 
 private slots:
   void handleDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
 
 private:
-  qint64 m_size;
   qint64 m_progress;
   QNetworkReply *m_reply;
 };

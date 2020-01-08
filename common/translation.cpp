@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,10 +81,6 @@ Translation::Status Translation::status() const {
   return m_info->m_status;
 }
 
-qint64 Translation::downloadSize() const {
-  return m_download ? m_download->size() : 0;
-}
-
 bool Translation::startDownload() {
   stopDownload();
 
@@ -95,9 +91,6 @@ bool Translation::startDownload() {
 
   QObject::connect(m_download, &Download::progressChanged,
 		   this, &Translation::downloadProgressChanged);
-  QObject::connect(m_download, &Download::sizeChanged,
-		   this, &Translation::downloadSizeChanged);
-
   QObject::connect(m_download, SIGNAL(finished()),
 		   this, SLOT(replyFinished()));
 
@@ -218,6 +211,5 @@ void Translation::clearDownload() {
   m_download = 0;
 
   // And we need to reset those properties
-  emit downloadSizeChanged();
   emit downloadProgressChanged();
 }

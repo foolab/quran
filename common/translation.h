@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ class Translation : public QObject {
   Q_PROPERTY(QString uuid READ uuid CONSTANT);
   Q_PROPERTY(QString name READ name CONSTANT);
   Q_PROPERTY(QString language READ language CONSTANT);
-  Q_PROPERTY(qint64 downloadSize READ downloadSize NOTIFY downloadSizeChanged);
   Q_PROPERTY(qint64 downloadProgress READ downloadProgress NOTIFY downloadProgressChanged);
   Q_PROPERTY(Status status READ status NOTIFY statusChanged);
   Q_PROPERTY(bool loaded READ isLoaded NOTIFY loadedChanged);
@@ -57,7 +56,6 @@ public:
   QString name() const;
   QString language() const;
 
-  qint64 downloadSize() const;
   qint64 downloadProgress() const;
 
   void setStatus(Status status);
@@ -74,7 +72,6 @@ public slots:
 signals:
   void statusChanged();
   void downloadProgressChanged();
-  void downloadSizeChanged();
   void loadedChanged();
   void installed();
 
