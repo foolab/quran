@@ -115,3 +115,14 @@ SOURCES += \
 
 LIBS += -landroid -lOpenSLES
 ANDROID_PACKAGE_SOURCE_DIR = android/apk
+
+apk_dir.path = /
+apk_dir.files = apk/*
+
+fonts.path = /assets/fonts/
+fonts.files = ../data/amiri-regular.ttf ../data/amiri-quran.ttf
+
+search.path = /assets/
+search.files = ../data/search.db
+
+INSTALLS += apk_dir fonts search

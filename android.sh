@@ -63,11 +63,6 @@ pushd android
 make install INSTALL_ROOT=../apk
 popd
 
-mkdir -p apk/assets/fonts/
-cp data/search.db apk/assets/
-cp data/amiri-regular.ttf apk/assets/fonts/
-cp data/amiri-quran.ttf apk/assets/fonts/
-
 $QT_DIR/android_$ANDROID/bin/androiddeployqt \
     --input android/android-libQuran.so-deployment-settings.json \
     --output apk \
