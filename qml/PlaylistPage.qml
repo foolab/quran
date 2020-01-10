@@ -161,7 +161,7 @@ QuranPage {
                     model: toChapterInfo.length
                     label: qsTr("Verse")
                     textRole: function(model) { return formatter.formatNumber(model.index + 1) }
-                    currentIndex: currentPageInfo.lastVerse
+                    currentIndex: toChapterInfo.length - 1
                     ChapterInfo {
                         id: toChapterInfo
                         chapter: toChapterSelector.currentIndex
