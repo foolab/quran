@@ -159,7 +159,6 @@ void Service::positionChanged(int chapter, int verse) {
 
 void Service::error() {
   send(ActionError, true);
-  stopService();
 }
 
 void Service::send(int code, const QVariant& data) {
