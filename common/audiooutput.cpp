@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -117,6 +117,7 @@ void AudioOutput::timeout() {
       return;
     } else if (buffer.media.isError()) {
       if (!hasFrames()) {
+	qWarning() << "Received error buffer from decoder";
 	emit error();
       } else {
 	// Put it back because we will be called again.
@@ -131,6 +132,7 @@ void AudioOutput::timeout() {
   }
 
   if (!writeData(m_data)) {
+    qWarning() << "Error writing data to device";
     emit error();
     return;
   }

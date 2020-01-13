@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,6 +78,7 @@ void MediaDecoder::decodeMedia() {
   QByteArray data = m_provider->data(media);
 
   if (data.isEmpty()) {
+    qWarning() << "Could not read data for media" << media.chapter() << ":" << media.verse();
     play(AudioBuffer(Media::error()));
     return;
   }

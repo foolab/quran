@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 #include "sles.h"
 #include <SLES/OpenSLES.h>
 #include <QMutex>
+#include <QDebug>
 
 #define BUFFER_SIZE 4096
 #define NUM_BUFFERS 2
@@ -28,15 +29,23 @@ public:
     m_engine(0),
     m_object(0) {
 
-    if (slCreateEngine(&m_object, 0, NULL, 0, NULL, NULL) != SL_RESULT_SUCCESS) {
+    SLresult result;
+
+    result = slCreateEngine(&m_object, 0, NULL, 0, NULL, NULL);
+    if (result != SL_RESULT_SUCCESS) {
+      qWarning() << "Failed to create OpenSL ES engine" << result;
       return;
     }
 
-    if ((*m_object)->Realize(m_object, SL_BOOLEAN_FALSE) != SL_RESULT_SUCCESS) {
+    result = (*m_object)->Realize(m_object, SL_BOOLEAN_FALSE);
+    if (result != SL_RESULT_SUCCESS) {
+      qWarning() << "Failed to realize OpenSL ES engine" << result;
       return;
     }
 
-    if ((*m_object)->GetInterface(m_object, SL_IID_ENGINE, &m_engine) != SL_RESULT_SUCCESS) {
+    result = (*m_object)->GetInterface(m_object, SL_IID_ENGINE, &m_engine);
+    if (result != SL_RESULT_SUCCESS) {
+      qWarning() << "Failed to get OpenSL ES engine interface" << result;
       return;
     }
   }
@@ -64,11 +73,16 @@ public:
     const SLInterfaceID ids[] = {SL_IID_VOLUME};
     const SLboolean req[] = {SL_BOOLEAN_FALSE};
 
-    if ((*m_engine)->CreateOutputMix(m_engine, &m_object, 1, ids, req) != SL_RESULT_SUCCESS) {
+    SLresult result;
+    result = (*m_engine)->CreateOutputMix(m_engine, &m_object, 1, ids, req);
+    if (result != SL_RESULT_SUCCESS) {
+      qWarning() << "Failed to create OpenSL ES output mix" << result;
       return;
     }
 
-    if ((*m_object)->Realize(m_object, SL_BOOLEAN_FALSE) != SL_RESULT_SUCCESS) {
+    result = (*m_object)->Realize(m_object, SL_BOOLEAN_FALSE);
+    if (result != SL_RESULT_SUCCESS) {
+      qWarning() << "Failed to realize OpenSL ES output mix" << result;
       return;
     }
   }
@@ -114,24 +128,34 @@ public:
     /* player */
     const SLInterfaceID ids1[] = {SL_IID_BUFFERQUEUE};
     const SLboolean req1[] = {SL_BOOLEAN_TRUE};
-    if ((*m_engine)->CreateAudioPlayer(m_engine, &m_playerObject, &audioSrc, &audioSnk,
-				       1, ids1, req1) != SL_RESULT_SUCCESS) {
+
+    SLresult result;
+    result = (*m_engine)->CreateAudioPlayer(m_engine, &m_playerObject, &audioSrc, &audioSnk,
+					    1, ids1, req1);
+    if (result != SL_RESULT_SUCCESS) {
+      qWarning() << "Failed to create OpenSL ES audio player" << result;
       return;
     }
 
-    if ((*m_playerObject)->Realize(m_playerObject, SL_BOOLEAN_FALSE) != SL_RESULT_SUCCESS) {
+    result = (*m_playerObject)->Realize(m_playerObject, SL_BOOLEAN_FALSE);
+    if (result != SL_RESULT_SUCCESS) {
+      qWarning() << "Failed to realize OpenSL ES audio player" << result;
       return;
     }
 
     /* player interface */
-    if ((*m_playerObject)->GetInterface(m_playerObject,
-					SL_IID_PLAY, &m_player) != SL_RESULT_SUCCESS) {
+    result = (*m_playerObject)->GetInterface(m_playerObject,
+					     SL_IID_PLAY, &m_player);
+    if (result != SL_RESULT_SUCCESS) {
+      qWarning() << "Failed to get OpenSL ES audio player interface" << result;
       return;
     }
 
     /* buffer queue interface */
-    if ((*m_playerObject)->GetInterface(m_playerObject, SL_IID_BUFFERQUEUE,
-					&m_queue) != SL_RESULT_SUCCESS) {
+    result = (*m_playerObject)->GetInterface(m_playerObject, SL_IID_BUFFERQUEUE,
+					     &m_queue);
+    if (result != SL_RESULT_SUCCESS) {
+      qWarning() << "Failed to get OpenSL ES buffer queue interface" << result;
       return;
     }
   }
@@ -161,7 +185,9 @@ public:
       m_data << d;
     }
 
-    if ((*m_queue)->Enqueue(m_queue, d.constData(), d.size()) != SL_RESULT_SUCCESS) {
+    SLresult result = (*m_queue)->Enqueue(m_queue, d.constData(), d.size());
+    if (result != SL_RESULT_SUCCESS) {
+      qWarning() << "Failed to enqueue OpenSL ES buffer" << result;
       return false;
     }
 
@@ -182,8 +208,9 @@ public:
   }
 
   bool registerCallback() {
-    if ((*m_queue)->RegisterCallback(m_queue,
-				     slesCallback, this) != SL_RESULT_SUCCESS) {
+    SLresult result = (*m_queue)->RegisterCallback(m_queue, slesCallback, this);
+    if (result != SL_RESULT_SUCCESS) {
+      qWarning() << "Failed to register OpenSL ES buffer queue callback" << result;
       return false;
     }
 
@@ -238,9 +265,10 @@ bool Sles::start() {
     return false;
   }
 
-  if ((*m_sink->m_player)->SetPlayState(m_sink->m_player,
-					  SL_PLAYSTATE_PLAYING) != SL_RESULT_SUCCESS) {
-    emit error();
+  SLresult result = (*m_sink->m_player)->SetPlayState(m_sink->m_player,
+						      SL_PLAYSTATE_PLAYING);
+  if (result != SL_RESULT_SUCCESS) {
+    qWarning() << "Failed to set OpenSL ES player state to playing" << result;
     return false;
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2019-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,6 +52,7 @@ MediaCodec::MediaCodec(Media media, QByteArray& data, QObject *parent) :
 
   int stream_index = av_find_best_stream(m_ctx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
   if (stream_index < 0) {
+    qWarning() << "Cannot find audio stream to decode";
     m_buffers << AudioBuffer(Media::error());
     return;
   }
@@ -60,17 +61,20 @@ MediaCodec::MediaCodec(Media media, QByteArray& data, QObject *parent) :
 
   AVCodec *codec = avcodec_find_decoder(stream->codecpar->codec_id);
   if (!codec) {
+    qWarning() << "Cannot find audio decoder for stream";
     m_buffers << AudioBuffer(Media::error());
     return;
   }
 
   m_codec = avcodec_alloc_context3(codec);
   if (!m_codec) {
+    qWarning() << "Cannot allocate audio decoder for stream";
     m_buffers << AudioBuffer(Media::error());
     return;
   }
 
   if (avcodec_parameters_to_context(m_codec, stream->codecpar) < 0) {
+    qWarning() << "Cannot set audio decoder parameters for stream";
     avcodec_free_context(&m_codec);
     m_codec = 0;
     m_buffers << AudioBuffer(Media::error());
@@ -81,6 +85,7 @@ MediaCodec::MediaCodec(Media media, QByteArray& data, QObject *parent) :
   AVDictionary *opts = NULL;
   av_dict_set(&opts, "refcounted_frames", "1", 0);
   if (avcodec_open2(m_codec, codec, &opts) < 0) {
+    qWarning() << "Cannot open audio decoder for stream";
     avcodec_free_context(&m_codec);
     m_codec = 0;
     m_buffers << AudioBuffer(Media::error());
@@ -88,6 +93,7 @@ MediaCodec::MediaCodec(Media media, QByteArray& data, QObject *parent) :
   }
 
   if (m_codec->request_sample_fmt != AV_SAMPLE_FMT_S16) {
+    qWarning() << "Cannot set decoder output sample format for stream";
     avcodec_close(m_codec);
     m_codec = 0;
     m_buffers << AudioBuffer(Media::error());
@@ -128,6 +134,7 @@ void MediaCodec::decodePacket() {
 	flushDecoder(b);
 	goto out;
       } else {
+	qWarning() << "Error decoding packet";
 	// Error:
 	goto error;
       }
@@ -145,6 +152,7 @@ void MediaCodec::decodePacket() {
   if (b.data.isEmpty()) {
     // I can only think of one valid scenario which is every single input packed has been invalid!
     // Let's just fail here :/
+    qWarning() << "Empty data decoding packet";
     goto error;
   }
 
@@ -188,11 +196,13 @@ QList<AudioBuffer> MediaCodec::buffers() {
 bool MediaCodec::decode(AVPacket *pkt, AudioBuffer& buffer) {
   AVFrame *frame = av_frame_alloc();
   if (!frame) {
+    qWarning() << "Cannot allocate audio frame";
     return false;
   }
 
   int ret = avcodec_send_packet(m_codec, pkt);
   if (ret < 0) {
+    qWarning() << "Failed to send packet to decoder";
     av_frame_free(&frame);
     return false;
   }
@@ -220,6 +230,7 @@ bool MediaCodec::decode(AVPacket *pkt, AudioBuffer& buffer) {
     }
 
     if (!m_resampler->resample(frame, data)) {
+      qWarning() << "Failed to resample audio frame";
       av_frame_free(&frame);
       return false;
     }

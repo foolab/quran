@@ -85,6 +85,7 @@ void MediaPlayer::policyAcquired() {
 
 void MediaPlayer::policyDenied() {
   if (m_decoder) {
+    qmlInfo(this) << "Audio playback request denied";
     emit error();
   }
 }
@@ -127,6 +128,7 @@ void MediaPlayer::play(const MediaPlayerConfig& config) {
 
   if (!m_policy->acquire()) {
     stop();
+    qmlInfo(this) << "Audio playback request failed";
     emit error();
     return;
   }
