@@ -9,7 +9,7 @@ LIBS += -lz
 
 TEMPLATE = app
 
-CONFIG += c++11
+CONFIG += c++14
 
 QT += network
 CONFIG += mobility link_pkgconfig

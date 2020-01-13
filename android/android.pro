@@ -57,8 +57,6 @@ HEADERS += fsmonitor.h \
            sqlite-ndk/sources/sqlite3ndk.h
 
 oboe {
-CONFIG += c++14
-
 INCLUDEPATH += oboe/src oboe/include
 
 SOURCES += \

@@ -32,13 +32,15 @@ public:
 
   Download *get(const QString& url);
   Download *get(const QUrl& url);
+
+  using QNetworkAccessManager::get;
 };
 
 class Download : public QObject {
   Q_OBJECT
 
 public:
-  Download(QNetworkReply *reply, QObject *parent = 0);
+  Download(const QUrl& url, Downloader *downloader, QObject *parent = 0);
   ~Download();
 
   QNetworkReply *reply() const;
@@ -51,10 +53,19 @@ signals:
 
 private slots:
   void handleDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+  void downloadFinished();
+
+private slots:
+  void download();
 
 private:
+  void setReply(QNetworkReply *reply);
+
+  Downloader *m_downloader;
   qint64 m_progress;
   QNetworkReply *m_reply;
+  const QUrl m_url;
+  int m_trials;
 };
 
 #endif /* DOWNLOADER_H */

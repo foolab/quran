@@ -19,6 +19,11 @@
 #include <QUrl>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QTimer>
+#include <QDebug>
+
+#define MAX_DOWNLOAD_RETRY      3
+#define DOWNLOAD_RETRY_WAIT     1000 // 1 second in ms
 
 Downloader::Downloader(QObject *parent) :
   QNetworkAccessManager(parent) {
@@ -34,38 +39,57 @@ Download *Downloader::get(const QString& url) {
 }
 
 Download *Downloader::get(const QUrl& url) {
-  QNetworkReply *reply = QNetworkAccessManager::get(QNetworkRequest(url));
-
-  return new Download(reply);
+  return new Download(url, this, this);
 }
 
-Download::Download(QNetworkReply *reply, QObject *parent) :
+Download::Download(const QUrl& url, Downloader *downloader, QObject *parent) :
   QObject(parent),
+  m_downloader(downloader),
   m_progress(0),
-  m_reply(reply) {
+  m_reply(0),
+  m_url(url),
+  m_trials(0) {
 
-  QObject::connect(m_reply, SIGNAL(sslErrors(const QList<QSslError>&)), m_reply,
-		   SLOT(ignoreSslErrors()));
-
-  QObject::connect(m_reply, &QNetworkReply::finished, this, &Download::finished);
-
-  QObject::connect(m_reply, &QNetworkReply::downloadProgress,
-		   this, &Download::handleDownloadProgress);
-
-  m_reply->setParent(this);
+  download();
 }
 
 Download::~Download() {
   stop();
 }
 
-void Download::stop() {
+void Download::download() {
+  ++m_trials;
+
+  QNetworkReply *reply = m_downloader->get(QNetworkRequest(m_url));
+
+  setReply(reply);
+}
+
+void Download::setReply(QNetworkReply *reply) {
   if (m_reply) {
     QObject::disconnect(m_reply, 0, this, 0);
     m_reply->abort();
     m_reply->deleteLater();
     m_reply = 0;
   }
+
+  m_reply = reply;
+
+  if (m_reply) {
+    QObject::connect(m_reply, &QNetworkReply::sslErrors, m_reply,
+		     qOverload<>(&QNetworkReply::ignoreSslErrors));
+
+    QObject::connect(m_reply, &QNetworkReply::finished, this, &Download::downloadFinished);
+
+    QObject::connect(m_reply, &QNetworkReply::downloadProgress,
+		     this, &Download::handleDownloadProgress);
+
+    m_reply->setParent(this);
+  }
+}
+
+void Download::stop() {
+  setReply(0);
 }
 
 void Download::handleDownloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
@@ -86,4 +110,12 @@ QNetworkReply *Download::reply() const {
 
 qint64 Download::progress() const {
   return m_progress;
+}
+
+void Download::downloadFinished() {
+  if (m_reply->error() == QNetworkReply::NoError || m_trials > MAX_DOWNLOAD_RETRY) {
+    emit finished();
+  } else {
+    QTimer::singleShot(m_trials * DOWNLOAD_RETRY_WAIT, this, &Download::download);
+  }
 }
