@@ -35,7 +35,7 @@ Bundle::~Bundle() {
 
 void Bundle::setProperty(const QString& key, bool value) {
   QAndroidJniExceptionCleaner cleaner;
-  m_handle.callMethod<void>("putBoolean", "(Ljava/lang/String;)V",
+  m_handle.callMethod<void>("putBoolean", "(Ljava/lang/String;Z)V",
 			    QAndroidJniObject::fromString(key).object(), value);
 }
 
