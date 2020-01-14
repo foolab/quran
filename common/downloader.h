@@ -22,6 +22,7 @@
 
 class QUrl;
 class Download;
+class NetworkManager;
 
 class Downloader : public QNetworkAccessManager {
   Q_OBJECT
@@ -34,6 +35,12 @@ public:
   Download *get(const QUrl& url);
 
   using QNetworkAccessManager::get;
+
+  void begin();
+  void end();
+
+private:
+  NetworkManager *m_manager;
 };
 
 class Download : public QObject {

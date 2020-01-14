@@ -50,7 +50,8 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmode
            quran.h mediastate.h \
            $$GENERATED $$INTERFACES
 
-INTERFACES = interfaces/application.h
+INTERFACES = interfaces/application.h \
+             interfaces/networkmanager.h
 
 sles {
   SOURCES += sles.cpp

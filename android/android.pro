@@ -42,6 +42,7 @@ SOURCES += fsmonitor.cpp \
            intent.cpp \
            bundle.cpp \
            parcel.cpp \
+           networkmanager.cpp \
            sqlite-ndk/sources/sqlite3ndk.cpp
 
 HEADERS += fsmonitor.h \

@@ -19,6 +19,7 @@ SOURCES += fsmonitor.cpp \
            application.cpp \
            mockandroidsupport.cpp \
            mediaservice.cpp \
+           networkmanager.cpp \
            ../android/keyfilter.cpp
 
 HEADERS += fsmonitor.h \

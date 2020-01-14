@@ -21,17 +21,20 @@
 #include <QNetworkReply>
 #include <QTimer>
 #include <QDebug>
+#include "networkmanager.h"
 
 #define MAX_DOWNLOAD_RETRY      3
 #define DOWNLOAD_RETRY_WAIT     1000 // 1 second in ms
 
 Downloader::Downloader(QObject *parent) :
-  QNetworkAccessManager(parent) {
+  QNetworkAccessManager(parent),
+  m_manager(new NetworkManager) {
 
 }
 
 Downloader::~Downloader() {
-
+  delete m_manager;
+  m_manager = 0;
 }
 
 Download *Downloader::get(const QString& url) {
@@ -42,6 +45,14 @@ Download *Downloader::get(const QUrl& url) {
   return new Download(url, this, this);
 }
 
+void Downloader::begin() {
+  m_manager->ref();
+}
+
+void Downloader::end() {
+  m_manager->unref();
+}
+
 Download::Download(const QUrl& url, Downloader *downloader, QObject *parent) :
   QObject(parent),
   m_downloader(downloader),
@@ -50,10 +61,13 @@ Download::Download(const QUrl& url, Downloader *downloader, QObject *parent) :
   m_url(url),
   m_trials(0) {
 
+  m_downloader->begin();
+
   download();
 }
 
 Download::~Download() {
+  m_downloader->end();
   stop();
 }
 
