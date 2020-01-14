@@ -37,6 +37,8 @@ public:
 
   void setBundle(const QString& key, Bundle& bundle);
   Bundle bundle(const QString& key);
+
+  bool send();
 };
 
 #endif /* INTENT_H */

@@ -18,6 +18,7 @@
 #include "intent.h"
 #include <QAndroidJniEnvironment>
 #include <QAndroidJniExceptionCleaner>
+#include <QtAndroid>
 
 Intent::Intent(QAndroidIntent& intent) :
   QAndroidIntent(intent.handle()) {
@@ -83,4 +84,13 @@ Bundle Intent::bundle(const QString& key) {
 			      "(Ljava/lang/String;)Landroid/os/Bundle;",
 			      QAndroidJniObject::fromString(key).object());
   return Bundle(bundle);
+}
+
+bool Intent::send() {
+  QAndroidJniExceptionCleaner cleaner;
+
+  QAndroidJniObject obj = QtAndroid::androidContext()
+    .callObjectMethod("startService", "(Landroid/content/Intent;)Landroid/content/ComponentName;",
+		      handle().object());
+  return obj.isValid();
 }
