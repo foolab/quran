@@ -17,54 +17,22 @@
 
 #include "parcel.h"
 #include <QAndroidJniExceptionCleaner>
-#include <QAndroidParcel>
 
-Parcel::Parcel() :
-  m_handle(QAndroidJniObject::callStaticObjectMethod("android/os/Parcel",
-						     "obtain",
-						     "()Landroid/os/Parcel;").object()) {
-
-  QAndroidJniExceptionCleaner cleaner;
-}
-
-Parcel::Parcel(QAndroidParcel& parcel) :
-  m_handle(parcel.handle()) {
-
-}
-
-Parcel::~Parcel() {
+Parcel::Parcel(const QAndroidParcel& parcel) :
+  QAndroidParcel(parcel.handle()) {
 
 }
 
 Bundle Parcel::readBundle() {
   QAndroidJniExceptionCleaner cleaner;
 
-  QAndroidJniObject bundle = m_handle.callObjectMethod("readBundle", "()Landroid/os/Bundle;");
+  QAndroidJniObject bundle = handle().callObjectMethod("readBundle", "()Landroid/os/Bundle;");
   return Bundle(bundle);
 }
 
 void Parcel::writeBundle(Bundle& bundle) {
   QAndroidJniExceptionCleaner cleaner;
 
-  m_handle.callMethod<void>("writeBundle", "(Landroid/os/Bundle;)V",
+  handle().callMethod<void>("writeBundle", "(Landroid/os/Bundle;)V",
 			    bundle.handle().object());
-}
-
-QAndroidBinder Parcel::readBinder() {
-  QAndroidJniExceptionCleaner cleaner;
-  QAndroidJniObject binder = m_handle.callObjectMethod("readStrongBinder",
-							 "()Landroid/os/IBinder;");
-  return QAndroidBinder(binder.object());
-}
-
-void Parcel::writeBinder(QAndroidBinder& binder) {
-  QAndroidJniExceptionCleaner cleaner;
-
-  m_handle.callMethod<void>("writeStrongBinder",
-			    "(Landroid/os/IBinder;)V",
-			    binder.handle().object());
-}
-
-QAndroidJniObject Parcel::handle() {
-  return m_handle;
 }

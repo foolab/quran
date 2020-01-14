@@ -18,28 +18,18 @@
 #ifndef PARCEL_H
 #define PARCEL_H
 
-#include <QAndroidJniObject>
+#include <QAndroidParcel>
 #include <QAndroidBinder>
 #include "bundle.h"
 
-class QAndroidParcel;
-
-class Parcel {
+class Parcel : public QAndroidParcel {
 public:
-  Parcel();
-  Parcel(QAndroidParcel& parcel);
-  ~Parcel();
+  using QAndroidParcel::QAndroidParcel;
+
+  Parcel(const QAndroidParcel& parcel);
 
   Bundle readBundle();
   void writeBundle(Bundle& bundle);
-
-  QAndroidBinder readBinder();
-  void writeBinder(QAndroidBinder& binder);
-
-  QAndroidJniObject handle();
-
-private:
-  QAndroidJniObject m_handle;
 };
 
 #endif /* PARCEL_H */
