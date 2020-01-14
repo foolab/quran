@@ -1,6 +1,6 @@
 // -*- qml -*-
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -181,7 +181,7 @@ QuranPage {
             }
 
             QuranTextSwitch {
-                text: qsTr("Flip phone to stop recitation")
+                text: qsTr("Flip phone to pause recitation")
                 checked: settings.flipToStopRecitation
                 onCheckedChanged: settings.flipToStopRecitation = checked
             }
