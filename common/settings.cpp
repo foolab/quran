@@ -31,7 +31,7 @@
 #define DEFAULT_FULL_SCREEN        false
 #define DEFAULT_ORIENTATION        Settings::OrientationPortrait
 #define DEFAULT_TRANSLATIONS_HIDDEN   false
-#define DEFAULT_FLIP_TO_STOP_RECITATION       true
+#define DEFAULT_FLIP_TO_STOP_RECITATION       false
 #define DEFAULT_NIGHT_MODE         false
 #define DEFAULT_THEME              "blue"
 
