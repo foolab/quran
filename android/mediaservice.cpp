@@ -235,11 +235,8 @@ void MediaService::binderUpdated() {
   }
 }
 
-void MediaService::sendIntent(const Intent& intent) {
-  QAndroidJniObject obj = QtAndroid::androidContext()
-    .callObjectMethod("startService", "(Landroid/content/Intent;)Landroid/content/ComponentName;",
-		      intent.handle().object());
-  if (!obj.isValid()) {
+void MediaService::sendIntent(Intent& intent) {
+  if (!intent.send()) {
     emit error();
   }
 }

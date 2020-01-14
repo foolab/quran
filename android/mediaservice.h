@@ -61,7 +61,7 @@ private slots:
   void binderUpdated();
 
 private:
-  void sendIntent(const Intent& intent);
+  void sendIntent(Intent& intent);
 
   bool send(int code);
   QVariant get(int code);
