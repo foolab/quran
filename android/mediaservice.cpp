@@ -27,6 +27,7 @@
 #include "mediaplayerconfig.h"
 #include "binder.h"
 #include "intent.h"
+#include "parcel.h"
 #include <QAndroidJniExceptionCleaner>
 #include <QMutex>
 #include <QMutexLocker>
@@ -116,7 +117,8 @@ private:
 MediaService::MediaService(QObject *parent) :
   QObject(parent),
   m_binder(new Binder),
-  m_connection(new ServiceConnection(this)) {
+  m_connection(new ServiceConnection(this)),
+  m_flipToPause(false) {
 
   m_binder->addHandler(Service::ActionStateChanged,
 		       Binder::MethodInvoker(this, QLatin1String("stateChanged")));
@@ -229,6 +231,7 @@ void MediaService::binderUpdated() {
     QAndroidParcel sendData, replyData;
     sendData.writeBinder(*m_binder);
     m_connection->send(Service::UpdateBinder, sendData, &replyData);
+    syncSettingsToService();
   }
 }
 
@@ -238,5 +241,33 @@ void MediaService::sendIntent(const Intent& intent) {
 		      intent.handle().object());
   if (!obj.isValid()) {
     emit error();
+  }
+}
+
+bool MediaService::isFlipToPauseEnabled() {
+  return m_flipToPause;
+}
+
+void MediaService::setFlipToPauseEnabled(bool enabled) {
+  if (m_flipToPause != enabled) {
+    m_flipToPause = enabled;
+
+    syncSettingsToService();
+
+    emit flipToPauseChanged();
+  }
+}
+
+void MediaService::syncSettingsToService() {
+  Bundle bundle;
+  bundle.setProperty(FLIP_TO_PAUSE, m_flipToPause);
+  Parcel parcel;
+  parcel.writeBundle(bundle);
+
+  if (!m_connection->send(Service::UpdateSettings, parcel, 0)) {
+    qWarning() << Q_FUNC_INFO << "Failed to update service settings";
+    // We do not emit an error because we could be called because the flip to pause
+    // setting is set to true and we are starting up
+    //    emit error();
   }
 }

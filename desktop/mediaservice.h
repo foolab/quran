@@ -24,12 +24,14 @@
 class MediaState;
 class MediaPlayerConfig;
 class MediaPlayer;
+class FlipSensor;
 
 class MediaService : public QObject {
   Q_OBJECT
 
   Q_PROPERTY(Quran::PlaybackState state READ state NOTIFY stateChanged);
   Q_PROPERTY(bool isAvailable READ isAvailable NOTIFY isAvailableChanged);
+  Q_PROPERTY(bool flipToPause READ isFlipToPauseEnabled WRITE setFlipToPauseEnabled NOTIFY flipToPauseChanged);
 
 public:
   MediaService(QObject *parent = 0);
@@ -39,6 +41,9 @@ public:
 
   Quran::PlaybackState state() const;
   bool isAvailable();
+
+  bool isFlipToPauseEnabled();
+  void setFlipToPauseEnabled(bool enabled);
 
 public slots:
   void stop();
@@ -50,10 +55,15 @@ signals:
   void positionChanged(int chapter, int verse);
   void error();
   void isAvailableChanged();
+  void flipToPauseChanged();
 
 private:
+  void setSensorState();
+
   MediaState *m_state;
   MediaPlayer *m_player;
+  FlipSensor *m_sensor;
+  bool m_flipToPause;
 };
 
 #endif /* MEDIA_SERVICE_H */

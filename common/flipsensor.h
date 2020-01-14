@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,20 +15,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PHONE_FLIP_CONTROL_H
-#define PHONE_FLIP_CONTROL_H
+#ifndef FLIP_SENSOR_H
+#define FLIP_SENSOR_H
 
 #include <QObject>
 
 class QOrientationSensor;
 
-class PhoneFlipControl : public QObject {
+class FlipSensor : public QObject {
   Q_OBJECT
   Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged);
 
 public:
-  PhoneFlipControl(QObject *parent = 0);
-  ~PhoneFlipControl();
+  FlipSensor(QObject *parent = 0);
+  ~FlipSensor();
 
   bool isActive() const;
   void setActive(bool active);
@@ -37,11 +37,8 @@ signals:
   void activeChanged();
   void flipped();
 
-private slots:
-  void sensorReadingChanged();
-
 private:
   QOrientationSensor *m_sensor;
 };
 
-#endif /* PHONE_FLIP_CONTROL_H */
+#endif /* FLIP_SENSOR_H */

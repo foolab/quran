@@ -35,6 +35,7 @@ MediaPlayback::MediaPlayback(QObject *parent) :
   QObject::connect(m_service, SIGNAL(positionChanged(int, int)), this, SIGNAL(positionChanged(int, int)));
   QObject::connect(m_service, SIGNAL(error()), this, SIGNAL(error()));
   QObject::connect(m_service, SIGNAL(isAvailableChanged()), this, SIGNAL(isAvailableChanged()));
+  QObject::connect(m_service, SIGNAL(flipToPauseChanged()), this, SIGNAL(flipToPauseChanged()));
 }
 
 MediaPlayback::~MediaPlayback() {
@@ -168,4 +169,12 @@ Recitation *MediaPlayback::recitation() const {
 
 void MediaPlayback::setRecitation(Recitation *recitation) {
   m_recitation = recitation;
+}
+
+bool MediaPlayback::isFlipToPauseEnabled() {
+  return m_service->isFlipToPauseEnabled();
+}
+
+void MediaPlayback::setFlipToPauseEnabled(bool enabled) {
+  m_service->setFlipToPauseEnabled(enabled);
 }

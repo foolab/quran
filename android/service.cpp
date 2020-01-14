@@ -22,12 +22,14 @@
 #include "bookmarks.h"
 #include "binder.h"
 #include "intent.h"
+#include "parcel.h"
 #include <android/log.h>
 #include <QAndroidParcel>
 #include <QAndroidJniObject>
 #include <QAndroidJniExceptionCleaner>
 #include <QtAndroid>
 #include <QDebug>
+#include "flipsensor.h"
 
 #define applicationName "QuranMediaService"
 
@@ -83,8 +85,10 @@ Service::Service(int& argc, char **argv) :
   m_state(new MediaState),
   m_player(new MediaPlayer(m_state, this)),
   m_localBinder(new Binder),
+  m_sensor(new FlipSensor(this)),
   m_chapter(-1),
-  m_verse(-1) {
+  m_verse(-1),
+  m_flipToPause(false) {
 
   qInstallMessageHandler(messageHandler);
 
@@ -94,6 +98,7 @@ Service::Service(int& argc, char **argv) :
   QObject::connect(m_player, SIGNAL(stateChanged()), this, SLOT(stateChanged()));
   QObject::connect(m_player, SIGNAL(positionChanged(int, int)), this, SLOT(positionChanged(int, int)));
   QObject::connect(m_player, SIGNAL(error()), this, SLOT(error()));
+  QObject::connect(m_sensor, SIGNAL(flipped()), this, SLOT(pause()));
 
   m_localBinder->addHandler(Service::UpdateBinder,
 			    [this](const QAndroidParcel& data) {
@@ -118,6 +123,13 @@ Service::Service(int& argc, char **argv) :
 			    Binder::UnsignedIntPropertyGetter(m_player,
 							      QLatin1String("getPosition")));
 
+  m_localBinder->addHandler(Service::UpdateSettings,
+			    [this](const QAndroidParcel& data) {
+			      return QMetaObject::invokeMethod(this, "updateSettings",
+							       Qt::BlockingQueuedConnection,
+							       Q_ARG(QAndroidParcel, data));
+			    });
+
   that = this;
 }
 
@@ -132,6 +144,9 @@ Service::~Service() {
   delete m_state;
   m_state = 0;
 
+  delete m_sensor;
+  m_sensor = 0;
+
   that = 0;
 }
 
@@ -145,6 +160,8 @@ void Service::stateChanged() {
   send(ActionStateChanged, QVariant::fromValue<Quran::PlaybackState>(state));
   if (state == Quran::Stopped) {
     stopService();
+  } else {
+    setSensorState();
   }
 }
 
@@ -226,4 +243,32 @@ void Service::stopService() {
 void Service::sendState() {
   send(ActionStateChanged, QVariant::fromValue<Quran::PlaybackState>(m_player->state()));
   send(ActionUpdatePosition, getPosition());
+}
+
+bool Service::updateSettings(const QAndroidParcel& data) {
+  Parcel parcel(data);
+  Bundle bundle = parcel.readBundle();
+
+  Q_ASSERT(bundle.isPropertySet(FLIP_TO_PAUSE));
+
+  m_flipToPause = bundle.property(FLIP_TO_PAUSE);
+
+  setSensorState();
+
+  return true;
+}
+
+void Service::setSensorState() {
+  if (m_flipToPause && m_player->state() == Quran::Playing) {
+    m_sensor->setActive(true);
+  } else {
+    m_sensor->setActive(false);
+  }
+}
+
+void Service::pause() {
+  Intent intent(QtAndroid::androidContext().object(), SERVICE);
+  intent.setAction(ACTION_PAUSE);
+  // TODO: error
+  intent.send();
 }

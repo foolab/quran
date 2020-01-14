@@ -22,10 +22,13 @@
 #include <QAndroidBinder>
 
 #define SERVICE            "org.foolab.quran.MediaService"
+
 #define ACTION_PLAY        "play"
 #define ACTION_STOP        "stop"
 #define ACTION_PAUSE       "pause"
 #define ACTION_RESUME      "resume"
+
+#define FLIP_TO_PAUSE      "flip-to-pause"
 
 #define KEY_CONFIG         "conf"
 #define KEY_RECITER        "reciter"
@@ -34,6 +37,7 @@ class Binder;
 class MediaPlayer;
 class Intent;
 class MediaState;
+class FlipSensor;
 
 class Service : public QAndroidService {
   Q_OBJECT
@@ -51,6 +55,7 @@ public:
     ActionError,
     QueryPosition,
     QueryState,
+    UpdateSettings,
   } Action;
 
   bool onStartCommand(Intent& intent, bool restore);
@@ -61,17 +66,23 @@ private slots:
   void error();
   uint getPosition();
   void sendState();
+  bool updateSettings(const QAndroidParcel& data);
+  void pause();
 
 private:
   void stopService();
   void send(int code, const QVariant& data);
 
+  void setSensorState();
+
   QAndroidBinder m_sender;
   MediaState *m_state;
   MediaPlayer *m_player;
   Binder *m_localBinder;
+  FlipSensor *m_sensor;
   int m_chapter;
   int m_verse;
+  bool m_flipToPause;
 };
 
 #endif /* SERVICE_H */

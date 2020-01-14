@@ -72,14 +72,9 @@ QuranWindow {
         }
     }
 
-    PhoneFlipControl {
-        id: flipControl
-        active: settings.flipToStopRecitation && audioPlayer.state == Quran.Playing
-        onFlipped: audioPlayer.stop()
-    }
-
     MediaPlayback {
         id: audioPlayer
+        flipToPause: settings.flipToStopRecitation
         onError: banner.showMessage(qsTr("Failed to play recitation"))
 
         onPositionChanged: {

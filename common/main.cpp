@@ -24,7 +24,6 @@
 #include "translations.h"
 #include "fsmonitor.h"
 #include "recitations.h"
-#include "phoneflipcontrol.h"
 #include "application.h"
 #include <QFontDatabase>
 #include "bookmarksmodel.h"
@@ -94,7 +93,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
   qmlRegisterType<Recitations>("Quran", 1, 0, "Recitations");
   qmlRegisterType<FSMonitor>("Quran", 1, 0, "FSMonitor");
   qmlRegisterType<SearchModel>("Quran", 1, 0, "SearchModel");
-  qmlRegisterType<PhoneFlipControl>("Quran", 1, 0, "PhoneFlipControl");
   qmlRegisterType<BookmarksModel>("Quran", 1, 0, "BookmarksModel");
   qmlRegisterType<BookmarkItem>("Quran", 1, 0, "BookmarkItem");
   qmlRegisterType<QuranViewModel>("Quran", 1, 0, "QuranViewModel");

@@ -18,15 +18,25 @@
 #include "mediaservice.h"
 #include "mediaplayer.h"
 #include "mediastate.h"
+#include "flipsensor.h"
 
 MediaService::MediaService(QObject *parent) :
   QObject(parent),
   m_state(new MediaState),
-  m_player(new MediaPlayer(m_state, this)) {
+  m_player(new MediaPlayer(m_state, this)),
+  m_sensor(new FlipSensor(this)),
+  m_flipToPause(false) {
 
-  QObject::connect(m_player, SIGNAL(stateChanged()), this, SIGNAL(stateChanged()));
-  QObject::connect(m_player, SIGNAL(positionChanged(int, int)), this, SIGNAL(positionChanged(int, int)));
+  QObject::connect(m_player, &MediaPlayer::stateChanged,
+		   this, [this]() {
+			   setSensorState();
+			   emit stateChanged();
+			 });
+
+  QObject::connect(m_player, SIGNAL(positionChanged(int, int)),
+		   this, SIGNAL(positionChanged(int, int)));
   QObject::connect(m_player, SIGNAL(error()), this, SIGNAL(error()));
+  QObject::connect(m_sensor, SIGNAL(flipped()), this, SLOT(pause()));
 }
 
 MediaService::~MediaService() {
@@ -35,6 +45,9 @@ MediaService::~MediaService() {
 
   delete m_state;
   m_state = 0;
+
+  delete m_sensor;
+  m_sensor = 0;
 }
 
 void MediaService::play(const MediaPlayerConfig& config) {
@@ -59,4 +72,26 @@ void MediaService::pause() {
 
 void MediaService::resume() {
   return m_player->resume();
+}
+
+bool MediaService::isFlipToPauseEnabled() {
+  return m_flipToPause;
+}
+
+void MediaService::setFlipToPauseEnabled(bool enabled) {
+  if (m_flipToPause != enabled) {
+    m_flipToPause = enabled;
+
+    setSensorState();
+
+    emit flipToPauseChanged();
+  }
+}
+
+void MediaService::setSensorState() {
+  if (m_flipToPause && m_player->state() == Quran::Playing) {
+    m_sensor->setActive(true);
+  } else {
+    m_sensor->setActive(false);
+  }
 }

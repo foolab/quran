@@ -31,6 +31,7 @@ class MediaService : public QObject {
 
   Q_PROPERTY(Quran::PlaybackState state READ state NOTIFY stateChanged);
   Q_PROPERTY(bool isAvailable READ isAvailable NOTIFY isAvailableChanged);
+  Q_PROPERTY(bool flipToPause READ isFlipToPauseEnabled WRITE setFlipToPauseEnabled NOTIFY flipToPauseChanged);
 
 public:
   MediaService(QObject *parent = 0);
@@ -39,8 +40,10 @@ public:
   void play(const MediaPlayerConfig& config);
 
   Quran::PlaybackState state();
-
   bool isAvailable();
+
+  bool isFlipToPauseEnabled();
+  void setFlipToPauseEnabled(bool enabled);
 
 public slots:
   void stop();
@@ -52,6 +55,7 @@ signals:
   void positionChanged(int chapter, int verse);
   void error();
   void isAvailableChanged();
+  void flipToPauseChanged();
 
 private slots:
   void binderUpdated();
@@ -62,8 +66,11 @@ private:
   bool send(int code);
   QVariant get(int code);
 
+  void syncSettingsToService();
+
   Binder *m_binder;
   ServiceConnection *m_connection;
+  bool m_flipToPause;
 };
 
 #endif /* MEDIA_SERVICE_H */

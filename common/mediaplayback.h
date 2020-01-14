@@ -29,6 +29,7 @@ class MediaPlayback : public QObject {
 
   Q_PROPERTY(Quran::PlaybackState state READ state NOTIFY stateChanged);
   Q_PROPERTY(bool isAvailable READ isAvailable NOTIFY isAvailableChanged);
+  Q_PROPERTY(bool flipToPause READ isFlipToPauseEnabled WRITE setFlipToPauseEnabled NOTIFY flipToPauseChanged);
 
 public:
   MediaPlayback(QObject *parent = 0);
@@ -39,6 +40,9 @@ public:
 
   Recitation *recitation() const;
   void setRecitation(Recitation *recitation);
+
+  bool isFlipToPauseEnabled();
+  void setFlipToPauseEnabled(bool enabled);
 
 public slots:
   void playPage(int page);
@@ -56,6 +60,7 @@ signals:
   void positionChanged(int chapter, int verse);
   void error();
   void isAvailableChanged();
+  void flipToPauseChanged();
 
 private:
   MediaService *m_service;

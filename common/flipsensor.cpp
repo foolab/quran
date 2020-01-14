@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2017 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,37 +15,36 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "phoneflipcontrol.h"
+#include "flipsensor.h"
 #include <QOrientationSensor>
 #include <QOrientationReading>
 #include "settings.h"
 #include <QDebug>
 
-PhoneFlipControl::PhoneFlipControl(QObject *parent)
+FlipSensor::FlipSensor(QObject *parent)
   : QObject(parent),
     m_sensor(new QOrientationSensor(this)) {
 
-  QObject::connect(m_sensor, SIGNAL(readingChanged()), this, SLOT(sensorReadingChanged()));
+  QObject::connect(m_sensor, &QOrientationSensor::readingChanged,
+		   [this]() {
+		     if (m_sensor->reading()->orientation()
+			 == QOrientationReading::FaceDown) {
+		       emit flipped();
+		     }
+		   });
 }
 
-PhoneFlipControl::~PhoneFlipControl() {
+FlipSensor::~FlipSensor() {
   m_sensor->stop();
 }
 
-bool PhoneFlipControl::isActive() const {
+bool FlipSensor::isActive() const {
   return m_sensor->isActive();
 }
 
-void PhoneFlipControl::setActive(bool active) {
-  if (active == isActive()) {
-    return;
-  }
-
-  m_sensor->setActive(active);
-}
-
-void PhoneFlipControl::sensorReadingChanged() {
-  if (m_sensor->reading()->orientation() == QOrientationReading::FaceDown) {
-    emit flipped();
+void FlipSensor::setActive(bool active) {
+  if (active != isActive()) {
+    m_sensor->setActive(active);
+    emit activeChanged();
   }
 }
