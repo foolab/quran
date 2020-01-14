@@ -33,7 +33,6 @@ MediaPlayer::MediaPlayer(MediaState *handler, QObject *parent) :
   m_policy(0),
   m_audio(0) {
 
-  QObject::connect(this, SIGNAL(error()), this, SLOT(pause()));
 }
 
 MediaPlayer::~MediaPlayer() {
@@ -123,7 +122,7 @@ void MediaPlayer::play(const MediaPlayerConfig& config) {
 
   m_policy = new AudioPolicy(this);
   QObject::connect(m_policy, SIGNAL(acquired()), this, SLOT(policyAcquired()));
-  QObject::connect(m_policy, SIGNAL(lost()), this, SLOT(pause()));
+  QObject::connect(m_policy, SIGNAL(lost()), this, SIGNAL(policyLost()));
   QObject::connect(m_policy, SIGNAL(denied()), this, SLOT(policyDenied()));
 
   if (!m_policy->acquire()) {

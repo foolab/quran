@@ -35,7 +35,11 @@ MediaService::MediaService(QObject *parent) :
 
   QObject::connect(m_player, SIGNAL(positionChanged(int, int)),
 		   this, SIGNAL(positionChanged(int, int)));
-  QObject::connect(m_player, SIGNAL(error()), this, SIGNAL(error()));
+  QObject::connect(m_player, &MediaPlayer::error, [this]() {
+						    pause();
+						    emit error();
+						  });
+  QObject::connect(m_player, SIGNAL(policyLost()), this, SLOT(pause()));
   QObject::connect(m_sensor, SIGNAL(flipped()), this, SLOT(pause()));
 }
 

@@ -50,6 +50,7 @@ signals:
   void stateChanged();
   void positionChanged(int chapter, int verse);
   void error();
+  void policyLost();
 
 private slots:
   void policyAcquired();

@@ -97,7 +97,11 @@ Service::Service(int& argc, char **argv) :
 
   QObject::connect(m_player, SIGNAL(stateChanged()), this, SLOT(stateChanged()));
   QObject::connect(m_player, SIGNAL(positionChanged(int, int)), this, SLOT(positionChanged(int, int)));
-  QObject::connect(m_player, SIGNAL(error()), this, SLOT(error()));
+  QObject::connect(m_player, &MediaPlayer::error, [this]() {
+						    pause();
+						    error();
+						  });
+  QObject::connect(m_player, SIGNAL(policyLost()), this, SLOT(pause()));
   QObject::connect(m_sensor, SIGNAL(flipped()), this, SLOT(pause()));
 
   m_localBinder->addHandler(Service::UpdateBinder,
