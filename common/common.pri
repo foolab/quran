@@ -25,6 +25,9 @@ DEFINES += __STDC_CONSTANT_MACROS VERSION=\\\"0.8.0\\\"
 
 GENERATED = ../data/text-meta.h
 
+INTERFACES = interfaces/application.h \
+             interfaces/networkmanager.h
+
 SOURCES += bookmarks.cpp dataprovider.cpp numberformatter.cpp settings.cpp quranviewmodel.cpp \
            aboutdata.cpp textsupplier.cpp \
            translations.cpp translation.cpp downloader.cpp textprovider.cpp \
@@ -49,9 +52,6 @@ HEADERS += bookmarks.h dataprovider.h numberformatter.h settings.h quranviewmode
            mediacodec.h recitationdataprovider.h mediaplayerconfig.h mediaplayback.h \
            quran.h mediastate.h \
            $$GENERATED $$INTERFACES
-
-INTERFACES = interfaces/application.h \
-             interfaces/networkmanager.h
 
 sles {
   SOURCES += sles.cpp
