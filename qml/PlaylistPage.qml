@@ -136,7 +136,7 @@ QuranPage {
                     model: fromChapterInfo.length
                     label: qsTr("Verse")
                     textRole: function(model) { return formatter.formatNumber(model.index + 1) }
-                    currentIndex: currentPageInfo.firstVerse
+                    currentIndex: 0
                     ChapterInfo {
                         id: fromChapterInfo
                         chapter: fromChapterSelector.currentIndex
