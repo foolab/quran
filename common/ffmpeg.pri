@@ -1,13 +1,15 @@
-DEPENDPATH += ../ffmpeg/ ffmpeg/
-INCLUDEPATH += ../ffmpeg/ ffmpeg/
+DEPENDPATH += ../ffmpeg/ ffmpeg/$${QT_ARCH}
+INCLUDEPATH += ../ffmpeg/ ffmpeg/$${QT_ARCH}
 
-PRE_TARGETDEPS += ffmpeg_build
-QMAKE_EXTRA_TARGETS += ffmpeg_build
+PRE_TARGETDEPS += ffmpeg_$${QT_ARCH}_build
+QMAKE_EXTRA_TARGETS += ffmpeg_$${QT_ARCH}_build
 
 FFMPEG_EXTRA_COMPILE_FLAGS +=
 
-ffmpeg_build.depends = ../ffmpeg/configure
-ffmpeg_build.commands = mkdir -p ffmpeg && cd ffmpeg && ../../ffmpeg/configure \
+ffmpeg_$${QT_ARCH}_build.depends = ../ffmpeg/configure
+ffmpeg_$${QT_ARCH}_build.commands = mkdir -p ffmpeg/$${QT_ARCH} && \
+                        cd ffmpeg/$${QT_ARCH} && \
+			../../../ffmpeg/configure \
                --cc=\"$${QMAKE_CC} $${QMAKE_CFLAGS}\" \
                --ld=\"$${QMAKE_LINK} $${QMAKE_LFLAGS}\" \
                --nm=\"$${QMAKE_NM}\" \
@@ -40,18 +42,18 @@ ffmpeg_build.commands = mkdir -p ffmpeg && cd ffmpeg && ../../ffmpeg/configure \
 	       --disable-armv6 \
 	       --disable-armv6t2 \
 	       $$FFMPEG_EXTRA_COMPILE_FLAGS \
-	       && make && cd .. && touch ffmpeg_build
+	       && make && cd ../../ && touch ffmpeg_$${QT_ARCH}_build
 
 LIBS += \
     -Wl,--start-group \
-    ffmpeg/libavcodec/libavcodec.a \
-    ffmpeg/libavformat/libavformat.a \
-    ffmpeg/libavutil/libavutil.a \
-    ffmpeg/libavfilter/libavfilter.a \
-    ffmpeg/libswresample/libswresample.a \
+    ffmpeg/$${QT_ARCH}/libavcodec/libavcodec.a \
+    ffmpeg/$${QT_ARCH}/libavformat/libavformat.a \
+    ffmpeg/$${QT_ARCH}/libavutil/libavutil.a \
+    ffmpeg/$${QT_ARCH}/libavfilter/libavfilter.a \
+    ffmpeg/$${QT_ARCH}/libswresample/libswresample.a \
     -Wl,--end-group
 
-ffmpegclean.commands = rm -rf ffmpeg ffmpeg_build
+ffmpegclean.commands = rm -rf ffmpeg/$${QT_ARCH} ffmpeg_$${QT_ARCH}_build
 clean.depends += ffmpegclean
 distclean.depends += ffmpegclean
 
