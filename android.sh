@@ -5,7 +5,6 @@ set -e
 QT_VERSION=5.13.2
 ANDROID=armv7
 ANDROID_API=21
-ANDROID_TARGET=armv7a-linux-androideabi${ANDROID_API}
 ANT_ARG=debug
 
 show_help() {
@@ -42,16 +41,6 @@ QT_DIR=/home/mohammed/Qt/$QT_VERSION/
 export ANDROID_NDK_ROOT=/home/mohammed/android/ndk-bundle/
 export ANDROID_SDK_ROOT=/home/mohammed/android/
 
-export TOOLCHAIN=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin/
-
-export ANDROID_CFLAGS="-march=armv7-a -mthumb"
-export ANDROID_LDFLAGS="-march=armv7-a -mthumb -Xlinker --fix-cortex-a8"
-
-export CC=${TOOLCHAIN}/armv7a-linux-androideabi21-clang
-export LD=${TOOLCHAIN}/armv7a-linux-androideabi21-clang
-export STRIP=${TOOLCHAIN}/arm-linux-androideabi-strip
-export NM=${TOOLCHAIN}/arm-linux-androideabi-nm
-export PATH=${TOOLCHAIN}:${PATH}
 #rm -rf apk
 
 pushd android
