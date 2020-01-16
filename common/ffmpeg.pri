@@ -12,7 +12,6 @@ ffmpeg_build.commands = mkdir -p ffmpeg && cd ffmpeg && ../../ffmpeg/configure \
                --ld=\"$${QMAKE_LINK} $${QMAKE_LFLAGS}\" \
                --nm=\"$${QMAKE_NM}\" \
                --strip=\"$${QMAKE_STRIP}\" \
-               --ar=\"$${QMAKE_AR}\" \
 	       --ranlib=\"$${QMAKE_RANLIB}\" \
                --extra-cflags=\"$$EXTRA_CFLAGS\" \
                --extra-ldflags=\"$$EXTRA_LDFLAGS\" \
