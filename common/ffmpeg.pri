@@ -8,6 +8,14 @@ FFMPEG_EXTRA_COMPILE_FLAGS +=
 
 ffmpeg_build.depends = ../ffmpeg/configure
 ffmpeg_build.commands = mkdir -p ffmpeg && cd ffmpeg && ../../ffmpeg/configure \
+               --cc=\"$${QMAKE_CC} $${QMAKE_CFLAGS}\" \
+               --ld=\"$${QMAKE_LINK} $${QMAKE_LFLAGS}\" \
+               --nm=\"$${QMAKE_NM}\" \
+               --strip=\"$${QMAKE_STRIP}\" \
+               --ar=\"$${QMAKE_AR}\" \
+	       --ranlib=\"$${QMAKE_RANLIB}\" \
+               --extra-cflags=\"$$EXTRA_CFLAGS\" \
+               --extra-ldflags=\"$$EXTRA_LDFLAGS\" \
 	       --disable-programs \
 	       --disable-doc \
 	       --disable-htmlpages \

@@ -9,6 +9,8 @@ SQLITE_EXTRA_COMPILE_FLAGS +=
 sqlite/.libs/libsqlite3.a.depends = $$SQLITE_SRC_PATH/configure
 sqlite/.libs/libsqlite3.a.commands = mkdir -p sqlite/ && cd sqlite && \
                       CC=$${QMAKE_CC} \
+                      STRIP=\"$${QMAKE_STRIP}\" \
+                      RANLIB=\"$${QMAKE_RANLIB}\" \
                       CFLAGS=\"$${QMAKE_CFLAGS} -DSQLITE_ENABLE_FTS4=1 -fPIC -B$${QMAKE_LINK}\" \
                       LDFLAGS=\"$${QMAKE_LFLAGS}\" \
 		      ../$$SQLITE_SRC_PATH/configure \
