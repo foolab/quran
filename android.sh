@@ -3,7 +3,7 @@
 set -e
 
 QT_VERSION=5.13.2
-ANDROID=armv7
+ANDROID=arm64_v8a
 ANDROID_API=21
 ANT_ARG=debug
 
