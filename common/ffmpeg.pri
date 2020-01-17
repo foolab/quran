@@ -41,6 +41,7 @@ ffmpeg_$${QT_ARCH}_build.commands = mkdir -p ffmpeg/$${QT_ARCH} && \
 	       --disable-armv5te \
 	       --disable-armv6 \
 	       --disable-armv6t2 \
+               --enable-pic \
 	       $$FFMPEG_EXTRA_COMPILE_FLAGS \
 	       && make && cd ../../ && touch ffmpeg_$${QT_ARCH}_build
 
