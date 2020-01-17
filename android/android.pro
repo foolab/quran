@@ -24,6 +24,22 @@ equals(ANDROID_TARGET_ARCH, arm64-v8a) {
   FFMPEG_EXTRA_COMPILE_FLAGS += --arch=arm64
 }
 
+equals(ANDROID_TARGET_ARCH, x86) {
+  SQLITE_EXTRA_COMPILE_FLAGS += --host=i686-linux-android
+  FFMPEG_EXTRA_COMPILE_FLAGS += --arch=x86
+}
+
+equals(ANDROID_TARGET_ARCH, x86_64) {
+  EXTRA_CFLAGS=""
+  EXTRA_LDFLAGS=""
+  SQLITE_EXTRA_COMPILE_FLAGS += --host=x86_64-linux-android
+
+  # We have to disable asm because we get this linking error:
+  # ld: error: ffmpeg/x86_64/libavcodec/libavcodec.a(fft.o): requires dynamic R_X86_64_PC32 reloc against 'ff_cos_32' which may overflow at runtime; recompile with -fPIC
+  # clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+  FFMPEG_EXTRA_COMPILE_FLAGS += --arch=x86_64 --disable-asm
+}
+
 # Has to be after android keyword in config
 include(../common/common.pri)
 
