@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2019 Mohammed Sameer <msameer@foolab.org>.
+ * Copyright (c) 2011-2020 Mohammed Sameer <msameer@foolab.org>.
  *
  * This package is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,6 +64,18 @@ void Pulse::stop() {
   pa_threaded_mainloop_stop(m_loop);
 
   return AudioOutput::stop();
+}
+
+void Pulse::pause() {
+  AudioOutput::pause();
+  pa_operation *o = pa_stream_cork(m_stream, 1, NULL, NULL);
+  pa_operation_unref(o);
+}
+
+void Pulse::resume() {
+  pa_operation *o = pa_stream_cork(m_stream, 0, NULL, NULL);
+  pa_operation_unref(o);
+  AudioOutput::resume();
 }
 
 bool Pulse::connect() {
