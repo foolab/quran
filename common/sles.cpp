@@ -283,6 +283,28 @@ void Sles::stop() {
   return AudioOutput::stop();
 }
 
+void Sles::pause() {
+  AudioOutput::pause();
+
+  SLresult result = (*m_sink->m_player)->SetPlayState(m_sink->m_player,
+						      SL_PLAYSTATE_PAUSED);
+  if (result != SL_RESULT_SUCCESS) {
+    qWarning() << "Failed to set OpenSL ES player state to paused" << result;
+    emit error();
+  }
+}
+
+void Sles::resume() {
+  SLresult result = (*m_sink->m_player)->SetPlayState(m_sink->m_player,
+						      SL_PLAYSTATE_PLAYING);
+  if (result != SL_RESULT_SUCCESS) {
+    qWarning() << "Failed to set OpenSL ES player state to resume playing" << result;
+    emit error();
+  }
+
+  AudioOutput::resume();
+}
+
 bool Sles::connect() {
   if (m_engine) {
     return true;
