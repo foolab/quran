@@ -38,8 +38,6 @@ public:
   void pause();
   void resume();
 
-  bool isRunning();
-
 protected:
   bool connect();
   bool writeData(QByteArray& data);
