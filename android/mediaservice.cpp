@@ -31,6 +31,9 @@
 #include <QAndroidJniExceptionCleaner>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QTimer>
+
+#define SERVICE_BIND_TIMEOUT_MS 250
 
 class ServiceConnection : public QAndroidServiceConnection {
 public:
@@ -225,7 +228,12 @@ void MediaService::binderUpdated() {
   emit isAvailableChanged();
 
   if (!m_connection->isValid()) {
-    // TODO: reconnect
+    // reconnect
+    QTimer::singleShot(SERVICE_BIND_TIMEOUT_MS,
+		       [this] () {
+			 m_connection->unbind();
+			 m_connection->bind();
+		       });
     emit error();
   } else {
     QAndroidParcel sendData, replyData;
