@@ -212,7 +212,7 @@ bool Service::onStartCommand(Intent& intent, bool restore) {
     m_state->clear();
   }
 
-  if (action == ACTION_PLAY || (action == ACTION_PAUSE && restore)) {
+  if (action == ACTION_PLAY) {
     QByteArray d(intent.extraBytes(KEY_CONFIG));
     MediaPlayerConfig config = MediaPlayerConfig::fromByteArray(d);
     return QMetaObject::invokeMethod(m_player, "play",
