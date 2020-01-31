@@ -200,15 +200,10 @@ bool Service::onStartCommand(Intent& intent, bool restore) {
     } else {
       // Let's restore:
       QByteArray data = config.toByteArray();
-
       intent.putExtra(KEY_CONFIG, data);
       intent.putExtraString(KEY_RECITER, config.reciter());
-
-      // TODO: save the state and restore it too.
+      intent.putExtraInt(KEY_POSITION, m_state->position());
       intent.setAction(ACTION_PAUSE);
-      // TODO: position?
-
-      qWarning() << "Restored config";
     }
   }
 

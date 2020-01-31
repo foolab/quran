@@ -32,6 +32,7 @@
 
 #define KEY_CONFIG         "conf"
 #define KEY_RECITER        "reciter"
+#define KEY_POSITION       "position"
 
 class Binder;
 class MediaPlayer;
