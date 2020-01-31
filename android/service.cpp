@@ -18,7 +18,7 @@
 #include "service.h"
 #include "mediaplayer.h"
 #include "mediaplayerconfig.h"
-#include "mediastate.h"
+#include "media.h"
 #include "bookmarks.h"
 #include "binder.h"
 #include "intent.h"
@@ -71,19 +71,17 @@ void messageHandler(QtMsgType type, const QMessageLogContext& context, const QSt
 static Service *that = 0;
 
 extern "C" jboolean
-Java_org_foolab_quran_MediaService_onStartCommand(JNIEnv *env, jobject objectOrClass,
-						  jobject i, jboolean restore) {
+Java_org_foolab_quran_MediaService_onStartCommand(JNIEnv *env, jobject objectOrClass, jobject i) {
   Q_UNUSED(env);
   Q_UNUSED(objectOrClass);
 
   Intent intent = Intent(QAndroidJniObject(i));
-  return that->onStartCommand(intent, restore);
+  return that->onStartCommand(intent);
 }
 
 Service::Service(int& argc, char **argv) :
   QAndroidService(argc, argv),
-  m_state(new MediaState),
-  m_player(new MediaPlayer(m_state, this)),
+  m_player(new MediaPlayer(this)),
   m_localBinder(new Binder),
   m_sensor(new FlipSensor(this)),
   m_chapter(-1),
@@ -145,9 +143,6 @@ Service::~Service() {
   delete m_player;
   m_player = 0;
 
-  delete m_state;
-  m_state = 0;
-
   delete m_sensor;
   m_sensor = 0;
 
@@ -190,33 +185,8 @@ void Service::send(int code, const QVariant& data) {
   m_sender.transact(code, sendData, &replyData);
 }
 
-bool Service::onStartCommand(Intent& intent, bool restore) {
-  if (restore) {
-    MediaPlayerConfig config = m_state->config();
-    if (!config.isValid()) {
-      qWarning() << "Failed to restore previous intent";
-      // Assume action is stop
-      intent.setAction(ACTION_STOP);
-    } else {
-      // Let's restore:
-      QByteArray data = config.toByteArray();
-
-      intent.putExtra(KEY_CONFIG, data);
-      intent.putExtraString(KEY_RECITER, config.reciter());
-
-      // TODO: save the state and restore it too.
-      intent.setAction(ACTION_PAUSE);
-      // TODO: position?
-
-      qWarning() << "Restored config";
-    }
-  }
-
+bool Service::onStartCommand(Intent& intent) {
   QString action(intent.action());
-  if (!restore && action == ACTION_STOP) {
-    m_state->clear();
-  }
-
   if (action == ACTION_PLAY) {
     QByteArray d(intent.extraBytes(KEY_CONFIG));
     MediaPlayerConfig config = MediaPlayerConfig::fromByteArray(d);

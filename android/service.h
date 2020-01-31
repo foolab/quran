@@ -36,7 +36,6 @@
 class Binder;
 class MediaPlayer;
 class Intent;
-class MediaState;
 class FlipSensor;
 
 class Service : public QAndroidService {
@@ -58,7 +57,7 @@ public:
     UpdateSettings,
   } Action;
 
-  bool onStartCommand(Intent& intent, bool restore);
+  bool onStartCommand(Intent& intent);
 
 private slots:
   void stateChanged();
@@ -76,7 +75,6 @@ private:
   void setSensorState();
 
   QAndroidBinder m_sender;
-  MediaState *m_state;
   MediaPlayer *m_player;
   Binder *m_localBinder;
   FlipSensor *m_sensor;

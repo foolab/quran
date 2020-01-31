@@ -21,7 +21,6 @@
 #include <QObject>
 #include "quran.h"
 
-class MediaState;
 class MediaPlayerConfig;
 class MediaPlayer;
 class FlipSensor;
@@ -60,7 +59,6 @@ signals:
 private:
   void setSensorState();
 
-  MediaState *m_state;
   MediaPlayer *m_player;
   FlipSensor *m_sensor;
   bool m_flipToPause;

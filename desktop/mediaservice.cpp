@@ -17,13 +17,11 @@
 
 #include "mediaservice.h"
 #include "mediaplayer.h"
-#include "mediastate.h"
 #include "flipsensor.h"
 
 MediaService::MediaService(QObject *parent) :
   QObject(parent),
-  m_state(new MediaState),
-  m_player(new MediaPlayer(m_state, this)),
+  m_player(new MediaPlayer(this)),
   m_sensor(new FlipSensor(this)),
   m_flipToPause(false) {
 
@@ -46,9 +44,6 @@ MediaService::MediaService(QObject *parent) :
 MediaService::~MediaService() {
   delete m_player;
   m_player = 0;
-
-  delete m_state;
-  m_state = 0;
 
   delete m_sensor;
   m_sensor = 0;

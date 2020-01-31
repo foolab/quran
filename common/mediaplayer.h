@@ -21,7 +21,6 @@
 #include <QObject>
 #include "quran.h"
 
-class MediaState;
 class MediaPlaylist;
 class Media;
 class MediaDecoder;
@@ -35,7 +34,7 @@ class MediaPlayer : public QObject {
   Q_PROPERTY(Quran::PlaybackState state READ state NOTIFY stateChanged);
 
 public:
-  MediaPlayer(MediaState *state, QObject *parent = 0);
+  MediaPlayer(QObject *parent = 0);
   ~MediaPlayer();
 
   Q_INVOKABLE Quran::PlaybackState state();
@@ -59,7 +58,6 @@ private slots:
   void audioPositionChanged(int index);
 
 private:
-  MediaState *m_state;
   MediaPlaylist *m_list;
   MediaDecoder* m_decoder;
   AudioPolicy *m_policy;

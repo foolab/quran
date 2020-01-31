@@ -67,14 +67,11 @@ public class MediaService extends QtService {
 
 	mStartId = startId;
 
-	boolean restoreIntent = false;
-
 	if (intent == null) {
-	    intent = new Intent();
-	    restoreIntent = true;
+	    // TODO: handle
 	}
 
-	if (!onStartCommand(intent, restoreIntent)) {
+	if (!onStartCommand(intent)) {
 	    _stopService();
 	    return START_STICKY;
 	}
@@ -112,5 +109,5 @@ public class MediaService extends QtService {
 	return START_STICKY;
     }
 
-    private native boolean onStartCommand(Intent intent, boolean restore);
+    private native boolean onStartCommand(Intent intent);
 }
