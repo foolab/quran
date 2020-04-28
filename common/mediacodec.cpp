@@ -324,10 +324,15 @@ AVFormatContext *MediaCodec::context(const QByteArray& data) {
 }
 
 void MediaCodec::cleanup() {
-  AVIOContext *io = m_ctx->pb;
-  QBuffer *b = reinterpret_cast<QBuffer *>(io->opaque);
+  AVIOContext *io = 0;
+  QBuffer *b = 0;
 
   if (m_ctx) {
+    io = m_ctx->pb;
+    if (io) {
+      b = reinterpret_cast<QBuffer *>(io->opaque);
+    }
+
     avformat_close_input(&m_ctx);
     m_ctx = 0;
   }
