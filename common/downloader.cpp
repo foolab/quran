@@ -127,9 +127,24 @@ qint64 Download::progress() const {
 }
 
 void Download::downloadFinished() {
-  if (m_reply->error() == QNetworkReply::NoError || m_trials > MAX_DOWNLOAD_RETRY) {
+  if (m_trials > MAX_DOWNLOAD_RETRY) {
     emit finished();
-  } else {
-    QTimer::singleShot(m_trials * DOWNLOAD_RETRY_WAIT, this, &Download::download);
+    return;
   }
+
+  if (m_reply->error() != QNetworkReply::NoError) {
+    emit finished();
+    return;
+  }
+
+  QVariant v = m_reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+
+  if (m_reply->error() == QNetworkReply::NoError && !v.isValid()) {
+    emit finished();
+    return;
+  }
+
+  m_url = v.toUrl();
+
+  QTimer::singleShot(m_trials * DOWNLOAD_RETRY_WAIT, this, &Download::download);
 }

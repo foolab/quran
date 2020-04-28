@@ -71,7 +71,7 @@ private:
   Downloader *m_downloader;
   qint64 m_progress;
   QNetworkReply *m_reply;
-  const QUrl m_url;
+  QUrl m_url;
   int m_trials;
 };
 
