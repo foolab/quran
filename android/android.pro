@@ -43,6 +43,9 @@ equals(ANDROID_TARGET_ARCH, x86_64) {
 # Has to be after android keyword in config
 include(../common/common.pri)
 
+# OpenSSL
+include(openssl/openssl.pri)
+
 DEFINES += DATA_DIR=\\\"assets:/\\\"
 DEFINES += ANDROID=1
 
