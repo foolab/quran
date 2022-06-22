@@ -112,8 +112,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[]) {
 					  "Use Translations to obtain a Translation");
   qmlRegisterUncreatableType<Recitation>("Quran", 1, 0, "Recitation",
 					  "Use Recitations to obtain a Recitation");
-  qmlRegisterUncreatableMetaObject(Quran::staticMetaObject, "Quran", 1, 0, "Quran",
-				   "Used for enums only");
+  qmlRegisterUncreatableType<Quran>("Quran", 1, 0, "Quran",
+				    "Used for enums only");
 
   if (!app.load(QUrl("qrc:/qml/main.qml"))) {
     return 1;

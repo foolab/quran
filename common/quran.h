@@ -22,19 +22,18 @@
 
 class QDataStream;
 
-namespace Quran {
-  Q_NAMESPACE;
+class Quran : public QObject {
+  Q_OBJECT
+  Q_ENUMS(PlaybackState);
 
-  enum PlaybackState {
+public:
+  typedef enum {
       Stopped,
       Paused,
       Playing,
-  };
-
-  Q_ENUM_NS(PlaybackState);
+  } PlaybackState;
 };
 Q_DECLARE_METATYPE(Quran::PlaybackState);
-
 
 QDataStream& operator<<(QDataStream& out, const Quran::PlaybackState& s);
 QDataStream& operator>>(QDataStream& in, Quran::PlaybackState& s);
