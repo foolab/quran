@@ -19,8 +19,8 @@
 #define DOWNLOADER_H
 
 #include <QNetworkAccessManager>
+#include <QUrl>
 
-class QUrl;
 class Download;
 class NetworkManager;
 
