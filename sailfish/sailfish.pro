@@ -15,7 +15,7 @@ DEFINES += DATA_DIR=\\\"/usr/share/harbour-quran/\\\"
 DEFINES += SAILFISH=1
 
 RESOURCES += sailfish.qrc ../icons/icons.qrc ../qml/qml.qrc
-SOURCES += fsmonitor.cpp audiopolicy.cpp application.cpp
-HEADERS += fsmonitor.h audiopolicy.h
+SOURCES += fsmonitor.cpp audiopolicy.cpp application.cpp mediaservice.cpp
+HEADERS += fsmonitor.h audiopolicy.h mediaservice.h
 
 LIBS += -Wl,-rpath=/usr/share/harbour-quran/lib/
