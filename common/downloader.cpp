@@ -91,7 +91,7 @@ void Download::setReply(QNetworkReply *reply) {
 
   if (m_reply) {
     QObject::connect(m_reply, &QNetworkReply::sslErrors, m_reply,
-		     qOverload<>(&QNetworkReply::ignoreSslErrors));
+		     [this]() {m_reply->ignoreSslErrors(); });
 
     QObject::connect(m_reply, &QNetworkReply::finished, this, &Download::downloadFinished);
 
