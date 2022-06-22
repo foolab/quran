@@ -33,15 +33,8 @@ Requires:  mapplauncherd-booster-silica-qt5
 %setup -q
 
 %build
-pushd data
-%qmake5
-make
-popd
-
 pushd sailfish
 
-%qmake5
-make gen
 %qmake5
 make %{?jobs:-j%jobs}
 
