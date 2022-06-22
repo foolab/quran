@@ -36,7 +36,8 @@ Requires:  mapplauncherd-booster-silica-qt5
 pushd sailfish
 
 %qmake5
-make %{?jobs:-j%jobs}
+make
+#%{?jobs:-j%jobs}
 
 %install
 rm -rf %{buildroot}
