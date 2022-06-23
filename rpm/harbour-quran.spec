@@ -26,9 +26,6 @@ Requires:  mapplauncherd-booster-silica-qt5
  and allows adding certain verses to a list of
  favorites to easily navigate to them later.
 
-%define __provides_exclude_from ^%{_datadir}/harbour-quran/lib/.*$
-%define __requires_exclude ^libaudioresource-qt.so.2|libdbus-glib-1.so.2|libdbus-qeventloop-qt5.so.1|libresource.so.0|libresourceqt5.so.1$
-
 %prep
 %setup -q
 
@@ -55,7 +52,6 @@ cp -a data/fonts.conf %{buildroot}/%{_datadir}/harbour-quran/fonts/
 
 mkdir -p %{buildroot}/%{_datadir}/icons/hicolor/86x86/apps/
 mkdir -p %{buildroot}/%{_datadir}/applications/
-mkdir -p %{buildroot}/%{_datadir}/harbour-quran/lib/
 
 cp %SOURCE1 %{buildroot}/%{_datadir}/icons/hicolor/86x86/apps/
 cp %SOURCE2 %{buildroot}/%{_datadir}/applications/
@@ -64,17 +60,11 @@ desktop-file-install --delete-original                   \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
 
-cp /usr/lib/libdbus-glib-1.so.2.2.2 %{buildroot}/%{_datadir}/harbour-quran/lib/libdbus-glib-1.so.2
-cp /usr/lib/libresourceqt5.so.1.0.0 %{buildroot}/%{_datadir}/harbour-quran/lib/libresourceqt5.so.1
-cp /usr/lib/libresource.so.0.0.18 %{buildroot}/%{_datadir}/harbour-quran/lib/libresource.so.0
-cp /usr/lib/libdbus-qeventloop-qt5.so.1.0.0 %{buildroot}/%{_datadir}/harbour-quran/lib/libdbus-qeventloop-qt5.so.1
-
 %files
 %defattr(-,root,root,-)
 %{_bindir}/harbour-quran
 %{_datadir}/applications/harbour-quran.desktop
 %{_datadir}/icons/hicolor/86x86/apps/harbour-quran.png
-%{_datadir}/harbour-quran/lib/*.so.*
 %{_datadir}/harbour-quran/data/search.db
 %{_datadir}/harbour-quran/fonts/amiri-quran.ttf
 %{_datadir}/harbour-quran/fonts/amiri-regular.ttf
