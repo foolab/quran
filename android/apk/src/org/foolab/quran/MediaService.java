@@ -31,6 +31,13 @@ public class MediaService extends QtService {
     private int mStartId;
     private String mReciter;
 
+    private static final int NOTIFICATION_ID = 13;
+    private static final String ACTION_PLAY = "play";
+    private static final String ACTION_STOP = "stop";
+    private static final String ACTION_PAUSE = "pause";
+    private static final String ACTION_RESUME = "resume";
+    private static final String RECITER = "reciter";
+
     public void _stopService() {
 	Log.d(TAG, "stop service");
 	stopForeground(true);
@@ -77,10 +84,18 @@ public class MediaService extends QtService {
 	}
 
 	String action = intent.getAction();
-	if (action.equals("play")) {
-	    mReciter = intent.getStringExtra("reciter");
+	if (action.equals(MediaService.ACTION_PLAY)) {
+	    mReciter = intent.getStringExtra(MediaService.RECITER);
 	}
 
+	android.app.Notification n = updateNotification(action);
+
+	startForeground(MediaService.NOTIFICATION_ID, n);
+
+	return START_STICKY;
+    }
+
+    private Notification updateNotification(String action) {
 	Intent launchIntent =
 	    new Intent(this, org.qtproject.qt5.android.bindings.QtActivity.class);
 	PendingIntent contentIntent =
@@ -93,20 +108,18 @@ public class MediaService extends QtService {
 	    .setSmallIcon(R.drawable.icon)
 	    .setShowWhen(false)
 	    .setContentIntent(contentIntent)
-	    .addAction(makeNotificationAction("stop"));
+	    .addAction(makeNotificationAction(MediaService.ACTION_STOP));
 
 	// stop action has been handled by our native layer.
-	if (action.equals("play")) {
-	    builder.addAction(makeNotificationAction("pause"));
-	} else if (action.equals("pause")) {
-	    builder.addAction(makeNotificationAction("resume"));
-	} else if (action.equals("resume")) {
-	    builder.addAction(makeNotificationAction("pause"));
+	if (action.equals(MediaService.ACTION_PLAY)) {
+	    builder.addAction(makeNotificationAction(MediaService.ACTION_PAUSE));
+	} else if (action.equals(MediaService.ACTION_PAUSE)) {
+	    builder.addAction(makeNotificationAction(MediaService.ACTION_RESUME));
+	} else if (action.equals(MediaService.ACTION_RESUME)) {
+	    builder.addAction(makeNotificationAction(MediaService.ACTION_PAUSE));
 	}
 
-	startForeground(13, builder.build());
-
-	return START_STICKY;
+	return builder.build();
     }
 
     private native boolean onStartCommand(Intent intent);
