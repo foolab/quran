@@ -4,7 +4,7 @@ Version:    0.0.0
 Release:    1
 Group:      Applications
 License:    GPLv2
-URL:        https://gitorious.org/quran/
+URL:        https://github.com/foolab/quran
 Source0:    %{name}-%{version}.tar.bz2
 Source1:    harbour-quran.png
 Source2:    harbour-quran.desktop
